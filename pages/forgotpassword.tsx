@@ -39,6 +39,7 @@ const SendVerficationEmail: React.FC<{
       if (emailSent) emailSent(true);
       return Promise.resolve();
     } catch (err) {
+      alert("You have signed in through google");
       if (emailSent) emailSent(false);
       return Promise.reject(err);
     }
@@ -87,11 +88,10 @@ const GetVerificationCode: React.FC<{ gotCode?: (got: boolean) => void }> = ({
   gotCode,
 }) => {
   const [verificationCode, setVerificationCode] = useState<string>("");
-  const [cookies] = useCookies();
 
   const verifyCode = async () => {
-    try {
-      axios.post(
+    axios
+      .post(
         `${constants.url}/auth/verifycode/`,
         { code: verificationCode },
         {
@@ -99,11 +99,13 @@ const GetVerificationCode: React.FC<{ gotCode?: (got: boolean) => void }> = ({
             Cookie: document.cookie,
           },
         }
-      );
-      return Promise.resolve();
-    } catch (err) {
-      return Promise.reject();
-    }
+      )
+      .then(() => {
+        if (gotCode) gotCode(true);
+      })
+      .catch(() => {
+        if (gotCode) gotCode(false);
+      });
   };
 
   return (
@@ -128,13 +130,7 @@ const GetVerificationCode: React.FC<{ gotCode?: (got: boolean) => void }> = ({
           marginTop="1em"
           borderRadius="none"
           onClick={() => {
-            verifyCode()
-              .then(() => {
-                if (gotCode) gotCode(true);
-              })
-              .catch(() => {
-                if (gotCode) gotCode(false);
-              });
+            verifyCode();
           }}
         >
           Submit
@@ -145,6 +141,26 @@ const GetVerificationCode: React.FC<{ gotCode?: (got: boolean) => void }> = ({
 };
 
 const ResetPasswordScreen = () => {
+  const [newPass, setNewPass] = useState<string>("");
+  const [confirmPass, setConfirmPass] = useState<string>("");
+
+  const changePass = () => {
+    if (newPass) {
+      axios
+        .post(`${constants.url}/auth/resetPass/`, {
+          newPass,
+        })
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } else {
+      alert("The two passwords do not match");
+    }
+  };
+
   return (
     <AccordionPanel pb={4}>
       <div
@@ -156,22 +172,30 @@ const ResetPasswordScreen = () => {
         }}
       >
         <CustomField
-          name="password"
-          label="New Password"
+          name="confirmPass"
+          label="Confirm Password"
           type="password"
-          placeholder="New Password"
+          placeholder="Confirm Password"
+          onChange={(event: any) => setConfirmPass(event.target.value)}
         />
         <br />
         <CustomField
-          name="confirmPassword"
-          label="Confirm Password"
-          placeholder="Confirm Password"
+          name="newPass"
+          label="New Password"
+          type="password"
+          placeholder="New Password"
+          onChange={(event: any) => {
+            if (confirmPass == event.target.value) {
+              setNewPass(event.target.value);
+            }
+          }}
         />
         <Button
           colorScheme="teal"
           marginLeft="20em"
           marginTop="1em"
           borderRadius="none"
+          onClick={changePass}
         >
           Submit
         </Button>
@@ -180,7 +204,6 @@ const ResetPasswordScreen = () => {
   );
 };
 
-// SendVerificationOTP -> SVO
 const SendVerificationOTP: React.FC = () => {
   return (
     <AccordionPanel pb={4}>
@@ -212,7 +235,6 @@ const SendVerificationOTP: React.FC = () => {
 };
 
 const ForgotPassword: NextPage = () => {
-  const [cookies] = useCookies(["token"]);
   const [showScreen, setShowScreen] = useState<number | null>(1);
 
   useEffect(() => {

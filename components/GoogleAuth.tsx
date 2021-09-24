@@ -85,7 +85,6 @@ const GoogleAuth: React.FC = () => {
         googleId: googleId.current,
         phNumber: phNumber.current,
       });
-      console.log("authenticating user");
       const token = await axios.post(`${constants.url}/auth/googlesignin/`, {
         email: email.current,
         googleId: googleId.current,
@@ -95,7 +94,6 @@ const GoogleAuth: React.FC = () => {
       setUserExist(false);
       setDelay(false);
       document.location.assign("/shop");
-      console.log(token);
     } catch (err) {
       console.error(err);
     }
@@ -103,9 +101,6 @@ const GoogleAuth: React.FC = () => {
 
   const successGoogleLogin = (res: any) => {
     const { profileObj } = res;
-    console.log("google response = ", profileObj);
-    console.log("profileObj.googleId = ", profileObj.googleId);
-    console.log("profileObj.email = ", profileObj.email);
 
     email.current = profileObj.email;
     googleId.current = profileObj.googleId;
@@ -115,14 +110,12 @@ const GoogleAuth: React.FC = () => {
     // check if the user already exists
     GetUser(email.current)
       .then(() => {
-        console.log("getuser found user");
         setUserExist(true);
         // if user exist
         authenticateUser();
       })
       .catch(() => {
         setUserExist(false);
-        console.log("getuser did not find user");
       });
   };
 

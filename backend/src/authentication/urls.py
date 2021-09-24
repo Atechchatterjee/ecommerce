@@ -10,5 +10,6 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name="dashboard"),
     path('sendemail/', views.send_auth_email, name="send_auth_email"),
     path('verifycode/', views.verify_code, name="verify_code"),
+    path('resetPass/', views.reset_password, name="reset_password"),
     path('isAuthenticated/', views.is_authenticated, name="isAuthenticated")
 ]

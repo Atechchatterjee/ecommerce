@@ -6,6 +6,7 @@ class User(models.Model):
     phNumber = models.TextField(blank=False)
     email = models.EmailField(blank=False, unique=True)
     password = models.TextField(blank=False)
+    auth = models.TextField(blank=True)
 
     def __str__(self):
         return self.email

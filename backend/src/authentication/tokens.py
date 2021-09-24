@@ -14,6 +14,16 @@ def create_token(payload):
     return jwt.encode(payload, settings.TOKEN_SECRET)
 
 
+def retrieve_payload(token):
+    # try:
+    payload = jwt.decode(jwt=token, key=settings.TOKEN_SECRET, algorithms=["HS256"])
+    print('retrieve payload = ', payload)
+    return payload
+    # except:
+    #     print('could not retrieve payload')
+    #     return None
+
+
 def get_token(token):
     try:
         token = Token.objects.filter(token=token)

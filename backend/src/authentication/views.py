@@ -1,5 +1,6 @@
 import hashlib
-from .tokens import create_token, remove_token, save_token, get_token
+from operator import itemgetter
+from .tokens import create_token, remove_token, retrieve_payload, save_token, get_token
 from django.contrib.auth import authenticate
 from django.contrib.auth.hashers import check_password, make_password
 from django.core.mail import EmailMessage
@@ -15,9 +16,6 @@ from .backends import Is_Authenticated
 @permission_classes([AllowAny])
 def signup(request):
     req_user = request.data
-    print('email = ', req_user.get('email'))
-    print('password = ', req_user.get('password'))
-    print('phone number = ', req_user.get('phNumber'))
 
     # getting the user
     try:
@@ -36,7 +34,6 @@ def signup(request):
 @api_view(['POST'])
 def get_user(request):
     email = request.data.get('email')
-    print('get_user email = ', email)
 
     try:
         user = User.objects.get(email=email)
@@ -53,7 +50,6 @@ def signin(request):
     password = request.data.get('password')
 
     user = authenticate(email=email, password=password)
-    print('user = ', user)
 
     if user is not None:
         token = create_token({'email': email})
@@ -66,7 +62,6 @@ def signin(request):
         )
         return res
     else:
-        print('can not find user')
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 @api_view(['POST'])
@@ -75,26 +70,22 @@ def googlesignin(request):
     googleId = request.data.get('googleId')
     phNumber = request.data.get('phNumber')
 
-    print("email = ", email)
-    print("googleId = ", googleId)
-    print("phNumber = ", phNumber)
-
     user = None
 
+    # if user already exist create new user
     try:
         user = User.objects.get(email=email)
     except:
-        print('creating new user google sign in')
         user = User(
             email=email,
             password=make_password(googleId),
-            phNumber=phNumber
+            phNumber=phNumber,
+            auth='google'
         )
         user.save()
 
-    print('google sign in user = ', user)
-
     token = ""
+
     if user is not None:
         token = create_token({'email': email})
         save_token(user, token)
@@ -117,55 +108,84 @@ def dashboard(request):
 @api_view(['GET'])
 def is_authenticated(request):
     token = request.COOKIES.get('token')
+
     if get_token(token) is None:
-        print("token not present in the database")
         return Response(status=status.HTTP_403_FORBIDDEN)
     else:
-        print('is authenticated token = ', token)
         return Response({"token":token}, status=status.HTTP_202_ACCEPTED)
 
 
 @api_view(['GET'])
 def logout(request):
     token = request.COOKIES.get('token')
+
     if remove_token(token) is True:
         return Response(status=status.HTTP_200_OK)
     else:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
+# sends an email with the verification code to the user
 @api_view(['POST'])
 def send_auth_email(request):
     print('send_auth_email = ',request.data)
     email_data = request.data.get('emailBody')
 
-    subject = email_data.get('subject')
-    body = email_data.get('body')
-    code = email_data.get('code')
-    to_email = email_data.get('toEmail')
+    subject, body, code, to_email = itemgetter('subject','body','code','toEmail')(email_data)
 
     hashed_code = hashlib.sha256(bytes(code, 'utf-8')).hexdigest()
+    print('code = ', code)
 
+    # check if the user's auth provider is not 'google'
+    # if they used google oauth they would not be allowed to change password
     try:
-        email = EmailMessage(
-            subject,
-            body,
-            to=[to_email],
-        )
-        email.send()
-        res =  Response(status=status.HTTP_200_OK)
-        res.set_cookie(key='verification_code', value=hashed_code, httponly=True)
-        return res
+        user = User.objects.get(email=to_email)
+        print('user.auth = ', user.auth)
+        if user.auth == 'google':
+          return Response({'warning':'you cannot change the password'},status=status.HTTP_400_BAD_REQUEST)
+        else: # change password - if they have logged in through password
+            email = EmailMessage(
+                subject,
+                body,
+                to=[to_email],
+            )
+            email.send()
+            # creating a jwt that stores the email and code and setting up a httponly cookie
+            verification_token = create_token({'email': to_email, 'verification_code': hashed_code})
+            res =  Response(status=status.HTTP_200_OK)
+            res.set_cookie(key='verification_jwt', value=verification_token, httponly=True)
+            return res
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+# checks if the verification code (given for reseting password) is correct
 @api_view(['POST'])
 def verify_code(request):
     code = request.data.get('code')
-    code_cookie = request.COOKIES.get('verification_code')
     hashed_code = hashlib.sha256(bytes(code, 'utf-8')).hexdigest(); 
 
-    if hashed_code == code_cookie:
+    verification_token = request.COOKIES.get('verification_jwt')
+    payload = retrieve_payload(verification_token)
+    print('payload = ', payload)
+
+    _, verification_code = itemgetter('email', 'verification_code')(payload)
+
+    if hashed_code == verification_code:
         return Response(status=status.HTTP_200_OK)
     else:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def reset_password(request):
+    new_pass = itemgetter('newPass')(request.data)
+
+    verification_token = request.COOKIES.get('verification_jwt')
+    payload = retrieve_payload(verification_token)
+
+    email, _  = itemgetter('email', 'verification_code')(payload)
+
+    try:
+        User.objects.filter(email=email).update(password=make_password(new_pass))
+        return Response(status=status.HTTP_202_ACCEPTED)
+    except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
