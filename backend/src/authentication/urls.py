@@ -11,5 +11,7 @@ urlpatterns = [
     path('sendemail/', views.send_auth_email, name="send_auth_email"),
     path('verifycode/', views.verify_code, name="verify_code"),
     path('resetPass/', views.reset_password, name="reset_password"),
-    path('isAuthenticated/', views.is_authenticated, name="isAuthenticated")
+    path('isAuthenticated/', views.is_authenticated, name="isAuthenticated"),
+    path('sendOTP/', views.send_OTP, name="sendOTP"),
+    path('verifyOTP/', views.verify_OTP, name="sendOTP"),
 ]

@@ -1,16 +1,24 @@
 import React, { useState, useRef } from "react";
-import { Formik } from "formik";
+import { Field, Formik } from "formik";
 import axios from "axios";
 import { ShowError } from "./ShowError";
 import { CustomField } from "./CustomField";
 import "../styles/signup.module.css";
-import { Avatar, Button, HStack, Link, Text } from "@chakra-ui/react";
+import {
+  Avatar,
+  Button,
+  FormErrorMessage,
+  HStack,
+  Link,
+  Text,
+} from "@chakra-ui/react";
 import constants from "../util/Constants";
 import GoogleAuth from "./GoogleAuth";
 import Router from "next/router";
 
 const SignIn: React.FunctionComponent = () => {
   const [failedError, setFailedError] = useState<string>(""); // error for already existing user
+  const [err, setErr] = useState<boolean>(false);
   const formikRef = useRef<any>();
 
   return (
@@ -30,9 +38,15 @@ const SignIn: React.FunctionComponent = () => {
               .then((res) => {
                 console.log(res);
                 setSubmitting(false);
+                setFailedError("");
+                setErr(false);
                 document.location.assign("/shop");
               })
-              .catch((err) => console.error(err));
+              .catch((err) => {
+                setFailedError("Email or Password is incorrect");
+                setErr(true);
+                console.error(err);
+              });
           }}
         >
           {({ handleSubmit, handleChange }) => {
@@ -48,6 +62,7 @@ const SignIn: React.FunctionComponent = () => {
                     name="email"
                     label="Email Id"
                     onChange={handleChange}
+                    isInvalid={err}
                   />
                   <br />
                   <CustomField
@@ -56,6 +71,7 @@ const SignIn: React.FunctionComponent = () => {
                     type="password"
                     label="Password"
                     onChange={handleChange}
+                    isInvalid={err}
                   />
                   <br />
                   <Link

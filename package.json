@@ -26,6 +26,7 @@
     "react-google-login": "^5.2.2",
     "react-icons": "^4.2.0",
     "react-slideshow-image": "^3.5.0",
+    "twilio": "^3.68.0",
     "yup": "^0.32.9"
   },
   "devDependencies": {

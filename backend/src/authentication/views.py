@@ -2,7 +2,7 @@ import hashlib
 from operator import itemgetter
 from .tokens import create_token, remove_token, retrieve_payload, save_token, get_token
 from django.contrib.auth import authenticate
-from django.contrib.auth.hashers import check_password, make_password
+from django.contrib.auth.hashers import make_password
 from django.core.mail import EmailMessage
 from rest_framework import status
 from rest_framework.response import Response
@@ -10,6 +10,16 @@ from rest_framework.permissions import AllowAny
 from rest_framework.decorators import api_view, permission_classes
 from .models import User
 from .backends import Is_Authenticated
+from twilio.rest import Client
+from django.conf import settings
+
+
+def verify_phNumber(phNumber):
+    try:
+        User.objects.get(phNumber=phNumber)
+        return True
+    except:
+        return False
 
 
 @api_view(['POST'])
@@ -188,4 +198,55 @@ def reset_password(request):
         User.objects.filter(email=email).update(password=make_password(new_pass))
         return Response(status=status.HTTP_202_ACCEPTED)
     except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def send_OTP(request):
+    phNumber = request.data.get('phNumber')
+    OTP = request.data.get('OTP')
+    hashed_OTP = hashlib.sha256(bytes(OTP, 'utf-8')).hexdigest()
+    print('otp = ', OTP)
+
+    account_sid = settings.TWILIO_ACCOUNT_SID
+    auth_token = settings.TWILIO_AUTH_TOKEN
+    from_phNumber = settings.TWILIO_PHNUMBER 
+    client = Client(account_sid, auth_token)
+
+    if verify_phNumber(phNumber) == True:
+        try:
+            message = client.messages \
+                            .create(
+                                body=f'The Verification OTP for ecommerce is: {OTP}',
+                                from_=from_phNumber,
+                                to=f'+91{phNumber}'
+                            )
+            print(message.sid)
+
+            # creating a jwt that stores the email and code and setting up a httponly cookie
+            verification_OTP = create_token({'phNumber': phNumber, 'verification_OTP': hashed_OTP})
+            res =  Response(status=status.HTTP_200_OK)
+            res.set_cookie(key='verification_OTP', value=verification_OTP, httponly=True)
+            return res
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+    else:
+        print("no such phone number actually exists")
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def verify_OTP(request):
+    OTP = request.data.get('OTP')
+    print('otp sent = ', OTP)
+    hashed_OTP = hashlib.sha256(bytes(OTP, 'utf-8')).hexdigest()
+    verification_OTP_jwt = request.COOKIES.get('verification_OTP')
+
+    payload = retrieve_payload(verification_OTP_jwt)
+    print('payload = ', payload)
+
+    _, verification_OTP = itemgetter('phNumber', 'verification_OTP')(payload)
+    print('verification otp = ', verification_OTP)
+
+    if verification_OTP == hashed_OTP:
+        return Response(status=status.HTTP_200_OK)
+    else:
         return Response(status=status.HTTP_400_BAD_REQUEST)
