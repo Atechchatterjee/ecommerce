@@ -489,8 +489,10 @@ const ForgotPassword: NextPage = () => {
                   return (
                     <Verify_OTP
                       verifiedOTP={(verified) => {
-                        if (verified) alert("OTP is valid");
-                        else alert("invalid OTP");
+                        if (verified) {
+                          localStorage.setItem("OTPScreenNo", "1");
+                          setLoginOTPScreen(1);
+                        } else alert("invalid OTP");
                       }}
                     />
                   );

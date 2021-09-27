@@ -236,15 +236,12 @@ def send_OTP(request):
 @api_view(['POST'])
 def verify_OTP(request):
     OTP = request.data.get('OTP')
-    print('otp sent = ', OTP)
     hashed_OTP = hashlib.sha256(bytes(OTP, 'utf-8')).hexdigest()
     verification_OTP_jwt = request.COOKIES.get('verification_OTP')
 
     payload = retrieve_payload(verification_OTP_jwt)
-    print('payload = ', payload)
 
     _, verification_OTP = itemgetter('phNumber', 'verification_OTP')(payload)
-    print('verification otp = ', verification_OTP)
 
     if verification_OTP == hashed_OTP:
         return Response(status=status.HTTP_200_OK)
