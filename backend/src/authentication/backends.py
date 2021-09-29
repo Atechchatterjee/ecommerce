@@ -14,17 +14,20 @@ class UserBackend(ModelBackend):
         email = kwargs['email']
         password = kwargs['password']
 
-        try:
-            user = User.objects.get(email=email)
-            serialized_user = UserSerializer(user).data
-            user_password = serialized_user['password']
+        print('UserBackend email = ',email)
+        print('UserBackend pass = ',password)
 
-            if check_password(password, user_password):
-                return user
-            else:
-                return None
-        except:
+        # try:
+        user = User.objects.get(email=email)
+        serialized_user = UserSerializer(user).data
+        user_password = serialized_user['password']
+
+        if check_password(password, user_password):
+            return user
+        else:
             return None
+        # except:
+        #     return None
 
 
 class Is_Authenticated(permissions.BasePermission):

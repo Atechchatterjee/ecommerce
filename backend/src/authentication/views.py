@@ -44,10 +44,11 @@ def signup(request):
 @api_view(['POST'])
 def get_user(request):
     email = request.data.get('email')
+    print('get_user email = ', email)
 
     try:
         user = User.objects.get(email=email)
-        print(user)
+        print('get_user email = ',user)
         print('get_user found user')
         return Response(status=status.HTTP_200_OK)
     except:
@@ -58,11 +59,15 @@ def get_user(request):
 def signin(request):
     email = request.data.get('email')
     password = request.data.get('password')
+    print('email = ', email)
+    print('password = ', password)
 
     user = authenticate(email=email, password=password)
+    print('user = ', user)
 
     if user is not None:
         token = create_token({'email': email})
+        print('token = ', token)
         save_token(user, token)
         res = Response({'token': token}, status=status.HTTP_200_OK)
         res.set_cookie(
@@ -118,8 +123,11 @@ def dashboard(request):
 @api_view(['GET'])
 def is_authenticated(request):
     token = request.COOKIES.get('token')
+    print('is_authenticated token = ', token)
 
-    if get_token(token) is None:
+    got_token = get_token(token)
+    print('got_token = ',got_token)
+    if got_token is None:
         return Response(status=status.HTTP_403_FORBIDDEN)
     else:
         return Response({"token":token}, status=status.HTTP_202_ACCEPTED)
@@ -128,6 +136,7 @@ def is_authenticated(request):
 @api_view(['GET'])
 def logout(request):
     token = request.COOKIES.get('token')
+    print("logout token = ", token)
 
     if remove_token(token) is True:
         return Response(status=status.HTTP_200_OK)

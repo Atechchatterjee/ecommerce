@@ -1,21 +1,8 @@
-import React, { useState, useEffect } from "react";
 import type { NextPage } from "next";
-import axios from "axios";
-import Router from "next/router";
-import { requireAuth } from "./requireAuth";
+import WithAuth from "../util/WithAuth";
 
-const Shop: NextPage = ({ ...props }) => {
-  const [authenticated, setAuthenticated] = useState<boolean>(true);
-
-  useEffect(() => {
-    console.log(props);
-  }, []);
-
-  return (
-    <div style={{ display: `${authenticated ? "block" : "none"}` }}>
-      <h1>Shop</h1>
-    </div>
-  );
+const Shop: NextPage = () => {
+  return <h1>Shop</h1>;
 };
 
-export default requireAuth(Shop);
+export default WithAuth(Shop);

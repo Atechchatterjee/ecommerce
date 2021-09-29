@@ -21,6 +21,32 @@ import { AiOutlineShopping } from "react-icons/ai";
 import { BsListUl } from "react-icons/bs";
 import { useCookies } from "react-cookie";
 import { isAuthenticated } from "../util/Authenticated";
+import constants from "../util/Constants";
+import axios from "axios";
+
+const logout = () => {
+  alert("logging out");
+  const sessionCookie: string | undefined = document.cookie;
+  axios
+    .get(`${constants.url}/auth/logout/`, {
+      headers: {
+        Cookie: sessionCookie,
+      },
+    })
+    .then((response) => {
+      console.log(response.data);
+      // res.removeHeader('Cookie');
+      // res.status(200);
+      // res.redirect('/');
+      window.location.assign("/");
+    })
+    .catch((err) => {
+      console.error(err);
+      // res.status(400);
+      // res.redirect('/');
+      window.location.assign("/");
+    });
+};
 
 const CategoryMenu: React.FunctionComponent<any> = ({ ...props }) => {
   const [selectedItem, selectItem] = useState<string>("All Categories");
@@ -103,7 +129,7 @@ const CategoryMenu: React.FunctionComponent<any> = ({ ...props }) => {
 
 const Header: React.FC = () => {
   const [authenticated, setAuthenticated] = useState<boolean>(false);
-  const [cookies] = useCookies(["user_session"]);
+  const [cookies] = useCookies(["token"]);
 
   useEffect(() => {
     isAuthenticated(cookies)
@@ -142,11 +168,12 @@ const Header: React.FC = () => {
             style={{ width: "45rem", marginLeft: "7%", color: "gray" }}
           >
             <InputLeftAddon
-              children={<CategoryMenu />}
               style={{ padding: "0.2px" }}
               borderLeftRadius="3xl"
               borderRightRadius="none"
-            />
+            >
+              <CategoryMenu />
+            </InputLeftAddon>
             <Input
               style={{ fontSize: "0.9em" }}
               placeholder="I am shopping for ..."
@@ -154,14 +181,13 @@ const Header: React.FC = () => {
               borderRadius="none"
             />
             <InputRightAddon
-              children={
-                <Text style={{ cursor: "pointer", fontSize: "0.8em" }}>
-                  Search
-                </Text>
-              }
               style={{ backgroundColor: "#F9C200", color: "white" }}
               borderRadius="3xl"
-            />
+            >
+              <Text style={{ cursor: "pointer", fontSize: "0.8em" }}>
+                Search
+              </Text>
+            </InputRightAddon>
           </InputGroup>
           <HStack style={{ marginLeft: "10%" }} spacing={5}>
             <FaRegHeart size={25} style={{ cursor: "pointer" }} />
@@ -177,7 +203,7 @@ const Header: React.FC = () => {
               Login
             </Link>
           ) : (
-            <Link style={{ marginLeft: "5em" }} href="/api/logout">
+            <Link style={{ marginLeft: "5em" }} onClick={() => logout()}>
               logout
             </Link>
           )}

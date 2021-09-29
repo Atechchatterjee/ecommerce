@@ -16,7 +16,7 @@ SECRET_KEY = 'm7m@gomdw0ej^j8%j6-jns-=0fy(@k^yvx^kpwa%%!)ct^&t$#'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost']
 
 
 # Application definition
@@ -75,7 +75,8 @@ DATABASES = {
         'NAME': 'ecommerce',
         'USER': 'root',
         'PASSWORD': 'root',
-        'HOST': 'localhost',
+        'HOST': 'db',
+        # 'HOST': 'localhost',
         'PORT': '5432',
     }
 }
