@@ -171,7 +171,7 @@ def send_auth_email(request):
             email.send()
             # creating a jwt that stores the email and code and setting up a httponly cookie
             verification_token = create_token({'email': to_email, 'verification_code': hashed_code})
-            res =  Response(status=status.HTTP_200_OK)
+            res =  Response(status=status.HTTP_202_ACCEPTED)
             res.set_cookie(key='verification_jwt', value=verification_token, httponly=True)
             return res
     except:
@@ -250,9 +250,22 @@ def verify_OTP(request):
 
     payload = retrieve_payload(verification_OTP_jwt)
 
-    _, verification_OTP = itemgetter('phNumber', 'verification_OTP')(payload)
+    phNumber, verification_OTP = itemgetter('phNumber', 'verification_OTP')(payload)
 
     if verification_OTP == hashed_OTP:
-        return Response(status=status.HTTP_200_OK)
+        try:
+            user = User.objects.get(phNumber=phNumber)
+            print('user_email = ',user.email)
+            token = create_token({'email': user.email})
+            save_token(user, token)
+            res = Response({'token': token}, status=status.HTTP_200_OK)
+            res.set_cookie(
+                key='token',
+                value=token,
+                httponly=True
+            )
+            return res
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response(status=status.HTTP_400_BAD_REQUEST)

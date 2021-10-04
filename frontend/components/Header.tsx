@@ -25,7 +25,6 @@ import constants from "../util/Constants";
 import axios from "axios";
 
 const logout = () => {
-  alert("logging out");
   const sessionCookie: string | undefined = document.cookie;
   axios
     .get(`${constants.url}/auth/logout/`, {
@@ -35,15 +34,10 @@ const logout = () => {
     })
     .then((response) => {
       console.log(response.data);
-      // res.removeHeader('Cookie');
-      // res.status(200);
-      // res.redirect('/');
       window.location.assign("/");
     })
     .catch((err) => {
       console.error(err);
-      // res.status(400);
-      // res.redirect('/');
       window.location.assign("/");
     });
 };

@@ -29,6 +29,8 @@
 # /frontend/.env.production.local
 
 # backend
+/backend/data
+/backend/static
 # /backend/src/.env
 
 # vercel

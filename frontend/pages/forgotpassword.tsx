@@ -78,6 +78,7 @@ const ForgotPassword: NextPage = () => {
         return Promise.resolve();
       } catch (err) {
         setLoading(false);
+        console.error(err);
         alert("You have signed in through google");
 
         if (emailSent) emailSent(false);
@@ -367,6 +368,7 @@ const ForgotPassword: NextPage = () => {
                 .then((res) => {
                   if (verifiedOTP) verifiedOTP(true);
                   console.log(res);
+                  window.location.assign("/shop");
                 })
                 .catch((err) => {
                   if (verifiedOTP) verifiedOTP(false);
@@ -447,7 +449,7 @@ const ForgotPassword: NextPage = () => {
                     <ResetPasswordScreen
                       done={(dn) => {
                         if (dn) {
-                          localStorage.setItem("screenNo", "3");
+                          localStorage.setItem("screenNo", "1");
                           setResetPassScreen(1);
                         }
                       }}

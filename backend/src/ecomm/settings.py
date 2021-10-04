@@ -7,16 +7,21 @@ TWILIO_ACCOUNT_SID = config('TWILIO_ACCOUNT_SID')
 TWILIO_AUTH_TOKEN = config('TWILIO_AUTH_TOKEN')
 TWILIO_PHNUMBER = config('TWILIO_PHNUMBER')
 
+ENV = config('ENV', 'developement')
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'm7m@gomdw0ej^j8%j6-jns-=0fy(@k^yvx^kpwa%%!)ct^&t$#'
+SECRET_KEY = config('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(int(config('DEBUG', '1')))
 
-ALLOWED_HOSTS = ['0.0.0.0', 'localhost']
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1']
+
+# including production domain names and ip as allowed host
+if ENV == 'production':
+    for host in config('PROD_ALLOWED_HOST').split(','):
+        ALLOWED_HOSTS.append(host)
 
 
 # Application definition
@@ -72,12 +77,11 @@ WSGI_APPLICATION = 'ecomm.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ecommerce',
-        'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST': 'db',
-        # 'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': config('PSQL_DB_NAME'),
+        'USER': config('PSQL_DB_USER'),
+        'PASSWORD': config('PSQL_DB_PASSWORD'),
+        'HOST': config('PSQL_DB_HOST'),
+        'PORT': config('PSQL_DB_PORT')
     }
 }
 
@@ -88,7 +92,6 @@ AUTHENTICATION_BACKENDS = (
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        # 'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ]
 }
@@ -120,6 +123,7 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+STATIC_ROOT = '/home/anish/coding/ecommerce/backend/src/static/'
 
 # SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 CSRF_COOKIE_SAMESITE = 'Strict'
@@ -137,6 +141,12 @@ CORS_ORIGIN_WHITELIST = [
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
+
+if ENV == 'production':
+    for host in config('CORS_ALLOWED_HOST', ''):
+        CORS_ALLOWED_ORIGINS.append(host)
+        CORS_ORIGIN_WHITELIST.append(host)
+
 CORS_ALLOW_HEADERS = True
 
 CORS_ALLOW_METHODS = [
@@ -167,4 +177,4 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = config("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
 EMAIL_USE_TLS = True
-EMAIL_PORT = 587
+EMAIL_PORT = int(config("EMAIL_PORT"))
