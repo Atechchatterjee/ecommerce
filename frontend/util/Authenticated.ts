@@ -2,20 +2,32 @@ import axios from "axios";
 import constants from './Constants';
 
 // checks if the user-session exists
-export const isAuthenticated = async (cookie: any): Promise<void> => {
+export const isAuthenticated = async (cookie: any, admin?:boolean): Promise<void> => {
   try {
+    let url = `${constants.url}/auth/isAuthenticated/`;
+
+    if(admin) {
+      url = `${constants.url}/auth/adminauth/`;
+    }
+
     axios.defaults.withCredentials = true;
     const res = await axios.get(
-      `${constants.url}/auth/isAuthenticated/`, {
+      url, {
         headers: {
           Cookie: cookie
         }
       }
     );
 
-    const { token } = res.data;
+    let token = "";
+
+    if(!admin) {
+      token = res.data.token;
+    } else {
+      token = res.data.admin_token;
+    }
     
-    if(token) {
+    if(!!token) {
       return Promise.resolve();
     } else {
       return Promise.reject(new Error('No token found'));
