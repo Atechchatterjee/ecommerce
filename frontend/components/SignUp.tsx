@@ -1,10 +1,10 @@
 import React, { useState, useRef } from "react";
+import "../styles/signup.module.css";
 import { Formik } from "formik";
 import axios from "axios";
 import * as yup from "yup";
 import { ShowError } from "./ShowError";
 import { CustomField } from "./CustomField";
-import "../styles/signup.module.css";
 import { Button } from "@chakra-ui/react";
 import constants from "../util/Constants";
 
@@ -33,6 +33,7 @@ const SignUp: React.FunctionComponent = () => {
         innerRef={formikRef}
         initialValues={{
           email: "",
+          name: "",
           password: "",
           phNumber: "",
         }}
@@ -62,6 +63,13 @@ const SignUp: React.FunctionComponent = () => {
                     label="Email Id"
                     onChange={handleChange}
                     isInvalid={!!errors.email}
+                  />
+                  <br />
+                  <CustomField
+                    placeholder="Name"
+                    name="name"
+                    label="Name"
+                    onChange={handleChange}
                   />
                   <br />
                   <CustomField
