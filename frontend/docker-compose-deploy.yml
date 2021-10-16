@@ -1,0 +1,12 @@
+version: "3.3"
+
+services:
+  web:
+    build: ./
+    command: npm start
+    volumes:
+      - ./:/frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
