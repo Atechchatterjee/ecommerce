@@ -1,7 +1,7 @@
 import jwt
 import math
 from datetime import datetime
-from .models import Token
+from .models import Token, AdminToken
 from django.conf import settings
 
 
@@ -14,19 +14,23 @@ def create_token(payload):
     return jwt.encode(payload, settings.TOKEN_SECRET)
 
 
+# cannot retrieve payload if the token has expired
 def retrieve_payload(token):
-    # try:
-    payload = jwt.decode(jwt=token, key=settings.TOKEN_SECRET, algorithms=["HS256"])
-    print('retrieve payload = ', payload)
-    return payload
-    # except:
-    #     print('could not retrieve payload')
-    #     return None
-
-
-def get_token(token):
     try:
-        token = Token.objects.filter(token=token)
+        payload = jwt.decode(jwt=token, key=settings.TOKEN_SECRET, algorithms=["HS256"])
+        print('retrieve payload = ', payload)
+        return payload
+    except:
+        print('could not retrieve payload')
+        return None
+
+
+# getting the token object from the db given the token
+def get_token(token, admin=False):
+    TokenObj = Token if admin == False else AdminToken
+
+    try:
+        token = TokenObj.objects.filter(token=token)
         len = token.__len__()
         print(len)
         if len > 0:
@@ -38,10 +42,12 @@ def get_token(token):
     except:
         return None
 
-def save_token(user, token):
+def save_token(user, token, admin=False):
+    TokenObj = Token if admin is False else AdminToken
+
     # if the same token does not already exist
-    if get_token(token) is None:
-        token_entry = Token(
+    if get_token(token, admin) is None:
+        token_entry = TokenObj(
             user_id = user,
             token = token,
             created_at = datetime.now()
@@ -50,10 +56,12 @@ def save_token(user, token):
     else:
         print('token already exists')
 
-def remove_token(token):
+# removes all the entries with the same token
+def remove_token(token, admin=False):
+    TokenObj = Token if admin is False else AdminToken
+    
     try:
-        Token.objects.filter(token=token).delete()
+        TokenObj.objects.filter(token=token).delete()
         return True
     except:
         return False
-        

@@ -19,13 +19,14 @@ DEBUG = bool(int(config('DEBUG', '1')))
 ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1']
 
 # including production domain names and ip as allowed host
-if ENV == 'production':
-    for host in config('PROD_ALLOWED_HOST').split(','):
-        ALLOWED_HOSTS.append(host)
+# if ENV == 'production':
+#     for host in config('PROD_ALLOWED_HOST').split(','):
+#         ALLOWED_HOSTS.append(host)
 
 
 # Application definition
 INSTALLED_APPS = [
+    'administrator',
     'authentication',
     'rest_framework',
     'django.contrib.admin',
@@ -142,10 +143,10 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
 
-if ENV == 'production':
-    for host in config('CORS_ALLOWED_HOST', ''):
-        CORS_ALLOWED_ORIGINS.append(host)
-        CORS_ORIGIN_WHITELIST.append(host)
+# if ENV == 'production':
+#     for host in config('CORS_ALLOWED_HOST', ''):
+#         CORS_ALLOWED_ORIGINS.append(host)
+#         CORS_ORIGIN_WHITELIST.append(host)
 
 CORS_ALLOW_HEADERS = True
 

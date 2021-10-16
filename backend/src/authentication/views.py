@@ -8,12 +8,13 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import api_view, permission_classes
-from .models import User
-from .backends import Is_Authenticated
+from .models import AdminToken, Token, User
+from .serializers import AdminUserSerializer
 from twilio.rest import Client
 from django.conf import settings
 
 
+# checks if a user with the given phone number exists in the db
 def verify_phNumber(phNumber):
     try:
         User.objects.get(phNumber=phNumber)
@@ -21,9 +22,18 @@ def verify_phNumber(phNumber):
     except:
         return False
 
+# check and removing previous tokens that have expired
+def remove_expired_token(user, admin=False):
+    TokenObj = Token if admin is False else AdminToken
+
+    all_tokens = TokenObj.objects.filter(user_id=user)
+
+    for token in all_tokens:
+        if retrieve_payload(token) is None:
+            TokenObj.objects.get(token=token).delete()
+
 
 @api_view(['POST'])
-@permission_classes([AllowAny])
 def signup(request):
     req_user = request.data
 
@@ -35,6 +45,7 @@ def signup(request):
         # creating a new user
         User(
             email=req_user.get("email"),
+            name=req_user.get("name"),
             phNumber=req_user.get("phNumber"),
             password=make_password(req_user.get("password")),
         ).save()
@@ -62,11 +73,12 @@ def signin(request):
     print('email = ', email)
     print('password = ', password)
 
-    user = authenticate(email=email, password=password)
+    user = authenticate(email=email, password=password, admin=False)
     print('user = ', user)
 
     if user is not None:
-        token = create_token({'email': email})
+        remove_expired_token(user, admin=False)
+        token = create_token({'email': email, 'admin': False})
         print('token = ', token)
         save_token(user, token)
         res = Response({'token': token}, status=status.HTTP_200_OK)
@@ -102,7 +114,7 @@ def googlesignin(request):
     token = ""
 
     if user is not None:
-        token = create_token({'email': email})
+        token = create_token({'email': email, 'admin': False})
         save_token(user, token)
 
     res = Response({"info":"successfully created a user", "token": token}, status=status.HTTP_201_CREATED)
@@ -115,19 +127,17 @@ def googlesignin(request):
 
 
 @api_view(['GET'])
-@permission_classes([Is_Authenticated])
-def dashboard(request):
-    return Response({"info": "dashboard"})
-
-
-@api_view(['GET'])
 def is_authenticated(request):
     token = request.COOKIES.get('token')
     print('is_authenticated token = ', token)
 
+    # fetching the token from the db for authentication
     got_token = get_token(token)
     print('got_token = ',got_token)
+
+    # if not authenticated then remove the token
     if got_token is None:
+        remove_token(token)
         return Response(status=status.HTTP_403_FORBIDDEN)
     else:
         return Response({"token":token}, status=status.HTTP_202_ACCEPTED)
@@ -155,21 +165,21 @@ def send_auth_email(request):
     hashed_code = hashlib.sha256(bytes(code, 'utf-8')).hexdigest()
     print('code = ', code)
 
-    # check if the user's auth provider is not 'google'
+    # check if the user's auth provider is 'google' or not
     # if they used google oauth they would not be allowed to change password
     try:
         user = User.objects.get(email=to_email)
         print('user.auth = ', user.auth)
         if user.auth == 'google':
           return Response({'warning':'you cannot change the password'},status=status.HTTP_400_BAD_REQUEST)
-        else: # change password - if they have logged in through password
+        else:
             email = EmailMessage(
                 subject,
                 body,
                 to=[to_email],
             )
             email.send()
-            # creating a jwt that stores the email and code and setting up a httponly cookie
+            # creating a jwt that stores the email and hashed code and setting up a httponly cookie
             verification_token = create_token({'email': to_email, 'verification_code': hashed_code})
             res =  Response(status=status.HTTP_202_ACCEPTED)
             res.set_cookie(key='verification_jwt', value=verification_token, httponly=True)
@@ -178,10 +188,11 @@ def send_auth_email(request):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 # checks if the verification code (given for reseting password) is correct
+# (matching with the code stored in the httponly cookie)
 @api_view(['POST'])
 def verify_code(request):
     code = request.data.get('code')
-    hashed_code = hashlib.sha256(bytes(code, 'utf-8')).hexdigest(); 
+    hashed_code = hashlib.sha256(bytes(code, 'utf-8')).hexdigest();
 
     verification_token = request.COOKIES.get('verification_jwt')
     payload = retrieve_payload(verification_token)
@@ -209,6 +220,8 @@ def reset_password(request):
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+# sends an OTP to the given phone number
+# stores the hashed OTP in a token inside a httponly cookie
 @api_view(['POST'])
 def send_OTP(request):
     phNumber = request.data.get('phNumber')
@@ -218,7 +231,7 @@ def send_OTP(request):
 
     account_sid = settings.TWILIO_ACCOUNT_SID
     auth_token = settings.TWILIO_AUTH_TOKEN
-    from_phNumber = settings.TWILIO_PHNUMBER 
+    from_phNumber = settings.TWILIO_PHNUMBER
     client = Client(account_sid, auth_token)
 
     if verify_phNumber(phNumber) == True:
@@ -231,7 +244,7 @@ def send_OTP(request):
                             )
             print(message.sid)
 
-            # creating a jwt that stores the email and code and setting up a httponly cookie
+            # creating a jwt that stores the phone number and hashed OTP and setting up a httponly cookie
             verification_OTP = create_token({'phNumber': phNumber, 'verification_OTP': hashed_OTP})
             res =  Response(status=status.HTTP_200_OK)
             res.set_cookie(key='verification_OTP', value=verification_OTP, httponly=True)
@@ -242,6 +255,8 @@ def send_OTP(request):
         print("no such phone number actually exists")
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+
+# verifying the OTP given by the user with the hashed_OTP stored in the httponly cookie
 @api_view(['POST'])
 def verify_OTP(request):
     OTP = request.data.get('OTP')
@@ -267,5 +282,59 @@ def verify_OTP(request):
             return res
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def admin_login(request):
+    email = request.data.get('email')
+    password = request.data.get('password')
+
+    print('email = ', email)
+    print('password = ', password)
+
+    admin_user = authenticate(email=email, password=password, admin=True)
+
+    print('admin user = ', AdminUserSerializer(admin_user).data)
+
+    if admin_user is not None:
+        remove_expired_token(admin_user, admin=True)
+        token = create_token({'email': email, 'admin': True})
+
+        print('token = ', token)
+        save_token(admin_user, token, admin=True)
+
+        res = Response({'token': token}, status=status.HTTP_200_OK)
+        res.set_cookie(
+            key='admin_token',
+            value=token,
+            httponly=True
+        )
+        return res
+    else:
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+@api_view(['GET'])
+def admin_auth(request):
+    token = request.COOKIES.get('admin_token')
+    print('is_authenticated token = ', token)
+
+    got_token = get_token(token, admin=True)
+    print('got_token = ', got_token)
+
+    if got_token is None:
+        remove_token(token, admin=True)
+        return Response(status=status.HTTP_403_FORBIDDEN)
+    else:
+        return Response({"admin_token":token}, status=status.HTTP_202_ACCEPTED)
+
+@api_view(['GET'])
+def admin_logout(request):
+    token = request.COOKIES.get('admin_token')
+    print("logout token = ", token)
+
+    if remove_token(token, admin=True) is True:
+        return Response(status=status.HTTP_200_OK)
     else:
         return Response(status=status.HTTP_400_BAD_REQUEST)
