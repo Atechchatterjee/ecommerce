@@ -10,28 +10,32 @@ import {
   Container,
 } from "@chakra-ui/react";
 import type { NextPage } from "next";
-import React from "react";
+import React, { useState } from "react";
 import SignUp from "../components/SignUp";
 import SignIn from "../components/SignIn";
 import Banner from "../components/Banner";
+import Header from "../components/Layout/Header";
+import Footer from "../components/Layout/Footer";
 
 const Login: NextPage = () => {
+  const [containerHeight, setContainerHeight] = useState<string>("37em");
+
   return (
     <>
+      <Header />
       <Banner text="My Account" />
       <Container
-        style={{
-          boxShadow: "0.2em 0.2em 0.2em 0.2em #e1e1e1",
-          height: "33em",
-        }}
+        boxShadow="0.2em 0.2em 0.2em 0.2em #e1e1e1"
+        height={containerHeight}
       >
         <Center color="gray" style={{ marginTop: "7vh" }}>
           <Stack
             direction={["row", "column"]}
             spacing="35px"
-            style={{ width: "25em", marginTop: "3em" }}
+            width="25em"
+            marginTop="3em"
           >
-            <Tabs align="center" isFitted={false} variant="line">
+            <Tabs align="center" isFitted={false} variant="line" isLazy>
               <TabList>
                 <Tab>
                   <Heading as="h2" size="md" isTruncated>
@@ -45,7 +49,7 @@ const Login: NextPage = () => {
                 </Tab>
               </TabList>
               <TabPanels>
-                <TabPanel>
+                <TabPanel on>
                   <SignUp />
                 </TabPanel>
                 <TabPanel>
@@ -56,6 +60,7 @@ const Login: NextPage = () => {
           </Stack>
         </Center>
       </Container>
+      <Footer />
     </>
   );
 };

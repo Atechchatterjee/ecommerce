@@ -13,6 +13,8 @@ import { CustomField } from "../components/CustomField";
 import { Button } from "@chakra-ui/button";
 import { Spinner } from "@chakra-ui/react";
 import { getCode } from "../util/GetCode";
+import Header from "../components/Layout/Header";
+import Footer from "../components/Layout/Footer";
 import axios from "axios";
 import constants from "../util/Constants";
 
@@ -385,6 +387,7 @@ const ForgotPassword: NextPage = () => {
 
   return (
     <>
+      <Header />
       <Banner text="My Account" />
       <Container
         style={{
@@ -505,6 +508,7 @@ const ForgotPassword: NextPage = () => {
           </AccordionItem>
         </Accordion>
       </Container>
+      <Footer />
     </>
   );
 };
