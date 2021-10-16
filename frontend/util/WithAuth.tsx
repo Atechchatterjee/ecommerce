@@ -1,21 +1,26 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { NextPage } from "next";
 import { isAuthenticated } from "./Authenticated";
 
-export default (WrappedComponent: NextPage) => {
+interface AdminProp {
+  admin?: boolean;
+}
+
+const WithAuth = (WrappedComponent: NextPage, { admin }: AdminProp = {}) => {
   return ({ ...props }) => {
     const [authenticated, setAuthenticated] = useState<number>(-1);
     const Router = useRouter();
     const serverSide = typeof window === "undefined";
 
     useEffect(() => {
-      isAuthenticated(document.cookie)
+      isAuthenticated(document.cookie, admin)
         .then(() => {
           setAuthenticated(1);
         })
         .catch((err) => {
           console.error(err);
+          console.log("admin auth failed");
           setAuthenticated(0);
         });
     }, []);
@@ -24,7 +29,9 @@ export default (WrappedComponent: NextPage) => {
       if (authenticated === 1) {
         return <WrappedComponent {...props} />;
       } else if (authenticated === 0) {
-        Router.push("/login");
+        console.log("redirecting to login");
+        if (admin) Router.push("/admin/login");
+        else Router.push("/login");
         return <></>;
       } else {
         return <></>;
@@ -35,3 +42,5 @@ export default (WrappedComponent: NextPage) => {
     }
   };
 };
+
+export default WithAuth;
