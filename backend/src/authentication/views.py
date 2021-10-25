@@ -23,6 +23,8 @@ def verify_phNumber(phNumber):
         return False
 
 # check and removing previous tokens that have expired
+
+
 def remove_expired_token(user, admin=False):
     TokenObj = Token if admin is False else AdminToken
 
@@ -52,6 +54,7 @@ def signup(request):
 
     return Response({"info": "successfully created a user"}, status=status.HTTP_201_CREATED)
 
+
 @api_view(['POST'])
 def get_user(request):
     email = request.data.get('email')
@@ -59,7 +62,7 @@ def get_user(request):
 
     try:
         user = User.objects.get(email=email)
-        print('get_user email = ',user)
+        print('get_user email = ', user)
         print('get_user found user')
         return Response(status=status.HTTP_200_OK)
     except:
@@ -91,6 +94,7 @@ def signin(request):
     else:
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
+
 @api_view(['POST'])
 def googlesignin(request):
     email = request.data.get('email')
@@ -117,7 +121,8 @@ def googlesignin(request):
         token = create_token({'email': email, 'admin': False})
         save_token(user, token)
 
-    res = Response({"info":"successfully created a user", "token": token}, status=status.HTTP_201_CREATED)
+    res = Response({"info": "successfully created a user",
+                   "token": token}, status=status.HTTP_201_CREATED)
     res.set_cookie(
         key="token",
         value=token,
@@ -133,14 +138,14 @@ def is_authenticated(request):
 
     # fetching the token from the db for authentication
     got_token = get_token(token)
-    print('got_token = ',got_token)
+    print('got_token = ', got_token)
 
     # if not authenticated then remove the token
     if got_token is None:
         remove_token(token)
         return Response(status=status.HTTP_403_FORBIDDEN)
     else:
-        return Response({"token":token}, status=status.HTTP_202_ACCEPTED)
+        return Response({"token": token}, status=status.HTTP_202_ACCEPTED)
 
 
 @api_view(['GET'])
@@ -157,10 +162,11 @@ def logout(request):
 # sends an email with the verification code to the user
 @api_view(['POST'])
 def send_auth_email(request):
-    print('send_auth_email = ',request.data)
+    print('send_auth_email = ', request.data)
     email_data = request.data.get('emailBody')
 
-    subject, body, code, to_email = itemgetter('subject','body','code','toEmail')(email_data)
+    subject, body, code, to_email = itemgetter(
+        'subject', 'body', 'code', 'toEmail')(email_data)
 
     hashed_code = hashlib.sha256(bytes(code, 'utf-8')).hexdigest()
     print('code = ', code)
@@ -171,7 +177,7 @@ def send_auth_email(request):
         user = User.objects.get(email=to_email)
         print('user.auth = ', user.auth)
         if user.auth == 'google':
-          return Response({'warning':'you cannot change the password'},status=status.HTTP_400_BAD_REQUEST)
+            return Response({'warning': 'you cannot change the password'}, status=status.HTTP_400_BAD_REQUEST)
         else:
             email = EmailMessage(
                 subject,
@@ -180,19 +186,22 @@ def send_auth_email(request):
             )
             email.send()
             # creating a jwt that stores the email and hashed code and setting up a httponly cookie
-            verification_token = create_token({'email': to_email, 'verification_code': hashed_code})
-            res =  Response(status=status.HTTP_202_ACCEPTED)
-            res.set_cookie(key='verification_jwt', value=verification_token, httponly=True)
+            verification_token = create_token(
+                {'email': to_email, 'verification_code': hashed_code})
+            res = Response(status=status.HTTP_202_ACCEPTED)
+            res.set_cookie(key='verification_jwt',
+                           value=verification_token, httponly=True)
             return res
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
 
 # checks if the verification code (given for reseting password) is correct
 # (matching with the code stored in the httponly cookie)
 @api_view(['POST'])
 def verify_code(request):
     code = request.data.get('code')
-    hashed_code = hashlib.sha256(bytes(code, 'utf-8')).hexdigest();
+    hashed_code = hashlib.sha256(bytes(code, 'utf-8')).hexdigest()
 
     verification_token = request.COOKIES.get('verification_jwt')
     payload = retrieve_payload(verification_token)
@@ -205,6 +214,7 @@ def verify_code(request):
     else:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['POST'])
 def reset_password(request):
     new_pass = itemgetter('newPass')(request.data)
@@ -212,16 +222,19 @@ def reset_password(request):
     verification_token = request.COOKIES.get('verification_jwt')
     payload = retrieve_payload(verification_token)
 
-    email, _  = itemgetter('email', 'verification_code')(payload)
+    email, _ = itemgetter('email', 'verification_code')(payload)
 
     try:
-        User.objects.filter(email=email).update(password=make_password(new_pass))
+        User.objects.filter(email=email).update(
+            password=make_password(new_pass))
         return Response(status=status.HTTP_202_ACCEPTED)
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 # sends an OTP to the given phone number
 # stores the hashed OTP in a token inside a httponly cookie
+
+
 @api_view(['POST'])
 def send_OTP(request):
     phNumber = request.data.get('phNumber')
@@ -245,9 +258,11 @@ def send_OTP(request):
             print(message.sid)
 
             # creating a jwt that stores the phone number and hashed OTP and setting up a httponly cookie
-            verification_OTP = create_token({'phNumber': phNumber, 'verification_OTP': hashed_OTP})
-            res =  Response(status=status.HTTP_200_OK)
-            res.set_cookie(key='verification_OTP', value=verification_OTP, httponly=True)
+            verification_OTP = create_token(
+                {'phNumber': phNumber, 'verification_OTP': hashed_OTP})
+            res = Response(status=status.HTTP_200_OK)
+            res.set_cookie(key='verification_OTP',
+                           value=verification_OTP, httponly=True)
             return res
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -265,12 +280,13 @@ def verify_OTP(request):
 
     payload = retrieve_payload(verification_OTP_jwt)
 
-    phNumber, verification_OTP = itemgetter('phNumber', 'verification_OTP')(payload)
+    phNumber, verification_OTP = itemgetter(
+        'phNumber', 'verification_OTP')(payload)
 
     if verification_OTP == hashed_OTP:
         try:
             user = User.objects.get(phNumber=phNumber)
-            print('user_email = ',user.email)
+            print('user_email = ', user.email)
             token = create_token({'email': user.email})
             save_token(user, token)
             res = Response({'token': token}, status=status.HTTP_200_OK)
@@ -315,6 +331,7 @@ def admin_login(request):
     else:
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
+
 @api_view(['GET'])
 def admin_auth(request):
     token = request.COOKIES.get('admin_token')
@@ -327,10 +344,12 @@ def admin_auth(request):
         remove_token(token, admin=True)
         return Response(status=status.HTTP_403_FORBIDDEN)
     else:
-        return Response({"admin_token":token}, status=status.HTTP_202_ACCEPTED)
+        return Response({"admin_token": token}, status=status.HTTP_202_ACCEPTED)
+
 
 @api_view(['GET'])
 def admin_logout(request):
+    print('admin logout = ', request.COOKIES)
     token = request.COOKIES.get('admin_token')
     print("logout token = ", token)
 
