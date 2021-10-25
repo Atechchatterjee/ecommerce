@@ -2,6 +2,7 @@ import jwt
 from django.conf import settings
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.hashers import check_password
+from .tokens import get_token
 from .models import User, AdminUser
 from rest_framework import permissions
 
@@ -29,26 +30,44 @@ class UserBackend(ModelBackend):
                 return None
 
 
-class Is_Authenticated(permissions.BasePermission):
+# authentication for a regular user
+class Is_User(permissions.BasePermission):
 
-    def has_permission(self, request):
-        print('authenticating user')
-        # try:
-        print('is_authenticated cookies = ',request.COOKIES)
+    def has_permission(self, request, view):
+        print('is_authenticated cookies = ', request.COOKIES)
+        token = ""
         try:
             token = request.COOKIES.get('token')
             print('authentication token = ', token)
         except:
             print('cannot find token')
             return False
-            
+
         if token is not None:
-            print(f'decoding token = {token}')
-            payload = jwt.decode(token, settings.TOKEN_SECRET)
-            print('payload = ', payload)
-            return True
+            print(f'getting token = {token}')
+            got_token = get_token(token)
+            return got_token is not None
         else:
             print("token not found")
             return False
-        # except:
-        #     return False
+
+
+# authentication for admin users
+class Is_Admin(permissions.BasePermission):
+
+    def has_permission(self, request, view):
+        print('is_authenticated cookies = ', request.COOKIES)
+        admin_token = ""
+        try:
+            admin_token = request.COOKIES.get('admin_token')
+            print('admin token = ', admin_token)
+        except:
+            print('cannot find admin token')
+            return False
+
+        if admin_token is not None:
+            got_token = get_token(admin_token, admin=True)
+            return got_token is not None
+        else:
+            print("admin token not found")
+            return False
