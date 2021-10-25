@@ -17,7 +17,8 @@ def create_token(payload):
 # cannot retrieve payload if the token has expired
 def retrieve_payload(token):
     try:
-        payload = jwt.decode(jwt=token, key=settings.TOKEN_SECRET, algorithms=["HS256"])
+        payload = jwt.decode(
+            jwt=token, key=settings.TOKEN_SECRET, algorithms=["HS256"])
         print('retrieve payload = ', payload)
         return payload
     except:
@@ -34,13 +35,12 @@ def get_token(token, admin=False):
         len = token.__len__()
         print(len)
         if len > 0:
-            # print('get_token = ',token)
             return token
         else:
-            # print('no token found')
             return None
     except:
         return None
+
 
 def save_token(user, token, admin=False):
     TokenObj = Token if admin is False else AdminToken
@@ -48,18 +48,20 @@ def save_token(user, token, admin=False):
     # if the same token does not already exist
     if get_token(token, admin) is None:
         token_entry = TokenObj(
-            user_id = user,
-            token = token,
-            created_at = datetime.now()
+            user_id=user,
+            token=token,
+            created_at=datetime.now()
         )
         token_entry.save()
     else:
         print('token already exists')
 
 # removes all the entries with the same token
+
+
 def remove_token(token, admin=False):
     TokenObj = Token if admin is False else AdminToken
-    
+
     try:
         TokenObj.objects.filter(token=token).delete()
         return True
