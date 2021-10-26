@@ -10,12 +10,9 @@ export const isAuthenticated = async (cookie: any, admin?:boolean): Promise<void
       url = `${constants.url}/auth/adminauth/`;
     }
 
-    axios.defaults.withCredentials = true;
     const res = await axios.get(
       url, {
-        headers: {
-          Cookie: cookie
-        }
+        withCredentials: true
       }
     );
 
