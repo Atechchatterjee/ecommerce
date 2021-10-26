@@ -1,8 +1,8 @@
 import React, { useState, useRef } from "react";
 import { Field, Formik } from "formik";
 import axios from "axios";
-import { ShowError } from "./ShowError";
-import { CustomField } from "./CustomField";
+import { ShowError } from "./Custom/ShowError";
+import { CustomField } from "./Custom/CustomField";
 import "../styles/signup.module.css";
 import {
   Avatar,

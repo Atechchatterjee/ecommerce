@@ -14,7 +14,7 @@ import {
   ModalCloseButton,
   ModalFooter,
 } from "@chakra-ui/modal";
-import { CustomField } from "./CustomField";
+import { CustomField } from "./Custom/CustomField";
 import { HStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 
