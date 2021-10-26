@@ -9,7 +9,7 @@ import {
   AccordionIcon,
   AccordionPanel,
 } from "@chakra-ui/accordion";
-import { CustomField } from "../components/CustomField";
+import { CustomField } from "../components/Custom/CustomField";
 import { Button } from "@chakra-ui/button";
 import { Spinner } from "@chakra-ui/react";
 import { getCode } from "../util/GetCode";
