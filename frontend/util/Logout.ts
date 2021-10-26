@@ -6,14 +6,11 @@ interface Props {
 }
 
 const logout = ({admin}: Props = {admin: false}) => {
-  const sessionCookie: string | undefined = document.cookie;
   const url = !admin ? `${constants.url}/auth/logout/`:`${constants.url}/auth/adminlogout/`;
 
   axios
     .get(url, {
-      headers: {
-        Cookie: sessionCookie,
-      },
+      withCredentials: true
     })
     .then((response) => {
       console.log(response.data);
