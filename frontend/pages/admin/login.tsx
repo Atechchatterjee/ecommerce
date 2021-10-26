@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { Button, Center, Stack, Container } from "@chakra-ui/react";
 import { Formik } from "formik";
 import { NextPage } from "next";
-import { CustomField } from "../../components/CustomField";
+import { CustomField } from "../../components/Custom/CustomField";
 import constants from "../../util/Constants";
 import axios from "axios";
 import Banner from "../../components/Banner";
