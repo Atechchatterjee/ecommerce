@@ -15,7 +15,6 @@ import {
   useDisclosure,
   useColorModeValue,
   Stack,
-  Text,
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import logout from "../../util/Logout";
@@ -26,7 +25,13 @@ interface NavLinkProps {
   onClick?: MouseEventHandler<HTMLAnchorElement> | undefined;
 }
 
-const Links = ["Dashboard", "Purchase", "Catalogs", "Orders", "Customers"];
+const Links = [
+  "Dashboard",
+  "Purchase",
+  ["Catalogs", "Product", "Category"],
+  "Orders",
+  "Customers",
+];
 
 const NavLink: React.FC<NavLinkProps> = ({ children, onClick }) => (
   <Link
@@ -66,8 +71,8 @@ const Navbar: React.FC = () => {
               display={{ base: "none", md: "flex" }}
             >
               {Links.map((link) => {
-                return link == "Catalogs" ? (
-                  <NavLink key={link}>
+                return Array.isArray(link) ? (
+                  <NavLink key={link[0]}>
                     <Menu>
                       <MenuButton
                         rounded={"full"}
@@ -75,11 +80,21 @@ const Navbar: React.FC = () => {
                         cursor={"pointer"}
                         minW={0}
                       >
-                        {link}
+                        {link[0]}
                       </MenuButton>
                       <MenuList>
-                        <MenuItem>Products</MenuItem>
-                        <MenuItem>Category</MenuItem>
+                        {link.slice(1).map((item) => (
+                          <MenuItem
+                            key={item}
+                            onClick={() =>
+                              router.push(
+                                `/admin/${link[0].toLowerCase()}/${item.toLowerCase()}`
+                              )
+                            }
+                          >
+                            {item}
+                          </MenuItem>
+                        ))}
                       </MenuList>
                     </Menu>
                   </NavLink>
@@ -119,9 +134,13 @@ const Navbar: React.FC = () => {
         {isOpen ? (
           <Box pb={4} display={{ md: "none" }}>
             <Stack as={"nav"} spacing={4}>
-              {Links.map((link) => (
-                <NavLink key={link}>{link}</NavLink>
-              ))}
+              {Links.map((link) =>
+                Array.isArray(link) ? (
+                  <NavLink key={link[0]}>{link[0]}</NavLink>
+                ) : (
+                  <NavLink key={link}>{link}</NavLink>
+                )
+              )}
             </Stack>
           </Box>
         ) : null}
