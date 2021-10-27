@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from decouple import config
 
@@ -126,6 +127,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = '/home/anish/coding/ecommerce/backend/src/static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, '/src/media')
+MEDIA_URL = '/media/'
 
 # SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 CSRF_COOKIE_SAMESITE = 'Strict'
