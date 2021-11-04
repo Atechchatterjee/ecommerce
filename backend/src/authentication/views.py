@@ -12,6 +12,7 @@ from .models import AdminToken, Token, User
 from .serializers import AdminUserSerializer
 from twilio.rest import Client
 from django.conf import settings
+from .backends import Is_User, Is_Admin
 
 
 # checks if a user with the given phone number exists in the db
@@ -22,9 +23,8 @@ def verify_phNumber(phNumber):
     except:
         return False
 
+
 # check and removing previous tokens that have expired
-
-
 def remove_expired_token(user, admin=False):
     TokenObj = Token if admin is False else AdminToken
 
@@ -100,6 +100,7 @@ def googlesignin(request):
     email = request.data.get('email')
     googleId = request.data.get('googleId')
     phNumber = request.data.get('phNumber')
+    name = request.data.get('name')
 
     user = None
 
@@ -111,41 +112,34 @@ def googlesignin(request):
             email=email,
             password=make_password(googleId),
             phNumber=phNumber,
+            name=name,
             auth='google'
         )
         user.save()
 
-    token = ""
-
     if user is not None:
+        remove_expired_token(user, admin=False)
         token = create_token({'email': email, 'admin': False})
         save_token(user, token)
 
-    res = Response({"info": "successfully created a user",
-                   "token": token}, status=status.HTTP_201_CREATED)
-    res.set_cookie(
-        key="token",
-        value=token,
-        httponly=True
-    )
-    return res
+        print('google auth token = ', token)
 
-
-@api_view(['GET'])
-def is_authenticated(request):
-    token = request.COOKIES.get('token')
-    print('is_authenticated token = ', token)
-
-    # fetching the token from the db for authentication
-    got_token = get_token(token)
-    print('got_token = ', got_token)
-
-    # if not authenticated then remove the token
-    if got_token is None:
-        remove_token(token)
-        return Response(status=status.HTTP_403_FORBIDDEN)
+        res = Response({"token": token}, status=status.HTTP_200_OK)
+        res.set_cookie(
+            key="token",
+            value=token,
+            httponly=True
+        )
+        return res
     else:
-        return Response({"token": token}, status=status.HTTP_202_ACCEPTED)
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+
+# authentication for frontend user routes
+@api_view(['GET'])
+@permission_classes([Is_User])
+def is_authenticated(request):
+    return Response(status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
@@ -231,10 +225,9 @@ def reset_password(request):
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+
 # sends an OTP to the given phone number
 # stores the hashed OTP in a token inside a httponly cookie
-
-
 @api_view(['POST'])
 def send_OTP(request):
     phNumber = request.data.get('phNumber')
@@ -332,19 +325,11 @@ def admin_login(request):
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
+# authentication for frontend admin routes
 @api_view(['GET'])
+@permission_classes([Is_Admin])
 def admin_auth(request):
-    token = request.COOKIES.get('admin_token')
-    print('is_authenticated token = ', token)
-
-    got_token = get_token(token, admin=True)
-    print('got_token = ', got_token)
-
-    if got_token is None:
-        remove_token(token, admin=True)
-        return Response(status=status.HTTP_403_FORBIDDEN)
-    else:
-        return Response({"admin_token": token}, status=status.HTTP_202_ACCEPTED)
+    return Response(status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
