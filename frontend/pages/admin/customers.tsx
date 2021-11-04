@@ -33,9 +33,7 @@ const AdminCustomers: NextPage = () => {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await axios.get(`${constants.url}/admin/getallusers/`, {
-          headers: {
-            Cookie: document.cookie,
-          },
+          withCredentials: true,
         });
 
         const allUsers = res.data.all_users;
