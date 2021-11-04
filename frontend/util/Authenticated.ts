@@ -16,15 +16,7 @@ export const isAuthenticated = async (cookie: any, admin?:boolean): Promise<void
       }
     );
 
-    let token = "";
-
-    if(!admin) {
-      token = res.data.token;
-    } else {
-      token = res.data.admin_token;
-    }
-    
-    if(!!token) {
+    if(res.status === 200) {
       return Promise.resolve();
     } else {
       return Promise.reject(new Error('No token found'));

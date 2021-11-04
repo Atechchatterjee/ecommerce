@@ -7,11 +7,13 @@ interface AdminProp {
   admin?: boolean;
 }
 
-const WithAuth = (WrappedComponent: NextPage, { admin }: AdminProp = {}) => {
+const WithAuth = (
+  WrappedComponent: NextPage,
+  { admin }: AdminProp = { admin: false }
+) => {
   return ({ ...props }) => {
     const [authenticated, setAuthenticated] = useState<number>(-1);
     const Router = useRouter();
-    const serverSide = typeof window === "undefined";
 
     useEffect(() => {
       isAuthenticated(document.cookie, admin)
@@ -25,19 +27,14 @@ const WithAuth = (WrappedComponent: NextPage, { admin }: AdminProp = {}) => {
         });
     }, []);
 
-    if (!serverSide) {
-      if (authenticated === 1) {
-        return <WrappedComponent {...props} />;
-      } else if (authenticated === 0) {
-        console.log("redirecting to login");
-        if (admin) Router.push("/admin/login");
-        else Router.push("/login");
-        return <></>;
-      } else {
-        return <></>;
-      }
+    if (authenticated === 1) {
+      return <WrappedComponent {...props} />;
+    } else if (authenticated === 0) {
+      console.log("redirecting to login");
+      if (admin) Router.push("/admin/login");
+      else Router.push("/login");
+      return <></>;
     } else {
-      console.warn("you are in the server side");
       return <></>;
     }
   };
