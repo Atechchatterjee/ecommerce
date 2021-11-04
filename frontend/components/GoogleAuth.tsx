@@ -69,9 +69,9 @@ const GoogleAuth: React.FC = () => {
   const [userExist, setUserExist] = useState<boolean>(false);
   const googleId = useRef<string>("");
   const email = useRef<string>("");
+  const name = useRef<string>("");
   const phNumber = useRef<string>("");
   const [delay, setDelay] = useState<boolean>(false);
-  const router = useRouter();
 
   useEffect(() => {
     if (googleAuth && !userExist) setTimeout(() => setDelay(true), 300);
@@ -84,12 +84,18 @@ const GoogleAuth: React.FC = () => {
         email: email.current,
         googleId: googleId.current,
         phNumber: phNumber.current,
+        name: name.current,
       });
-      const token = await axios.post(`${constants.url}/auth/googlesignin/`, {
-        email: email.current,
-        googleId: googleId.current,
-        phNumber: phNumber.current,
-      });
+      await axios.post(
+        `${constants.url}/auth/googlesignin/`,
+        {
+          email: email.current,
+          googleId: googleId.current,
+          phNumber: phNumber.current,
+          name: name.current,
+        },
+        { withCredentials: true }
+      );
       setGoogleAuth(false);
       setUserExist(false);
       setDelay(false);
@@ -101,9 +107,11 @@ const GoogleAuth: React.FC = () => {
 
   const successGoogleLogin = (res: any) => {
     const { profileObj } = res;
+    console.log(profileObj);
 
     email.current = profileObj.email;
     googleId.current = profileObj.googleId;
+    name.current = profileObj.name;
 
     setGoogleAuth(true);
 
@@ -133,7 +141,8 @@ const GoogleAuth: React.FC = () => {
   return (
     <Button
       variant="solid"
-      backgroundColor="white"
+      backgroundColor="#4285F4"
+      color="white"
       width="100%"
       borderRadius="none"
       boxShadow="base"
@@ -144,7 +153,7 @@ const GoogleAuth: React.FC = () => {
         <Avatar src="google.svg" backgroundColor="inherit" size="xs" />
         {googleAuth && !userExist && delay ? (
           <PopUp
-            trigger={googleAuth && !userExist}
+            trigger={true}
             cb={(ph: string) => {
               console.log(ph);
               phNumber.current = ph;
