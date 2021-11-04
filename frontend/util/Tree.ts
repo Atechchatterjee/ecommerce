@@ -140,6 +140,9 @@ const traverse = (cur: CategoryNode, tree: CategoryTree, output: TreeNode[]) => 
   } 
 }
 
+export const getRootNodes = (tree: CategoryTree): CategoryNode[] => 
+  tree.root.children;
+
 // converts the category tree nodes into the actual tree nodes which would be displayed
 export const convertToTree = (tree: CategoryTree): TreeNode[] | null => {
   const output: TreeNode[] = [];
