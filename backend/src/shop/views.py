@@ -1,9 +1,12 @@
 from operator import itemgetter
+from urllib import parse
+from rest_framework.decorators import parser_classes
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from .serializers import CategorySerializer, ProductSerializer
-from authentication.backends import Is_Admin
+from authentication.backends import Is_Admin, Is_User
 from .models import Category, Product
 
 
@@ -15,15 +18,19 @@ def fetch_category(category_id):
 
 @api_view(['POST'])
 @permission_classes([Is_Admin])
+@parser_classes([MultiPartParser, FormParser])
 def create_product(request):
-    product_name, product_description, product_price, category_id = itemgetter(
-        'productName', 'productDescription', 'productPrice', 'categoryId')(request.data)
+    product_name, product_description, product_price, product_image, category_id = itemgetter(
+        'productName', 'productDescription', 'productPrice', 'productImage', 'categoryId')(request.data)
+
     try:
         Product(
             name=product_name,
-            price=product_price,
+            price=str(product_price),
             description=product_description,
-            category=fetch_category(category_id)
+            image=product_image,
+            category=fetch_category(
+                int(category_id)) if category_id is not "" else None
         ).save()
         return Response(status=status.HTTP_200_OK)
     except:
@@ -31,11 +38,11 @@ def create_product(request):
 
 
 @api_view(['GET'])
-@permission_classes([Is_Admin])
+@permission_classes([Is_User])
 def get_all_products(request):
     try:
         all_products = Product.objects.all()
-        serialized_products = ProductSerializer(all_products).data
+        serialized_products = ProductSerializer(all_products, many=True).data
         return Response({"allProducts": serialized_products}, status=status.HTTP_200_OK)
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -45,6 +52,7 @@ def get_all_products(request):
 def create_category(request):
     category_name, sub_category = itemgetter(
         'category_name', 'sub_category')(request.data)
+
     try:
         Category(
             category_name=category_name,
@@ -56,7 +64,6 @@ def create_category(request):
 
 
 @api_view(['GET'])
-@permission_classes([Is_Admin])
 def get_all_category(request):
     print(f'get_all_category cookie = {request.COOKIES}')
     try:
