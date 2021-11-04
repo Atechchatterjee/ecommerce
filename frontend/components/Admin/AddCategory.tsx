@@ -37,19 +37,24 @@ const AddCategory = ({ ...props }) => {
           </Heading>
         </Center>
         <Input
+          borderRadius="none"
           placeholder="Category Name"
+          marginBottom="1em"
           top="2em"
           size="md"
           onChange={(event: any) => setCategoryName(event.target.value)}
         />
         <SelectCategory
+          borderRadius="none"
           marginTop="4em"
           onSelect={({ selectedCategory }) => {
             setSelectedCategory(selectedCategory);
           }}
+          includeNone
         />
         <Button
-          colorScheme="teal"
+          borderRadius="none"
+          colorScheme="facebook"
           width="full"
           marginTop="1em"
           onClick={() => {

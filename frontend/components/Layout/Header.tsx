@@ -1,12 +1,5 @@
-import React, { useEffect, useState } from "react";
-import {
-  HStack,
-  Text,
-  Heading,
-  Center,
-  Link,
-  Divider,
-} from "@chakra-ui/layout";
+import React, { useEffect, useState, useRef } from "react";
+import { HStack, Text, Heading, Center, Link } from "@chakra-ui/layout";
 import {
   InputGroup,
   InputLeftAddon,
@@ -18,93 +11,57 @@ import { Button } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { FaRegHeart, FaRegUser } from "react-icons/fa";
 import { AiOutlineShopping } from "react-icons/ai";
-import { BsListUl } from "react-icons/bs";
 import { useCookies } from "react-cookie";
 import { isAuthenticated } from "../../util/Authenticated";
+import { convertToCategoryTree, getRootNodes } from "../../util/Tree";
+import SelectCategory, { getAllCategory } from "../Admin/SelectCategory";
 import logout from "../../util/Logout";
-
-const CategoryMenu: React.FunctionComponent<any> = ({ ...props }) => {
-  const [selectedItem, selectItem] = useState<string>("All Categories");
-
-  return (
-    <Menu {...props}>
-      <MenuButton
-        as={Button}
-        rightIcon={<ChevronDownIcon />}
-        style={{ fontSize: "0.9em" }}
-        borderLeftRadius="3xl"
-      >
-        <Text>{selectedItem}</Text>
-      </MenuButton>
-      <MenuList style={{ fontSize: "0.9em" }}>
-        <MenuItem
-          value="All Categories"
-          onClick={(event: any) => selectItem(event.target.value)}
-        >
-          All Categories
-        </MenuItem>
-        <MenuItem
-          value="Fashion"
-          onClick={(event: any) => selectItem(event.target.value)}
-        >
-          Fashion
-        </MenuItem>
-        <MenuItem
-          value="Furniture"
-          onClick={(event: any) => selectItem(event.target.value)}
-        >
-          Furniture
-        </MenuItem>
-        <MenuItem
-          value="Shoes"
-          onClick={(event: any) => selectItem(event.target.value)}
-        >
-          Shoes
-        </MenuItem>
-        <MenuItem
-          value="Sports"
-          onClick={(event: any) => selectItem(event.target.value)}
-        >
-          Sports
-        </MenuItem>
-        <MenuItem
-          value="Games"
-          onClick={(event: any) => selectItem(event.target.value)}
-        >
-          Games
-        </MenuItem>
-        <MenuItem
-          value="Computers"
-          onClick={(event: any) => selectItem(event.target.value)}
-        >
-          Computers
-        </MenuItem>
-        <MenuItem
-          value="Electronics"
-          onClick={(event: any) => selectItem(event.target.value)}
-        >
-          Electronics
-        </MenuItem>
-        <MenuItem
-          value="Kitechen"
-          onClick={(event: any) => selectItem(event.target.value)}
-        >
-          Kitchen
-        </MenuItem>
-        <MenuItem
-          value="Clothing"
-          onClick={(event: any) => selectItem(event.target.value)}
-        >
-          Clothing
-        </MenuItem>
-      </MenuList>
-    </Menu>
-  );
-};
 
 const Header: React.FC = () => {
   const [authenticated, setAuthenticated] = useState<boolean>(false);
+  const [rootCategories, setRootCategories] = useState<any[]>([]);
   const [cookies] = useCookies(["token"]);
+
+  const CategoryMenu: React.FunctionComponent<any> = ({ ...props }) => {
+    const [selectedItem, selectItem] = useState<string>("All Categories");
+    const menuBtnColor = useRef<string>("#9D84B7");
+
+    return (
+      <Menu {...props}>
+        <MenuButton
+          backgroundColor={menuBtnColor.current}
+          color="white"
+          marginLeft="-0.1em"
+          as={Button}
+          rightIcon={<ChevronDownIcon />}
+          style={{ fontSize: "0.9em" }}
+          width="35.1"
+          borderLeftRadius="3xl"
+          borderRightRadius="none"
+          _hover={{ backgroundColor: "#b799d6" }}
+        >
+          <Text>{selectedItem}</Text>
+        </MenuButton>
+        <MenuList style={{ fontSize: "0.9em" }}>
+          <MenuItem
+            value="All Categories"
+            onClick={(event: any) => selectItem(event.target.value)}
+          >
+            All Categories
+          </MenuItem>
+          {rootCategories.map((categoryNode: any) => (
+            <MenuItem
+              key={categoryNode.val.category_name}
+              value={categoryNode.val.category_name}
+              onClick={(event: any) => selectItem(event.target.value)}
+            >
+              {categoryNode.val.category_name}
+            </MenuItem>
+          ))}
+        </MenuList>
+      </Menu>
+    );
+  };
 
   useEffect(() => {
     isAuthenticated(cookies)
@@ -116,18 +73,22 @@ const Header: React.FC = () => {
         console.log("user is not authenticated");
         setAuthenticated(false);
       });
+    getAllCategory().then((categories) => {
+      const tree = convertToCategoryTree(categories);
+      const rootNodes = getRootNodes(tree);
+      console.log({ rootNodes });
+      setRootCategories(rootNodes);
+    });
   }, []);
 
   return (
-    <>
+    <div style={{ width: "100%" }}>
       <Center
         className="header-up"
-        style={{
-          width: "100%",
-          height: "8em",
-          backgroundColor: "#F40103",
-          color: "white",
-        }}
+        width="full"
+        height="8em"
+        backgroundColor="#091353"
+        color="white"
       >
         <HStack style={{ paddingTop: "0" }}>
           <Heading
@@ -153,13 +114,17 @@ const Header: React.FC = () => {
               style={{ fontSize: "0.9em" }}
               placeholder="I am shopping for ..."
               backgroundColor="white"
+              borderWidth="0"
               borderRadius="none"
             />
             <InputRightAddon
-              style={{ backgroundColor: "#F9C200", color: "white" }}
+              // backgroundColor= "#F9C200"
+              backgroundColor="#9D84B7"
+              color="white"
+              borderColor="#9D84B7"
               borderRadius="3xl"
             >
-              <Text style={{ cursor: "pointer", fontSize: "0.8em" }}>
+              <Text cursor="pointer" fontSize="0.8em">
                 Search
               </Text>
             </InputRightAddon>
@@ -186,58 +151,22 @@ const Header: React.FC = () => {
       </Center>
       <Center
         className="header-mid"
-        style={{
-          backgroundColor: "#ffffff",
-          marginLeft: "-50em",
-          height: "3.2em",
-        }}
+        backgroundColor="#4f5bba"
+        marginLeft="-50em"
+        height="3em"
       >
-        <HStack style={{ color: "black" }}>
-          <Divider orientation="vertical" />
-          <Menu>
-            <MenuButton
-              as={Button}
-              rightIcon={<ChevronDownIcon marginLeft={10} />}
-              borderRadius="none"
-              style={{ height: "3.2em" }}
-              backgroundColor="white"
-              _hover={{ backgroundColor: "#336699", color: "white" }}
-              _active={{ backgroundColor: "#336699", color: "white" }}
-            >
-              <HStack>
-                <BsListUl />
-                <Text style={{ marginTop: "0.2em", marginLeft: "1em" }}>
-                  Browse Categories
-                </Text>
-              </HStack>
-            </MenuButton>
-            <MenuList>
-              <MenuItem value="Fashion">Fashion</MenuItem>
-              <MenuItem value="HomeGarden">Home Garden</MenuItem>
-              <MenuItem value="Electronics">Electronics</MenuItem>
-              <MenuItem value="Furniture">Furniture</MenuItem>
-              <MenuItem value="BagsNShoes">Bags and Shoes</MenuItem>
-              <MenuItem value="OutdoorFunNSports">
-                Outdoor Fun and Sports
-              </MenuItem>
-              <MenuItem value="AutomobilesNBikes">
-                Automobiles and Bikes
-              </MenuItem>
-              <MenuItem value="Toys and kids">Toys and Kids</MenuItem>
-              <MenuItem value="HomeImprovement">Home Improvement</MenuItem>
-              <MenuItem value="HealthNBeauty">Health and Beauty</MenuItem>
-            </MenuList>
-          </Menu>
-          <Divider orientation="vertical" color="gray.500" />
-          <Link fontWeight={700} color="gray.600" style={{ marginLeft: "1em" }}>
-            All Products
-          </Link>
-          <Link fontWeight={700} color="gray.600" style={{ marginLeft: "1em" }}>
-            Campaigns
-          </Link>
-        </HStack>
+        <SelectCategory
+          text="Browse Category"
+          bgColor="#9D84B7"
+          borderRadius="none"
+          width="13em"
+          height="3em"
+        />
+        <Link fontWeight={700} color="white" marginLeft="1em" width="inherit">
+          All Products
+        </Link>
       </Center>
-    </>
+    </div>
   );
 };
 

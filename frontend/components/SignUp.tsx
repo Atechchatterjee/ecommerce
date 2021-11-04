@@ -51,57 +51,55 @@ const SignUp: React.FunctionComponent = () => {
         }}
         validationSchema={signUpValidationSchema}
       >
-        {({ handleSubmit, errors, handleChange }) => {
-          return (
-            <>
-              <form onSubmit={handleSubmit}>
-                <ShowError condition={failedErr.length > 0} error={failedErr} />
-                <div style={{ marginTop: "1em" }}>
-                  <CustomField
-                    placeholder="Email Address"
-                    name="email"
-                    label="Email Id"
-                    onChange={handleChange}
-                    isInvalid={!!errors.email}
-                  />
-                  <br />
-                  <CustomField
-                    placeholder="Name"
-                    name="name"
-                    label="Name"
-                    onChange={handleChange}
-                  />
-                  <br />
-                  <CustomField
-                    placeholder="Password"
-                    name="password"
-                    type="password"
-                    label="Password"
-                    onChange={handleChange}
-                    isInvalid={!!errors.password}
-                  />
-                  <br />
-                  <CustomField
-                    placeholder="Phone Number"
-                    name="phNumber"
-                    label="Phone Number"
-                    onChange={handleChange}
-                    isInvalid={!!errors.phNumber}
-                  />
-                  <br />
-                  <Button
-                    type="submit"
-                    colorScheme="teal"
-                    style={{ width: "100%" }}
-                    borderRadius="none"
-                  >
-                    Submit
-                  </Button>
-                </div>
-              </form>
-            </>
-          );
-        }}
+        {({ handleSubmit, errors, handleChange }) => (
+          <form onSubmit={handleSubmit}>
+            <ShowError condition={failedErr.length > 0} error={failedErr} />
+            <div style={{ marginTop: "1em" }}>
+              <CustomField
+                placeholder="Email Address"
+                name="email"
+                label="Email Id"
+                onChange={handleChange}
+                isInvalid={!!errors.email}
+              />
+              <br />
+              <CustomField
+                placeholder="Name"
+                name="name"
+                label="Name"
+                onChange={handleChange}
+              />
+              <br />
+              <CustomField
+                placeholder="Password"
+                name="password"
+                type="password"
+                label="Password"
+                onChange={handleChange}
+                isInvalid={!!errors.password}
+              />
+              <br />
+              <CustomField
+                placeholder="Phone Number"
+                name="phNumber"
+                label="Phone Number"
+                onChange={handleChange}
+                isInvalid={!!errors.phNumber}
+              />
+              <br />
+              <Button
+                type="submit"
+                backgroundColor="#091353"
+                _hover={{ backgroundColor: "#535a87" }}
+                color="white"
+                style={{ width: "100%" }}
+                borderRadius="none"
+              >
+                Submit
+              </Button>
+            </div>
+          </form>
+        )}
       </Formik>
     </div>
   );

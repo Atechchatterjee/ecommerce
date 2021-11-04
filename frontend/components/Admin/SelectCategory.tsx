@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import Tree from "@naisutech/react-tree";
+import Tree, { ThemeSettings } from "@naisutech/react-tree";
 import { Category, CategoryMap } from "../../types/shop";
 import { convertToCategoryTree, convertToTree } from "../../util/Tree";
 import axios from "axios";
@@ -14,6 +14,24 @@ import {
   ModalBody,
   ModalFooter,
 } from "@chakra-ui/modal";
+
+// theme for category tree
+const myTheme: ThemeSettings = {
+  theme1: {
+    text: "#fafafa",
+    bg: "#091353",
+    indicator: "#9D84B7",
+    separator: "#091353",
+    icon: "#9D84B7",
+    selectedBg: "#9D84B7",
+    selectedText: "#fafafa",
+    hoverBg: "#4F5BBA",
+    hoverText: "#fafafa",
+    accentBg: "#2d3439",
+    accentText: "#999",
+    textSize: "large",
+  },
+};
 
 export const getAllCategory = async (): Promise<Category[]> => {
   try {
@@ -32,16 +50,26 @@ interface Props {
   }: {
     selectedCategory: number | null;
   }) => void;
-  color?: string;
+  colorScheme?: string;
   marginTop?: string;
   width?: string;
+  borderRadius?: string;
+  text?: string;
+  includeNone?: boolean;
+  bgColor?: string;
+  height?: string;
 }
 
 const SelectCategory: React.FC<Props> = ({
   onSelect,
-  color,
+  colorScheme,
   width,
   marginTop,
+  borderRadius,
+  text,
+  includeNone,
+  bgColor,
+  height,
 }) => {
   const categoryMap = useRef<CategoryMap>({});
   const [modalOpen, setModalOpen] = useState<boolean>(false);
@@ -50,17 +78,21 @@ const SelectCategory: React.FC<Props> = ({
 
   useEffect(() => {
     getAllCategory().then((categories) => {
-      categories.push({
-        category_id: null,
-        category_name: "None",
-        sub_category: null,
-      });
+      if (includeNone) {
+        categories.push({
+          category_id: null,
+          category_name: "None",
+          sub_category: null,
+        });
+      }
+
+      // creating a categoryTree from given categories from db
       const tree = convertToCategoryTree(categories);
       const nodeTree = convertToTree(tree);
 
       setNodes(nodeTree);
 
-      categoryMap.current[-1] = "None";
+      if (includeNone) categoryMap.current[-1] = "None";
 
       // setting up the category map
       categories.forEach(({ category_name, category_id }) => {
@@ -72,9 +104,12 @@ const SelectCategory: React.FC<Props> = ({
   return (
     <>
       <Button
-        color={color ? color : "gray.400"}
+        colorScheme={colorScheme ? colorScheme : ""}
+        backgroundColor={bgColor ? bgColor : "teal"}
         width={width ? width : "full"}
         marginTop={marginTop ? marginTop : "0"}
+        borderRadius={borderRadius ? borderRadius : "md"}
+        height={height ? height : "2.5em"}
         onClick={() => {
           setModalOpen(true);
         }}
@@ -82,22 +117,33 @@ const SelectCategory: React.FC<Props> = ({
         {(() => {
           switch (selectedCategory) {
             case null:
-              return categoryMap.current[-1];
+              return includeNone
+                ? categoryMap.current[-1]
+                : text
+                ? text
+                : "Sub Category";
             case -2:
-              return "Sub Category";
+              return text ? text : "Sub Category";
             default:
               return categoryMap.current[selectedCategory];
           }
         })()}
       </Button>
-      <Modal onClose={() => setModalOpen(false)} size={"md"} isOpen={modalOpen}>
+      <Modal
+        onClose={() => setModalOpen(false)}
+        size={"md"}
+        isOpen={modalOpen}
+        blockScrollOnMount={false}
+        colorScheme="whiteAlpha"
+      >
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Select Category</ModalHeader>
+        <ModalContent backgroundColor="#091353">
+          <ModalHeader color="white">Select Category</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Tree
-              theme="light"
+              theme="theme1"
+              customTheme={myTheme}
               nodes={nodes}
               size="full"
               grow={true}
@@ -126,7 +172,9 @@ const SelectCategory: React.FC<Props> = ({
             />
           </ModalBody>
           <ModalFooter>
-            <Button onClick={() => setModalOpen(false)}>Select</Button>
+            <Button onClick={() => setModalOpen(false)} colorScheme="facebook">
+              Select
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

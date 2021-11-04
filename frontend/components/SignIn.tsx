@@ -4,17 +4,9 @@ import axios from "axios";
 import { ShowError } from "./Custom/ShowError";
 import { CustomField } from "./Custom/CustomField";
 import "../styles/signup.module.css";
-import {
-  Avatar,
-  Button,
-  FormErrorMessage,
-  HStack,
-  Link,
-  Text,
-} from "@chakra-ui/react";
+import { Button, Link, Text } from "@chakra-ui/react";
 import constants from "../util/Constants";
 import GoogleAuth from "./GoogleAuth";
-import Router from "next/router";
 
 const SignIn: React.FunctionComponent = () => {
   const [failedError, setFailedError] = useState<string>(""); // error for already existing user
@@ -88,7 +80,9 @@ const SignIn: React.FunctionComponent = () => {
                   <br />
                   <Button
                     type="submit"
-                    colorScheme="teal"
+                    backgroundColor="#091353"
+                    _hover={{ backgroundColor: "#535a87" }}
+                    color="white"
                     style={{ width: "100%" }}
                     borderRadius="none"
                   >

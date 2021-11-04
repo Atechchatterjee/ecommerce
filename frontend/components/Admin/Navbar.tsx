@@ -54,7 +54,7 @@ const Navbar: React.FC = () => {
 
   return (
     <>
-      <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
+      <Box bgColor="#091353" textColor="white" px={4}>
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           <IconButton
             size={"md"}
@@ -79,12 +79,14 @@ const Navbar: React.FC = () => {
                         variant={"link"}
                         cursor={"pointer"}
                         minW={0}
+                        _hover={{ color: "black" }}
                       >
                         {link[0]}
                       </MenuButton>
                       <MenuList>
                         {link.slice(1).map((item) => (
                           <MenuItem
+                            color="black"
                             key={item}
                             onClick={() =>
                               router.push(

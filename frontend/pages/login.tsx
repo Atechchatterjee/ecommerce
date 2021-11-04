@@ -10,7 +10,7 @@ import {
   Container,
 } from "@chakra-ui/react";
 import type { NextPage } from "next";
-import React, { useState } from "react";
+import React from "react";
 import SignUp from "../components/SignUp";
 import SignIn from "../components/SignIn";
 import Banner from "../components/Banner";
@@ -18,15 +18,14 @@ import Header from "../components/Layout/Header";
 import Footer from "../components/Layout/Footer";
 
 const Login: NextPage = () => {
-  const [containerHeight, setContainerHeight] = useState<string>("37em");
-
   return (
     <>
       <Header />
       <Banner text="My Account" />
       <Container
         boxShadow="0.2em 0.2em 0.2em 0.2em #e1e1e1"
-        height={containerHeight}
+        height="inherit"
+        paddingBottom="4em"
       >
         <Center color="gray" style={{ marginTop: "7vh" }}>
           <Stack
