@@ -6,6 +6,8 @@ class Product(models.Model):
     name = models.TextField(null=False)
     price = models.TextField(null=False)
     description = models.TextField(null=False, default="")
+    image = models.ImageField(
+        upload_to="images/", null=True, blank=True)
     category = models.ForeignKey(
         'shop.Category', verbose_name="category", on_delete=models.CASCADE)
 
