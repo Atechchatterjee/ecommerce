@@ -31,7 +31,9 @@
 # backend
 /backend/data
 /backend/static
-# /backend/src/.env
+/backend/venv
+/backend/src/media/images/
+**/migrations
 
 # vercel
 .vercel
