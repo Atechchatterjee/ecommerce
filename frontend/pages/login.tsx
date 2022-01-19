@@ -37,12 +37,20 @@ const Login: NextPage = () => {
           >
             <Tabs align="center" isFitted={false} variant="line" isLazy>
               <TabList>
-                <Tab>
+                <Tab
+                  _focus={{
+                    outline: "none",
+                  }}
+                >
                   <Heading as="h2" size="md" isTruncated fontFamily="Sora">
                     Sign Up
                   </Heading>
                 </Tab>
-                <Tab>
+                <Tab
+                  _focus={{
+                    outline: "none",
+                  }}
+                >
                   <Heading as="h2" size="md" isTruncated fontFamily="Sora">
                     Sign In
                   </Heading>
