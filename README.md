@@ -1,4 +1,4 @@
-### Installation
+### Installation and Usage
 
 Git clone the repository.
 
@@ -19,5 +19,3 @@ sudo docker-compose up -f ./backend/docker-compose-deploy.yml --build
 ### Prerequisites
 
 You should have **docker** and **docker-compose** installed on your local system.
-
-
