@@ -1,5 +1,4 @@
 import {
-  Box,
   Container,
   Grid,
   Heading,
@@ -7,12 +6,36 @@ import {
   VStack,
   Text,
   Avatar,
-  Stack,
   HStack,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
 
 const Footer: React.FC = () => {
+  const [col1, _] = useState<string[]>([
+    "About Us",
+    "Team Member",
+    "Career",
+    "Contact Us",
+    "Affiliate",
+    "Order History",
+  ]);
+  const [col2, __] = useState<string[]>([
+    "Track My Order",
+    "View Cart",
+    "Sign In",
+    "Help",
+    "My Wishlist",
+    "Privacy Policy",
+  ]);
+  const [col3, ___] = useState<string[]>([
+    "Payment Methods",
+    "Money-back gaurentee!",
+    "Product Returns",
+    "Support Center",
+    "Shipping",
+    "Term and Conditions",
+  ]);
+
   return (
     <footer
       style={{
@@ -36,6 +59,8 @@ const Footer: React.FC = () => {
                 size="md"
                 isTruncated
                 style={{ textAlign: "left" }}
+                fontFamily="Sora"
+                fontWeight="bold"
               >
                 Ecommerce Design
               </Heading>
@@ -46,7 +71,7 @@ const Footer: React.FC = () => {
                 href="tel:18005707777"
                 fontWeight={700}
                 fontSize="1.2em"
-                // style={{ marginTop: "2rem" }}
+                textUnderlineOffset="0.1em"
               >
                 1-800-570-7777
               </Link>
@@ -94,99 +119,87 @@ const Footer: React.FC = () => {
         <Container>
           <VStack style={{ textAlign: "left" }}>
             <div>
-              <Heading as="h1" size="md" isTruncated>
+              <Heading
+                as="h1"
+                size="md"
+                isTruncated
+                fontFamily="Sora"
+                fontWeight="bold"
+              >
                 Company
               </Heading>
-              <div style={{ height: "1em" }}></div>
-              <Link size="sm" color="gray.500">
-                About Us
-              </Link>
-              <div style={{ height: "0.4em" }}></div>
-              <Link size="sm" color="gray.500">
-                Team Member
-              </Link>
-              <div style={{ height: "0.4em" }}></div>
-              <Link size="sm" color="gray.500">
-                Career
-              </Link>
-              <div style={{ height: "0.4em" }}></div>
-              <Link size="sm" color="gray.500">
-                Contact Us
-              </Link>
-              <div style={{ height: "0.4em" }}></div>
-              <Link size="sm" color="gray.500">
-                Affiliate
-              </Link>
-              <div style={{ height: "0.4em" }}></div>
-              <Link size="sm" color="gray.500">
-                Order History
-              </Link>
+              <Container marginTop="0.5em" padding="0">
+                {col1.map((val) => (
+                  <>
+                    <div style={{ height: "0.7em" }}></div>
+                    <Link
+                      size="sm"
+                      color="gray.500"
+                      textUnderlineOffset="0.1em"
+                    >
+                      {val}
+                    </Link>
+                  </>
+                ))}
+              </Container>
             </div>
           </VStack>
         </Container>
         <Container>
           <VStack style={{ textAlign: "left" }}>
             <div>
-              <Heading as="h1" size="md" isTruncated>
+              <Heading
+                as="h1"
+                size="md"
+                isTruncated
+                fontFamily="Sora"
+                fontWeight="bold"
+              >
                 My Account
               </Heading>
-              <div style={{ height: "1em" }}></div>
-              <Link size="sm" color="gray.500">
-                Track My Order
-              </Link>
-              <div style={{ height: "0.4em" }}></div>
-              <Link size="sm" color="gray.500">
-                View Cart
-              </Link>
-              <div style={{ height: "0.4em" }}></div>
-              <Link size="sm" color="gray.500">
-                Sign In
-              </Link>
-              <div style={{ height: "0.4em" }}></div>
-              <Link size="sm" color="gray.500">
-                Help
-              </Link>
-              <div style={{ height: "0.4em" }}></div>
-              <Link size="sm" color="gray.500">
-                My Wishlist
-              </Link>
-              <div style={{ height: "0.4em" }}></div>
-              <Link size="sm" color="gray.500">
-                Privacy Policy
-              </Link>
+              <Container marginTop="0.5em" padding="0">
+                {col2.map((val) => (
+                  <>
+                    <div style={{ height: "0.7em" }}></div>
+                    <Link
+                      size="sm"
+                      color="gray.500"
+                      textUnderlineOffset="0.1em"
+                    >
+                      {val}
+                    </Link>
+                  </>
+                ))}
+              </Container>
             </div>
           </VStack>
         </Container>
         <Container>
           <VStack style={{ textAlign: "left" }}>
             <div>
-              <Heading as="h1" size="md" isTruncated>
+              <Heading
+                as="h1"
+                size="md"
+                isTruncated
+                fontFamily="Sora"
+                fontWeight="bold"
+              >
                 Customer Service
               </Heading>
-              <div style={{ height: "1em" }}></div>
-              <Link size="sm" color="gray.500">
-                Payment Methods
-              </Link>
-              <div style={{ height: "0.4em" }}></div>
-              <Link size="sm" color="gray.500">
-                Money-back gaurentee!
-              </Link>
-              <div style={{ height: "0.4em" }}></div>
-              <Link size="sm" color="gray.500">
-                Product Returns
-              </Link>
-              <div style={{ height: "0.4em" }}></div>
-              <Link size="sm" color="gray.500">
-                Support Center
-              </Link>
-              <div style={{ height: "0.4em" }}></div>
-              <Link size="sm" color="gray.500">
-                Shipping
-              </Link>
-              <div style={{ height: "0.4em" }}></div>
-              <Link size="sm" color="gray.500">
-                Term and Conditions
-              </Link>
+              <Container marginTop="0.5em" padding="0">
+                {col3.map((val) => (
+                  <>
+                    <div style={{ height: "0.7em" }}></div>
+                    <Link
+                      size="sm"
+                      color="gray.500"
+                      textUnderlineOffset="0.1em"
+                    >
+                      {val}
+                    </Link>
+                  </>
+                ))}
+              </Container>
             </div>
           </VStack>
         </Container>
