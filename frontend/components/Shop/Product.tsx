@@ -8,6 +8,7 @@ import {
   Container,
   EditableInput,
   EditablePreview,
+  Tooltip,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { RiEditBoxFill, RiEditBoxLine } from "react-icons/ri";
@@ -100,15 +101,13 @@ const Product: React.FC<Props> = ({
             />
           </UploadContext.Provider>
           <Button
+            variant="pinkSolid"
             size="sm"
             borderRadius="3xl"
-            bgColor="#9D84B7"
-            color="white"
             position="absolute"
             padding="1em"
             bottom="1em"
             right="1em"
-            // marginLeft="27em"
             _hover={{ bg: "#B096CE" }}
             onClick={() => {
               if (cb) {
@@ -155,36 +154,44 @@ const Product: React.FC<Props> = ({
   const EditBtn: React.FC = () => {
     if (!edit)
       return (
-        <RiEditBoxLine
-          color={"#091353"}
-          size="20"
-          style={{
-            float: "right",
-            cursor: "pointer",
-            marginRight: "0.5em",
-            marginTop: "0.5em",
-          }}
-          onClick={() => {
-            setEdit(!edit);
-            setTriggerUpload(false);
-          }}
-        />
+        <Tooltip label="Edit">
+          <span style={{ float: "right" }}>
+            <RiEditBoxLine
+              color={"#091353"}
+              size="20"
+              style={{
+                float: "right",
+                cursor: "pointer",
+                marginRight: "0.5em",
+                marginTop: "0.5em",
+              }}
+              onClick={() => {
+                setEdit(!edit);
+                setTriggerUpload(false);
+              }}
+            />
+          </span>
+        </Tooltip>
       );
     else
       return (
-        <RiEditBoxFill
-          color={"#091353"}
-          size="20"
-          style={{
-            float: "right",
-            cursor: "pointer",
-            marginRight: "0.5em",
-            marginTop: "0.5em",
-          }}
-          onClick={() => {
-            setEdit(!edit);
-          }}
-        />
+        <Tooltip label="Edit">
+          <span style={{ float: "right" }}>
+            <RiEditBoxFill
+              color={"#091353"}
+              size="20"
+              style={{
+                float: "right",
+                cursor: "pointer",
+                marginRight: "0.5em",
+                marginTop: "0.5em",
+              }}
+              onClick={() => {
+                setEdit(!edit);
+              }}
+            />
+          </span>
+        </Tooltip>
       );
   };
 
@@ -199,20 +206,25 @@ const Product: React.FC<Props> = ({
     >
       {editable ? (
         <>
-          <BsFillTrashFill
-            style={{
-              position: "absolute",
-              marginTop: "0.55em",
-              marginLeft: "26.5em",
-            }}
-            size="18"
-            color="#BF3E3D"
-            cursor="pointer"
-            onClick={() => {
-              if (onDelete) onDelete();
-            }}
-          />
           <EditBtn />
+          <Tooltip label="Delete">
+            <span style={{ float: "right" }}>
+              <BsFillTrashFill
+                style={{
+                  float: "right",
+                  // position: "absolute",
+                  marginTop: "0.56em",
+                  marginRight: "0.5em",
+                }}
+                size="18"
+                color="#BF3E3D"
+                cursor="pointer"
+                onClick={() => {
+                  if (onDelete) onDelete();
+                }}
+              />
+            </span>
+          </Tooltip>
         </>
       ) : (
         <></>
