@@ -26,6 +26,7 @@ const Login: NextPage = () => {
         boxShadow="0.2em 0.2em 0.2em 0.2em #e1e1e1"
         height="inherit"
         paddingBottom="4em"
+        borderRadius="lg"
       >
         <Center color="gray" style={{ marginTop: "7vh" }}>
           <Stack
@@ -37,12 +38,12 @@ const Login: NextPage = () => {
             <Tabs align="center" isFitted={false} variant="line" isLazy>
               <TabList>
                 <Tab>
-                  <Heading as="h2" size="md" isTruncated>
+                  <Heading as="h2" size="md" isTruncated fontFamily="Sora">
                     Sign Up
                   </Heading>
                 </Tab>
                 <Tab>
-                  <Heading as="h2" size="md" isTruncated>
+                  <Heading as="h2" size="md" isTruncated fontFamily="Sora">
                     Sign In
                   </Heading>
                 </Tab>
