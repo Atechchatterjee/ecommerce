@@ -8,7 +8,8 @@ const Banner: React.FC<{ text: string }> = ({ text }) => {
         <Heading
           as="h1"
           color="#333333"
-          style={{ marginTop: "1.6em" }}
+          marginTop="1.6em"
+          fontFamily="Sora"
           isTruncated
         >
           {text}
