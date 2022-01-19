@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { Field, Formik } from "formik";
+import { Formik } from "formik";
 import axios from "axios";
 import { ShowError } from "./Custom/ShowError";
 import { CustomField } from "./Custom/CustomField";
@@ -69,10 +69,10 @@ const SignIn: React.FunctionComponent = () => {
                   <Link
                     color="red.400"
                     href="#"
-                    style={{
-                      fontSize: "0.8em",
-                      marginLeft: "20em",
-                    }}
+                    // style={{
+                    fontSize="0.8em"
+                    marginLeft="19em"
+                    // }}
                     onClick={() => window.location.assign("/forgotpassword")}
                   >
                     Forgot Password ?
@@ -80,10 +80,12 @@ const SignIn: React.FunctionComponent = () => {
                   <br />
                   <Button
                     type="submit"
-                    backgroundColor="#091353"
-                    _hover={{ backgroundColor: "#535a87" }}
-                    color="white"
-                    style={{ width: "100%" }}
+                    variant="blueSolid"
+                    // backgroundColor="#091353"
+                    marginTop="1em"
+                    // _hover={{ backgroundColor: "#535a87" }}
+                    // color="white"
+                    width="100%"
                     borderRadius="none"
                   >
                     Submit

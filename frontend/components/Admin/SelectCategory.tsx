@@ -141,7 +141,7 @@ const SelectCategory: React.FC<Props> = ({
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader color="black.300" fontFamily="Sora">
+          <ModalHeader color="gray.700" fontFamily="Sora">
             Select Category
           </ModalHeader>
           <ModalCloseButton />
@@ -177,7 +177,7 @@ const SelectCategory: React.FC<Props> = ({
             />
           </ModalBody>
           <ModalFooter>
-            <Button onClick={() => setModalOpen(false)} colorScheme="facebook">
+            <Button variant="blueSolid" onClick={() => setModalOpen(false)}>
               Select
             </Button>
           </ModalFooter>

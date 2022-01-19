@@ -1,12 +1,12 @@
-import React, { useState, useRef } from 'react';
-import '../styles/signup.module.css';
-import { Formik } from 'formik';
-import axios from 'axios';
-import * as yup from 'yup';
-import { ShowError } from './Custom/ShowError';
-import { CustomField } from './Custom/CustomField';
-import { Button } from '@chakra-ui/react';
-import constants from '../util/Constants';
+import React, { useState, useRef } from "react";
+import "../styles/signup.module.css";
+import { Formik } from "formik";
+import axios from "axios";
+import * as yup from "yup";
+import { ShowError } from "./Custom/ShowError";
+import { CustomField } from "./Custom/CustomField";
+import { Button } from "@chakra-ui/react";
+import constants from "../util/Constants";
 
 // validation with yup
 const emailValidation: RegExp =
@@ -15,18 +15,18 @@ const phNumberValidation: RegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
 const SignUp: React.FunctionComponent = () => {
-  const [failedErr, setFailedErr] = useState<string>(''); // error for already existing user
+  const [failedErr, setFailedErr] = useState<string>(""); // error for already existing user
 
   const formikRef = useRef<any>();
 
   const signUpValidationSchema = yup.object().shape({
-    email: yup.string().matches(emailValidation, 'Invalid email'),
-    password: yup.string().min(8, 'Too Short'),
+    email: yup.string().matches(emailValidation, "Invalid email"),
+    password: yup.string().min(8, "Too Short"),
     phNumber: yup
       .string()
-      .min(10, 'Invalid phone number')
-      .max(10, 'Invalid phone number')
-      .matches(phNumberValidation, 'Invalid phone number'),
+      .min(10, "Invalid phone number")
+      .max(10, "Invalid phone number")
+      .matches(phNumberValidation, "Invalid phone number"),
   });
 
   return (
@@ -34,10 +34,10 @@ const SignUp: React.FunctionComponent = () => {
       <Formik
         innerRef={formikRef}
         initialValues={{
-          email: '',
-          name: '',
-          password: '',
-          phNumber: '',
+          email: "",
+          name: "",
+          password: "",
+          phNumber: "",
         }}
         onSubmit={(formData, { setSubmitting, resetForm }) => {
           console.log(formData);
@@ -56,7 +56,7 @@ const SignUp: React.FunctionComponent = () => {
         {({ handleSubmit, errors, handleChange }) => (
           <form onSubmit={handleSubmit}>
             <ShowError condition={failedErr.length > 0} error={failedErr} />
-            <div style={{ marginTop: '1em' }}>
+            <div style={{ marginTop: "1em" }}>
               <CustomField
                 placeholder="Email Address"
                 name="email"
@@ -91,10 +91,8 @@ const SignUp: React.FunctionComponent = () => {
               <br />
               <Button
                 type="submit"
-                backgroundColor="#091353"
-                _hover={{ backgroundColor: '#535a87' }}
-                color="white"
-                style={{ width: '100%' }}
+                variant="blueSolid"
+                style={{ width: "100%" }}
                 borderRadius="none"
               >
                 Submit

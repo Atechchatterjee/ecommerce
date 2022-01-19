@@ -140,9 +140,7 @@ const GoogleAuth: React.FC = () => {
 
   return (
     <Button
-      variant="solid"
-      backgroundColor="#4285F4"
-      color="white"
+      variant="pinkSolid"
       width="100%"
       borderRadius="none"
       boxShadow="base"
