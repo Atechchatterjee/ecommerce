@@ -1,14 +1,26 @@
 from operator import itemgetter
-from urllib import parse
-from rest_framework.decorators import parser_classes
-from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
-from .serializers import CategorySerializer, ProductSerializer
-from authentication.backends import Is_Admin, Is_User
 from .models import Category, Product
+from rest_framework.response import Response
+from authentication.backends import Is_Admin
+from rest_framework.decorators import parser_classes
+from .serializers import CategorySerializer, ProductSerializer
+from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.decorators import api_view, permission_classes
 
+def add_product_to_db(product_name, product_description, product_price, product_image, category_id):
+    try:
+        Product(
+            name=product_name,
+            price=str(product_price),
+            description=product_description,
+            image=product_image,
+            category=fetch_category(
+                int(category_id)) if category_id is not "" else None
+        ).save()
+        return True
+    except:
+        return False
 
 # fetching the category object from db
 def fetch_category(category_id):
@@ -22,23 +34,14 @@ def fetch_category(category_id):
 def create_product(request):
     product_name, product_description, product_price, product_image, category_id = itemgetter(
         'productName', 'productDescription', 'productPrice', 'productImage', 'categoryId')(request.data)
-
-    try:
-        Product(
-            name=product_name,
-            price=str(product_price),
-            description=product_description,
-            image=product_image,
-            category=fetch_category(
-                int(category_id)) if category_id is not "" else None
-        ).save()
+    success = add_product_to_db(product_name, product_description, product_price, product_image, category_id)
+    if success:
         return Response(status=status.HTTP_200_OK)
-    except:
+    else:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
-@permission_classes([Is_User])
 def get_all_products(request):
     try:
         all_products = Product.objects.all()
@@ -82,5 +85,26 @@ def get_sub_category(request):
         sub_categories = Category.objects.filter(
             sub_categories=category_id)
         return Response({"subCategories": sub_categories}, status=status.HTTP_200_OK)
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([Is_Admin])
+def update_product(request):
+    id, name, description, price = itemgetter('id', 'name', 'description', 'price')(request.data)
+    image = None
+    if "image" in request.data:
+        image = request.data['image']
+    try:
+        product = Product.objects.get(product_id=id)
+        product.product_id = id 
+        product.name = name
+        product.price = price
+        product.description=description
+        if image is not None:
+            product.image=image
+        product.save()
+        return Response(status=status.HTTP_200_OK)
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
