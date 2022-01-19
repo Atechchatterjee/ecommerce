@@ -9,6 +9,7 @@ interface Props {
   borderRadius?: string;
   onChange?: (_: File) => void;
   bgColor?: string;
+  variant?: "pinkSolid" | "blueSolid" | "none";
 }
 
 const CustomFileInput: React.FC<Props> = ({
@@ -19,6 +20,7 @@ const CustomFileInput: React.FC<Props> = ({
   colorScheme,
   borderRadius,
   bgColor,
+  variant,
 }) => {
   const fileInput = useRef<any>(null);
   const [selectedFile, setSelectedFile] = useState<File>();
@@ -36,7 +38,8 @@ const CustomFileInput: React.FC<Props> = ({
         }}
       />
       <Button
-        bgColor={bgColor ? bgColor : "teal"}
+        variant={variant}
+        bgColor={bgColor ? bgColor : ""}
         borderRadius={borderRadius ? borderRadius : "md"}
         width={width}
         colorScheme={colorScheme}

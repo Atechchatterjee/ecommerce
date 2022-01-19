@@ -58,6 +58,7 @@ interface Props {
   includeNone?: boolean;
   bgColor?: string;
   height?: string;
+  variant?: "blueSolid" | "pinkSolid" | "none";
 }
 
 const SelectCategory: React.FC<Props> = ({
@@ -70,6 +71,7 @@ const SelectCategory: React.FC<Props> = ({
   includeNone,
   bgColor,
   height,
+  variant,
 }) => {
   const categoryMap = useRef<CategoryMap>({});
   const [modalOpen, setModalOpen] = useState<boolean>(false);
@@ -104,6 +106,7 @@ const SelectCategory: React.FC<Props> = ({
   return (
     <>
       <Button
+        variant={variant || "pinkSolid"}
         colorScheme={colorScheme ? colorScheme : ""}
         backgroundColor={bgColor ? bgColor : "teal"}
         width={width ? width : "full"}
