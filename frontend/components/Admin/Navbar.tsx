@@ -1,4 +1,4 @@
-import { MouseEventHandler, ReactNode } from 'react';
+import { MouseEventHandler, ReactNode } from "react";
 import {
   Box,
   Flex,
@@ -15,10 +15,10 @@ import {
   useDisclosure,
   useColorModeValue,
   Stack,
-} from '@chakra-ui/react';
-import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
-import logout from '../../util/Logout';
-import { useRouter } from 'next/router';
+} from "@chakra-ui/react";
+import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
+import logout from "../../util/Logout";
+import { useRouter } from "next/router";
 
 interface NavLinkProps {
   children: ReactNode;
@@ -26,21 +26,21 @@ interface NavLinkProps {
 }
 
 const Links = [
-  'Dashboard',
-  'Purchase',
-  ['Catalogs', 'Product', 'Category', 'AllProducts'],
-  'Orders',
-  'Customers',
+  "Dashboard",
+  "Purchase",
+  ["Catalogs", "Product", "Category", "AllProducts"],
+  "Orders",
+  "Customers",
 ];
 
 const NavLink: React.FC<NavLinkProps> = ({ children, onClick }) => (
   <Link
     px={2}
     py={1}
-    rounded={'md'}
+    rounded={"md"}
     _hover={{
-      textDecoration: 'none',
-      bg: useColorModeValue('#212C6B', '#212C6B'),
+      textDecoration: "none",
+      bg: useColorModeValue("#212C6B", "#212C6B"),
     }}
     onClick={onClick}
   >
@@ -55,29 +55,30 @@ const Navbar: React.FC = () => {
   return (
     <>
       <Box bgColor="#091353" textColor="white" px={4}>
-        <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
+        <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           <IconButton
-            size={'md'}
+            size={"md"}
             icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
-            aria-label={'Open Menu'}
-            display={{ md: 'none' }}
+            aria-label={"Open Menu"}
+            display={{ md: "none" }}
             onClick={isOpen ? onClose : onOpen}
           />
-          <HStack spacing={8} alignItems={'center'}>
+          <HStack spacing={8} alignItems={"center"}>
             <Box>Admin Panel</Box>
             <HStack
-              as={'nav'}
+              as={"nav"}
               spacing={4}
-              display={{ base: 'none', md: 'flex' }}
+              display={{ base: "none", md: "flex" }}
             >
               {Links.map((link) => {
                 return Array.isArray(link) ? (
                   <NavLink key={link[0]}>
                     <Menu autoSelect={false}>
                       <MenuButton
-                        rounded={'full'}
-                        variant={'link'}
-                        cursor={'pointer'}
+                        key={link[0]}
+                        rounded={"full"}
+                        variant={"link"}
+                        cursor={"pointer"}
                         minW={0}
                       >
                         {link[0]}
@@ -86,7 +87,7 @@ const Navbar: React.FC = () => {
                         {link.slice(1).map((item) => (
                           <MenuItem
                             key={item}
-                            _hover={{ bg: '#212C6B' }}
+                            _hover={{ bg: "#212C6B" }}
                             onClick={() =>
                               router.push(
                                 `/admin/${link[0].toLowerCase()}/${item.toLowerCase()}`
@@ -110,23 +111,23 @@ const Navbar: React.FC = () => {
               })}
             </HStack>
           </HStack>
-          <Flex alignItems={'center'}>
+          <Flex alignItems={"center"}>
             <Menu autoSelect={false}>
               <MenuButton
                 as={Button}
-                rounded={'full'}
-                variant={'link'}
-                cursor={'pointer'}
+                rounded={"full"}
+                variant={"link"}
+                cursor={"pointer"}
                 minW={0}
                 autoFocus={false}
               >
-                <Avatar size={'sm'} />
+                <Avatar size={"sm"} />
               </MenuButton>
               <MenuList bg="#091353" borderColor="#212C6B">
-                <MenuItem _hover={{ bg: '#212C6B' }}>Profile</MenuItem>
+                <MenuItem _hover={{ bg: "#212C6B" }}>Profile</MenuItem>
                 <MenuDivider />
                 <MenuItem
-                  _hover={{ bg: '#212C6B' }}
+                  _hover={{ bg: "#212C6B" }}
                   onClick={() => logout({ admin: true })}
                 >
                   logout
@@ -137,8 +138,8 @@ const Navbar: React.FC = () => {
         </Flex>
 
         {isOpen ? (
-          <Box pb={4} display={{ md: 'none' }}>
-            <Stack as={'nav'} spacing={4}>
+          <Box pb={4} display={{ md: "none" }}>
+            <Stack as={"nav"} spacing={4}>
               {Links.map((link) =>
                 Array.isArray(link) ? (
                   <NavLink key={link[0]}>{link[0]}</NavLink>
