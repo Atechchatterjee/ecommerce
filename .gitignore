@@ -1,0 +1,40 @@
+# dependencies
+/frontend/node_modules
+/frontent/.pnp
+/frontend/.pnp.js
+
+# testing
+/frontend/coverage
+
+# next.js
+/frontend/.next/
+/frontend/out/
+
+# production
+/frontend/build
+
+# misc
+/frontend/.DS_Store
+/frontend/*.pem
+
+# debug
+/frontend/npm-debug.log*
+/frontend/yarn-debug.log*
+/frontend/yarn-error.log*
+
+# /frontend/# local env files
+# /frontend/.env.local
+# /frontend/.env.development.local
+# /frontend/.env.test.local
+# /frontend/.env.production.local
+
+# backend
+/backend/data
+/backend/static
+/backend/venv
+/backend/src/media/images/
+/backend/src/**/__pycache__/
+**/migrations
+
+# vercel
+.vercel

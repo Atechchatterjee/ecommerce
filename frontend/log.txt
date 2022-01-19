@@ -1,0 +1,412 @@
+
+
+times in msec
+ clock   self+sourced   self:  sourced script
+ clock   elapsed:              other lines
+
+000.010  000.010: --- NVIM STARTING ---
+000.427  000.417: locale set
+000.895  000.467: inits 1
+000.913  000.019: window checked
+000.917  000.004: parsing arguments
+001.028  000.111: expanding arguments
+001.110  000.083: inits 2
+002.020  000.910: init highlight
+002.024  000.004: waiting for UI
+003.917  001.892: done waiting for UI
+003.957  000.040: initialized screen early for UI
+008.091  003.603  003.603: sourcing /home/anish/.config/nvim/autoload/plug.vim
+031.408  000.020  000.020: sourcing /home/anish/.vim/plugged/vifm.vim/ftdetect/vifm-rename.vim
+031.461  000.029  000.029: sourcing /home/anish/.vim/plugged/vifm.vim/ftdetect/vifm.vim
+031.664  000.036  000.036: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/css.vim
+031.713  000.027  000.027: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/graphql.vim
+031.744  000.014  000.014: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/html.vim
+031.784  000.021  000.021: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/javascript.vim
+031.815  000.014  000.014: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/json.vim
+031.849  000.015  000.015: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/less.vim
+031.882  000.014  000.014: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/lua.vim
+031.939  000.038  000.038: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/markdown.vim
+031.971  000.014  000.014: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/php.vim
+032.005  000.015  000.015: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/ruby.vim
+032.040  000.016  000.016: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/scss.vim
+032.077  000.020  000.020: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/typescript.vim
+032.109  000.013  000.013: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/vue.vim
+032.143  000.016  000.016: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/xml.vim
+032.178  000.016  000.016: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/yaml.vim
+032.335  000.015  000.015: sourcing /home/anish/.vim/plugged/yats.vim/ftdetect/typescript.vim
+032.369  000.015  000.015: sourcing /home/anish/.vim/plugged/yats.vim/ftdetect/typescriptreact.vim
+032.442  000.014  000.014: sourcing /home/anish/.vim/plugged/vim-javascript/ftdetect/flow.vim
+032.499  000.039  000.039: sourcing /home/anish/.vim/plugged/vim-javascript/ftdetect/javascript.vim
+032.726  000.174  000.174: sourcing /home/anish/.vim/plugged/vim-go/ftdetect/gofiletype.vim
+032.913  009.298  008.705: sourcing /usr/share/nvim/runtime/filetype.vim
+033.173  000.039  000.039: sourcing /usr/share/nvim/runtime/ftplugin.vim
+033.421  000.034  000.034: sourcing /usr/share/nvim/runtime/indent.vim
+034.251  000.340  000.340: sourcing /usr/share/nvim/runtime/syntax/syncolor.vim
+034.402  000.693  000.353: sourcing /usr/share/nvim/runtime/syntax/synload.vim
+034.433  000.928  000.235: sourcing /usr/share/nvim/runtime/syntax/syntax.vim
+035.249  000.016  000.016: sourcing /usr/share/nvim/runtime/filetype.vim
+038.329  000.036  000.036: sourcing /usr/share/nvim/runtime/ftplugin.vim
+040.900  000.026  000.026: sourcing /usr/share/nvim/runtime/indent.vim
+043.593  000.488  000.488: sourcing /usr/share/nvim/runtime/syntax/nosyntax.vim
+044.172  000.170  000.170: sourcing /usr/share/nvim/runtime/syntax/syncolor.vim
+046.486  002.685  002.515: sourcing /usr/share/nvim/runtime/syntax/synload.vim
+046.533  003.480  000.307: sourcing /usr/share/nvim/runtime/syntax/syntax.vim
+047.564  000.204  000.204: sourcing /usr/share/nvim/runtime/syntax/syncolor.vim
+050.865  000.195  000.195: sourcing /usr/share/nvim/runtime/syntax/syncolor.vim
+058.888  012.092  011.693: sourcing /home/anish/.vim/plugged/vim-github-dark/colors/ghdark.vim
+059.941  000.229  000.229: sourcing /home/anish/.config/nvim/autoload/pathogen.vim
+077.424  001.376  001.376: sourcing /usr/share/nvim/runtime/ftoff.vim
+090.269  000.050  000.050: sourcing /home/anish/.vim/plugged/vifm.vim/ftdetect/vifm-rename.vim
+090.470  000.055  000.055: sourcing /home/anish/.vim/plugged/vifm.vim/ftdetect/vifm.vim
+090.749  000.035  000.035: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/css.vim
+090.807  000.024  000.024: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/graphql.vim
+090.842  000.015  000.015: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/html.vim
+090.880  000.021  000.021: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/javascript.vim
+090.912  000.014  000.014: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/json.vim
+090.943  000.013  000.013: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/less.vim
+090.974  000.013  000.013: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/lua.vim
+091.021  000.029  000.029: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/markdown.vim
+091.052  000.013  000.013: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/php.vim
+091.083  000.013  000.013: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/ruby.vim
+091.113  000.013  000.013: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/scss.vim
+091.149  000.018  000.018: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/typescript.vim
+091.188  000.020  000.020: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/vue.vim
+091.234  000.019  000.019: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/xml.vim
+091.273  000.019  000.019: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/yaml.vim
+091.489  000.022  000.022: sourcing /home/anish/.vim/plugged/yats.vim/ftdetect/typescript.vim
+091.533  000.018  000.018: sourcing /home/anish/.vim/plugged/yats.vim/ftdetect/typescriptreact.vim
+091.637  000.023  000.023: sourcing /home/anish/.vim/plugged/vim-javascript/ftdetect/flow.vim
+091.727  000.049  000.049: sourcing /home/anish/.vim/plugged/vim-javascript/ftdetect/javascript.vim
+092.101  000.316  000.316: sourcing /home/anish/.vim/plugged/vim-go/ftdetect/gofiletype.vim
+094.695  014.304  013.491: sourcing /usr/share/nvim/runtime/filetype.vim
+097.554  000.142  000.142: sourcing /home/anish/.vim/plugged/vim-lightline-coc/autoload/lightline/coc.vim
+098.030  093.628  048.026: sourcing /home/anish/.config/nvim/init.vim
+098.040  000.455: sourcing vimrc file(s)
+101.942  000.531  000.531: sourcing /home/anish/.config/nvim/plugin/auto-pairs/plugin/auto-pairs.vim
+102.310  000.018  000.018: sourcing /home/anish/.config/nvim/bundle/syntastic/plugin/syntastic/autoloclist.vim
+102.344  000.013  000.013: sourcing /home/anish/.config/nvim/bundle/syntastic/plugin/syntastic/balloons.vim
+102.386  000.022  000.022: sourcing /home/anish/.config/nvim/bundle/syntastic/plugin/syntastic/checker.vim
+102.435  000.019  000.019: sourcing /home/anish/.config/nvim/bundle/syntastic/plugin/syntastic/cursor.vim
+102.475  000.018  000.018: sourcing /home/anish/.config/nvim/bundle/syntastic/plugin/syntastic/highlighting.vim
+102.508  000.013  000.013: sourcing /home/anish/.config/nvim/bundle/syntastic/plugin/syntastic/loclist.vim
+102.538  000.012  000.012: sourcing /home/anish/.config/nvim/bundle/syntastic/plugin/syntastic/modemap.vim
+102.566  000.011  000.011: sourcing /home/anish/.config/nvim/bundle/syntastic/plugin/syntastic/notifiers.vim
+102.599  000.016  000.016: sourcing /home/anish/.config/nvim/bundle/syntastic/plugin/syntastic/registry.vim
+102.637  000.016  000.016: sourcing /home/anish/.config/nvim/bundle/syntastic/plugin/syntastic/signs.vim
+104.165  001.245  001.245: sourcing /home/anish/.config/nvim/bundle/syntastic/autoload/syntastic/util.vim
+109.909  000.076  000.076: sourcing /home/anish/.config/nvim/bundle/syntastic/plugin/syntastic/autoloclist.vim
+110.000  000.065  000.065: sourcing /home/anish/.config/nvim/bundle/syntastic/plugin/syntastic/balloons.vim
+110.229  000.208  000.208: sourcing /home/anish/.config/nvim/bundle/syntastic/plugin/syntastic/checker.vim
+110.356  000.106  000.106: sourcing /home/anish/.config/nvim/bundle/syntastic/plugin/syntastic/cursor.vim
+110.468  000.090  000.090: sourcing /home/anish/.config/nvim/bundle/syntastic/plugin/syntastic/highlighting.vim
+110.833  000.314  000.314: sourcing /home/anish/.config/nvim/bundle/syntastic/plugin/syntastic/loclist.vim
+110.947  000.092  000.092: sourcing /home/anish/.config/nvim/bundle/syntastic/plugin/syntastic/modemap.vim
+111.042  000.075  000.075: sourcing /home/anish/.config/nvim/bundle/syntastic/plugin/syntastic/notifiers.vim
+111.461  000.400  000.400: sourcing /home/anish/.config/nvim/bundle/syntastic/plugin/syntastic/registry.vim
+111.595  000.109  000.109: sourcing /home/anish/.config/nvim/bundle/syntastic/plugin/syntastic/signs.vim
+115.319  012.661  009.881: sourcing /home/anish/.config/nvim/bundle/syntastic/plugin/syntastic.vim
+115.667  000.245  000.245: sourcing /home/anish/.vim/plugged/lightline.vim/plugin/lightline.vim
+116.424  000.218  000.218: sourcing /home/anish/.config/nvim/pack/vendor/start/nerdtree/autoload/nerdtree.vim
+117.901  000.579  000.579: sourcing /home/anish/.config/nvim/pack/vendor/start/nerdtree/lib/nerdtree/path.vim
+118.138  000.185  000.185: sourcing /home/anish/.config/nvim/pack/vendor/start/nerdtree/lib/nerdtree/menu_controller.vim
+118.274  000.085  000.085: sourcing /home/anish/.config/nvim/pack/vendor/start/nerdtree/lib/nerdtree/menu_item.vim
+118.440  000.117  000.117: sourcing /home/anish/.config/nvim/pack/vendor/start/nerdtree/lib/nerdtree/key_map.vim
+118.742  000.248  000.248: sourcing /home/anish/.config/nvim/pack/vendor/start/nerdtree/lib/nerdtree/bookmark.vim
+119.026  000.232  000.232: sourcing /home/anish/.config/nvim/pack/vendor/start/nerdtree/lib/nerdtree/tree_file_node.vim
+119.603  000.486  000.486: sourcing /home/anish/.config/nvim/pack/vendor/start/nerdtree/lib/nerdtree/tree_dir_node.vim
+119.899  000.214  000.214: sourcing /home/anish/.config/nvim/pack/vendor/start/nerdtree/lib/nerdtree/opener.vim
+120.215  000.265  000.265: sourcing /home/anish/.config/nvim/pack/vendor/start/nerdtree/lib/nerdtree/creator.vim
+120.322  000.059  000.059: sourcing /home/anish/.config/nvim/pack/vendor/start/nerdtree/lib/nerdtree/flag_set.vim
+120.524  000.155  000.155: sourcing /home/anish/.config/nvim/pack/vendor/start/nerdtree/lib/nerdtree/nerdtree.vim
+120.920  000.345  000.345: sourcing /home/anish/.config/nvim/pack/vendor/start/nerdtree/lib/nerdtree/ui.vim
+120.993  000.024  000.024: sourcing /home/anish/.config/nvim/pack/vendor/start/nerdtree/lib/nerdtree/event.vim
+121.081  000.043  000.043: sourcing /home/anish/.config/nvim/pack/vendor/start/nerdtree/lib/nerdtree/notifier.vim
+121.994  000.858  000.858: sourcing /home/anish/.config/nvim/pack/vendor/start/nerdtree/autoload/nerdtree/ui_glue.vim
+125.284  000.151  000.151: sourcing /home/anish/.config/nvim/pack/vendor/start/nerdtree/nerdtree_plugin/exec_menuitem.vim
+126.342  000.393  000.393: sourcing /usr/share/nvim/runtime/autoload/provider/clipboard.vim
+126.858  001.550  001.157: sourcing /home/anish/.config/nvim/pack/vendor/start/nerdtree/nerdtree_plugin/fs_menu.vim
+126.966  000.082  000.082: sourcing /home/anish/.config/nvim/pack/vendor/start/nerdtree/nerdtree_plugin/vcs.vim
+127.152  000.020  000.020: sourcing /home/anish/.vim/plugged/nerdtree/nerdtree_plugin/exec_menuitem.vim
+127.188  000.016  000.016: sourcing /home/anish/.vim/plugged/nerdtree/nerdtree_plugin/fs_menu.vim
+127.287  000.082  000.082: sourcing /home/anish/.vim/plugged/nerdtree/nerdtree_plugin/vcs.vim
+127.566  000.114  000.114: sourcing /home/anish/.vim/plugged/nerdtree-git-plugin/autoload/gitstatus.vim
+128.108  000.136  000.136: sourcing /home/anish/.vim/plugged/nerdtree-git-plugin/autoload/gitstatus/log.vim
+129.342  001.981  001.731: sourcing /home/anish/.vim/plugged/nerdtree-git-plugin/nerdtree_plugin/git_status.vim
+129.983  000.535  000.535: sourcing /home/anish/.vim/plugged/vim-devicons/nerdtree_plugin/webdevicons.vim
+132.808  017.061  008.531: sourcing /home/anish/.vim/plugged/nerdtree/plugin/NERD_tree.vim
+133.447  000.191  000.191: sourcing /home/anish/.vim/plugged/coc.nvim/autoload/coc/rpc.vim
+134.258  000.722  000.722: sourcing /home/anish/.vim/plugged/coc.nvim/autoload/coc/util.vim
+134.700  000.207  000.207: sourcing /home/anish/.vim/plugged/coc.nvim/autoload/coc/client.vim
+139.106  006.180  005.060: sourcing /home/anish/.vim/plugged/coc.nvim/plugin/coc.vim
+141.662  002.418  002.418: sourcing /home/anish/.vim/plugged/vim-devicons/plugin/webdevicons.vim
+146.689  004.937  004.937: sourcing /home/anish/.vim/plugged/nerdcommenter/plugin/NERD_commenter.vim
+148.242  000.099  000.099: sourcing /usr/share/nvim/runtime/autoload/provider/pythonx.vim
+194.605  000.305  000.305: sourcing /usr/share/nvim/runtime/autoload/remote/host.vim
+194.719  046.880  046.476: sourcing /usr/share/nvim/runtime/autoload/provider/python.vim
+216.454  021.490  021.490: sourcing /usr/share/nvim/runtime/autoload/provider/python3.vim
+216.848  069.461  001.091: sourcing /home/anish/.vim/plugged/clang_complete/plugin/clang_complete.vim
+217.846  000.882  000.882: sourcing /home/anish/.vim/plugged/vim-clang/plugin/clang.vim
+217.956  000.041  000.041: sourcing /home/anish/.vim/plugged/vim-snippets/plugin/vimsnippets.vim
+218.275  000.027  000.027: sourcing /home/anish/.vim/plugged/vifm.vim/autoload/vifm/globals.vim
+218.733  000.717  000.690: sourcing /home/anish/.vim/plugged/vifm.vim/plugin/vifm.vim
+219.331  000.505  000.505: sourcing /home/anish/.vim/plugged/vim-floaterm/plugin/floaterm.vim
+219.811  000.396  000.396: sourcing /home/anish/.vim/plugged/vim-prettier/plugin/prettier.vim
+220.875  000.719  000.719: sourcing /home/anish/.vim/plugged/vimwiki/autoload/vimwiki/vars.vim
+222.657  000.118  000.118: sourcing /home/anish/.vim/plugged/vimwiki/autoload/vimwiki/u.vim
+225.124  005.240  004.403: sourcing /home/anish/.vim/plugged/vimwiki/plugin/vimwiki.vim
+225.952  000.729  000.729: sourcing /home/anish/.vim/plugged/fzf/plugin/fzf.vim
+227.199  001.163  001.163: sourcing /home/anish/.vim/plugged/fzf.vim/plugin/fzf.vim
+227.802  000.518  000.518: sourcing /home/anish/.vim/plugged/vim-surround/plugin/surround.vim
+227.992  000.076  000.076: sourcing /home/anish/.vim/plugged/vim-lightline-coc/plugin/lightline/coc.vim
+228.902  000.490  000.490: sourcing /home/anish/.vim/plugged/vim-go/autoload/go/config.vim
+229.831  000.455  000.455: sourcing /home/anish/.vim/plugged/vim-go/autoload/go/util.vim
+229.864  001.693  000.749: sourcing /home/anish/.vim/plugged/vim-go/plugin/go.vim
+230.406  000.216  000.216: sourcing /usr/share/nvim/runtime/plugin/gzip.vim
+230.461  000.016  000.016: sourcing /usr/share/nvim/runtime/plugin/health.vim
+230.579  000.095  000.095: sourcing /usr/share/nvim/runtime/plugin/man.vim
+232.160  000.301  000.301: sourcing /usr/share/nvim/runtime/pack/dist/opt/matchit/plugin/matchit.vim
+232.228  001.627  001.326: sourcing /usr/share/nvim/runtime/plugin/matchit.vim
+232.435  000.188  000.188: sourcing /usr/share/nvim/runtime/plugin/matchparen.vim
+233.045  000.589  000.589: sourcing /usr/share/nvim/runtime/plugin/netrwPlugin.vim
+233.252  000.170  000.170: sourcing /usr/share/nvim/runtime/plugin/rplugin.vim
+233.419  000.137  000.137: sourcing /usr/share/nvim/runtime/plugin/shada.vim
+233.482  000.031  000.031: sourcing /usr/share/nvim/runtime/plugin/spellfile.vim
+233.699  000.188  000.188: sourcing /usr/share/nvim/runtime/plugin/tarPlugin.vim
+233.834  000.103  000.103: sourcing /usr/share/nvim/runtime/plugin/tohtml.vim
+233.889  000.029  000.029: sourcing /usr/share/nvim/runtime/plugin/tutor.vim
+234.159  000.240  000.240: sourcing /usr/share/nvim/runtime/plugin/zipPlugin.vim
+236.548  009.272: loading plugins
+237.147  000.019  000.019: sourcing /usr/share/nvim/runtime/filetype.vim
+239.925  003.161  003.142: sourcing /home/anish/.config/nvim/pack/kite/start/vim-plugin/plugin/kite.vim
+240.180  000.121  000.121: sourcing /home/anish/.config/nvim/pack/plugins/start/lightline/plugin/lightline.vim
+240.295  000.025  000.025: sourcing /home/anish/.config/nvim/pack/vendor/start/nerdtree/plugin/NERD_tree.vim
+240.402  000.020  000.020: sourcing /home/anish/.config/nvim/pack/vim-javascript/start/vim-javascript/ftdetect/flow.vim
+240.470  000.044  000.044: sourcing /home/anish/.config/nvim/pack/vim-javascript/start/vim-javascript/ftdetect/javascript.vim
+240.578  000.659: loading packages
+240.728  000.150: loading after plugins
+240.751  000.023: inits 3
+243.787  003.036: reading ShaDa
+244.596  000.220  000.220: sourcing /home/anish/.config/nvim/bundle/syntastic/autoload/syntastic/log.vim
+244.668  000.661: opening buffers
+246.608  000.414  000.414: sourcing /home/anish/.config/nvim/pack/plugins/start/lightline/autoload/lightline.vim
+247.326  000.179  000.179: sourcing /home/anish/.vim/plugged/coc.nvim/autoload/coc.vim
+247.488  000.051  000.051: sourcing /home/anish/.config/nvim/pack/plugins/start/lightline/autoload/lightline/tab.vim
+248.202  000.197  000.197: sourcing /home/anish/.config/nvim/pack/plugins/start/lightline/autoload/lightline/colorscheme.vim
+255.164  007.348  007.151: sourcing /home/anish/.vim/plugged/vim-github-dark/autoload/lightline/colorscheme/ghdark.vim
+270.196  000.473  000.473: sourcing /home/anish/.config/nvim/pack/kite/start/vim-plugin/autoload/kite/utils.vim
+270.364  000.722  000.249: sourcing /home/anish/.config/nvim/pack/kite/start/vim-plugin/autoload/kite.vim
+270.479  000.037  000.037: sourcing /home/anish/.config/nvim/pack/kite/start/vim-plugin/autoload/kite/languages.vim
+270.542  017.124: BufEnter autocommands
+270.546  000.004: editing files in windows
+300.939  001.200  001.200: sourcing /home/anish/.config/nvim/pack/vendor/start/nerdtree/syntax/nerdtree.vim
+301.830  000.782  000.782: sourcing /home/anish/.vim/plugged/nerdtree/syntax/nerdtree.vim
+303.383  000.971  000.971: sourcing /home/anish/.vim/plugged/nerdtree-git-plugin/after/syntax/nerdtree.vim
+361.766  058.326  058.326: sourcing /home/anish/.vim/plugged/vim-nerdtree-syntax-highlight/after/syntax/nerdtree.vim
+420.227  000.632  000.632: sourcing /home/anish/.vim/plugged/nerdtree-git-plugin/autoload/gitstatus/job.vim
+424.580  000.256  000.256: sourcing /home/anish/.config/nvim/pack/kite/start/vim-plugin/autoload/kite/async.vim
+439.789  107.077: VimEnter autocommands
+439.819  000.030: UIEnter autocommands
+439.832  000.013: before starting main loop
+478.483  038.651: first screen update
+478.489  000.006: --- NVIM STARTED ---
+
+
+times in msec
+ clock   self+sourced   self:  sourced script
+ clock   elapsed:              other lines
+
+000.016  000.016: --- VIM STARTING ---
+028.568  028.552: Allocated generic buffers
+081.676  053.108: locale set
+082.079  000.403: GUI prepared
+082.086  000.007: clipboard setup
+082.096  000.010: window checked
+155.231  073.135: inits 1
+155.296  000.065: parsing arguments
+155.299  000.003: expanding arguments
+155.364  000.065: shell init
+156.428  001.064: Termcap init
+156.555  000.127: inits 2
+157.538  000.983: init highlight
+232.966  029.447  029.447: sourcing /usr/share/vim/vim81/debian.vim
+353.605  031.393  031.393: sourcing /usr/share/vim/vim81/syntax/syncolor.vim
+353.998  032.247  000.854: sourcing /usr/share/vim/vim81/syntax/synload.vim
+414.869  029.397  029.397: sourcing /usr/share/vim/vim81/filetype.vim
+414.995  146.693  085.049: sourcing /usr/share/vim/vim81/syntax/syntax.vim
+415.079  228.996  052.856: sourcing $VIM/vimrc
+471.170  018.536  018.536: sourcing /home/anish/.vim/autoload/plug.vim
+482.270  001.503  001.503: sourcing /usr/share/vim/vim81/ftoff.vim
+503.532  000.053  000.053: sourcing /home/anish/.vim/plugged/vifm.vim/ftdetect/vifm-rename.vim
+503.598  000.036  000.036: sourcing /home/anish/.vim/plugged/vifm.vim/ftdetect/vifm.vim
+503.892  000.024  000.024: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/css.vim
+503.945  000.026  000.026: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/graphql.vim
+503.991  000.020  000.020: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/html.vim
+504.038  000.022  000.022: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/javascript.vim
+504.083  000.020  000.020: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/json.vim
+504.128  000.020  000.020: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/less.vim
+504.171  000.019  000.019: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/lua.vim
+504.230  000.034  000.034: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/markdown.vim
+504.280  000.020  000.020: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/php.vim
+504.328  000.023  000.023: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/ruby.vim
+504.372  000.019  000.019: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/scss.vim
+504.419  000.022  000.022: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/typescript.vim
+504.463  000.020  000.020: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/vue.vim
+504.509  000.021  000.021: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/xml.vim
+504.557  000.023  000.023: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/yaml.vim
+504.769  000.020  000.020: sourcing /home/anish/.vim/plugged/yats.vim/ftdetect/typescript.vim
+504.813  000.018  000.018: sourcing /home/anish/.vim/plugged/yats.vim/ftdetect/typescriptreact.vim
+504.916  000.020  000.020: sourcing /home/anish/.vim/plugged/vim-javascript/ftdetect/flow.vim
+505.001  000.059  000.059: sourcing /home/anish/.vim/plugged/vim-javascript/ftdetect/javascript.vim
+505.238  016.414  015.875: sourcing /usr/share/vim/vim81/filetype.vim
+518.392  012.812  012.812: sourcing /usr/share/vim/vim81/ftplugin.vim
+531.194  012.584  012.584: sourcing /usr/share/vim/vim81/indent.vim
+531.429  000.013  000.013: sourcing /usr/share/vim/vim81/filetype.vim
+531.624  000.009  000.009: sourcing /usr/share/vim/vim81/ftplugin.vim
+531.808  000.009  000.009: sourcing /usr/share/vim/vim81/indent.vim
+541.493  009.581  009.581: sourcing /usr/share/vim/vim81/syntax/nosyntax.vim
+542.071  000.168  000.168: sourcing /usr/share/vim/vim81/syntax/syncolor.vim
+542.218  000.526  000.358: sourcing /usr/share/vim/vim81/syntax/synload.vim
+542.247  010.381  000.274: sourcing /usr/share/vim/vim81/syntax/syntax.vim
+542.860  000.181  000.181: sourcing /usr/share/vim/vim81/syntax/syncolor.vim
+554.966  011.231  011.231: sourcing /home/anish/.vim/autoload/pathogen.vim
+647.884  001.292  001.292: sourcing /usr/share/vim/vim81/ftoff.vim
+665.824  000.035  000.035: sourcing /home/anish/.vim/plugged/vifm.vim/ftdetect/vifm-rename.vim
+665.912  000.049  000.049: sourcing /home/anish/.vim/plugged/vifm.vim/ftdetect/vifm.vim
+666.400  000.038  000.038: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/css.vim
+666.474  000.036  000.036: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/graphql.vim
+666.534  000.027  000.027: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/html.vim
+666.598  000.031  000.031: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/javascript.vim
+666.657  000.026  000.026: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/json.vim
+666.714  000.024  000.024: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/less.vim
+666.770  000.024  000.024: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/lua.vim
+666.850  000.048  000.048: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/markdown.vim
+666.909  000.026  000.026: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/php.vim
+666.967  000.024  000.024: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/ruby.vim
+667.023  000.024  000.024: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/scss.vim
+667.083  000.028  000.028: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/typescript.vim
+667.139  000.023  000.023: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/vue.vim
+667.195  000.023  000.023: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/xml.vim
+667.255  000.028  000.028: sourcing /home/anish/.vim/plugged/vim-prettier/ftdetect/yaml.vim
+667.523  000.024  000.024: sourcing /home/anish/.vim/plugged/yats.vim/ftdetect/typescript.vim
+667.580  000.023  000.023: sourcing /home/anish/.vim/plugged/yats.vim/ftdetect/typescriptreact.vim
+667.715  000.024  000.024: sourcing /home/anish/.vim/plugged/vim-javascript/ftdetect/flow.vim
+667.822  000.072  000.072: sourcing /home/anish/.vim/plugged/vim-javascript/ftdetect/javascript.vim
+668.142  018.646  017.989: sourcing /usr/share/vim/vim81/filetype.vim
+669.077  253.857  150.246: sourcing $HOME/.vimrc
+669.084  028.693: sourcing vimrc file(s)
+764.239  008.895  008.895: sourcing /home/anish/.vim/plugin/auto-pairs/plugin/auto-pairs.vim
+816.566  024.273  024.273: sourcing /home/anish/.vim/bundle/syntastic/plugin/syntastic/autoloclist.vim
+830.399  013.737  013.737: sourcing /home/anish/.vim/bundle/syntastic/plugin/syntastic/balloons.vim
+830.713  000.220  000.220: sourcing /home/anish/.vim/bundle/syntastic/plugin/syntastic/checker.vim
+830.956  000.172  000.172: sourcing /home/anish/.vim/bundle/syntastic/plugin/syntastic/cursor.vim
+832.455  001.402  001.402: sourcing /home/anish/.vim/bundle/syntastic/plugin/syntastic/highlighting.vim
+832.836  000.290  000.290: sourcing /home/anish/.vim/bundle/syntastic/plugin/syntastic/loclist.vim
+833.182  000.255  000.255: sourcing /home/anish/.vim/bundle/syntastic/plugin/syntastic/modemap.vim
+847.592  014.317  014.317: sourcing /home/anish/.vim/bundle/syntastic/plugin/syntastic/notifiers.vim
+861.166  013.483  013.483: sourcing /home/anish/.vim/bundle/syntastic/plugin/syntastic/registry.vim
+879.316  018.057  018.057: sourcing /home/anish/.vim/bundle/syntastic/plugin/syntastic/signs.vim
+923.887  010.706  010.706: sourcing /home/anish/.vim/bundle/syntastic/autoload/syntastic/util.vim
+990.152  000.222  000.222: sourcing /home/anish/.vim/bundle/syntastic/plugin/syntastic/autoloclist.vim
+990.408  000.180  000.180: sourcing /home/anish/.vim/bundle/syntastic/plugin/syntastic/balloons.vim
+991.049  000.580  000.580: sourcing /home/anish/.vim/bundle/syntastic/plugin/syntastic/checker.vim
+991.416  000.287  000.287: sourcing /home/anish/.vim/bundle/syntastic/plugin/syntastic/cursor.vim
+991.716  000.237  000.237: sourcing /home/anish/.vim/bundle/syntastic/plugin/syntastic/highlighting.vim
+992.618  000.846  000.846: sourcing /home/anish/.vim/bundle/syntastic/plugin/syntastic/loclist.vim
+992.929  000.247  000.247: sourcing /home/anish/.vim/bundle/syntastic/plugin/syntastic/modemap.vim
+993.196  000.206  000.206: sourcing /home/anish/.vim/bundle/syntastic/plugin/syntastic/notifiers.vim
+994.286  001.030  001.030: sourcing /home/anish/.vim/bundle/syntastic/plugin/syntastic/registry.vim
+994.736  000.313  000.313: sourcing /home/anish/.vim/bundle/syntastic/plugin/syntastic/signs.vim
+999.160  119.754  104.900: sourcing /home/anish/.vim/bundle/syntastic/plugin/syntastic.vim
+1000.061  000.591  000.591: sourcing /home/anish/.vim/plugged/lightline.vim/plugin/lightline.vim
+1001.448  000.864  000.864: sourcing /home/anish/.vim/pack/vendor/start/nerdtree/autoload/nerdtree.vim
+1020.515  016.256  016.256: sourcing /home/anish/.vim/pack/vendor/start/nerdtree/lib/nerdtree/path.vim
+1029.520  008.807  008.807: sourcing /home/anish/.vim/pack/vendor/start/nerdtree/lib/nerdtree/menu_controller.vim
+1030.192  000.470  000.470: sourcing /home/anish/.vim/pack/vendor/start/nerdtree/lib/nerdtree/menu_item.vim
+1037.180  006.824  006.824: sourcing /home/anish/.vim/pack/vendor/start/nerdtree/lib/nerdtree/key_map.vim
+1046.396  009.025  009.025: sourcing /home/anish/.vim/pack/vendor/start/nerdtree/lib/nerdtree/bookmark.vim
+1047.506  000.899  000.899: sourcing /home/anish/.vim/pack/vendor/start/nerdtree/lib/nerdtree/tree_file_node.vim
+1061.237  013.528  013.528: sourcing /home/anish/.vim/pack/vendor/start/nerdtree/lib/nerdtree/tree_dir_node.vim
+1062.186  000.746  000.746: sourcing /home/anish/.vim/pack/vendor/start/nerdtree/lib/nerdtree/opener.vim
+1063.356  000.997  000.997: sourcing /home/anish/.vim/pack/vendor/start/nerdtree/lib/nerdtree/creator.vim
+1063.973  000.419  000.419: sourcing /home/anish/.vim/pack/vendor/start/nerdtree/lib/nerdtree/flag_set.vim
+1064.892  000.728  000.728: sourcing /home/anish/.vim/pack/vendor/start/nerdtree/lib/nerdtree/nerdtree.vim
+1066.219  001.140  001.140: sourcing /home/anish/.vim/pack/vendor/start/nerdtree/lib/nerdtree/ui.vim
+1066.734  000.341  000.341: sourcing /home/anish/.vim/pack/vendor/start/nerdtree/lib/nerdtree/event.vim
+1067.238  000.312  000.312: sourcing /home/anish/.vim/pack/vendor/start/nerdtree/lib/nerdtree/notifier.vim
+1069.987  002.419  002.419: sourcing /home/anish/.vim/pack/vendor/start/nerdtree/autoload/nerdtree/ui_glue.vim
+1079.108  000.600  000.600: sourcing /home/anish/.vim/pack/vendor/start/nerdtree/nerdtree_plugin/exec_menuitem.vim
+1082.243  003.061  003.061: sourcing /home/anish/.vim/pack/vendor/start/nerdtree/nerdtree_plugin/fs_menu.vim
+1082.739  000.416  000.416: sourcing /home/anish/.vim/pack/vendor/start/nerdtree/nerdtree_plugin/vcs.vim
+1083.326  000.067  000.067: sourcing /home/anish/.vim/plugged/nerdtree/nerdtree_plugin/exec_menuitem.vim
+1083.431  000.047  000.047: sourcing /home/anish/.vim/plugged/nerdtree/nerdtree_plugin/fs_menu.vim
+1083.773  000.289  000.289: sourcing /home/anish/.vim/plugged/nerdtree/nerdtree_plugin/vcs.vim
+1084.674  000.363  000.363: sourcing /home/anish/.vim/plugged/nerdtree-git-plugin/autoload/gitstatus.vim
+1086.367  000.480  000.480: sourcing /home/anish/.vim/plugged/nerdtree-git-plugin/autoload/gitstatus/log.vim
+1089.646  005.666  004.823: sourcing /home/anish/.vim/plugged/nerdtree-git-plugin/nerdtree_plugin/git_status.vim
+1091.083  001.221  001.221: sourcing /home/anish/.vim/plugged/vim-devicons/nerdtree_plugin/webdevicons.vim
+1091.984  092.722  017.580: sourcing /home/anish/.vim/plugged/nerdtree/plugin/NERD_tree.vim
+1093.160  000.570  000.570: sourcing /home/anish/.vim/plugged/coc.nvim/autoload/coc/rpc.vim
+1094.769  001.393  001.393: sourcing /home/anish/.vim/plugged/coc.nvim/autoload/coc/util.vim
+1095.513  000.335  000.335: sourcing /home/anish/.vim/plugged/coc.nvim/autoload/coc/client.vim
+1100.750  008.610  006.312: sourcing /home/anish/.vim/plugged/coc.nvim/plugin/coc.vim
+1104.226  003.310  003.310: sourcing /home/anish/.vim/plugged/vim-devicons/plugin/webdevicons.vim
+1112.764  008.404  008.404: sourcing /home/anish/.vim/plugged/nerdcommenter/plugin/NERD_commenter.vim
+1114.100  000.683  000.683: sourcing /home/anish/.vim/plugged/clang_complete/plugin/clang_complete.vim
+1115.492  001.269  001.269: sourcing /home/anish/.vim/plugged/vim-clang/plugin/clang.vim
+1115.697  000.066  000.066: sourcing /home/anish/.vim/plugged/vim-snippets/plugin/vimsnippets.vim
+1116.266  000.038  000.038: sourcing /home/anish/.vim/plugged/vifm.vim/autoload/vifm/globals.vim
+1116.928  001.143  001.105: sourcing /home/anish/.vim/plugged/vifm.vim/plugin/vifm.vim
+1117.722  000.681  000.681: sourcing /home/anish/.vim/plugged/vim-floaterm/plugin/floaterm.vim
+1118.522  000.661  000.661: sourcing /home/anish/.vim/plugged/vim-prettier/plugin/prettier.vim
+1119.635  000.522  000.522: sourcing /home/anish/.vim/plugged/vimwiki/autoload/vimwiki/vars.vim
+1120.910  000.099  000.099: sourcing /home/anish/.vim/plugged/vimwiki/autoload/vimwiki/u.vim
+1122.992  004.369  003.748: sourcing /home/anish/.vim/plugged/vimwiki/plugin/vimwiki.vim
+1123.710  000.617  000.617: sourcing /home/anish/.vim/plugged/fzf/plugin/fzf.vim
+1124.743  000.954  000.954: sourcing /home/anish/.vim/plugged/fzf.vim/plugin/fzf.vim
+1125.323  000.493  000.493: sourcing /home/anish/.vim/plugged/vim-surround/plugin/surround.vim
+1125.934  000.243  000.243: sourcing /usr/share/vim/vim81/plugin/getscriptPlugin.vim
+1126.263  000.307  000.307: sourcing /usr/share/vim/vim81/plugin/gzip.vim
+1126.593  000.306  000.306: sourcing /usr/share/vim/vim81/plugin/logiPat.vim
+1126.719  000.100  000.100: sourcing /usr/share/vim/vim81/plugin/manpager.vim
+1126.992  000.254  000.254: sourcing /usr/share/vim/vim81/plugin/matchparen.vim
+1127.731  000.715  000.715: sourcing /usr/share/vim/vim81/plugin/netrwPlugin.vim
+1127.887  000.116  000.116: sourcing /usr/share/vim/vim81/plugin/rrhelper.vim
+1128.019  000.102  000.102: sourcing /usr/share/vim/vim81/plugin/spellfile.vim
+1128.294  000.251  000.251: sourcing /usr/share/vim/vim81/plugin/tarPlugin.vim
+1128.497  000.174  000.174: sourcing /usr/share/vim/vim81/plugin/tohtml.vim
+1128.796  000.276  000.276: sourcing /usr/share/vim/vim81/plugin/vimballPlugin.vim
+1129.093  000.262  000.262: sourcing /usr/share/vim/vim81/plugin/zipPlugin.vim
+1129.103  117.485: loading plugins
+1146.659  000.023  000.023: sourcing /usr/share/vim/vim81/filetype.vim
+1147.142  017.842  017.819: sourcing /home/anish/.vim/pack/kite/start/vim-plugin/plugin/kite.vim
+1147.422  000.164  000.164: sourcing /home/anish/.vim/pack/plugins/start/lightline/plugin/lightline.vim
+1147.689  000.156  000.156: sourcing /home/anish/.vim/pack/vendor/start/nerdtree/plugin/NERD_tree.vim
+1147.973  000.091  000.091: sourcing /home/anish/.vim/pack/vim-javascript/start/vim-javascript/ftdetect/flow.vim
+1148.115  000.113  000.113: sourcing /home/anish/.vim/pack/vim-javascript/start/vim-javascript/ftdetect/javascript.vim
+1148.169  000.700: loading packages
+1148.276  000.107: loading after plugins
+1149.021  000.745: inits 3
+1174.951  025.930: reading viminfo
+1194.274  019.323: setup clipboard
+1194.304  000.030: setting raw mode
+1194.311  000.007: start termcap
+1194.367  000.056: clearing screen
+1195.653  000.534  000.534: sourcing /home/anish/.vim/bundle/syntastic/autoload/syntastic/log.vim
+1195.748  000.847: opening buffers
+1197.849  000.537  000.537: sourcing /home/anish/.vim/pack/plugins/start/lightline/autoload/lightline.vim
+1198.565  000.172  000.172: sourcing /home/anish/.vim/plugged/coc.nvim/autoload/coc.vim
+1199.005  000.181  000.181: sourcing /home/anish/.vim/pack/plugins/start/lightline/autoload/lightline/tab.vim
+1222.731  000.215  000.215: sourcing /home/anish/.vim/plugged/onedark.vim/autoload/onedark.vim
+1223.267  000.292  000.292: sourcing /home/anish/.vim/pack/plugins/start/lightline/autoload/lightline/colorscheme.vim
+1223.953  024.460  023.953: sourcing /home/anish/.vim/plugged/onedark.vim/autoload/lightline/colorscheme/onedark.vim
+1245.759  006.882  006.882: sourcing /home/anish/.vim/pack/kite/start/vim-plugin/autoload/kite/utils.vim
+1245.918  018.036  011.154: sourcing /home/anish/.vim/pack/kite/start/vim-plugin/autoload/kite.vim
+1246.414  000.384  000.384: sourcing /home/anish/.vim/pack/kite/start/vim-plugin/autoload/kite/languages.vim
+1246.482  006.964: BufEnter autocommands
+1246.483  000.001: editing files in windows
+1252.423  000.482  000.482: sourcing /home/anish/.vim/pack/kite/start/vim-plugin/autoload/kite/async.vim
+1276.859  012.970  012.970: sourcing /home/anish/.vim/plugged/coc.nvim/autoload/coc/api.vim
+1280.053  020.118: VimEnter autocommands
+1280.163  000.110: before starting main loop
+1281.999  001.836: first screen update
+1282.002  000.003: --- VIM STARTED ---
