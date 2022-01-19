@@ -1,5 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
-import { HStack, Text, Heading, Center, Link } from "@chakra-ui/layout";
+import {
+  HStack,
+  Text,
+  Heading,
+  Center,
+  Link,
+  Container,
+} from "@chakra-ui/layout";
 import {
   InputGroup,
   InputLeftAddon,
@@ -27,16 +34,17 @@ const Header: React.FC = () => {
     const menuBtnColor = useRef<string>("#9D84B7");
 
     return (
-      <Menu {...props}>
+      <Menu {...props} autoSelect={false}>
         <MenuButton
           backgroundColor={menuBtnColor.current}
+          fontFamily="Sora"
           color="white"
           marginLeft="-0.1em"
           as={Button}
           rightIcon={<ChevronDownIcon />}
           style={{ fontSize: "0.9em" }}
           width="35.1"
-          fontWeight="400"
+          fontWeight="medium"
           borderLeftRadius="3xl"
           borderRightRadius="none"
           _hover={{ backgroundColor: "#b799d6" }}
@@ -44,10 +52,19 @@ const Header: React.FC = () => {
         >
           <Text>{selectedItem}</Text>
         </MenuButton>
-        <MenuList style={{ fontSize: "0.9em" }}>
+        <MenuList
+          style={{ fontSize: "0.9em" }}
+          autoSelect={false}
+          borderColor="#091353"
+          bgColor="#091353"
+        >
           <MenuItem
             value="All Categories"
             onClick={(event: any) => selectItem(event.target.value)}
+            bgColor="#091353"
+            color="white"
+            _hover={{ backgroundColor: "#3C488C" }}
+            borderColor="#091353"
           >
             All Categories
           </MenuItem>
@@ -56,6 +73,10 @@ const Header: React.FC = () => {
               key={categoryNode.val.category_name}
               value={categoryNode.val.category_name}
               onClick={(event: any) => selectItem(event.target.value)}
+              bgColor="#091353"
+              color="white"
+              _hover={{ backgroundColor: "#3C488C" }}
+              borderColor="#091353"
             >
               {categoryNode.val.category_name}
             </MenuItem>
@@ -96,7 +117,7 @@ const Header: React.FC = () => {
           <Heading
             as="h1"
             size="md"
-            fontFamily="Roboto"
+            fontFamily="Sora"
             style={{ width: "30rem", marginLeft: "0", cursor: "pointer" }}
             marginLeft="-5em"
             onClick={() => window.location.assign("/")}
@@ -122,33 +143,49 @@ const Header: React.FC = () => {
               borderRadius="none"
             />
             <InputRightAddon
-              // backgroundColor= "#F9C200"
               backgroundColor="#9D84B7"
               color="white"
               borderColor="#9D84B7"
-              borderRadius="3xl"
-              width="6em"
+              width="3em"
+              position="relative"
             >
-              <Text cursor="pointer" fontSize="0.8em" marginLeft="0.5em">
+              <Button
+                variant="pinkSolid"
+                position="absolute"
+                fontSize="0.9em"
+                marginLeft="-1.3em"
+                width="6.5em"
+                borderRightRadius="full"
+              >
                 Search
-              </Text>
+              </Button>
             </InputRightAddon>
           </InputGroup>
           <HStack style={{ marginLeft: "10%" }} spacing={5}>
             <FaRegHeart size={25} style={{ cursor: "pointer" }} />
             <AiOutlineShopping
-              size={25}
+              size={30}
               style={{ cursor: "pointer" }}
               onClick={() => window.location.assign("/shop")}
             />
             <FaRegUser size={25} style={{ cursor: "pointer" }} />
           </HStack>
           {!authenticated ? (
-            <Link style={{ marginLeft: "5em" }} href="/login">
+            <Link
+              style={{ marginLeft: "5em" }}
+              href="/login"
+              fontFamily="Sora"
+              textUnderlineOffset="0.1em"
+            >
               Login
             </Link>
           ) : (
-            <Link style={{ marginLeft: "5em" }} onClick={() => logout()}>
+            <Link
+              style={{ marginLeft: "5em" }}
+              onClick={() => logout()}
+              fontFamily="Sora"
+              textUnderlineOffset="0.2em"
+            >
               logout
             </Link>
           )}
@@ -156,7 +193,7 @@ const Header: React.FC = () => {
       </Center>
       <Center
         className="header-mid"
-        backgroundColor="#4f5bba"
+        backgroundColor="#3C488C"
         marginLeft="-50em"
         height="3em"
       >
@@ -167,7 +204,14 @@ const Header: React.FC = () => {
           width="13em"
           height="3em"
         />
-        <Link fontWeight={700} color="white" marginLeft="1em" width="inherit">
+        <Link
+          fontWeight={700}
+          color="white"
+          marginLeft="1em"
+          width="inherit"
+          fontFamily="Sora"
+          textUnderlineOffset="0.2em"
+        >
           All Products
         </Link>
       </Center>
@@ -175,4 +219,4 @@ const Header: React.FC = () => {
   );
 };
 
-export default Header;
+export default Header; //
