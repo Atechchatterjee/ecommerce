@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { NextPage } from 'next';
-import { Center, Container, Stack, Heading, Box } from '@chakra-ui/layout';
-import Banner from '../components/Banner';
+import React, { useState, useEffect } from "react";
+import { NextPage } from "next";
+import { Center, Container, Stack, Heading, Box } from "@chakra-ui/layout";
+import Banner from "../components/Banner";
 import {
   Accordion,
   AccordionItem,
   AccordionButton,
   AccordionIcon,
   AccordionPanel,
-} from '@chakra-ui/accordion';
-import { CustomField } from '../components/Custom/CustomField';
-import { Button } from '@chakra-ui/button';
-import { Spinner } from '@chakra-ui/react';
-import { getCode } from '../util/GetCode';
-import Header from '../components/Layout/Header';
-import Footer from '../components/Layout/Footer';
-import axios from 'axios';
-import constants from '../util/Constants';
+} from "@chakra-ui/accordion";
+import { CustomField } from "../components/Custom/CustomField";
+import { Button } from "@chakra-ui/button";
+import { Spinner } from "@chakra-ui/react";
+import { getCode } from "../util/GetCode";
+import Header from "../components/Layout/Header";
+import Footer from "../components/Layout/Footer";
+import axios from "axios";
+import constants from "../util/Constants";
 
 interface Email {
   subject: string;
@@ -44,20 +44,20 @@ const ForgotPassword: NextPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    const screenNo = localStorage.getItem('screenNo');
-    const OTPScreenNo = localStorage.getItem('OTPScreenNo');
+    const screenNo = localStorage.getItem("screenNo");
+    const OTPScreenNo = localStorage.getItem("OTPScreenNo");
 
     if (screenNo) {
       setResetPassScreen(parseInt(screenNo));
     } else {
-      localStorage.setItem('screenNo', '1');
+      localStorage.setItem("screenNo", "1");
       setResetPassScreen(1);
     }
 
     if (OTPScreenNo) {
       setLoginOTPScreen(parseInt(OTPScreenNo));
     } else {
-      localStorage.setItem('OTPScreenNo', '1');
+      localStorage.setItem("OTPScreenNo", "1");
       setLoginOTPScreen(1);
     }
   }, [resetPassScreen, setResetPassScreen, loginOTPScreen, setLoginOTPScreen]);
@@ -65,7 +65,7 @@ const ForgotPassword: NextPage = () => {
   const SendVerficationEmail: React.FC<{
     emailSent?: (sent: boolean) => void;
   }> = ({ emailSent }) => {
-    const [email, setEmail] = useState<string>('');
+    const [email, setEmail] = useState<string>("");
 
     const sendEmail = async (emailBody: Email): Promise<void> => {
       try {
@@ -81,7 +81,7 @@ const ForgotPassword: NextPage = () => {
       } catch (err) {
         setLoading(false);
         console.error(err);
-        alert('You have signed in through google');
+        alert("You have signed in through google");
 
         if (emailSent) emailSent(false);
 
@@ -93,10 +93,10 @@ const ForgotPassword: NextPage = () => {
       <AccordionPanel pb={4}>
         <div
           style={{
-            marginTop: '1.2em',
-            width: '25em',
-            marginLeft: '1em',
-            marginBottom: '2em',
+            marginTop: "1.2em",
+            width: "32em",
+            marginLeft: "1em",
+            marginBottom: "2em",
           }}
         >
           {!loading ? (
@@ -105,17 +105,18 @@ const ForgotPassword: NextPage = () => {
                 name="email"
                 label="email"
                 placeholder="email address"
+                width="full"
                 onChange={(event: any) => setEmail(event.target.value)}
               />
               <Button
-                colorScheme="teal"
-                marginLeft="20em"
+                variant="pinkSolid"
+                marginLeft="26.2em"
                 marginTop="1em"
                 borderRadius="none"
                 onClick={() => {
                   const code: string = getCode().toString();
                   sendEmail({
-                    subject: 'Reset Password',
+                    subject: "Reset Password",
                     code: code,
                     body: `To reset the password use the code given below ${code}`,
                     toEmail: email,
@@ -139,7 +140,7 @@ const ForgotPassword: NextPage = () => {
   const GetVerificationCode: React.FC<{ gotCode?: (got: boolean) => void }> = ({
     gotCode,
   }) => {
-    const [verificationCode, setVerificationCode] = useState<string>('');
+    const [verificationCode, setVerificationCode] = useState<string>("");
 
     const verifyCode = async () => {
       setLoading(true);
@@ -167,10 +168,10 @@ const ForgotPassword: NextPage = () => {
       <AccordionPanel pb={4}>
         <div
           style={{
-            marginTop: '1.2em',
-            width: '25em',
-            marginLeft: '1em',
-            marginBottom: '2em',
+            marginTop: "1.2em",
+            width: "32em",
+            marginLeft: "1em",
+            marginBottom: "2em",
           }}
         >
           {!loading ? (
@@ -184,8 +185,9 @@ const ForgotPassword: NextPage = () => {
                 }
               />
               <Button
-                colorScheme="teal"
-                marginLeft="20em"
+                // colorScheme="teal"
+                variant="pinkSolid"
+                marginLeft="26.2em"
                 marginTop="1em"
                 borderRadius="none"
                 onClick={() => {
@@ -208,8 +210,8 @@ const ForgotPassword: NextPage = () => {
   const ResetPasswordScreen: React.FC<{ done?: (dn: boolean) => void }> = ({
     done,
   }) => {
-    const [newPass, setNewPass] = useState<string>('');
-    const [confirmPass, setConfirmPass] = useState<string>('');
+    const [newPass, setNewPass] = useState<string>("");
+    const [confirmPass, setConfirmPass] = useState<string>("");
 
     const changePass = () => {
       if (newPass) {
@@ -228,7 +230,7 @@ const ForgotPassword: NextPage = () => {
             console.error(err);
           });
       } else {
-        alert('The two passwords do not match');
+        alert("The two passwords do not match");
       }
     };
 
@@ -236,10 +238,10 @@ const ForgotPassword: NextPage = () => {
       <AccordionPanel pb={4}>
         <div
           style={{
-            marginTop: '1.2em',
-            width: '25em',
-            marginLeft: '1em',
-            marginBottom: '1em',
+            marginTop: "1.2em",
+            width: "32em",
+            marginLeft: "1em",
+            marginBottom: "1em",
           }}
         >
           {!loading ? (
@@ -264,8 +266,9 @@ const ForgotPassword: NextPage = () => {
                 }}
               />
               <Button
-                colorScheme="teal"
-                marginLeft="20em"
+                // colorScheme="teal"
+                variant="pinkSolid"
+                marginLeft="26.2em"
                 marginTop="1em"
                 borderRadius="none"
                 onClick={changePass}
@@ -286,17 +289,17 @@ const ForgotPassword: NextPage = () => {
   const SendVerificationOTP: React.FC<{
     sentOTP?: (sent: boolean) => void;
   }> = ({ sentOTP }) => {
-    const [phNumber, setPhNumber] = useState<string>('');
+    const [phNumber, setPhNumber] = useState<string>("");
 
     return (
       <AccordionPanel pb={4}>
         <div
           style={{
-            marginTop: '1.2em',
-            width: '25em',
-            marginLeft: '1em',
-            marginBottom: '2em',
-            border: 'none',
+            marginTop: "1.2em",
+            width: "32em",
+            marginLeft: "1em",
+            marginBottom: "2em",
+            border: "none",
           }}
         >
           <CustomField
@@ -306,8 +309,8 @@ const ForgotPassword: NextPage = () => {
             onChange={(event: any) => setPhNumber(event.target.value)}
           />
           <Button
-            colorScheme="teal"
-            marginLeft="20em"
+            variant="pinkSolid"
+            marginLeft="25.8em"
             marginTop="1em"
             borderRadius="none"
             onClick={() => {
@@ -336,30 +339,31 @@ const ForgotPassword: NextPage = () => {
   const Verify_OTP: React.FC<{ verifiedOTP?: (verified: boolean) => void }> = ({
     verifiedOTP,
   }) => {
-    const [OTP, setOTP] = useState<string>('');
+    const [OTP, setOTP] = useState<string>("");
 
     return (
       <AccordionPanel pb={4}>
         <div
           style={{
-            marginTop: '1.2em',
-            width: '25em',
-            marginLeft: '1em',
-            marginBottom: '2em',
-            border: 'none',
+            marginTop: "1.2em",
+            width: "32em",
+            marginLeft: "1em",
+            marginBottom: "2em",
+            border: "none",
           }}
         >
           <CustomField
             name="OTP"
-            label="OTP"
-            placeholder="OTP"
+            label="Enter OTP"
+            placeholder="Enter OTP"
             onChange={(event: any) => {
               setOTP(event.target.value);
             }}
           />
           <Button
             colorScheme="teal"
-            marginLeft="20em"
+            variant="pinkSolid"
+            marginLeft="24.8em"
             marginTop="1em"
             borderRadius="none"
             onClick={() => {
@@ -370,7 +374,7 @@ const ForgotPassword: NextPage = () => {
                 .then((res) => {
                   if (verifiedOTP) verifiedOTP(true);
                   console.log(res);
-                  window.location.assign('/shop');
+                  window.location.assign("/shop");
                 })
                 .catch((err) => {
                   if (verifiedOTP) verifiedOTP(false);
@@ -378,7 +382,7 @@ const ForgotPassword: NextPage = () => {
                 });
             }}
           >
-            Get OTP
+            Verify OTP
           </Button>
         </div>
       </AccordionPanel>
@@ -391,18 +395,20 @@ const ForgotPassword: NextPage = () => {
       <Banner text="My Account" />
       <Container
         style={{
-          boxShadow: '0.2em 0.2em 0.2em 0.2em #e1e1e1',
-          height: '33em',
+          boxShadow: "0.2em 0.2em 0.2em 0.2em #e1e1e1",
+          height: "33em",
         }}
       >
-        <Center color="gray" style={{ marginTop: '7vh' }}>
+        <Center color="gray" style={{ marginTop: "7vh" }}>
           <Stack
-            direction={['row', 'column']}
+            direction={["row", "column"]}
             spacing="35px"
-            style={{ width: '25em', marginTop: '3em' }}
+            style={{ width: "25em", marginTop: "3em" }}
           >
             <Center>
-              <Heading size="lg">Forgot Password</Heading>
+              <Heading size="lg" fontFamily="Sora" color="gray.600">
+                Forgot Password
+              </Heading>
             </Center>
           </Stack>
         </Center>
@@ -411,7 +417,7 @@ const ForgotPassword: NextPage = () => {
           <AccordionItem>
             <h2>
               <AccordionButton
-                backgroundColor="#F2F2F2"
+                backgroundColor="#F5F5F5"
                 borderTopWidth="0"
                 borderBottomWidth="0"
               >
@@ -428,7 +434,7 @@ const ForgotPassword: NextPage = () => {
                     <SendVerficationEmail
                       emailSent={(sent) => {
                         if (sent) {
-                          localStorage.setItem('screenNo', '2');
+                          localStorage.setItem("screenNo", "2");
                           setResetPassScreen(2);
                         }
                       }}
@@ -439,10 +445,10 @@ const ForgotPassword: NextPage = () => {
                     <GetVerificationCode
                       gotCode={(code) => {
                         if (code) {
-                          localStorage.setItem('screenNo', '3');
+                          localStorage.setItem("screenNo", "3");
                           setResetPassScreen(3);
                         } else {
-                          alert('wrong verification code');
+                          alert("wrong verification code");
                         }
                       }}
                     />
@@ -452,7 +458,7 @@ const ForgotPassword: NextPage = () => {
                     <ResetPasswordScreen
                       done={(dn) => {
                         if (dn) {
-                          localStorage.setItem('screenNo', '1');
+                          localStorage.setItem("screenNo", "1");
                           setResetPassScreen(1);
                         }
                       }}
@@ -467,7 +473,7 @@ const ForgotPassword: NextPage = () => {
           <AccordionItem>
             <h2>
               <AccordionButton
-                backgroundColor="#F2F2F2"
+                backgroundColor="#F5F5F5"
                 borderTopWidth="0"
                 borderBottomWidth="0"
               >
@@ -484,7 +490,7 @@ const ForgotPassword: NextPage = () => {
                     <SendVerificationOTP
                       sentOTP={(sent) => {
                         if (sent) {
-                          localStorage.setItem('OTPScreenNo', '2');
+                          localStorage.setItem("OTPScreenNo", "2");
                           setLoginOTPScreen(2);
                         }
                       }}
@@ -495,9 +501,9 @@ const ForgotPassword: NextPage = () => {
                     <Verify_OTP
                       verifiedOTP={(verified) => {
                         if (verified) {
-                          localStorage.setItem('OTPScreenNo', '1');
+                          localStorage.setItem("OTPScreenNo", "1");
                           setLoginOTPScreen(1);
-                        } else alert('invalid OTP');
+                        } else alert("invalid OTP");
                       }}
                     />
                   );
