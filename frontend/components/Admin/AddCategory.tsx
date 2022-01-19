@@ -53,6 +53,7 @@ const AddCategory = ({ ...props }) => {
           borderRadius="lg"
           marginTop="4em"
           bgColor="#9D84B7"
+          variant="pinkSolid"
           onSelect={({ selectedCategory }) => {
             setSelectedCategory(selectedCategory);
           }}
@@ -60,8 +61,8 @@ const AddCategory = ({ ...props }) => {
         />
         <Button
           borderRadius="lg"
-          colorScheme="facebook"
           width="full"
+          variant="blueSolid"
           marginTop="1em"
           onClick={() => {
             createCategory({

@@ -45,6 +45,7 @@ const AdminLogin: NextPage = () => {
           boxShadow: "0.2em 0.2em 0.2em 0.2em #e1e1e1",
           height: "23em",
         }}
+        borderRadius="lg"
       >
         <Center color="gray" style={{ marginTop: "7vh" }}>
           <Stack
@@ -70,6 +71,7 @@ const AdminLogin: NextPage = () => {
                         placeholder="Admin Email"
                         name="email"
                         label="Admin Email Id"
+                        borderRadius="md"
                         onChange={handleChange}
                         isInvalid={err}
                       />
@@ -80,14 +82,16 @@ const AdminLogin: NextPage = () => {
                         type="password"
                         label="Admin Password"
                         onChange={handleChange}
+                        borderRadius="md"
                         isInvalid={err}
                       />
                       <br />
                       <Button
+                        marginTop="1em"
                         type="submit"
-                        colorScheme="blue"
-                        style={{ width: "100%" }}
-                        borderRadius="none"
+                        variant="blueSolid"
+                        width="100%"
+                        borderRadius="lg"
                       >
                         Submit
                       </Button>

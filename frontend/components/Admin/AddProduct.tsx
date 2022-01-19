@@ -163,6 +163,7 @@ const AddProduct = (props: ContainerProps) => {
                   </NumberInputStepper>
                 </NumberInput>
                 <SelectCategory
+                  variant="pinkSolid"
                   bgColor="#9D84B7"
                   colorScheme=""
                   marginTop="5em"
@@ -173,9 +174,8 @@ const AddProduct = (props: ContainerProps) => {
                   }
                 />
                 <CustomFileInput
-                  bgColor="#9D84B7"
+                  variant="pinkSolid"
                   borderRadius="lg"
-                  colorScheme=""
                   width="full"
                   marginTop="1em"
                   customText="Upload Image"
@@ -185,9 +185,8 @@ const AddProduct = (props: ContainerProps) => {
                 />
                 <Button
                   borderRadius="lg"
+                  variant="blueSolid"
                   size="md"
-                  colorScheme="facebook"
-                  bgColor="#091353"
                   top="3em"
                   width="full"
                   type="submit"
