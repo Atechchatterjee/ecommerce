@@ -212,6 +212,7 @@ const Product: React.FC<Props> = ({
               <BsFillTrashFill
                 style={{
                   float: "right",
+                  // position: "absolute",
                   marginTop: "0.56em",
                   marginRight: "0.5em",
                 }}
