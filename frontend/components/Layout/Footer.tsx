@@ -50,7 +50,6 @@ const Footer: React.FC = () => {
         gap={4}
         padding="6em 15em"
       >
-        {/* <Box w="100%" h="10" bg="blue.500" /> */}
         <Container w="100%">
           <VStack spacing={10}>
             <div>

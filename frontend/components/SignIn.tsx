@@ -9,7 +9,8 @@ import constants from "../util/Constants";
 import GoogleAuth from "./GoogleAuth";
 
 const SignIn: React.FunctionComponent = () => {
-  const [failedError, setFailedError] = useState<string>(""); // error for already existing user
+  // failedErr: user already exists
+  const [failedError, setFailedError] = useState<string>("");
   const [err, setErr] = useState<boolean>(false);
   const formikRef = useRef<any>();
 
@@ -68,11 +69,8 @@ const SignIn: React.FunctionComponent = () => {
                   <br />
                   <Link
                     color="red.400"
-                    href="#"
-                    // style={{
                     fontSize="0.8em"
                     marginLeft="19em"
-                    // }}
                     onClick={() => window.location.assign("/forgotpassword")}
                   >
                     Forgot Password ?
@@ -81,10 +79,7 @@ const SignIn: React.FunctionComponent = () => {
                   <Button
                     type="submit"
                     variant="blueSolid"
-                    // backgroundColor="#091353"
                     marginTop="1em"
-                    // _hover={{ backgroundColor: "#535a87" }}
-                    // color="white"
                     width="100%"
                     borderRadius="none"
                   >

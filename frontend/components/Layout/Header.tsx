@@ -1,12 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import {
-  HStack,
-  Text,
-  Heading,
-  Center,
-  Link,
-  Container,
-} from "@chakra-ui/layout";
+import { HStack, Text, Heading, Center, Link } from "@chakra-ui/layout";
 import {
   InputGroup,
   InputLeftAddon,
@@ -219,4 +212,4 @@ const Header: React.FC = () => {
   );
 };
 
-export default Header; //
+export default Header;
