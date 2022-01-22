@@ -2,5 +2,7 @@
   "git.ignoreLimitWarning": true,
   "editor.fontLigatures": true,
   "python.linting.pylintEnabled": true,
-  "python.linting.enabled": false
+  "python.linting.enabled": false,
+  "python.pythonPath": "backend/venv/bin/python",
+  "python.linting.pylintPath": "backend/venv/bin/pylint"
 }
