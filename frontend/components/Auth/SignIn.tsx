@@ -1,11 +1,11 @@
 import React, { useState, useRef } from "react";
 import { Formik } from "formik";
 import axios from "axios";
-import { ShowError } from "./Custom/ShowError";
-import { CustomField } from "./Custom/CustomField";
-import "../styles/signup.module.css";
+import { ShowError } from "../Custom/ShowError";
+import { CustomField } from "../Custom/CustomField";
+// import "../../styles/signup.module.css";
 import { Button, Link, Text } from "@chakra-ui/react";
-import constants from "../util/Constants";
+import constants from "../../util/Constants";
 import GoogleAuth from "./GoogleAuth";
 
 const SignIn: React.FunctionComponent = () => {

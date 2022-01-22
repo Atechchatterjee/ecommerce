@@ -11,8 +11,8 @@ import {
 } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import React from "react";
-import SignUp from "../components/SignUp";
-import SignIn from "../components/SignIn";
+import SignUp from "../components/Auth/SignUp";
+import SignIn from "../components/Auth/SignIn";
 import Banner from "../components/Layout/Banner";
 import Header from "../components/Layout/Header";
 import Footer from "../components/Layout/Footer";

@@ -1,12 +1,12 @@
 import React, { useState, useRef } from "react";
-import "../styles/signup.module.css";
+import "../../styles/signup.module.css";
 import { Formik } from "formik";
 import axios from "axios";
 import * as yup from "yup";
-import { ShowError } from "./Custom/ShowError";
-import { CustomField } from "./Custom/CustomField";
+import { ShowError } from "../Custom/ShowError";
+import { CustomField } from "../Custom/CustomField";
 import { Button } from "@chakra-ui/react";
-import constants from "../util/Constants";
+import constants from "../../util/Constants";
 
 // validation with yup
 const emailValidation: RegExp =

@@ -2,8 +2,8 @@ import { Avatar } from "@chakra-ui/avatar";
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { useGoogleLogin } from "react-google-login";
-import { GetUser } from "../util/GetUser";
-import constants from "../util/Constants";
+import { GetUser } from "../../util/GetUser";
+import constants from "../../util/Constants";
 import { Button } from "@chakra-ui/button";
 import { useDisclosure } from "@chakra-ui/hooks";
 import {
@@ -14,7 +14,7 @@ import {
   ModalCloseButton,
   ModalFooter,
 } from "@chakra-ui/modal";
-import { CustomField } from "./Custom/CustomField";
+import { CustomField } from "../Custom/CustomField";
 import { HStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 
