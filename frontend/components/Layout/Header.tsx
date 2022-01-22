@@ -7,7 +7,7 @@ import {
   InputRightAddon,
 } from "@chakra-ui/input";
 import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/menu";
-import { Button } from "@chakra-ui/react";
+import { Button, Tooltip } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { FaRegHeart, FaRegUser } from "react-icons/fa";
 import { AiOutlineShopping } from "react-icons/ai";
@@ -155,13 +155,25 @@ const Header: React.FC = () => {
             </InputRightAddon>
           </InputGroup>
           <HStack style={{ marginLeft: "10%" }} spacing={5}>
-            <FaRegHeart size={25} style={{ cursor: "pointer" }} />
-            <AiOutlineShopping
-              size={30}
-              style={{ cursor: "pointer" }}
-              onClick={() => window.location.assign("/shop")}
-            />
-            <FaRegUser size={25} style={{ cursor: "pointer" }} />
+            <Tooltip label="whishlist" position="absolute">
+              <span>
+                <FaRegHeart size={25} style={{ cursor: "pointer" }} />
+              </span>
+            </Tooltip>
+            <Tooltip label="cart">
+              <span>
+                <AiOutlineShopping
+                  size={30}
+                  style={{ cursor: "pointer" }}
+                  onClick={() => window.location.assign("/shop")}
+                />
+              </span>
+            </Tooltip>
+            <Tooltip label="profile">
+              <span>
+                <FaRegUser size={25} style={{ cursor: "pointer" }} />
+              </span>
+            </Tooltip>
           </HStack>
           {!authenticated ? (
             <Link
