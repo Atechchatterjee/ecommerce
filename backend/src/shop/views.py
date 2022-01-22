@@ -8,19 +8,6 @@ from .serializers import CategorySerializer, ProductSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.decorators import api_view, permission_classes
 
-def add_product_to_db(product_name, product_description, product_price, product_image, category_id):
-    try:
-        Product(
-            name=product_name,
-            price=str(product_price),
-            description=product_description,
-            image=product_image,
-            category=fetch_category(
-                int(category_id)) if category_id is not "" else None
-        ).save()
-        return True
-    except:
-        return False
 
 # fetching the category object from db
 def fetch_category(category_id):
@@ -34,12 +21,18 @@ def fetch_category(category_id):
 def create_product(request):
     product_name, product_description, product_price, product_image, category_id = itemgetter(
         'productName', 'productDescription', 'productPrice', 'productImage', 'categoryId')(request.data)
-    success = add_product_to_db(product_name, product_description, product_price, product_image, category_id)
-    if success:
+    try:
+        Product(
+            name=product_name,
+            price=str(product_price),
+            description=product_description,
+            image=product_image,
+            category=fetch_category(
+                int(category_id)) if category_id is not "" else None
+        ).save()
         return Response(status=status.HTTP_200_OK)
-    else:
+    except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
-
 
 @api_view(['GET'])
 def get_all_products(request):
