@@ -5,7 +5,7 @@ import { NextPage } from "next";
 import { CustomField } from "../../components/Custom/CustomField";
 import constants from "../../util/Constants";
 import axios from "axios";
-import Banner from "../../components/Banner";
+import Banner from "../../components/Layout/Banner";
 
 interface FormData {
   email: string;

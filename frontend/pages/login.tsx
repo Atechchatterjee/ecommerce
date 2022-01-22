@@ -13,7 +13,7 @@ import type { NextPage } from "next";
 import React from "react";
 import SignUp from "../components/SignUp";
 import SignIn from "../components/SignIn";
-import Banner from "../components/Banner";
+import Banner from "../components/Layout/Banner";
 import Header from "../components/Layout/Header";
 import Footer from "../components/Layout/Footer";
 

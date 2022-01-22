@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { NextPage } from "next";
 import { Center, Container, Stack, Heading, Box } from "@chakra-ui/layout";
-import Banner from "../components/Banner";
+import Banner from "../components/Layout/Banner";
 import {
   Accordion,
   AccordionItem,
