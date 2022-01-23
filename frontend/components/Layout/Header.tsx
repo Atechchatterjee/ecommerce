@@ -160,7 +160,7 @@ const Header: React.FC = () => {
                 <FaRegHeart size={25} style={{ cursor: "pointer" }} />
               </span>
             </Tooltip>
-            <Tooltip label="cart">
+            <Tooltip label="shop">
               <span>
                 <AiOutlineShopping
                   size={30}
