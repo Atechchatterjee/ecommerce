@@ -17,18 +17,20 @@ interface Product {
   category: number;
 }
 
+const getAllProducts = async (): Promise<Product[]> => {
+  const products: Product[] = await axios.get(
+    `${constants.url}/shop/getallproducts/`,
+    { withCredentials: true }
+  );
+  return Promise.resolve(products);
+};
+
 const Shop: NextPage = () => {
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [columns, setColumns] = useState<string>("3");
 
   useEffect(() => {
-    axios
-      .get(`${constants.url}/shop/getallproducts/`, { withCredentials: true })
-      .then((res) => {
-        const allProducts = res.data.allProducts;
-        setAllProducts(allProducts);
-        console.log(allProducts);
-      });
+    getAllProducts().then((products) => setAllProducts(products));
   }, []);
   return (
     <>
