@@ -18,11 +18,10 @@ interface Product {
 }
 
 const getAllProducts = async (): Promise<Product[]> => {
-  const products: Product[] = await axios.get(
-    `${constants.url}/shop/getallproducts/`,
-    { withCredentials: true }
-  );
-  return Promise.resolve(products);
+  const res = await axios.get(`${constants.url}/shop/getallproducts/`, {
+    withCredentials: true,
+  });
+  return Promise.resolve(res.data.allProducts);
 };
 
 const Shop: NextPage = () => {
@@ -32,6 +31,7 @@ const Shop: NextPage = () => {
   useEffect(() => {
     getAllProducts().then((products) => setAllProducts(products));
   }, []);
+
   return (
     <>
       <Header />
