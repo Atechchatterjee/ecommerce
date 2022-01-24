@@ -16,7 +16,7 @@ const WithAuth = (
     const Router = useRouter();
 
     useEffect(() => {
-      isAuthenticated(document.cookie, admin)
+      isAuthenticated(admin)
         .then(() => {
           setAuthenticated(1);
         })
@@ -30,7 +30,6 @@ const WithAuth = (
     if (authenticated === 1) {
       return <WrappedComponent {...props} />;
     } else if (authenticated === 0) {
-      console.log("redirecting to login");
       if (admin) Router.push("/admin/login");
       else Router.push("/login");
       return <></>;
