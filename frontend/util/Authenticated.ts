@@ -1,19 +1,17 @@
 import axios from 'axios';
 import constants from './Constants';
 
-// checks if the user-session exists
 export const isAuthenticated = async (
-  cookie: any,
   admin?: boolean
 ): Promise<void> => {
   try {
-    let url = `${constants.url}/auth/isAuthenticated/`;
+    let backendURL = `${constants.url}/auth/isAuthenticated/`;
 
     if (admin) {
-      url = `${constants.url}/auth/adminauth/`;
+      backendURL = `${constants.url}/auth/adminauth/`;
     }
 
-    const res = await axios.get(url, {
+    const res = await axios.get(backendURL, {
       withCredentials: true,
     });
 
