@@ -1,5 +1,3 @@
-console.log('node_env = ', process.env.NODE_ENV);
-
 export default {
   url:
     process.env.NODE_ENV === 'production'

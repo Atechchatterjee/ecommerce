@@ -12,8 +12,7 @@ const logout = ({admin}: Props = {admin: false}) => {
     .get(url, {
       withCredentials: true
     })
-    .then((response) => {
-      console.log(response.data);
+    .then(() => {
       if(admin) {
         window.location.assign("/admin/login");
       } else {

@@ -17,13 +17,8 @@ const EditMode: React.FC<Props> = ({ id, name, description, price, cb }) => {
   const [changedName, setChangedName] = useState<string>(name);
   const [changedDesc, setChangedDesc] = useState<string>(description);
   const [changedPrice, setChangedPrice] = useState<string>(price);
-  const {
-    triggerUpload,
-    setTriggerUpload,
-    setChangedImage,
-    setEdit,
-    changedImage,
-  } = useContext(ProductContext);
+  const { triggerUpload, setTriggerUpload, setChangedImage, setEdit } =
+    useContext(ProductContext);
 
   return (
     <Container width="full" height="initial" padding="1.5em">
@@ -64,7 +59,6 @@ const EditMode: React.FC<Props> = ({ id, name, description, price, cb }) => {
         _hover={{ bg: "#B096CE" }}
         onClick={() => {
           if (cb) {
-            console.log("callback changedImage: ", changedImage);
             cb(id, changedName, changedDesc, changedPrice);
           }
           setEdit(false);

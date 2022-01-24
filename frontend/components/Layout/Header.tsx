@@ -80,7 +80,7 @@ const Header: React.FC = () => {
   };
 
   useEffect(() => {
-    isAuthenticated(cookies)
+    isAuthenticated()
       .then(() => {
         console.log("user is authenticated");
         setAuthenticated(true);

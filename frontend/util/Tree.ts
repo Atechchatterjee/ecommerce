@@ -45,7 +45,6 @@ export class CategoryTree {
     }
   }
 
-  // gets all the leaveNodes in the tree and fills up the Array leaveNodes
   getAllLeaveNodes(cur: CategoryNode) {
     if(cur.children.length === 0) {
       this.leaveNodes.push(cur);
@@ -74,7 +73,6 @@ export const convertToCategoryTree = (categoryList: Category[]): CategoryTree =>
     if(!category.sub_category) {
       tree.root.children.push(tree.createNode(category));
     } else {
-      // parentId := the sub_category(category_id)
       tree.add(category, category.sub_category);
     }
   }
