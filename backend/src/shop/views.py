@@ -101,3 +101,13 @@ def update_product(request):
         return Response(status=status.HTTP_200_OK)
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def get_product(request):
+    id = request.data['id']
+    try:
+        product = Product.objects.get(product_id=int(id))
+        serialized_product = ProductSerializer(product).data
+        return Response({"product": serialized_product}, status=status.HTTP_200_OK)
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
