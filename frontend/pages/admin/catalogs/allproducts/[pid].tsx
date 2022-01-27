@@ -4,6 +4,8 @@ import { NextPage } from "next";
 import axios from "axios";
 import constants from "../../../../util/Constants";
 import ProductSpec from "../../../../components/Shop/Product/ProductSpec";
+import { Container } from "@chakra-ui/react";
+import Navbar from "../../../../components/Admin/Navbar";
 
 const getProductInfo = async (productId: any): Promise<any> => {
   const res = await axios.post(`${constants.url}/shop/getproduct/`, {
@@ -30,7 +32,18 @@ const ProductPage: NextPage = () => {
       });
     });
   }, [pid]);
-  return <div>{!loading ? <ProductSpec product={product} /> : <></>}</div>;
+  return (
+    <div>
+      <Navbar />
+      {!loading ? (
+        <Container padding="2em" width="full">
+          <ProductSpec product={product} />
+        </Container>
+      ) : (
+        <></>
+      )}
+    </div>
+  );
 };
 
 export default ProductPage;
