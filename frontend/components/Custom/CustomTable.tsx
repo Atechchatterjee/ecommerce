@@ -17,7 +17,7 @@ interface Props {
 
 const CustomTable: React.FC<Props> = ({ rows, heading, tableCaption }) => {
   return (
-    <Table variant="simple">
+    <Table variant="simple" size="md" width="full">
       {tableCaption ? <TableCaption>{tableCaption}</TableCaption> : <></>}
       <Thead>
         <Tr>
