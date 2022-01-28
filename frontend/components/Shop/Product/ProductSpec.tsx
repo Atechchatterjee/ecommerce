@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Center, Container, Text } from "@chakra-ui/react";
+import { Button, Container, Text } from "@chakra-ui/react";
 import CustomTable from "../../Custom/CustomTable";
 import Product from "./index";
 import { TableModalContext } from "../../../context/TableModalContext";
@@ -11,17 +11,8 @@ interface Props {
   product: any;
 }
 
-const createTableContent = (rowsAsString: string[][]) => {
-  const rows: ReactJSXElement[][] = [];
-  rowsAsString.forEach((row) => {
-    let eachRow: any[] = [];
-    row.forEach((strEl) => {
-      eachRow.push(<Text>{strEl}</Text>);
-    });
-    rows.push(eachRow);
-  });
-  return rows;
-};
+const createTableContent = (rowsAsString: string[][]): JSX.Element[][] =>
+  rowsAsString.map((row) => row.map((element) => <Text>{element}</Text>));
 
 const ProductSpec: React.FC<Props> = ({ product }) => {
   const [tableContentStr, setTableContentStr] = useState<string[][]>([]);
@@ -46,7 +37,7 @@ const ProductSpec: React.FC<Props> = ({ product }) => {
   return (
     <>
       <Container position="absolute" left="5em">
-        {!!product ? (
+        {product ? (
           <Product
             id={product.product_id}
             name={product.name}
@@ -104,11 +95,11 @@ const ProductSpec: React.FC<Props> = ({ product }) => {
       >
         <CreateTableModal
           cb={(columnNames: any) => {
-            const headingNames: any = [];
-            Object.keys(columnNames).forEach((key) => {
-              headingNames.push(<Text>{columnNames[key]}</Text>);
-            });
-            setHeading(headingNames);
+            setHeading(
+              Object.keys(columnNames).map((elementKey) => (
+                <Text>{columnNames[elementKey]}</Text>
+              ))
+            );
           }}
         />
         <AddRowModal />
