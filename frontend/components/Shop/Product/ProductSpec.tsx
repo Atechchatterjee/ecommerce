@@ -3,14 +3,16 @@ import { Button, Center, Container, Text } from "@chakra-ui/react";
 import CustomTable from "../../Custom/CustomTable";
 import Product from "./index";
 import { TableModalContext } from "../../../context/TableModalContext";
-import CustomTableModal from "../../Custom/CustomTableModal";
+import CreateTableModal from "../../Custom/CreateTableModal";
+import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
+import AddRowModal from "../../Custom/AddRowModal";
 
 interface Props {
   product: any;
 }
 
-const createTableContent = (rowsAsString: string[][]): any[][] => {
-  const rows: any[][] = [];
+const createTableContent = (rowsAsString: string[][]) => {
+  const rows: ReactJSXElement[][] = [];
   rowsAsString.forEach((row) => {
     let eachRow: any[] = [];
     row.forEach((strEl) => {
@@ -22,21 +24,23 @@ const createTableContent = (rowsAsString: string[][]): any[][] => {
 };
 
 const ProductSpec: React.FC<Props> = ({ product }) => {
-  const [tableContent, _] = useState<string[][]>([]);
-  const [heading, setHeading] = useState<any[]>([]);
-  const [triggerModal, setTriggerModal] = useState<boolean>(false);
+  const [tableContentStr, setTableContentStr] = useState<string[][]>([]);
+  const [heading, setHeading] = useState<ReactJSXElement[]>([]);
+  const [openCreateTableModal, setOpenCreateTableModal] =
+    useState<boolean>(false);
+  const [openAddRowModal, setOpenAddRowModal] = useState<boolean>(false);
   const [columnNo, setColumnNo] = useState<number>(0);
   const [confirmColumn, setConfirmColumn] = useState<boolean>(false);
   const [columnNames, setColumnNames] = useState<any>({});
   const MODIFYTABLECOND = heading.length !== 0;
 
   const modifyTableOnClick = () => {
-    setTriggerModal(true);
+    setOpenCreateTableModal(true);
     setConfirmColumn(true);
   };
 
   const createTableOnClick = () => {
-    setTriggerModal(true);
+    setOpenCreateTableModal(true);
   };
 
   return (
@@ -68,6 +72,7 @@ const ProductSpec: React.FC<Props> = ({ product }) => {
             marginLeft="4em"
             width="30em"
             variant="pinkSolid"
+            onClick={() => setOpenAddRowModal(true)}
           >
             Add Rows
           </Button>
@@ -77,23 +82,27 @@ const ProductSpec: React.FC<Props> = ({ product }) => {
       </Container>
       <Container marginLeft="2em" width="100%">
         <CustomTable
-          rows={createTableContent(tableContent)}
+          rows={createTableContent(tableContentStr)}
           heading={heading}
         />
       </Container>
       <TableModalContext.Provider
         value={{
-          setTriggerOpen: setTriggerModal,
-          triggerOpen: triggerModal,
+          setOpenCreateTableModal,
+          openCreateTableModal,
           columnNames,
           columnNo,
           setColumnNames,
           setColumnNo,
           confirmColumn,
           setConfirmColumn,
+          openAddRowModal,
+          setOpenAddRowModal,
+          tableContentStr,
+          setTableContentStr,
         }}
       >
-        <CustomTableModal
+        <CreateTableModal
           cb={(columnNames: any) => {
             const headingNames: any = [];
             Object.keys(columnNames).forEach((key) => {
@@ -102,6 +111,7 @@ const ProductSpec: React.FC<Props> = ({ product }) => {
             setHeading(headingNames);
           }}
         />
+        <AddRowModal />
       </TableModalContext.Provider>
     </>
   );
