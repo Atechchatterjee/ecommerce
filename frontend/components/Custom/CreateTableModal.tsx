@@ -38,6 +38,19 @@ const CreateTableModal: React.FC<{ cb?: Function }> = ({ cb }) => {
     if (cb) cb(columnNames);
   };
 
+  const deleteColumnNames = (column: number) => {
+    let copyColumnNames: any = {};
+    let itr = parseInt(Object.keys(columnNames)[0]);
+    Object.keys(columnNames).forEach((elKey: any, indx) => {
+      if (indx + 1 !== column) {
+        copyColumnNames[itr] = columnNames[elKey];
+        itr++;
+      }
+    });
+    if (setColumnNames) setColumnNames(copyColumnNames);
+    setColumnNo(columnNo - 1);
+  };
+
   const ColumnNameInput: React.FC<{ column: number }> = ({ column }) => {
     return (
       <HStack position="relative" key={column}>
@@ -63,19 +76,7 @@ const CreateTableModal: React.FC<{ cb?: Function }> = ({ cb }) => {
           aria-label="delete"
           size="md"
           icon={<DeleteIcon />}
-          onClick={() => {
-            let copyColumnNames: any = {};
-            let i = parseInt(Object.keys(columnNames)[0]);
-            Object.keys(columnNames).forEach((elKey: any, indx) => {
-              console.log({ i });
-              if (indx + 1 !== column) {
-                copyColumnNames[i] = columnNames[elKey];
-                i++;
-              }
-            });
-            if (setColumnNames) setColumnNames(copyColumnNames);
-            setColumnNo(columnNo - 1);
-          }}
+          onClick={() => deleteColumnNames(column)}
         />
       </HStack>
     );
