@@ -7,11 +7,12 @@ import {
   TableCaption,
   Td,
 } from "@chakra-ui/react";
+import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
 import React from "react";
 
 interface Props {
-  rows: any[][];
-  heading: any[];
+  rows: ReactJSXElement[][];
+  heading: ReactJSXElement[];
   tableCaption?: string;
 }
 
