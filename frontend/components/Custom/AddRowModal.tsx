@@ -29,6 +29,19 @@ const AddRowModal: React.FC<{ cb?: Function }> = ({ cb }) => {
     if (cb) cb(columnNames);
   };
 
+  const RowInputElement = (column: number): JSX.Element => (
+    <Input
+      key={column}
+      placeholder={`Row ${column}`}
+      width="23.8em"
+      onChange={(e) => {
+        let tableContentLocalCopy = tableContentLocal;
+        tableContentLocal[column] = e.target.value;
+        setTableContentLocal(tableContentLocalCopy);
+      }}
+    />
+  );
+
   return (
     <Modal
       closeOnOverlayClick={false}
@@ -42,21 +55,9 @@ const AddRowModal: React.FC<{ cb?: Function }> = ({ cb }) => {
         <ModalCloseButton />
         <ModalBody>
           <HStack marginTop="1em">
-            {(function EnterColumns(columns: number): any[] {
+            {(function DisplayRowInputElements(columns: number): any[] {
               if (columns <= 0) return [];
-              const El = (
-                <Input
-                  key={columns}
-                  placeholder={`Row ${columns}`}
-                  width="23.8em"
-                  onChange={(e) => {
-                    let tableContentLocalCopy = tableContentLocal;
-                    tableContentLocal[columns] = e.target.value;
-                    setTableContentLocal(tableContentLocalCopy);
-                  }}
-                />
-              );
-              return [...EnterColumns(columns - 1), El];
+              return [...DisplayRowInputElements(columns - 1), RowInputElement];
             })(columnNo)}
           </HStack>
         </ModalBody>
@@ -66,10 +67,9 @@ const AddRowModal: React.FC<{ cb?: Function }> = ({ cb }) => {
             size="md"
             onClick={onClose}
             onClickCapture={() => {
-              let arr: any[] = [];
-              Object.keys(tableContentLocal).forEach((elKey) => {
-                arr.push(tableContentLocal[elKey]);
-              });
+              let arr = Object.keys(tableContentLocal).map(
+                (key) => tableContentLocal[key]
+              );
               if (setTableContentStr && tableContentStr)
                 setTableContentStr([...tableContentStr, arr]);
             }}
