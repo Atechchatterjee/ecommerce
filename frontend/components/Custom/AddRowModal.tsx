@@ -29,7 +29,9 @@ const AddRowModal: React.FC<{ cb?: Function }> = ({ cb }) => {
     if (cb) cb(columnNames);
   };
 
-  const RowInputElement = (column: number): JSX.Element => (
+  const RowInputElement: React.FC<{ column: number }> = ({
+    column,
+  }): JSX.Element => (
     <Input
       key={column}
       placeholder={`Row ${column}`}
@@ -55,9 +57,12 @@ const AddRowModal: React.FC<{ cb?: Function }> = ({ cb }) => {
         <ModalCloseButton />
         <ModalBody>
           <HStack marginTop="1em">
-            {(function DisplayRowInputElements(columns: number): any[] {
-              if (columns <= 0) return [];
-              return [...DisplayRowInputElements(columns - 1), RowInputElement];
+            {(function DisplayRowInputElements(column: number): any[] {
+              if (column <= 0) return [];
+              return [
+                ...DisplayRowInputElements(column - 1),
+                <RowInputElement column={column} />,
+              ];
             })(columnNo)}
           </HStack>
         </ModalBody>
