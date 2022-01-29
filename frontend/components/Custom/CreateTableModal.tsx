@@ -72,7 +72,7 @@ const CreateTableModal: React.FC<{ cb?: Function }> = ({ cb }) => {
           right="0.8em"
           top="1em"
           position="absolute"
-          variant="blueSolid"
+          variant="pinkSolid"
           aria-label="delete"
           size="md"
           icon={<DeleteIcon />}
@@ -113,6 +113,7 @@ const CreateTableModal: React.FC<{ cb?: Function }> = ({ cb }) => {
               </NumberInputStepper>
             </NumberInput>
             <IconButton
+              variant="pinkSolid"
               aria-label="enter"
               icon={<CheckIcon />}
               onClick={() => {
@@ -137,7 +138,7 @@ const CreateTableModal: React.FC<{ cb?: Function }> = ({ cb }) => {
         </ModalBody>
 
         <ModalFooter>
-          <Button variant="pinkSolid" mr={3} onClick={onClose}>
+          <Button variant="blueSolid" mr={3} onClick={onClose}>
             create
           </Button>
         </ModalFooter>
