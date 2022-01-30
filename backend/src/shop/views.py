@@ -1,10 +1,10 @@
 from operator import itemgetter
 from rest_framework import status
-from .models import Category, Product
+from .models import Category, Product, Product_Specification_Table, Specification_Table_Content
 from rest_framework.response import Response
 from authentication.backends import Is_Admin
 from rest_framework.decorators import parser_classes
-from .serializers import CategorySerializer, ProductSerializer
+from .serializers import CategorySerializer, ProductSerializer, SpecificationTableContentSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.decorators import api_view, permission_classes
 
@@ -109,5 +109,57 @@ def get_product(request):
         product = Product.objects.get(product_id=int(id))
         serialized_product = ProductSerializer(product).data
         return Response({"product": serialized_product}, status=status.HTTP_200_OK)
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([Is_Admin])
+def create_table(request):
+    product_id = itemgetter("product_id")(request.data)
+    try:
+        Product_Specification_Table(
+            product_id=Product.objects.get(product_id=product_id)
+        ).save()
+        return Response(status=status.HTTP_200_OK)
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([Is_Admin])
+def add_table_content(request):
+    content, product_id = itemgetter("content", "product_id")(request.data)
+    try:
+        for row in content:
+            table_id = Product_Specification_Table.objects.get(product_id=product_id)
+            Specification_Table_Content(
+                specification=row[0], details=row[1], table_id=table_id).save()
+        return  Response(status=status.HTTP_200_OK)
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([Is_Admin])
+def exists_table(request):
+    product_id = itemgetter('product_id')(request.data)
+    try:
+        Product_Specification_Table.objects.get(product_id=product_id)
+        return Response(status=status.HTTP_200_OK)
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([Is_Admin])
+def get_table_content(request):
+    product_id = itemgetter('product_id')(request.data)
+    try:
+        table_id = Product_Specification_Table.objects.get(product_id=product_id)
+        content = Specification_Table_Content.objects.filter(table_id=table_id)
+        serialized_content = SpecificationTableContentSerializer(content, many=True).data
+        print("content = ", content)
+        return Response({"content": serialized_content},status=status.HTTP_200_OK)
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)

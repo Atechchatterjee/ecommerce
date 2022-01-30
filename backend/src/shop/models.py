@@ -20,3 +20,15 @@ class Category(models.Model):
 
     def __str__(self):
         return self.category_name
+
+class Product_Specification_Table(models.Model):
+    table_id = models.AutoField(primary_key=True)
+    product_id = models.ForeignKey('shop.Product', verbose_name="product_id", on_delete=models.CASCADE)
+
+class Specification_Table_Content(models.Model):
+    id = models.AutoField(primary_key=True)
+    specification = models.TextField()
+    details = models.TextField()
+    table_id = models.ForeignKey(
+        'shop.Product_Specification_Table', verbose_name="table_id",
+        on_delete=models.CASCADE, null=False)
