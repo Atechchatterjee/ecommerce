@@ -1,31 +1,21 @@
 import { createContext } from 'react';
 
-interface ModalProps {
-  openCreateTableModal: boolean;
-  setOpenCreateTableModal: (_: boolean) => void;
-  columnNames: any[];
-  setColumnNames: (_:any[]) => void;
-  columnNo: number;
-  setColumnNo: (_:number) => void;
-  confirmColumn: boolean;
-  setConfirmColumn: (_:boolean) => void;
-  openAddRowModal: boolean;
-  setOpenAddRowModal: (_:boolean) => void;
-  tableContentStr?: any[][];
-  setTableContentStr?: (_:any[][])=> void;
+interface TableModalProps {
+  createTableModal: [openCreateTableModal:boolean, setOpenCreateTableModal: Function];
+  colNames: [columnNames:any[], setColumnNames: Function];
+  colNo: [columnNo:number, setColumnNo: Function];
+  confirmCol: [confirmColumn:boolean, setColNo: Function];
+  addRowModal: [openAddRowModal:boolean, setOpenRowModal: Function];
+  tableContent: [tableContentStr: any[], setTableContentStr: Function];
+  modifyTable: [modifyAddRowModal: boolean, setModifyAddRowModal: Function];
 }
 
-export const TableModalContext = createContext<ModalProps>({
-  openCreateTableModal: false,
-  setOpenCreateTableModal: (_: boolean) => {},
-  columnNames: [],
-  columnNo: 0,
-  setColumnNames: (_:any[]) => {},
-  setColumnNo: (_:number) => {},
-  confirmColumn: false,
-  setConfirmColumn: (_:boolean) => {},
-  openAddRowModal: false,
-  setOpenAddRowModal: (_:boolean) => {},
-  tableContentStr: [],
-  setTableContentStr: (_:any[][])=> {},
+export const TableModalContext = createContext<TableModalProps>({
+  createTableModal: [false, () => {}],
+  colNames: [[], () => {}],
+  colNo: [0, () => {}],
+  confirmCol: [false, () => {}],
+  addRowModal: [false, () => {}],
+  tableContent: [[], () => {}],
+  modifyTable: [false, () => {}],
 });

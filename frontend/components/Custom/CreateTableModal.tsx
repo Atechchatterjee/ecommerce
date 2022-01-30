@@ -22,19 +22,15 @@ import React, { useContext } from "react";
 import { TableModalContext } from "../../context/TableModalContext";
 
 const CreateTableModal: React.FC<{ cb?: Function }> = ({ cb }) => {
-  const {
-    confirmColumn,
-    setConfirmColumn,
-    openCreateTableModal: triggerOpen,
-    setOpenCreateTableModal: setTriggerOpen,
-    columnNames,
-    columnNo,
-    setColumnNames,
-    setColumnNo,
-  } = useContext(TableModalContext);
+  const { confirmCol, colNames, colNo, createTableModal } =
+    useContext(TableModalContext);
+  const [columnNo, setColumnNo] = colNo;
+  const [columnNames, setColumnNames] = colNames;
+  const [confirmColumn, setConfirmColumn] = confirmCol;
+  const [openCreateTableModal, setOpenCreateTableModal] = createTableModal;
 
   const onClose = () => {
-    setTriggerOpen(!triggerOpen);
+    setOpenCreateTableModal(!openCreateTableModal);
     if (cb) cb(columnNames);
   };
 
@@ -85,8 +81,8 @@ const CreateTableModal: React.FC<{ cb?: Function }> = ({ cb }) => {
   return (
     <Modal
       closeOnOverlayClick={false}
-      isOpen={triggerOpen}
-      onClose={() => setTriggerOpen(!triggerOpen)}
+      isOpen={openCreateTableModal}
+      onClose={() => setOpenCreateTableModal(!openCreateTableModal)}
     >
       <ModalOverlay />
       <ModalContent>
