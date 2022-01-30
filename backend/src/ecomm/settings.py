@@ -17,7 +17,7 @@ SECRET_KEY = config('SECRET_KEY')
 
 DEBUG = bool(int(config('DEBUG', '1')))
 
-ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1', '192.168.31.222']
 
 # including production domain names and ip as allowed host
 # if ENV == 'production':
@@ -145,11 +145,15 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
     'http://localhost',
+    'http://192.168.31.222',
+    'http://192.168.31.222:3000'
 ]
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     'http://localhost',
+    'http://192.168.31.222',
+    'http://192.168.31.222:3000'
 ]
 
 # if ENV == 'production':
