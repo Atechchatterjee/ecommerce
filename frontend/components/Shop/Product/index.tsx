@@ -24,8 +24,10 @@ interface Props {
   onDelete?: Function;
 }
 
-const createImageUrl = (url: string): string =>
-  `${constants.url?.substring(0, constants?.url.lastIndexOf("/"))}${url}`;
+const createImageUrl = (url: string, image: File | undefined): string =>
+  image
+    ? URL.createObjectURL(image)
+    : `${constants.url?.substring(0, constants?.url.lastIndexOf("/"))}${url}`;
 
 const Product: React.FC<Props> = ({
   id,
@@ -71,7 +73,7 @@ const Product: React.FC<Props> = ({
         <Image
           padding="2em"
           objectFit="scale-down"
-          src={createImageUrl(image)}
+          src={createImageUrl(image, changedImage)}
           width="full"
           height="20em"
           cursor={edit ? "pointer" : "auto"}
