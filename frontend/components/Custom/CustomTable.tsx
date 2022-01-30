@@ -14,9 +14,15 @@ interface Props {
   rows: ReactJSXElement[][];
   heading: ReactJSXElement[];
   tableCaption?: string;
+  rowCb?: Function;
 }
 
-const CustomTable: React.FC<Props> = ({ rows, heading, tableCaption }) => {
+const CustomTable: React.FC<Props> = ({
+  rows,
+  heading,
+  tableCaption,
+  rowCb,
+}) => {
   return (
     <Table variant="simple" size="md" width="full">
       {tableCaption ? <TableCaption>{tableCaption}</TableCaption> : <></>}
@@ -28,8 +34,16 @@ const CustomTable: React.FC<Props> = ({ rows, heading, tableCaption }) => {
         </Tr>
       </Thead>
       <Tbody>
-        {rows.map((rowEl) => (
-          <Tr>
+        {rows.map((rowEl, indx) => (
+          <Tr
+            _hover={{
+              background: "#F7F7F7",
+              cursor: "pointer",
+            }}
+            onClick={() => {
+              if (rowCb) rowCb(indx);
+            }}
+          >
             {rowEl.map((columnElement: any, indx: number) => (
               <Td key={indx}>{columnElement}</Td>
             ))}
