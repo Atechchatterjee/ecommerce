@@ -13,8 +13,10 @@ import {
 import React, { useContext, useState } from "react";
 import { TableModalContext } from "../../context/TableModalContext";
 
-const AddRowModal: React.FC<{ cb?: Function }> = ({ cb }) => {
-  const [tableContentLocal, setTableContentLocal] = useState<any>({});
+const AddRowModal: React.FC<{
+  cb?: (_: string[]) => void;
+}> = ({ cb }) => {
+  const [tableContentLocal, setTableContentLocal] = useState<string[]>([]);
   const { colNo, addRowModal, modifyTable } = useContext(TableModalContext);
   const [columnNo] = colNo;
   const [openAddRowModal, setOpenAddRowModal] = addRowModal;
@@ -42,7 +44,7 @@ const AddRowModal: React.FC<{ cb?: Function }> = ({ cb }) => {
       width="23.8em"
       onChange={(e) => {
         let tableContentLocalCopy = tableContentLocal;
-        tableContentLocal[column] = e.target.value;
+        tableContentLocal[column - 1] = e.target.value;
         setTableContentLocal(tableContentLocalCopy);
       }}
     />

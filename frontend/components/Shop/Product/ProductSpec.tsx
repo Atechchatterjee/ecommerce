@@ -7,16 +7,22 @@ import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
 import AddRowModal from "../../Custom/AddRowModal";
 import axios from "axios";
 import constants from "../../../util/Constants";
+import { FaSave, FaTrash, FaEdit } from "react-icons/fa";
 
 interface Props {
   product: any;
 }
 
-const createTableContent = (rowsAsString: string[][]): JSX.Element[][] =>
-  rowsAsString.map((row) => row.map((element) => <Text>{element}</Text>));
+const createTableContent = (tableContent: string[][]): any =>
+  tableContent.map((row) =>
+    Object.keys(row).map((elementIndx: any) => {
+      if (elementIndx !== "0") return <Text>{row[elementIndx]}</Text>;
+      else return row[elementIndx];
+    })
+  );
 
 const ProductSpec: React.FC<Props> = ({ product }) => {
-  const [tableContentStr, setTableContentStr] = useState<string[][]>([]);
+  const [tableContentStruct, setTableContentStruct] = useState<string[][]>([]);
   const [heading, setHeading] = useState<ReactJSXElement[]>([]);
   const [openCreateTableModal, setOpenCreateTableModal] =
     useState<boolean>(false);
@@ -27,21 +33,30 @@ const ProductSpec: React.FC<Props> = ({ product }) => {
   const [tableExists, setTableExists] = useState<boolean>(heading.length !== 0);
   const [modifyAddRowModal, setModifyAddRowModal] = useState<boolean>(false);
   const [indxToModify, setIndxToModify] = useState<number>(0);
+  const [lastIndxInTableStruct, setLastIndxInTableStruct] = useState<number>(0);
+  const [modifiedRows, setModifiedRows] = useState<string[][]>([]);
+  const [addedRows, setAddedRows] = useState<string[][]>([]);
 
-  const addRowToTable = (tableContentLocal: any[]) => {
-    let newTableContentLocal = Object.keys(tableContentLocal).map(
-      (key: any) => tableContentLocal[key]
-    );
-    setTableContentStr([...tableContentStr, newTableContentLocal]);
+  const addRowToTable = (tableContentLocal: string[]) => {
+    (tableContentLocal = [
+      (lastIndxInTableStruct + 1).toString(),
+      ...tableContentLocal,
+    ]),
+      setAddedRows([...addedRows, tableContentLocal]);
+    setLastIndxInTableStruct(lastIndxInTableStruct + 1);
+    setTableContentStruct([...tableContentStruct, tableContentLocal]);
   };
 
-  const modifyRowToTable = (tableContentLocal: any[]) => {
-    let newTableContentRow = Object.keys(tableContentLocal).map(
-      (key: any) => tableContentLocal[key]
-    );
-    setTableContentStr(
-      tableContentStr.map((row, indx) =>
-        indxToModify !== indx ? row : newTableContentRow
+  const modifyTableStruct = (tableContentLocal: string[], rowId: number) => {
+    setModifiedRows([
+      ...modifiedRows,
+      [rowId.toString(), ...tableContentLocal],
+    ]);
+    setTableContentStruct(
+      tableContentStruct.map((el) =>
+        el[0] == rowId.toString()
+          ? [rowId.toString(), ...tableContentLocal]
+          : el
       )
     );
   };
@@ -73,15 +88,21 @@ const ProductSpec: React.FC<Props> = ({ product }) => {
   };
 
   const createTableHeading = () => {
-    setHeading([...heading, <Text>Specification</Text>, <Text>Details</Text>]);
+    if (heading.length === 0)
+      setHeading([
+        ...heading,
+        <Text>Specification</Text>,
+        <Text>Details</Text>,
+      ]);
   };
 
-  const addTableContent = async () => {
+  const saveTableContent = async () => {
     axios
       .post(
-        `${constants.url}/shop/addtablecontent/`,
+        `${constants.url}/shop/savetablecontent/`,
         {
-          content: tableContentStr,
+          addedRows: addedRows,
+          modifiedRows: modifiedRows,
           product_id: product.product_id,
         },
         { withCredentials: true }
@@ -94,20 +115,19 @@ const ProductSpec: React.FC<Props> = ({ product }) => {
       });
   };
 
-  const getTableContent = async (): Promise<any[]> => {
-    try {
-      const res = await axios.post(
-        `${constants.url}/shop/gettablecontent/`,
-        {
-          product_id: product.product_id,
-        },
-        { withCredentials: true }
-      );
-      return Promise.resolve(res.data.content);
-    } catch (err) {
-      return Promise.reject([]);
-    }
-  };
+  const getTableContent = async (): Promise<any[]> =>
+    new Promise((resolve, reject) => {
+      axios
+        .post(
+          `${constants.url}/shop/gettablecontent/`,
+          {
+            product_id: product.product_id,
+          },
+          { withCredentials: true }
+        )
+        .then((res) => resolve(res.data.content))
+        .catch((err) => reject(err));
+    });
 
   useEffect(() => {
     doesTableExist()
@@ -115,10 +135,11 @@ const ProductSpec: React.FC<Props> = ({ product }) => {
         createTableHeading();
         setTableExists(true);
         getTableContent().then((content) => {
-          console.log({ content });
-          setTableContentStr(
+          setTableContentStruct(
             content.map((el) => {
-              return [el.specification, el.details];
+              if (lastIndxInTableStruct < el.id)
+                setLastIndxInTableStruct(el.id);
+              return [el.id, el.specification, el.details];
             })
           );
         });
@@ -163,7 +184,7 @@ const ProductSpec: React.FC<Props> = ({ product }) => {
             marginTop="1.5em"
             marginLeft="4em"
             width="30em"
-            variant="pinkSolid"
+            variant="blueGradient"
             onClick={() => {
               setModifyAddRowModal(false);
               setOpenAddRowModal(true);
@@ -175,25 +196,59 @@ const ProductSpec: React.FC<Props> = ({ product }) => {
           <></>
         )}
       </Container>
-      <Container marginLeft="2em" width="100%" position="relative">
+      <Container
+        marginLeft="2em"
+        width="50em"
+        position="relative"
+        boxShadow="0.2em 0.2em 0.2em 0.2em #e1e1e1"
+        height="inherit"
+        padding="2em 2em 5em 2em"
+        borderRadius="lg"
+      >
         <CustomTable
-          rows={createTableContent(tableContentStr)}
+          rows={tableContentStruct}
           heading={heading}
           rowCb={(indx: number) => {
             setOpenAddRowModal(true);
             setModifyAddRowModal(true);
             setIndxToModify(indx);
           }}
+          select
+          deleteCb={(rowId: any) => {}}
         />
-        <Button
-          variant="blueSolid"
-          marginTop="1em"
-          position="absolute"
-          right="1em"
-          onClick={() => addTableContent()}
-        >
-          Save
-        </Button>
+        {tableContentStruct.length !== 0 ? (
+          <>
+            <Button
+              variant="blueGradient"
+              marginTop="1em"
+              position="absolute"
+              right="1em"
+              onClick={() => saveTableContent()}
+            >
+              <FaSave />
+            </Button>
+            <Button
+              variant="blueGradient"
+              // colorScheme="red"
+              marginTop="1em"
+              position="absolute"
+              right="4.5em"
+            >
+              <FaEdit />
+            </Button>
+            <Button
+              // variant=""
+              colorScheme="red"
+              marginTop="1em"
+              position="absolute"
+              right="8em"
+            >
+              <FaTrash />
+            </Button>
+          </>
+        ) : (
+          <></>
+        )}
       </Container>
       <TableModalContext.Provider
         value={{
@@ -202,13 +257,15 @@ const ProductSpec: React.FC<Props> = ({ product }) => {
           colNo: [columnNo, setColumnNo],
           confirmCol: [confirmColumn, setConfirmColumn],
           addRowModal: [openAddRowModal, setOpenAddRowModal],
-          tableContent: [tableContentStr, setTableContentStr],
+          tableContent: [tableContentStruct, setTableContentStruct],
           modifyTable: [modifyAddRowModal, setModifyAddRowModal],
         }}
       >
         <AddRowModal
-          cb={(tableContent: any) => {
-            if (modifyAddRowModal) modifyRowToTable(tableContent);
+          cb={(tableContent) => {
+            console.log("table content", tableContent);
+            if (modifyAddRowModal)
+              modifyTableStruct(tableContent, indxToModify);
             else addRowToTable(tableContent);
           }}
         />
