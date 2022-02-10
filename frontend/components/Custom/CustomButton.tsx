@@ -18,6 +18,24 @@ const CustomButtonTheme = extendTheme({
           fontWeight: "medium",
           _hover: { bg: "#B199CC" },
         }),
+        pinkGradient: (props: any) => ({
+          color: "white",
+          fontFamily: "Sora",
+          fontWeight: "medium",
+          bgGradient: "linear(to-b, #9D84B7, #E863B6)",
+          _hover: {
+            bgGradient: "linear(to-b, #9D84B7, #E863B6)",
+          },
+        }),
+        blueGradient: (props: any) => ({
+          color: "white",
+          fontFamily: "Sora",
+          fontWeight: "medium",
+          bgGradient: "linear(to-b, #161F4F, #4E2A81)",
+          _hover: {
+            bgGradient: "linear(to-b, #222D68, #6C48A5)",
+          },
+        }),
       },
     },
   },
