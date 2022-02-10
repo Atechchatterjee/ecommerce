@@ -36,6 +36,15 @@ const CustomButtonTheme = extendTheme({
             bgGradient: "linear(to-b, #222D68, #6C48A5)",
           },
         }),
+        redGradient: (props: any) => ({
+          color: "white",
+          fontFamily: "Sora",
+          fontWeight: "medium",
+          bgGradient: "linear(to-b, #D34E93, #FF491C)",
+          _hover: {
+            bgGradient: "linear(to-b, #FF7597, #F98970)",
+          },
+        }),
       },
     },
   },
