@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Container, Text } from "@chakra-ui/react";
+import { Button, Container, Text, Tooltip } from "@chakra-ui/react";
 import CustomTable from "../../Custom/CustomTable";
 import Product from "./index";
 import { TableModalContext } from "../../../context/TableModalContext";
@@ -36,6 +36,8 @@ const ProductSpec: React.FC<Props> = ({ product }) => {
   const [lastIndxInTableStruct, setLastIndxInTableStruct] = useState<number>(0);
   const [modifiedRows, setModifiedRows] = useState<string[][]>([]);
   const [addedRows, setAddedRows] = useState<string[][]>([]);
+  const [selectedRows, setSelectedRows] = useState<any>({});
+  const [loadingSaveBtn, setLoadingSaveBtn] = useState<boolean>(false);
 
   const addRowToTable = (tableContentLocal: string[]) => {
     (tableContentLocal = [
@@ -84,7 +86,6 @@ const ProductSpec: React.FC<Props> = ({ product }) => {
         withCredentials: true,
       }
     );
-    alert("table created");
   };
 
   const createTableHeading = () => {
@@ -97,6 +98,7 @@ const ProductSpec: React.FC<Props> = ({ product }) => {
   };
 
   const saveTableContent = async () => {
+    setLoadingSaveBtn(true);
     axios
       .post(
         `${constants.url}/shop/savetablecontent/`,
@@ -108,41 +110,56 @@ const ProductSpec: React.FC<Props> = ({ product }) => {
         { withCredentials: true }
       )
       .then(() => {
-        alert("table content saved");
-      })
-      .catch(() => {
-        alert("table content cannot be saved");
+        setTimeout(() => {
+          setLoadingSaveBtn(false);
+        }, 1000);
       });
   };
 
-  const getTableContent = async (): Promise<any[]> =>
-    new Promise((resolve, reject) => {
-      axios
-        .post(
-          `${constants.url}/shop/gettablecontent/`,
-          {
-            product_id: product.product_id,
-          },
-          { withCredentials: true }
-        )
-        .then((res) => resolve(res.data.content))
-        .catch((err) => reject(err));
-    });
+  const getTableContent = async () => {
+    axios
+      .post(
+        `${constants.url}/shop/gettablecontent/`,
+        {
+          product_id: product.product_id,
+        },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        setTableContentStruct(
+          res.data.content.map((el: any) => {
+            if (lastIndxInTableStruct < el.id) setLastIndxInTableStruct(el.id);
+            return [el.id, el.specification, el.details];
+          })
+        );
+      });
+  };
+
+  const deleteRows = () => {
+    axios
+      .post(
+        `${constants.url}/shop/deletetablecontent/`,
+        {
+          deleteIndices: selectedRows,
+        },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        console.log(res);
+        getTableContent();
+      })
+      .catch((err) => {
+        alert("could not delete rows");
+        console.error(err);
+      });
+  };
 
   useEffect(() => {
     doesTableExist()
       .then(() => {
         createTableHeading();
         setTableExists(true);
-        getTableContent().then((content) => {
-          setTableContentStruct(
-            content.map((el) => {
-              if (lastIndxInTableStruct < el.id)
-                setLastIndxInTableStruct(el.id);
-              return [el.id, el.specification, el.details];
-            })
-          );
-        });
+        getTableContent();
       })
       .catch(() => {
         setTableExists(false);
@@ -214,37 +231,36 @@ const ProductSpec: React.FC<Props> = ({ product }) => {
             setIndxToModify(indx);
           }}
           select
-          deleteCb={(rowId: any) => {}}
+          selectedRowsState={[selectedRows, setSelectedRows]}
         />
         {tableContentStruct.length !== 0 ? (
           <>
-            <Button
-              variant="blueGradient"
-              marginTop="1em"
-              position="absolute"
-              right="1em"
-              onClick={() => saveTableContent()}
-            >
-              <FaSave />
-            </Button>
-            <Button
-              variant="blueGradient"
-              // colorScheme="red"
-              marginTop="1em"
-              position="absolute"
-              right="4.5em"
-            >
-              <FaEdit />
-            </Button>
-            <Button
-              // variant=""
-              colorScheme="red"
-              marginTop="1em"
-              position="absolute"
-              right="8em"
-            >
-              <FaTrash />
-            </Button>
+            <Tooltip label="Save">
+              <Button
+                variant="blueGradient"
+                marginTop="1em"
+                position="absolute"
+                right="1em"
+                onClick={() => saveTableContent()}
+                isLoading={loadingSaveBtn}
+              >
+                <FaSave />
+              </Button>
+            </Tooltip>
+            <Tooltip label="Delete">
+              <Button
+                // colorScheme="red"
+                variant="redGradient"
+                marginTop="1em"
+                position="absolute"
+                right="5em"
+                onClick={() => {
+                  deleteRows();
+                }}
+              >
+                <FaTrash />
+              </Button>
+            </Tooltip>
           </>
         ) : (
           <></>

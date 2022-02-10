@@ -17,7 +17,7 @@ interface Props {
   tableCaption?: string;
   rowCb?: Function;
   select?: boolean;
-  deleteCb?: Function;
+  selectedRowsState?: [selectedRows: any[], setSelectedRows: Function];
 }
 
 const CustomTable: React.FC<Props> = ({
@@ -26,14 +26,11 @@ const CustomTable: React.FC<Props> = ({
   tableCaption,
   rowCb,
   select,
-  deleteCb,
+  selectedRowsState,
 }) => {
   const [selectTrigger, setSelectTrigger] = useState<boolean>(false);
-  const [selectedRows, setSelectedRows] = useState<any>({});
-
-  useEffect(() => {
-    console.log({ selectedRows });
-  }, [selectedRows, setSelectedRows]);
+  const [selectedRows, setSelectedRows] =
+    selectedRowsState || useState<any>({});
 
   const toggleSelectedRows = (indx: any) => {
     if (!selectedRows[indx]) setSelectedRows({ ...selectedRows, [indx]: true });
@@ -43,7 +40,12 @@ const CustomTable: React.FC<Props> = ({
   const SelectRow: React.FC<{ indx: any }> = ({ indx }) => {
     if (select)
       return (
-        <Td textAlign="center">
+        <Td
+          textAlign="center"
+          onClick={() => {
+            toggleSelectedRows(indx);
+          }}
+        >
           <Checkbox
             size="lg"
             colorScheme="pink"
@@ -57,6 +59,14 @@ const CustomTable: React.FC<Props> = ({
     else return <></>;
   };
 
+  const selectAllRows = () => {
+    let copy: any = {};
+    rows.forEach((row) => {
+      if (!selectedRows[row[0]]) copy[row[0]] = true;
+    });
+    setSelectedRows(copy);
+  };
+
   return (
     <Table variant="simple" size="md" width="full">
       {tableCaption ? <TableCaption>{tableCaption}</TableCaption> : <></>}
@@ -67,7 +77,14 @@ const CustomTable: React.FC<Props> = ({
           ))}
           {select ? (
             <Th width={1}>
-              <Text>Select</Text>
+              <Text
+                cursor="pointer"
+                onClick={() => {
+                  selectAllRows();
+                }}
+              >
+                Select
+              </Text>
             </Th>
           ) : (
             <></>
@@ -83,7 +100,6 @@ const CustomTable: React.FC<Props> = ({
                 cursor: "pointer",
               }}
               onClick={() => {
-                toggleSelectedRows(rowEl[0]);
                 if (!selectTrigger) setSelectTrigger(false);
               }}
             >
@@ -92,7 +108,7 @@ const CustomTable: React.FC<Props> = ({
                   <Td
                     key={indx}
                     onClick={() => {
-                      // if (rowCb && selectTrigger === false) rowCb(rowEl[0]);
+                      if (rowCb && selectTrigger === false) rowCb(rowEl[0]);
                     }}
                   >
                     <Text>{columnElement}</Text>
@@ -101,7 +117,7 @@ const CustomTable: React.FC<Props> = ({
                   <></>
                 )
               )}
-              <SelectRow indx={rowEl[0]} />
+              <SelectRow indx={parseInt(rowEl[0])} />
             </Tr>
           </>
         ))}

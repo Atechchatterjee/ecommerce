@@ -13,4 +13,5 @@ urlpatterns = [
     path('savetablecontent/', views.save_table_content, name="save table content"),
     path('existstable/', views.exists_table, name="table exists"),
     path('gettablecontent/', views.get_table_content, name="get table content"),
+    path('deletetablecontent/', views.delete_table_content, name="delete table content"),
 ]

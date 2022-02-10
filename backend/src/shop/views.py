@@ -140,12 +140,26 @@ def save_table_content(request):
                 specification=row[1], details=row[2], table_id=table_id).save()
         # modifying/updating rows
         for row in modified_rows:
+            print(f"rows to modify = {row}")
             Specification_Table_Content.objects.filter(id=int(row[0])).update(
-                specification=row[1], details=row[2], table_id=table_id).save()
+                specification=row[1], details=row[2], table_id=table_id)
         return  Response(status=status.HTTP_200_OK)
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+
+@api_view(['POST'])
+@permission_classes([Is_Admin])
+def delete_table_content(request):
+    delete_indices = itemgetter("deleteIndices")(request.data)
+    try:
+        filtered_ids = [
+            id if delete_indices[id] == True else None for id in delete_indices
+        ]
+        Specification_Table_Content.objects.filter(id__in=filtered_ids).delete()
+        return  Response(status=status.HTTP_200_OK)
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
 @permission_classes([Is_Admin])
