@@ -128,13 +128,20 @@ def create_table(request):
 
 @api_view(['POST'])
 @permission_classes([Is_Admin])
-def add_table_content(request):
-    content, product_id = itemgetter("content", "product_id")(request.data)
+def save_table_content(request):
+    added_rows, modified_rows, product_id = itemgetter(
+        "addedRows", "modifiedRows", "product_id"
+    )(request.data)
     try:
-        for row in content:
-            table_id = Product_Specification_Table.objects.get(product_id=product_id)
+        table_id = Product_Specification_Table.objects.get(product_id=product_id)
+        # adding rows
+        for row in added_rows:
             Specification_Table_Content(
-                specification=row[0], details=row[1], table_id=table_id).save()
+                specification=row[1], details=row[2], table_id=table_id).save()
+        # modifying/updating rows
+        for row in modified_rows:
+            Specification_Table_Content.objects.filter(id=int(row[0])).update(
+                specification=row[1], details=row[2], table_id=table_id).save()
         return  Response(status=status.HTTP_200_OK)
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)

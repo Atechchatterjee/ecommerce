@@ -10,7 +10,7 @@ urlpatterns = [
     path('updateproduct/', views.update_product, name="update product"),
     path('getproduct/', views.get_product, name="get product"),
     path('createtable/', views.create_table, name="create table"),
-    path('addtablecontent/', views.add_table_content, name="add table content"),
+    path('savetablecontent/', views.save_table_content, name="save table content"),
     path('existstable/', views.exists_table, name="table exists"),
     path('gettablecontent/', views.get_table_content, name="get table content"),
 ]
