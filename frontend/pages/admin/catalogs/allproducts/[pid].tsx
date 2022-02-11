@@ -6,6 +6,7 @@ import constants from "../../../../util/Constants";
 import ProductSpec from "../../../../components/Shop/Product/ProductSpec";
 import { Container } from "@chakra-ui/react";
 import Navbar from "../../../../components/Admin/Navbar";
+import WithAuth from "../../../../util/WithAuth";
 
 const getProductInfo = async (productId: any): Promise<any> => {
   const res = await axios.post(`${constants.url}/shop/getproduct/`, {
@@ -46,4 +47,4 @@ const ProductPage: NextPage = () => {
   );
 };
 
-export default ProductPage;
+export default WithAuth(ProductPage, { admin: true });

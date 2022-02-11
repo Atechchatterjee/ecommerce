@@ -3,6 +3,7 @@ import { NextPage } from "next";
 import { Center } from "@chakra-ui/react";
 import Navbar from "../../../components/Admin/Navbar";
 import AddCategory from "../../../components/Admin/AddCategory";
+import WithAuth from "../../../util/WithAuth";
 
 interface Category {
   name: string;
@@ -21,4 +22,4 @@ const Category: NextPage = () => {
   );
 };
 
-export default Category;
+export default WithAuth(Category, { admin: true });

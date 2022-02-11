@@ -3,6 +3,7 @@ import { NextPage } from "next";
 import { Center, Container } from "@chakra-ui/react";
 import AllProducts from "../../../components/Admin/AllProducts";
 import Navbar from "../../../components/Admin/Navbar";
+import WithAuth from "../../../util/WithAuth";
 
 interface Products {
   name: string;
@@ -30,4 +31,4 @@ const Product: NextPage = () => {
   );
 };
 
-export default Product;
+export default WithAuth(Product, { admin: true });
