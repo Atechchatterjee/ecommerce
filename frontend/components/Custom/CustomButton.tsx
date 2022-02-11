@@ -4,21 +4,21 @@ const CustomButtonTheme = extendTheme({
   components: {
     Button: {
       variants: {
-        blueSolid: (props: any) => ({
+        blueSolid: () => ({
           bg: "#091353",
           color: "white",
           fontFamily: "Sora",
           fontWeight: "medium",
           _hover: { bg: "#314775" },
         }),
-        pinkSolid: (props: any) => ({
+        pinkSolid: () => ({
           bg: "#9D84B7",
           color: "white",
           fontFamily: "Sora",
           fontWeight: "medium",
           _hover: { bg: "#B199CC" },
         }),
-        pinkGradient: (props: any) => ({
+        pinkGradient: () => ({
           color: "white",
           fontFamily: "Sora",
           fontWeight: "medium",
@@ -27,7 +27,7 @@ const CustomButtonTheme = extendTheme({
             bgGradient: "linear(to-b, #9D84B7, #E863B6)",
           },
         }),
-        blueGradient: (props: any) => ({
+        blueGradient: () => ({
           color: "white",
           fontFamily: "Sora",
           fontWeight: "medium",
@@ -36,7 +36,7 @@ const CustomButtonTheme = extendTheme({
             bgGradient: "linear(to-b, #222D68, #6C48A5)",
           },
         }),
-        redGradient: (props: any) => ({
+        redGradient: () => ({
           color: "white",
           fontFamily: "Sora",
           fontWeight: "medium",
