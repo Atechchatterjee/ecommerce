@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useRouter } from "next/router";
 import { NextPage } from "next";
 import axios from "axios";
 import constants from "../../../../util/Constants";
 import ProductSpec from "../../../../components/Shop/Product/ProductSpec";
-import { Container } from "@chakra-ui/react";
 import Navbar from "../../../../components/Admin/Navbar";
 import WithAuth from "../../../../util/WithAuth";
+import { UserContext } from "../../../../context/UserContext";
 
 const getProductInfo = async (productId: any): Promise<any> => {
   const res = await axios.post(`${constants.url}/shop/getproduct/`, {
@@ -20,12 +20,11 @@ const ProductPage: NextPage = () => {
   const { pid } = router.query;
   const [product, setProduct] = useState<any>();
   const [loading, setLoading] = useState<boolean>(true);
+  const { admin } = useContext(UserContext);
 
   useEffect(() => {
     if (!pid) return;
-    (async () => {
-      await fetch(`/admin/catalogs/allproducts/${pid}`);
-    })().then(() => {
+    axios.get(`/admin/catalogs/allproducts/${pid}`).then(() => {
       getProductInfo(pid).then((product) => {
         setLoading(false);
         console.log(product);
@@ -33,17 +32,18 @@ const ProductPage: NextPage = () => {
       });
     });
   }, [pid]);
-  return (
-    <div>
-      <Navbar />
-      {!loading ? (
-        <Container padding="2em" width="full">
-          <ProductSpec product={product} />
-        </Container>
-      ) : (
-        <></>
-      )}
-    </div>
+
+  return !loading ? (
+    admin === true ? (
+      <>
+        <Navbar />
+        <ProductSpec product={product} />
+      </>
+    ) : (
+      <></>
+    )
+  ) : (
+    <></>
   );
 };
 

@@ -1,25 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NextPage } from "next";
 import { Center, Container } from "@chakra-ui/react";
 import AllProducts from "../../../components/Admin/AllProducts";
 import Navbar from "../../../components/Admin/Navbar";
 import WithAuth from "../../../util/WithAuth";
 
-interface Products {
-  name: string;
-  description: string;
-  price: string;
-  category: string;
-}
-
-interface Category {
-  name: string;
-  subCategory: string;
-}
-
 const Product: NextPage = () => {
-  const [allProducts, setAllProducts] = useState<Products[]>([]);
-
   return (
     <>
       <Navbar />

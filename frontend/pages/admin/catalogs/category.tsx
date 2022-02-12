@@ -5,13 +5,7 @@ import Navbar from "../../../components/Admin/Navbar";
 import AddCategory from "../../../components/Admin/AddCategory";
 import WithAuth from "../../../util/WithAuth";
 
-interface Category {
-  name: string;
-  subCategory: Category | null;
-}
 const Category: NextPage = () => {
-  const [allCategory, setAllCategory] = useState<Category[]>([]);
-
   return (
     <>
       <Navbar />

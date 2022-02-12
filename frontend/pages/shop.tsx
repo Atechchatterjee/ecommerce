@@ -7,6 +7,7 @@ import React, { useState, useEffect } from "react";
 import { Grid, GridItem, Center } from "@chakra-ui/react";
 import constants from "../util/Constants";
 import axios from "axios";
+import { checkWhichUser } from "../util/Authenticated";
 
 interface Product {
   product_id: number;
