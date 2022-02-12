@@ -25,3 +25,19 @@ export const isAuthenticated = async (
     return Promise.reject(err);
   }
 };
+
+export const checkWhichUser = async (): Promise<{admin: boolean}> => (
+ new Promise((resolve, reject) => {
+    axios
+      .get(`${constants.url}/auth/checkwhichuser/`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        let admin = res.data.admin;
+        resolve({admin});
+      })
+      .catch((err) => {
+        reject(err);
+      });
+ })
+)
