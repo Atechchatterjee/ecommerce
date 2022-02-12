@@ -4,7 +4,7 @@ import { UploadContext } from "../../../context/UploadContext";
 import Upload from "../../Custom/Upload";
 import { ProductContext } from "../../../context/ProductContext";
 import CustomEditable from "./CustomEditable";
-import { FaWindows } from "react-icons/fa";
+import { UserContext } from "../../../context/UserContext";
 
 interface Props {
   cb?: (id: number, name: string, description: string, price: string) => void;
@@ -72,6 +72,7 @@ const EditMode: React.FC<Props> = ({ id, name, description, price, cb }) => {
 };
 
 const NormalMode: React.FC<Props> = ({ id, name, description, price }) => {
+  const { admin } = useContext(UserContext);
   return (
     <Container width="full" height="initial" padding="1em">
       <Heading
@@ -80,9 +81,10 @@ const NormalMode: React.FC<Props> = ({ id, name, description, price }) => {
         size="lg"
         cursor="pointer"
         _hover={{ color: "#C75E0E" }}
-        onClick={() =>
-          window.location.assign(`/admin/catalogs/allproducts/${id}`)
-        }
+        onClick={() => {
+          if (!admin) window.location.assign(`/shop/${id}`);
+          else window.location.assign(`/admin/catalogs/allproducts/${id}`);
+        }}
       >
         {name}
       </Heading>
