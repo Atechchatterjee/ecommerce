@@ -1,6 +1,11 @@
 import { extendTheme } from "@chakra-ui/react";
 
 const CustomButtonTheme = extendTheme({
+  colors: {
+    secondaryBlue: {
+      200: "#091353",
+    },
+  },
   components: {
     Button: {
       variants: {
@@ -10,6 +15,16 @@ const CustomButtonTheme = extendTheme({
           fontFamily: "Sora",
           fontWeight: "medium",
           _hover: { bg: "#314775" },
+        }),
+        blueOutline: () => ({
+          bg: "white",
+          color: "#091353",
+          outlineColor: "#091354",
+          outlineOffset: "none",
+          borderRadius: "sm",
+          fontFamily: "Sora",
+          fontWeight: "medium",
+          _hover: { bg: "#091353", color: "#ffffff" },
         }),
         pinkSolid: () => ({
           bg: "#9D84B7",
