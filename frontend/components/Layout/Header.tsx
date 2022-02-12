@@ -216,6 +216,7 @@ const Header: React.FC = () => {
           width="inherit"
           fontFamily="Sora"
           textUnderlineOffset="0.2em"
+          href="/shop"
         >
           All Products
         </Link>
