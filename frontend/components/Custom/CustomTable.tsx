@@ -9,7 +9,7 @@ import {
   Text,
   Checkbox,
 } from "@chakra-ui/react";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 
 interface Props {
   rows: any[][];
