@@ -14,13 +14,15 @@ import React, { useContext, useState } from "react";
 import { TableModalContext } from "../../context/TableModalContext";
 
 const AddRowModal: React.FC<{
+  title: string;
+  buttonName: string;
+  rowPlaceholder?: string[];
   cb?: (_: string[]) => void;
-}> = ({ cb }) => {
+}> = ({ title, cb, buttonName, rowPlaceholder }) => {
   const [tableContentLocal, setTableContentLocal] = useState<string[]>([]);
-  const { colNo, addRowModal, modifyTable } = useContext(TableModalContext);
+  const { colNo, addRowModal } = useContext(TableModalContext);
   const [columnNo] = colNo;
   const [openAddRowModal, setOpenAddRowModal] = addRowModal;
-  const [modifyAddRowModal] = modifyTable;
 
   const onClose = () => {
     setOpenAddRowModal(!openAddRowModal);
@@ -31,16 +33,22 @@ const AddRowModal: React.FC<{
     if (column <= 0) return [];
     return [
       ...DisplayRowInputElements(column - 1),
-      <RowInputElement column={column} />,
+      <RowInputElement
+        column={column}
+        placeholder={
+          !!rowPlaceholder ? rowPlaceholder[column - 1] : `Row ${column}`
+        }
+      />,
     ];
   };
 
-  const RowInputElement: React.FC<{ column: number }> = ({
+  const RowInputElement: React.FC<{ column: number; placeholder: string }> = ({
     column,
+    placeholder,
   }): JSX.Element => (
     <Input
       key={column}
-      placeholder={`Row ${column}`}
+      placeholder={placeholder}
       width="23.8em"
       onChange={(e) => {
         let tableContentLocalCopy = tableContentLocal;
@@ -59,16 +67,14 @@ const AddRowModal: React.FC<{
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>
-          {modifyAddRowModal ? "Modify a Row" : "Add a Row"}
-        </ModalHeader>
+        <ModalHeader>{title}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <HStack>{DisplayRowInputElements(columnNo)}</HStack>
         </ModalBody>
         <ModalFooter>
           <Button variant="blueSolid" size="md" onClick={onClose}>
-            {modifyAddRowModal ? "Modify" : "Add"}
+            {buttonName}
           </Button>
         </ModalFooter>
       </ModalContent>
