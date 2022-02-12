@@ -16,4 +16,5 @@ urlpatterns = [
     path('isAuthenticated/', views.is_authenticated, name="isAuthenticated"),
     path('sendOTP/', views.send_OTP, name="sendOTP"),
     path('verifyOTP/', views.verify_OTP, name="sendOTP"),
+    path('checkwhichuser/', views.check_which_user, name="checkwhichuser"),
 ]

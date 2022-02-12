@@ -35,6 +35,17 @@ def remove_expired_token(user, admin=False):
             TokenObj.objects.get(token=token).delete()
 
 
+def token_exists(token, admin=False):
+    try:
+        if admin == True:
+            AdminToken.objects.get(token=token)
+        else:
+            Token.objects.get(token=token)
+        return True
+    except:
+        return False
+
+
 @api_view(['POST'])
 def signup(request):
     req_user = request.data
@@ -342,3 +353,16 @@ def admin_logout(request):
         return Response(status=status.HTTP_200_OK)
     else:
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def check_which_user(request):
+    normal_user = token_exists(request.COOKIES.get('token'))
+    admin_user = token_exists(request.COOKIES.get('admin_token'),
+        True)
+
+    if admin_user:
+        return Response({'admin': True}, status=status.HTTP_200_OK)
+    if normal_user:
+        return Response({'admin': False}, status=status.HTTP_200_OK)
+    
+    return Response({'admin': None}, status=status.HTTP_200_OK)
