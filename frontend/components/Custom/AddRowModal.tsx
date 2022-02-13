@@ -26,7 +26,7 @@ const AddRowModal: React.FC<{
 
   const onClose = () => {
     setOpenAddRowModal(!openAddRowModal);
-    if (cb) cb(tableContentLocal);
+    if (cb && tableContentLocal.length !== 0) cb(tableContentLocal);
   };
 
   const DisplayRowInputElements = (column: number): any[] => {
