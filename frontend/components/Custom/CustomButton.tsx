@@ -5,6 +5,9 @@ const CustomButtonTheme = extendTheme({
     secondaryBlue: {
       200: "#091353",
     },
+    secondaryPink: {
+      200: "#9D84B7",
+    },
   },
   components: {
     Button: {
