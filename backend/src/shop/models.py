@@ -32,3 +32,13 @@ class Specification_Table_Content(models.Model):
     table_id = models.ForeignKey(
         'shop.Product_Specification_Table', verbose_name="table_id",
         on_delete=models.CASCADE, null=False)
+
+class Options(models.Model):
+    id = models.AutoField(primary_key=True)
+    option_name = models.TextField()
+    product_id = models.ForeignKey('shop.Product', verbose_name="product_id", on_delete=models.CASCADE)
+
+class OptionValues(models.Model):
+    id = models.AutoField(primary_key=True)
+    value=models.TextField()
+    option_id = models.ForeignKey('shop.Options', verbose_name="option_id", on_delete=models.CASCADE)
