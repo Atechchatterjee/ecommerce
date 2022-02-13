@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Button, Container, HStack, Text } from "@chakra-ui/react";
-import Product from "./index";
+import { Button, Container, Text } from "@chakra-ui/react";
+import Product from "../Product/index";
 import axios from "axios";
 import constants from "../../../util/Constants";
 import SpecificationTable from "./SpecificationTable";
 import { SpecTableContext } from "../../../context/SpecTableContext";
+import OptionsTable from "./OptionsTable";
 
 const ProductSpec: React.FC<{ product: any }> = ({ product }) => {
   const [specTableHeading, setSpecTableHeading] = useState<any[]>([]);
@@ -13,7 +14,8 @@ const ProductSpec: React.FC<{ product: any }> = ({ product }) => {
   );
   const [openAddRowModal, setOpenAddRowModal] = useState<boolean>(false);
   const [modifyAddRowModal, setModifyAddRowModal] = useState<boolean>(false);
-  const [openAddOptionModal, setOpenOptionModal] = useState<boolean>(false);
+  const [optionsTableExists, setOptionsTableExists] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const createTableHeading = () => {
     if (specTableHeading.length === 0)
@@ -39,25 +41,6 @@ const ProductSpec: React.FC<{ product: any }> = ({ product }) => {
         setTableExists(true);
       })
       .catch((err) => console.error(err));
-  };
-
-  const AddRowsBtn: React.FC = () => {
-    if (tableExists)
-      return (
-        <Button
-          marginTop="1.5em"
-          marginLeft="10.5%"
-          width="30em"
-          variant="blueGradient"
-          onClick={() => {
-            setModifyAddRowModal(false);
-            setOpenAddRowModal(true);
-          }}
-        >
-          Add Rows
-        </Button>
-      );
-    else return <></>;
   };
 
   const CreateSpecificationTableBtn: React.FC = () => {
@@ -101,18 +84,22 @@ const ProductSpec: React.FC<{ product: any }> = ({ product }) => {
           <></>
         )}
         <CreateSpecificationTableBtn />
-        <AddRowsBtn />
+        {/* {!optionsTableExists ? ( */}
         <Button
           width="30em"
           marginLeft="10.5%"
           marginTop="1.5em"
           variant="blueSolid"
-          onClick={() => setOpenOptionModal(true)}
+          onClick={() => setIsOpen(true)}
         >
           Create Options Table
         </Button>
+        {/* ) : (
+          <></>
+        )} */}
       </Container>
       <Container float="left" marginTop="2em">
+        <OptionsTable product={product} triggerOpen={[isOpen, setIsOpen]} />
         <SpecificationTable product={product} />
       </Container>
     </SpecTableContext.Provider>

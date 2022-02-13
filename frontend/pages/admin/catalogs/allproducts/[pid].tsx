@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { NextPage } from "next";
 import axios from "axios";
 import constants from "../../../../util/Constants";
-import ProductSpec from "../../../../components/Shop/Product/ProductSpec";
+import ProductSpec from "../../../../components/Shop/ProductPage/ProductSpec";
 import Navbar from "../../../../components/Admin/Navbar";
 import WithAuth from "../../../../util/WithAuth";
 import { UserContext } from "../../../../context/UserContext";

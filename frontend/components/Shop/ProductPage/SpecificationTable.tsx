@@ -7,6 +7,7 @@ import CustomTable from "../../Custom/CustomTable";
 import { TableModalContext } from "../../../context/TableModalContext";
 import AddRowModal from "../../Custom/AddRowModal";
 import { SpecTableContext } from "../../../context/SpecTableContext";
+import { GoPlus } from "react-icons/go";
 
 const SpecificationTable: React.FC<{ product: any }> = ({ product }) => {
   const [tableContentStruct, setTableContentStruct] = useState<string[][]>([]);
@@ -137,6 +138,28 @@ const SpecificationTable: React.FC<{ product: any }> = ({ product }) => {
       });
   };
 
+  const AddRowsBtn: React.FC = () => {
+    if (tableExists)
+      return (
+        <Tooltip label="Add Row">
+          <Button
+            marginTop="1em"
+            position="absolute"
+            right="1em"
+            variant="pinkSolid"
+            padding="0.8em"
+            onClick={() => {
+              setModifyAddRowModal(false);
+              setOpenAddRowModal(true);
+            }}
+          >
+            <GoPlus size="20" />
+          </Button>
+        </Tooltip>
+      );
+    else return <></>;
+  };
+
   useEffect(() => {
     doesTableExist()
       .then(() => {
@@ -170,14 +193,16 @@ const SpecificationTable: React.FC<{ product: any }> = ({ product }) => {
             select
             selectedRowsState={[selectedRows, setSelectedRows]}
           />
+
+          <AddRowsBtn />
           {tableContentStruct.length !== 0 ? (
             <>
               <Tooltip label="Save">
                 <Button
-                  variant="blueGradient"
+                  variant="blueSolid"
                   marginTop="1em"
                   position="absolute"
-                  right="1em"
+                  right="5em"
                   onClick={() => saveTableContent()}
                   isLoading={loadingSaveBtn}
                 >
@@ -186,10 +211,10 @@ const SpecificationTable: React.FC<{ product: any }> = ({ product }) => {
               </Tooltip>
               <Tooltip label="Delete">
                 <Button
-                  variant="redGradient"
+                  variant="pinkSolid"
                   marginTop="1em"
                   position="absolute"
-                  right="5em"
+                  right="9em"
                   onClick={() => {
                     deleteRows();
                   }}
