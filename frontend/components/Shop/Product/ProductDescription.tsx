@@ -78,9 +78,10 @@ const NormalMode: React.FC<Props> = ({ id, name, description, price }) => {
       <Heading
         fontFamily="Sora"
         fontWeight="semibold"
+        color="secondaryBlue.200"
         size="lg"
         cursor="pointer"
-        _hover={{ color: "#C75E0E" }}
+        _hover={{ color: "secondaryPink.200" }}
         onClick={() => {
           if (!admin) window.location.assign(`/shop/${id}`);
           else window.location.assign(`/admin/catalogs/allproducts/${id}`);
