@@ -10,45 +10,61 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import constants from "../../util/Constants";
+import axios from "axios";
+import { OptionsData } from "../../types/shop";
 
 const OptionButtons: React.FC<{
-  optionValues: string[];
+  optionValues: { id: number; value: string }[];
   selectedOption: number;
   selected?: (indx: number) => void;
 }> = ({ optionValues, selectedOption, selected }) => (
   <>
     {optionValues.map((optionValue, indx) => (
       <Button
-        {...(indx !== selectedOption
+        {...(optionValue.id !== selectedOption
           ? { colorScheme: "whiteAlpha", textColor: "black" }
           : { variant: "pinkSolid" })}
         fontFamily="Sora"
         borderRadius="full"
         width="9em"
         boxShadow="0.01em 0.1em 0.1em 0.1em #e1e1e1"
-        left={`${indx + 2}`}
+        left={`${indx + 2}em`}
         onClick={() => {
-          if (selected) selected(indx);
+          if (selected) selected(optionValue.id);
         }}
       >
-        {optionValue}
+        {optionValue.value}
       </Button>
     ))}
   </>
 );
 
+const fetchOptions = async (product: any): Promise<OptionsData> =>
+  new Promise((resolve) => {
+    axios
+      .post(`${constants.url}/shop/getoptions/`, {
+        product_id: product.product_id,
+      })
+      .then((res) => {
+        resolve(res.data.options);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  });
+
 const ClientProductPage: React.FC<{ product: any }> = ({ product }) => {
   const [loading, setLoading] = useState<boolean>(true);
-  const [colorOption, setColorOption] = useState<string[]>([
-    "Black",
-    "Blue",
-    "Red",
-  ]);
-  const [colorOptionIndx, setColorOptionIndx] = useState<number>(0);
+  const [colorOptionIndx, setColorOptionIndx] = useState<{
+    [optionId: number]: number;
+  }>({});
+  const [fetchedOptions, setFetchedOptions] = useState<OptionsData>([]);
 
   useEffect(() => {
-    if (product) setLoading(false);
-    else setLoading(true);
+    if (product) {
+      fetchOptions(product).then((optionData) => setFetchedOptions(optionData));
+      setLoading(false);
+    } else setLoading(true);
   }, [product]);
 
   return (
@@ -112,18 +128,34 @@ const ClientProductPage: React.FC<{ product: any }> = ({ product }) => {
                 defaultValue={1}
               />
             </HStack>
-            <HStack marginTop="2em" width="full">
-              <Text fontWeight="semibold">Colors :</Text>
-              <OptionButtons
-                optionValues={colorOption}
-                selectedOption={colorOptionIndx}
-                selected={(indx: number) => {
-                  setColorOptionIndx(indx);
-                }}
-              />
-            </HStack>
+            <Box marginTop="3em" width="inherit">
+              {fetchedOptions.map((option) => (
+                <HStack marginTop="1.5em">
+                  <Text fontWeight="semibold" fontSize="1.1em">
+                    {option.name} :
+                  </Text>
+                  <OptionButtons
+                    optionValues={option.values}
+                    selectedOption={
+                      colorOptionIndx[option.id] || option.values[0].id
+                    }
+                    selected={(indx: number) => {
+                      setColorOptionIndx({
+                        ...colorOptionIndx,
+                        [option.id]: indx,
+                      });
+                    }}
+                  />
+                </HStack>
+              ))}
+            </Box>
             <HStack marginTop="7em">
-              <Button variant="blueOutline" width="10em">
+              <Button
+                variant="blueSolid"
+                width="10em"
+                borderRadius="3"
+                padding="1.4em 2em"
+              >
                 Buy Now
               </Button>
               <Button variant="blueOutline" width="10em" left="1em">
