@@ -21,6 +21,7 @@ import {
 import { FaCheck } from "react-icons/fa";
 import constants from "../../../util/Constants";
 import axios from "axios";
+import { OptionsData } from "../../../types/shop";
 
 const DisplayFetchedOptions: React.FC<{ fetchedOptions: any[] }> = ({
   fetchedOptions,
@@ -58,7 +59,7 @@ const OptionsTable: React.FC<{
   const [optionValues, setOptionValues] = useState<string[]>([]);
   const [displayOptionInputs, setDisplayOptionInputs] =
     useState<boolean>(false);
-  const [fetchedOptions, setFetchedOptions] = useState<any[]>();
+  const [fetchedOptions, setFetchedOptions] = useState<OptionsData>();
 
   const fetchOptions = () => {
     axios

@@ -7,3 +7,12 @@ export interface Category {
 export interface CategoryMap {
   [key: number]: string;
 }
+
+export type OptionsData = {
+  id: number;
+  name: string;
+  values: {
+    id: number;
+    value: string;
+  }[];
+}[];
