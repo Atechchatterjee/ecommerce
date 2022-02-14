@@ -1,5 +1,4 @@
 from operator import itemgetter
-from optparse import Option
 from rest_framework import status
 from .models import Category, Product, Product_Specification_Table, Specification_Table_Content, Options, OptionValues
 from rest_framework.response import Response
