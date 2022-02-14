@@ -84,7 +84,6 @@ const ProductSpec: React.FC<{ product: any }> = ({ product }) => {
           <></>
         )}
         <CreateSpecificationTableBtn />
-        {/* {!optionsTableExists ? ( */}
         <Button
           width="30em"
           marginLeft="10.5%"
@@ -92,11 +91,8 @@ const ProductSpec: React.FC<{ product: any }> = ({ product }) => {
           variant="blueSolid"
           onClick={() => setIsOpen(true)}
         >
-          Create Options Table
+          Add Options
         </Button>
-        {/* ) : (
-          <></>
-        )} */}
       </Container>
       <Container float="left" marginTop="2em">
         <OptionsTable product={product} triggerOpen={[isOpen, setIsOpen]} />
