@@ -14,8 +14,7 @@ const ProductSpec: React.FC<{ product: any }> = ({ product }) => {
   );
   const [openAddRowModal, setOpenAddRowModal] = useState<boolean>(false);
   const [modifyAddRowModal, setModifyAddRowModal] = useState<boolean>(false);
-  const [optionsTableExists, setOptionsTableExists] = useState<boolean>(false);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpenOptionModal, setIsOpenOptionModal] = useState<boolean>(false);
 
   const createTableHeading = () => {
     if (specTableHeading.length === 0)
@@ -89,13 +88,16 @@ const ProductSpec: React.FC<{ product: any }> = ({ product }) => {
           marginLeft="10.5%"
           marginTop="1.5em"
           variant="blueSolid"
-          onClick={() => setIsOpen(true)}
+          onClick={() => setIsOpenOptionModal(true)}
         >
           Add Options
         </Button>
       </Container>
       <Container float="left" marginTop="2em">
-        <OptionsTable product={product} triggerOpen={[isOpen, setIsOpen]} />
+        <OptionsTable
+          product={product}
+          triggerOpen={[isOpenOptionModal, setIsOpenOptionModal]}
+        />
         <SpecificationTable product={product} />
       </Container>
     </SpecTableContext.Provider>
