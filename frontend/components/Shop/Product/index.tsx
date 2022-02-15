@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, Container } from "@chakra-ui/react";
 import { ProductContext } from "../../../context/ProductContext";
 import constants from "../../../util/Constants";
@@ -12,7 +12,7 @@ interface Props {
   name: string;
   description: string;
   price: string;
-  image: string;
+  image: any;
   editable?: boolean;
   cb?: (
     id: number,
@@ -42,6 +42,10 @@ const Product: React.FC<Props> = ({
   const [edit, setEdit] = useState<boolean>(false); // toggles the edit mode
   const [triggerUpload, setTriggerUpload] = useState<boolean>(false);
   const [changedImage, setChangedImage] = useState<File | undefined>();
+
+  useEffect(() => {
+    console.log({ image });
+  }, [image]);
 
   return (
     <Container
@@ -73,7 +77,7 @@ const Product: React.FC<Props> = ({
         <Image
           padding="2em"
           objectFit="scale-down"
-          src={createImageUrl(image, changedImage)}
+          src={createImageUrl(!!image[0] ? image[0].image : "", changedImage)}
           width="full"
           height="20em"
           cursor={edit ? "pointer" : "auto"}
