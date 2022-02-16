@@ -41,6 +41,7 @@ def get_option_values(option_id):
 
 def save_product_images(product_id, images):
     print(f"saving product images for product {product_id.product_id}")
+    print(f"images {images}")
     Product_Images.objects.bulk_create([Product_Images(
         product_id=product_id,
         image=image) for image in images]
@@ -125,11 +126,6 @@ def update_product(request):
             price=price,
             description=description,
         )
-        # product.update(
-        #     name=name,
-        #     price=price,
-        #     description=description,
-        # )
         if image is not None:
             save_product_images(product, [image])
         return Response(status=status.HTTP_200_OK)
@@ -154,9 +150,16 @@ def get_product(request):
 
 @api_view(['POST'])
 @permission_classes([Is_Admin])
+@parser_classes([MultiPartParser, FormParser])
 def add_product_images(request):
-    product_id, images = itemgetter('productId', 'images')(request.data)
+    product_id = itemgetter('productId')(request.data)
+    print(request.data)
     try:
+        images = []
+        for key in request.data:
+            if key != 'productId':
+                images.append(request.data[key])
+                print(f"d -> {request.data[key]}")
         product = Product.objects.get(product_id=product_id)
         save_product_images(product, images)
         return Response(status=status.HTTP_200_OK)
