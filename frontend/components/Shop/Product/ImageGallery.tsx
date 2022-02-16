@@ -1,30 +1,51 @@
 import React, { useEffect, useState } from "react";
-import { Container, Image } from "@chakra-ui/react";
-import axios from "axios";
+import { HStack, Container, Image } from "@chakra-ui/react";
 import constants from "../../../util/Constants";
 
-const addProductImage = async (productId: number | string) =>
-  new Promise((resolve) => {
-    axios
-      .post(
-        `${constants.url}/shop/addProductImage/`,
-        {
-          productId,
-        },
-        { withCredentials: true }
-      )
-      .then(resolve)
-      .catch((err) => console.error(err));
-  });
+const createImageUrl = (url: string, image: File | undefined): string =>
+  image
+    ? URL.createObjectURL(image)
+    : `${constants.url?.substring(0, constants?.url.lastIndexOf("/"))}${url}`;
 
 const ImageGallery: React.FC<{ product: any }> = ({ product }) => {
-  const [productImages, setProductImages] = useState<any[]>([]);
-
-  useEffect(() => {}, []);
-
   return (
-    <Container boxShadow="0.2em 0.2em 0.2em 0.2em #e1e1e1">
-      <Image />
+    <Container
+      boxShadow="0.2em 0.2em 0.2em 0.2em #e1e1e1"
+      width="30em"
+      height="10em"
+      marginTop="1em"
+      borderRadius="lg"
+      overflowX="scroll"
+      overflowY="hidden"
+      sx={{
+        "&::-webkit-scrollbar": {
+          width: "7px",
+          height: "0.5em",
+          borderRadius: "7px",
+        },
+        "&::-webkit-scrollbar-thumb": {
+          width: "2px",
+          height: "1em",
+          borderRadius: "7px",
+          backgroundColor: `#b199cc`,
+        },
+      }}
+    >
+      <HStack height="inherit">
+        {product ? (
+          product.image.map(({ image }: any) => (
+            <Image
+              src={createImageUrl(image, undefined)}
+              boxSize="9em"
+              fit="contain"
+              padding="1em"
+              cursor="pointer"
+            />
+          ))
+        ) : (
+          <></>
+        )}
+      </HStack>
     </Container>
   );
 };
