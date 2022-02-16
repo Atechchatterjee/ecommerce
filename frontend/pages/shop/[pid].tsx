@@ -6,6 +6,7 @@ import constants from "../../util/Constants";
 import { UserContext } from "../../context/UserContext";
 import Header from "../../components/Layout/Header";
 import ClientProductPage from "../../components/Shop/ClientProductPage";
+import { ProductInfoContext } from "../../context/ProductInfoContext";
 
 const getProductInfo = async (productId: any): Promise<any> => {
   const res = await axios.post(`${constants.url}/shop/getproduct/`, {
@@ -35,8 +36,10 @@ const ProductPage: NextPage = () => {
   return !loading ? (
     !admin ? (
       <>
+        {/* <ProductInfoContext.Provider value={[product, setProduct]}> */}
         <Header />
         <ClientProductPage product={product} />
+        {/* </ProductInfoContext.Provider> */}
       </>
     ) : (
       <></>
