@@ -77,7 +77,10 @@ const Product: React.FC<Props> = ({
         <Image
           padding="2em"
           objectFit="scale-down"
-          src={createImageUrl(!!image[0] ? image[0].image : "", changedImage)}
+          src={createImageUrl(
+            !!image ? (!!image[0] ? image[0].image : "") : "",
+            changedImage
+          )}
           width="full"
           height="20em"
           cursor={edit ? "pointer" : "auto"}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Button, Container, Text } from "@chakra-ui/react";
 import Product from "../Product/index";
 import axios from "axios";
@@ -8,8 +8,9 @@ import { SpecTableContext } from "../../../context/SpecTableContext";
 import OptionsTable from "./OptionsTable";
 import ImageGallery from "../Product/ImageGallery";
 import DragUpload from "../../Custom/DragUpload";
+import { ProductInfoContext } from "../../../context/ProductInfoContext";
 
-const ProductSpec: React.FC<{ product: any }> = ({ product }) => {
+const ProductSpec: React.FC = () => {
   const [specTableHeading, setSpecTableHeading] = useState<any[]>([]);
   const [tableExists, setTableExists] = useState<boolean>(
     specTableHeading.length !== 0
@@ -18,6 +19,8 @@ const ProductSpec: React.FC<{ product: any }> = ({ product }) => {
   const [modifyAddRowModal, setModifyAddRowModal] = useState<boolean>(false);
   const [isOpenOptionModal, setIsOpenOptionModal] = useState<boolean>(false);
   const [uploadedImages, setUploadedImages] = useState<File[]>([]);
+  const { productInfo } = useContext(ProductInfoContext);
+  const [product, setProduct] = productInfo;
 
   const createTableHeading = () => {
     if (specTableHeading.length === 0)
@@ -33,7 +36,7 @@ const ProductSpec: React.FC<{ product: any }> = ({ product }) => {
       .post(
         `${constants.url}/shop/createtable/`,
         {
-          product_id: product.product_id,
+          product_id: product.id,
         },
         {
           withCredentials: true,
@@ -66,7 +69,7 @@ const ProductSpec: React.FC<{ product: any }> = ({ product }) => {
 
   const uploadAllImages = () => {
     let formData = new FormData();
-    formData.append("productId", product.product_id);
+    formData.append("productId", product.id.toString());
     uploadedImages.forEach((img, indx) => {
       formData.append(`file[${indx}]`, img);
     });
@@ -82,7 +85,7 @@ const ProductSpec: React.FC<{ product: any }> = ({ product }) => {
       });
   };
 
-  return (
+  return product ? (
     <SpecTableContext.Provider
       value={{
         headings: [specTableHeading, setSpecTableHeading],
@@ -100,7 +103,7 @@ const ProductSpec: React.FC<{ product: any }> = ({ product }) => {
       >
         {product ? (
           <Product
-            id={product.product_id}
+            id={product.id}
             name={product.name}
             description={product.description}
             price={product.price}
@@ -109,7 +112,7 @@ const ProductSpec: React.FC<{ product: any }> = ({ product }) => {
         ) : (
           <></>
         )}
-        <ImageGallery product={product} />
+        <ImageGallery />
         <DragUpload
           marginTop="2em"
           width="32em"
@@ -142,9 +145,11 @@ const ProductSpec: React.FC<{ product: any }> = ({ product }) => {
           product={product}
           triggerOpen={[isOpenOptionModal, setIsOpenOptionModal]}
         />
-        <SpecificationTable product={product} />
+        <SpecificationTable />
       </Container>
     </SpecTableContext.Provider>
+  ) : (
+    <></>
   );
 };
 

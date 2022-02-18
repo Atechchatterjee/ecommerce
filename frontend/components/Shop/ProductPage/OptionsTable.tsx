@@ -64,7 +64,7 @@ const OptionsTable: React.FC<{
   const fetchOptions = () => {
     axios
       .post(`${constants.url}/shop/getoptions/`, {
-        product_id: product.product_id,
+        product_id: product.id,
       })
       .then((res) => {
         console.log({ option_data: res.data.options });
@@ -84,7 +84,7 @@ const OptionsTable: React.FC<{
       .post(
         `${constants.url}/shop/saveoptions/`,
         {
-          product_id: product.product_id,
+          product_id: product.id,
           optionValues,
           optionName: currentOptionName,
         },

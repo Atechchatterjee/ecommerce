@@ -37,7 +37,7 @@ const CustomTable: React.FC<Props> = ({
     else setSelectedRows({ ...selectedRows, [indx]: false });
   };
 
-  const SelectRow: React.FC<{ indx: any }> = ({ indx }) => {
+  const SelectRowCheckBox: React.FC<{ indx: any }> = ({ indx }) => {
     if (select)
       return (
         <Td
@@ -76,7 +76,7 @@ const CustomTable: React.FC<Props> = ({
             <Th key={indx}>{headingElement}</Th>
           ))}
           {select ? (
-            <Th width={1}>
+            <Th width={1} key={heading.length + 1}>
               <Text
                 cursor="pointer"
                 onClick={() => {
@@ -92,9 +92,10 @@ const CustomTable: React.FC<Props> = ({
         </Tr>
       </Thead>
       <Tbody>
-        {rows.map((rowEl) => (
+        {rows.map((rowEl, i) => (
           <>
             <Tr
+              key={i}
               _hover={{
                 background: "#F7F7F7",
                 cursor: "pointer",
@@ -111,13 +112,13 @@ const CustomTable: React.FC<Props> = ({
                       if (rowCb && selectTrigger === false) rowCb(rowEl[0]);
                     }}
                   >
-                    <Text>{columnElement}</Text>
+                    <Text key={indx}>{columnElement}</Text>
                   </Td>
                 ) : (
                   <></>
                 )
               )}
-              <SelectRow indx={parseInt(rowEl[0])} />
+              <SelectRowCheckBox indx={parseInt(rowEl[0])} key={i} />
             </Tr>
           </>
         ))}

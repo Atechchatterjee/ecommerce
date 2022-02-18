@@ -1,15 +1,17 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import constants from "../../../util/Constants";
-import { Button, Container, Text, Tooltip } from "@chakra-ui/react";
+import { Box, Button, Container, Text, Tooltip } from "@chakra-ui/react";
 import { FaSave, FaTrash } from "react-icons/fa";
 import CustomTable from "../../Custom/CustomTable";
 import { TableModalContext } from "../../../context/TableModalContext";
 import AddRowModal from "../../Custom/AddRowModal";
 import { SpecTableContext } from "../../../context/SpecTableContext";
 import { GoPlus } from "react-icons/go";
+import { ProductInfoContext } from "../../../context/ProductInfoContext";
+import { RiEjectLine } from "react-icons/ri";
 
-const SpecificationTable: React.FC<{ product: any }> = ({ product }) => {
+const SpecificationTable: React.FC<{ product?: any }> = () => {
   const [tableContentStruct, setTableContentStruct] = useState<string[][]>([]);
   const [openCreateTableModal, setOpenCreateTableModal] =
     useState<boolean>(false);
@@ -29,6 +31,8 @@ const SpecificationTable: React.FC<{ product: any }> = ({ product }) => {
   const [openAddRowModal, setOpenAddRowModal] = specTableContext.openRowModal;
   const [modifyAddRowModal, setModifyAddRowModal] =
     specTableContext.modifyRowModal;
+  const { productInfo } = useContext(ProductInfoContext);
+  const [product, setProduct] = productInfo;
 
   const addRowToTable = (tableContentLocal: string[]) => {
     (tableContentLocal = [
@@ -54,23 +58,26 @@ const SpecificationTable: React.FC<{ product: any }> = ({ product }) => {
     );
   };
 
-  const doesTableExist = async (): Promise<void> =>
-    new Promise((resolve, reject) => {
-      axios
-        .post(
-          `${constants.url}/shop/existstable/`,
-          {
-            product_id: product.product_id,
-          },
-          { withCredentials: true }
-        )
-        .then(() => {
-          resolve();
-        })
-        .catch(() => {
-          reject();
-        });
+  const doesTableExist = async (productId: number): Promise<void> => {
+    console.log(`doestableexist product id = ${productId}`);
+    return new Promise((resolve, reject) => {
+      if (product)
+        axios
+          .post(
+            `${constants.url}/shop/existstable/`,
+            {
+              product_id: productId,
+            },
+            { withCredentials: true }
+          )
+          .then(() => {
+            resolve();
+          })
+          .catch(() => {
+            reject();
+          });
     });
+  };
 
   const createTableHeading = () => {
     if (heading.length === 0)
@@ -89,7 +96,7 @@ const SpecificationTable: React.FC<{ product: any }> = ({ product }) => {
         {
           addedRows: addedRows,
           modifiedRows: modifiedRows,
-          product_id: product.product_id,
+          product_id: product.id,
         },
         { withCredentials: true }
       )
@@ -105,7 +112,7 @@ const SpecificationTable: React.FC<{ product: any }> = ({ product }) => {
       .post(
         `${constants.url}/shop/gettablecontent/`,
         {
-          product_id: product.product_id,
+          product_id: product.id,
         },
         { withCredentials: true }
       )
@@ -161,75 +168,75 @@ const SpecificationTable: React.FC<{ product: any }> = ({ product }) => {
   };
 
   useEffect(() => {
-    doesTableExist()
+    doesTableExist(product.id)
       .then(() => {
-        createTableHeading();
+        console.log("table does exist");
+        setProduct(product);
         setTableExists(true);
+        createTableHeading();
         getTableContent();
       })
       .catch(() => {
+        console.log("table does not exist");
         setTableExists(false);
       });
-  }, [product]);
+  }, [product, tableExists]);
 
   return (
     <>
-      {tableExists ? (
-        <Container
-          position="relative"
-          boxShadow="0.2em 0.2em 0.2em 0.2em #e1e1e1"
-          height="inherit"
-          padding="2em 2em 5em 2em"
-          borderRadius="lg"
-        >
-          <CustomTable
-            rows={tableContentStruct}
-            heading={heading}
-            rowCb={(indx: number) => {
-              setOpenAddRowModal(true);
-              setModifyAddRowModal(true);
-              setIndxToModify(indx);
-            }}
-            select
-            selectedRowsState={[selectedRows, setSelectedRows]}
-          />
+      <Container
+        position="relative"
+        boxShadow="0.2em 0.2em 0.2em 0.2em #e1e1e1"
+        height="inherit"
+        padding="2em 2em 5em 2em"
+        borderRadius="lg"
+      >
+        <CustomTable
+          rows={tableContentStruct}
+          heading={heading}
+          rowCb={(indx: number) => {
+            setOpenAddRowModal(true);
+            setModifyAddRowModal(true);
+            setIndxToModify(indx);
+          }}
+          select
+          selectedRowsState={[selectedRows, setSelectedRows]}
+        />
 
-          <AddRowsBtn />
-          {tableContentStruct.length !== 0 ? (
-            <>
-              <Tooltip label="Save">
-                <Button
-                  variant="blueSolid"
-                  marginTop="1em"
-                  position="absolute"
-                  right="5em"
-                  onClick={() => saveTableContent()}
-                  isLoading={loadingSaveBtn}
-                >
-                  <FaSave />
-                </Button>
-              </Tooltip>
-              <Tooltip label="Delete">
-                <Button
-                  variant="pinkSolid"
-                  marginTop="1em"
-                  position="absolute"
-                  right="9em"
-                  onClick={() => {
-                    deleteRows();
-                  }}
-                >
-                  <FaTrash />
-                </Button>
-              </Tooltip>
-            </>
-          ) : (
-            <></>
-          )}
-        </Container>
-      ) : (
-        <></>
-      )}
+        <AddRowsBtn />
+        {tableContentStruct.length !== 0 ? (
+          <Box>
+            <Tooltip label="Save">
+              <Button
+                variant="blueSolid"
+                marginTop="1em"
+                position="absolute"
+                right="5em"
+                onClick={() => saveTableContent()}
+                isLoading={loadingSaveBtn}
+              >
+                <FaSave />
+              </Button>
+            </Tooltip>
+            <Tooltip label="Delete">
+              <Button
+                variant="pinkSolid"
+                marginTop="1em"
+                position="absolute"
+                right="9em"
+                onClick={() => {
+                  deleteRows();
+                }}
+              >
+                <FaTrash />
+              </Button>
+            </Tooltip>
+            <pre>{JSON.stringify({ tableExists })}</pre>
+          </Box>
+        ) : (
+          <></>
+        )}
+      </Container>
       <TableModalContext.Provider
         value={{
           createTableModal: [openCreateTableModal, setOpenCreateTableModal],

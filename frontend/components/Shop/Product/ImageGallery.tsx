@@ -1,14 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { HStack, Container, Image } from "@chakra-ui/react";
 import constants from "../../../util/Constants";
+import { ProductInfoContext } from "../../../context/ProductInfoContext";
 
 const createImageUrl = (url: string, image: File | undefined): string =>
   image
     ? URL.createObjectURL(image)
     : `${constants.url?.substring(0, constants?.url.lastIndexOf("/"))}${url}`;
 
-const ImageGallery: React.FC<{ product: any }> = ({ product }) => {
-  return (
+const ImageGallery: React.FC = () => {
+  const { productInfo } = useContext(ProductInfoContext);
+  const [product, setProduct] = productInfo;
+
+  return product ? (
     <Container
       boxShadow="0.2em 0.2em 0.2em 0.2em #e1e1e1"
       width="30em"
@@ -32,7 +36,7 @@ const ImageGallery: React.FC<{ product: any }> = ({ product }) => {
       }}
     >
       <HStack height="inherit">
-        {product ? (
+        {product.image ? (
           product.image.map(({ image }: any) => (
             <Image
               src={createImageUrl(image, undefined)}
@@ -47,6 +51,8 @@ const ImageGallery: React.FC<{ product: any }> = ({ product }) => {
         )}
       </HStack>
     </Container>
+  ) : (
+    <></>
   );
 };
 

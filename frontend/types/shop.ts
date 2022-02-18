@@ -16,3 +16,12 @@ export type OptionsData = {
     value: string;
   }[];
 }[];
+
+export type Product = {
+  id: number;
+  name: string;
+  price: string;
+  description: string;
+  category: number;
+  image: any[]
+}

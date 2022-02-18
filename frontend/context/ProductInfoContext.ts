@@ -1,16 +1,10 @@
 import { createContext } from 'react';
-
-type Product = {
-  id: number | string;
-  name: string;
-  price: string;
-  description: string;
-  image: any[]
-}
+import {Product} from '../types/shop';
 
 interface ProductInfoProps {
-    productInfo : [product: Product,
-    setProduct: (_:Product) => void]
+    productInfo :
+      [product: Product,
+      setProduct: (_:Product) => void]
 }
 
 export const ProductInfoContext = createContext<ProductInfoProps>({
@@ -19,6 +13,7 @@ export const ProductInfoContext = createContext<ProductInfoProps>({
       name: "",
       price: "",
       description: "",
+      category: 0,
       image: []
     },
     () => {}],

@@ -7,6 +7,7 @@ import { UserContext } from "../../context/UserContext";
 import Header from "../../components/Layout/Header";
 import ClientProductPage from "../../components/Shop/ClientProductPage";
 import { ProductInfoContext } from "../../context/ProductInfoContext";
+import { Product } from "../../types/shop";
 
 const getProductInfo = async (productId: any): Promise<any> => {
   const res = await axios.post(`${constants.url}/shop/getproduct/`, {
@@ -27,7 +28,12 @@ const ProductPage: NextPage = () => {
     axios.get(`/admin/catalogs/allproducts/${pid}`).then(() => {
       getProductInfo(pid).then((product) => {
         setLoading(false);
-        console.log(product);
+        let modifiedProduct: any;
+        Object.keys(product).forEach((key: any) => {
+          if (key === "product_id") modifiedProduct["id"] = product[key];
+          else modifiedProduct[key] = product[key];
+        });
+        console.log({ modifiedProduct });
         setProduct(product);
       });
     });
@@ -35,12 +41,12 @@ const ProductPage: NextPage = () => {
 
   return !loading ? (
     !admin ? (
-      <>
-        {/* <ProductInfoContext.Provider value={[product, setProduct]}> */}
+      <ProductInfoContext.Provider
+        value={{ productInfo: [product, setProduct] }}
+      >
         <Header />
         <ClientProductPage product={product} />
-        {/* </ProductInfoContext.Provider> */}
-      </>
+      </ProductInfoContext.Provider>
     ) : (
       <></>
     )
