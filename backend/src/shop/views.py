@@ -40,8 +40,6 @@ def get_option_values(option_id):
 
 
 def save_product_images(product_id, images):
-    print(f"saving product images for product {product_id.product_id}")
-    print(f"images {images}")
     Product_Images.objects.bulk_create([Product_Images(
         product_id=product_id,
         image=image) for image in images]
@@ -51,7 +49,6 @@ def get_product_images(product_id):
     all_products =  ProductImageSerializer(
             Product_Images.objects.filter(product_id=product_id),
             many=True).data
-    print(f"all_products: {all_products}")
     return all_products
 
 @api_view(['POST'])
@@ -104,7 +101,6 @@ def get_all_products(request):
                     )
                 )
             })
-        print(f"serialized products = {all_products}")
         return Response({"allProducts": all_products},
                         status=status.HTTP_200_OK)
     except:
@@ -153,13 +149,11 @@ def get_product(request):
 @parser_classes([MultiPartParser, FormParser])
 def add_product_images(request):
     product_id = itemgetter('productId')(request.data)
-    print(request.data)
     try:
         images = []
         for key in request.data:
             if key != 'productId':
                 images.append(request.data[key])
-                print(f"d -> {request.data[key]}")
         product = Product.objects.get(product_id=product_id)
         save_product_images(product, images)
         return Response(status=status.HTTP_200_OK)
@@ -184,7 +178,6 @@ def create_category(request):
 
 @api_view(['GET'])
 def get_all_category(request):
-    print(f'get_all_category cookie = {request.COOKIES}')
     try:
         all_categories = CategorySerializer(
             Category.objects.all(), many=True).data
@@ -238,7 +231,6 @@ def save_table_content(request):
             ).save()
         # modifying/updating rows
         for row in modified_rows:
-            print(f"rows to modify = {row}")
             Specification_Table_Content.objects.filter(
                 id=int(row[0])
             ).update(
@@ -290,7 +282,6 @@ def get_table_content(request):
         serialized_content = SpecificationTableContentSerializer(
             content, many=True
         ).data
-        print("content = ", content)
         return Response({"content": serialized_content},
                         status=status.HTTP_200_OK)
     except:
