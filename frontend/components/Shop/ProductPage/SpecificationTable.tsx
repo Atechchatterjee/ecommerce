@@ -231,7 +231,6 @@ const SpecificationTable: React.FC<{ product?: any }> = () => {
                 <FaTrash />
               </Button>
             </Tooltip>
-            <pre>{JSON.stringify({ tableExists })}</pre>
           </Box>
         ) : (
           <></>
