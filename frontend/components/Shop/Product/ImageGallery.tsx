@@ -31,7 +31,7 @@ const ImageGallery: React.FC = () => {
           width: "2px",
           height: "1em",
           borderRadius: "7px",
-          backgroundColor: `#b199cc`,
+          backgroundColor: `#CAB5E5`,
         },
       }}
     >
@@ -40,9 +40,9 @@ const ImageGallery: React.FC = () => {
           product.image.map(({ image }: any) => (
             <Image
               src={createImageUrl(image, undefined)}
-              boxSize="9em"
+              boxSize="10em"
               fit="contain"
-              padding="1em"
+              padding="2em"
               cursor="pointer"
             />
           ))
