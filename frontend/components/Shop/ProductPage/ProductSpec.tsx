@@ -9,6 +9,7 @@ import OptionsTable from "./OptionsTable";
 import ImageGallery from "../Product/ImageGallery";
 import DragUpload from "../../Custom/DragUpload";
 import { ProductInfoContext } from "../../../context/ProductInfoContext";
+import { getProductInfo } from "../../../util/ProductInfo";
 
 const ProductSpec: React.FC = () => {
   const [specTableHeading, setSpecTableHeading] = useState<any[]>([]);
@@ -21,6 +22,7 @@ const ProductSpec: React.FC = () => {
   const [uploadedImages, setUploadedImages] = useState<File[]>([]);
   const { productInfo } = useContext(ProductInfoContext);
   const [product, setProduct] = productInfo;
+  const [clearUploadedFiles, setClearUploadedFiles] = useState<boolean>(false);
 
   const createTableHeading = () => {
     if (specTableHeading.length === 0)
@@ -78,10 +80,15 @@ const ProductSpec: React.FC = () => {
         withCredentials: true,
       })
       .then(() => {
-        alert("additional images uploaded");
+        getProductInfo(product.id)
+          .then((newProduct) => {
+            setProduct(newProduct);
+          })
+          .catch((err) => console.error(err));
+        setClearUploadedFiles(true);
       })
-      .catch(() => {
-        alert("additional images are not uploaded");
+      .catch((err) => {
+        console.error(err);
       });
   };
 
@@ -116,8 +123,12 @@ const ProductSpec: React.FC = () => {
         <DragUpload
           marginTop="2em"
           width="32em"
+          clearUpload={[clearUploadedFiles, setClearUploadedFiles]}
           onFileUpload={(files) => {
-            setUploadedImages(files);
+            console.log({ files });
+            if (files.length !== 0) {
+              setUploadedImages(files);
+            }
           }}
         />
         <Button

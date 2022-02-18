@@ -1,13 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import {
-  HStack,
-  Text,
-  Container,
-  Image,
-  Input,
-  Button,
-  forwardRef,
-} from "@chakra-ui/react";
+import { HStack, Text, Container, Image, Input } from "@chakra-ui/react";
 import { ContainerProps } from "@chakra-ui/react";
 
 const ImagePreview: React.FC<{ imageFile: File }> = ({ imageFile }) => (
@@ -16,15 +8,28 @@ const ImagePreview: React.FC<{ imageFile: File }> = ({ imageFile }) => (
 
 interface Props extends ContainerProps {
   onFileUpload?: (files: File[]) => void;
+  clearUpload: [
+    clearUploadFiles: boolean,
+    setClearUploadFiles: (_: boolean) => void
+  ];
 }
 
-const DragUpload = ({ onFileUpload, ...props }: Props) => {
+const DragUpload = ({ onFileUpload, clearUpload, ...props }: Props) => {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const fileInputRef = useRef<any>(null);
+  const [clearUploadFiles, setClearUploadFiles] = clearUpload;
+  const [hover, setHover] = useState<boolean>(false);
 
   useEffect(() => {
     if (onFileUpload) onFileUpload(uploadedFiles);
   }, [uploadedFiles]);
+
+  useEffect(() => {
+    if (clearUploadFiles) {
+      setUploadedFiles([]);
+      setClearUploadFiles(false);
+    }
+  }, [clearUploadFiles, setClearUploadFiles]);
 
   const saveImagesToState = (files: FileList) => {
     const filesArray: File[] = Array.from(files).filter(
@@ -57,7 +62,7 @@ const DragUpload = ({ onFileUpload, ...props }: Props) => {
         height="inherit"
         paddingBottom={uploadedFiles.length === 0 ? "6em" : "1em"}
         border="0.15em dashed"
-        borderColor="secondaryPink.200"
+        borderColor={hover ? "#D6C2ED" : "secondaryPink.200"}
         onDragOver={(event) => {
           event.preventDefault();
         }}
@@ -66,7 +71,12 @@ const DragUpload = ({ onFileUpload, ...props }: Props) => {
           if (fileInputRef.current) fileInputRef.current.click();
         }}
         cursor="pointer"
-        _hover={{ borderColor: "#D6C2ED" }}
+        onMouseEnter={() => {
+          setHover(true);
+        }}
+        onMouseLeave={() => {
+          setHover(false);
+        }}
         position="relative"
         borderRadius="lg"
       >
@@ -77,9 +87,8 @@ const DragUpload = ({ onFileUpload, ...props }: Props) => {
             left="35%"
             fontWeight="semibold"
             fontSize="1.2em"
-            textColor="secondaryBlue.200"
+            textColor={hover ? "#525E99" : "secondaryBlue.200"}
             fontFamily="Sora"
-            _hover={{ textColor: "#525E99" }}
           >
             Drop Files Here
           </Text>
