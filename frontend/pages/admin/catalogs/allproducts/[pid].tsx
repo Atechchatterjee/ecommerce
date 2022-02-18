@@ -9,13 +9,7 @@ import WithAuth from "../../../../util/WithAuth";
 import { UserContext } from "../../../../context/UserContext";
 import { ProductInfoContext } from "../../../../context/ProductInfoContext";
 import { Product } from "../../../../types/shop";
-
-const getProductInfo = async (productId: any): Promise<any> => {
-  const res = await axios.post(`${constants.url}/shop/getproduct/`, {
-    id: productId,
-  });
-  return Promise.resolve(res.data.product);
-};
+import { getProductInfo } from "../../../../util/ProductInfo";
 
 const ProductPage: NextPage = () => {
   const router = useRouter();
@@ -25,22 +19,16 @@ const ProductPage: NextPage = () => {
   const { admin } = useContext(UserContext);
 
   useEffect(() => {
-    if (!pid) return;
-    axios.get(`/admin/catalogs/allproducts/${pid}`).then(() => {
-      getProductInfo(pid).then((product) => {
-        let modifiedProduct: any = {};
-        Object.keys(product).forEach((key: any) => {
-          if (key === "product_id") modifiedProduct["id"] = product[key];
-          else modifiedProduct[key] = product[key];
+    if (!pid) {
+      setLoading(true);
+    } else {
+      axios.get(`/admin/catalogs/allproducts/${pid}`).then(() => {
+        getProductInfo(pid).then((product) => {
+          setProduct(product);
+          setLoading(false);
         });
-        // product = { ...product, id: product.product_id };
-        // delete product["product_id"];
-        setLoading(false);
-        console.log({ modifiedProduct });
-        console.log({ product });
-        setProduct(modifiedProduct);
       });
-    });
+    }
   }, [pid]);
 
   return !loading ? (
