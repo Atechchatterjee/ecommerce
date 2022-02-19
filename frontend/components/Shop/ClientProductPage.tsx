@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   HStack,
   Button,
@@ -12,6 +12,9 @@ import {
 import constants from "../../util/Constants";
 import axios from "axios";
 import { OptionsData } from "../../types/shop";
+import { ProductInfoContext } from "../../context/ProductInfoContext";
+import ImageGallery from "./Product/ImageGallery";
+import SpecificationTable from "./ProductPage/SpecificationTable";
 
 const OptionButtons: React.FC<{
   optionValues: { id: number; value: string }[];
@@ -53,12 +56,14 @@ const fetchOptions = async (product: any): Promise<OptionsData> =>
       });
   });
 
-const ClientProductPage: React.FC<{ product: any }> = ({ product }) => {
+const ClientProductPage: React.FC<{ product?: any }> = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [colorOptionIndx, setColorOptionIndx] = useState<{
     [optionId: number]: number;
   }>({});
   const [fetchedOptions, setFetchedOptions] = useState<OptionsData>([]);
+  const { productInfo } = useContext(ProductInfoContext);
+  const [product, setProduct] = productInfo;
 
   useEffect(() => {
     if (product) {
@@ -73,24 +78,26 @@ const ClientProductPage: React.FC<{ product: any }> = ({ product }) => {
         <Spinner />
       ) : (
         <Box margin="4em 5em">
-          <Container
-            boxShadow="0.2em 0.2em 0.2em 0.2em #e1e1e1"
-            float="left"
-            borderRadius="2xl"
-            height="initial"
-            width="50em"
-            padding="2em"
-          >
-            <Image
-              objectFit="scale-down"
-              src={`${constants.url?.substring(
-                0,
-                constants?.url.lastIndexOf("/")
-              )}${product.image}`}
+          <Box float="left" marginBottom="3em">
+            <Container
+              boxShadow="0.2em 0.2em 0.2em 0.2em #e1e1e1"
+              borderRadius="2xl"
+              height="initial"
               width="50em"
-              height="40em"
-            />
-          </Container>
+              padding="2em"
+            >
+              <Image
+                objectFit="scale-down"
+                src={`${constants.url?.substring(
+                  0,
+                  constants?.url.lastIndexOf("/")
+                )}${product.image[0].image}`}
+                width="50em"
+                height="40em"
+              />
+            </Container>
+            <ImageGallery width="50em" />
+          </Box>
           <Container float="left" marginLeft="10em">
             <Text fontWeight="semibold" fontSize="2.7em">
               {product.name}
