@@ -8,13 +8,7 @@ import Header from "../../components/Layout/Header";
 import ClientProductPage from "../../components/Shop/ClientProductPage";
 import { ProductInfoContext } from "../../context/ProductInfoContext";
 import { Product } from "../../types/shop";
-
-const getProductInfo = async (productId: any): Promise<any> => {
-  const res = await axios.post(`${constants.url}/shop/getproduct/`, {
-    id: productId,
-  });
-  return Promise.resolve(res.data.product);
-};
+import { getProductInfo } from "../../util/ProductInfo";
 
 const ProductPage: NextPage = () => {
   const router = useRouter();
@@ -27,14 +21,9 @@ const ProductPage: NextPage = () => {
     if (!pid) return;
     axios.get(`/admin/catalogs/allproducts/${pid}`).then(() => {
       getProductInfo(pid).then((product) => {
-        setLoading(false);
-        let modifiedProduct: any;
-        Object.keys(product).forEach((key: any) => {
-          if (key === "product_id") modifiedProduct["id"] = product[key];
-          else modifiedProduct[key] = product[key];
-        });
-        console.log({ modifiedProduct });
+        console.log({ product });
         setProduct(product);
+        setLoading(false);
       });
     });
   }, [pid]);
