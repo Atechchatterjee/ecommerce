@@ -23,29 +23,56 @@ import constants from "../../../util/Constants";
 import axios from "axios";
 import { OptionsData } from "../../../types/shop";
 
+const scrollBarStyle = {
+  "&::-webkit-scrollbar": {
+    width: "7px",
+    height: "0.5em",
+    borderRadius: "7px",
+  },
+  "&::-webkit-scrollbar-track": {
+    display: "none",
+  },
+  "&::-webkit-scrollbar-thumb": {
+    width: "2px",
+    height: "1em",
+    borderRadius: "7px",
+    backgroundColor: `#CAB6E5`,
+    transition: "background-color 0.8s ease-in-out",
+  },
+};
+
 const DisplayFetchedOptions: React.FC<{ fetchedOptions: any[] }> = ({
   fetchedOptions,
 }) => (
-  <Container marginTop="2em">
+  <Container marginTop="2em" marginLeft="-1em" width="50em">
     {fetchedOptions.map((option: any) => (
-      <HStack marginTop="1em">
-        <Text marginRight="1em" fontWeight="semibold">
-          {option.name} :
-        </Text>
-        {option.values.map((value: any) => (
-          <Tag
-            marginRight="2em"
-            size="lg"
-            bgColor="#F7F7F7"
-            fontColor="black"
-            borderRadius="full"
-            padding="0.7em 2em"
-            boxShadow="0.1em 0.1em 0.1em 0.1em #F0F0F0"
-          >
-            <Text fontSize="sm">{value.value}</Text>
-          </Tag>
-        ))}
-      </HStack>
+      <Container
+        boxShadow="0.2em 0.2em 0.2em 0.2em #e1e1e1"
+        padding="1.8em"
+        marginTop="1em"
+        borderRadius="lg"
+        overflowX="scroll"
+        sx={scrollBarStyle}
+      >
+        <HStack>
+          <Text marginRight="1em" fontWeight="semibold">
+            {option.name} :
+          </Text>
+          {option.values.map((value: any) => (
+            <Button
+              variant="pinkSolid"
+              // marginRight="2em"
+              marginLeft="2em"
+              borderRadius="full"
+              padding="0.7em 2em"
+            >
+              <Text fontSize="sm" fontWeight="semibold">
+                {value.value}
+              </Text>
+            </Button>
+          ))}
+        </HStack>
+      </Container>
     ))}
   </Container>
 );
@@ -193,9 +220,8 @@ const OptionsTable: React.FC<{
       {fetchedOptions ? (
         <Container
           position="relative"
-          boxShadow="0.2em 0.2em 0.2em 0.2em #e1e1e1"
           height="inherit"
-          padding="2em 2em 6em 2em"
+          padding="0em 0em 2em 0em"
           borderRadius="lg"
           marginBottom="2em"
         >
