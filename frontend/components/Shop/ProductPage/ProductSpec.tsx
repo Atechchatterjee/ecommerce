@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Button, Container, Text } from "@chakra-ui/react";
+import { Box, Button, Container, Text } from "@chakra-ui/react";
 import Product from "../Product/index";
 import axios from "axios";
 import constants from "../../../util/Constants";
@@ -101,63 +101,59 @@ const ProductSpec: React.FC = () => {
         modifyRowModal: [modifyAddRowModal, setModifyAddRowModal],
       }}
     >
-      <Container
-        margin="0"
-        marginTop="2em"
-        marginBottom="2em"
-        float="left"
-        position="sticky"
-      >
-        {product ? (
-          <Product
-            id={product.id}
-            name={product.name}
-            description={product.description}
-            price={product.price}
-            image={product.image}
+      <Box marginLeft="12em">
+        <Container margin="0" marginTop="2em" marginBottom="2em" float="left">
+          {product ? (
+            <Product
+              id={product.id}
+              name={product.name}
+              description={product.description}
+              price={product.price}
+              image={product.image}
+            />
+          ) : (
+            <></>
+          )}
+          <ImageGallery marginTop="2em" />
+          <DragUpload
+            marginTop="2em"
+            width="32em"
+            clearUpload={[clearUploadedFiles, setClearUploadedFiles]}
+            onFileUpload={(files) => {
+              console.log({ files });
+              if (files.length !== 0) {
+                setUploadedImages(files);
+              }
+            }}
           />
-        ) : (
-          <></>
-        )}
-        <ImageGallery />
-        <DragUpload
-          marginTop="2em"
-          width="32em"
-          clearUpload={[clearUploadedFiles, setClearUploadedFiles]}
-          onFileUpload={(files) => {
-            console.log({ files });
-            if (files.length !== 0) {
-              setUploadedImages(files);
-            }
-          }}
-        />
-        <Button
-          marginLeft="10.5%"
-          variant="blueSolid"
-          marginTop="1em"
-          width="30em"
-          onClick={uploadAllImages}
-        >
-          Upload Additional Images
-        </Button>
-        <CreateSpecificationTableBtn />
-        <Button
-          width="30em"
-          marginLeft="10.5%"
-          marginTop="1.5em"
-          variant="blueSolid"
-          onClick={() => setIsOpenOptionModal(true)}
-        >
-          Add Options
-        </Button>
-      </Container>
-      <Container float="left" marginTop="2em" marginLeft="2em" width="40em">
-        <OptionsTable
-          product={product}
-          triggerOpen={[isOpenOptionModal, setIsOpenOptionModal]}
-        />
-        <SpecificationTable />
-      </Container>
+          <Button
+            marginLeft="10.5%"
+            variant="blueSolid"
+            marginTop="1em"
+            width="30em"
+            onClick={uploadAllImages}
+          >
+            Upload Additional Images
+          </Button>
+          <CreateSpecificationTableBtn />
+          <Button
+            width="30em"
+            marginLeft="10.5%"
+            marginTop="1.5em"
+            variant="blueSolid"
+            onClick={() => setIsOpenOptionModal(true)}
+          >
+            Add Options
+          </Button>
+        </Container>
+        <Container float="left" marginTop="2em" marginLeft="2em" width="40em">
+          <OptionsTable
+            product={product}
+            triggerOpen={[isOpenOptionModal, setIsOpenOptionModal]}
+          />
+          <SpecificationTable />
+        </Container>
+      </Box>
     </SpecTableContext.Provider>
   ) : (
     <></>
