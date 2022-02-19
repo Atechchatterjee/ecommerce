@@ -1,16 +1,41 @@
-import React, { useContext } from "react";
-import { HStack, Container, Image } from "@chakra-ui/react";
+import React, { useState, useContext } from "react";
+import {
+  HStack,
+  Container,
+  Image,
+  ContainerProps,
+  transition,
+} from "@chakra-ui/react";
 import constants from "../../../util/Constants";
 import { ProductInfoContext } from "../../../context/ProductInfoContext";
+import { GoNoNewline } from "react-icons/go";
 
 const createImageUrl = (url: string, image: File | undefined): string =>
   image
     ? URL.createObjectURL(image)
     : `${constants.url?.substring(0, constants?.url.lastIndexOf("/"))}${url}`;
 
-const ImageGallery: React.FC = () => {
+const ImageGallery = ({ ...props }: ContainerProps) => {
   const { productInfo } = useContext(ProductInfoContext);
   const [product, setProduct] = productInfo;
+
+  const scrollBarStyle = {
+    "&::-webkit-scrollbar": {
+      width: "7px",
+      height: "0.5em",
+      borderRadius: "7px",
+    },
+    "&::-webkit-scrollbar-track": {
+      display: "none",
+    },
+    "&::-webkit-scrollbar-thumb": {
+      width: "2px",
+      height: "1em",
+      borderRadius: "7px",
+      backgroundColor: `#CAB6E5`,
+      transition: "background-color 0.8s ease-in-out",
+    },
+  };
 
   return product ? (
     <Container
@@ -21,19 +46,8 @@ const ImageGallery: React.FC = () => {
       borderRadius="lg"
       overflowX="scroll"
       overflowY="hidden"
-      sx={{
-        "&::-webkit-scrollbar": {
-          width: "7px",
-          height: "0.5em",
-          borderRadius: "7px",
-        },
-        "&::-webkit-scrollbar-thumb": {
-          width: "2px",
-          height: "1em",
-          borderRadius: "7px",
-          backgroundColor: `#CAB5E5`,
-        },
-      }}
+      sx={scrollBarStyle}
+      {...props}
     >
       <HStack height="inherit">
         {product.image ? (
