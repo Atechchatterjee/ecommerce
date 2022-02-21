@@ -8,7 +8,6 @@ import {
 } from "@chakra-ui/react";
 import constants from "../../../util/Constants";
 import { ProductInfoContext } from "../../../context/ProductInfoContext";
-import { GoNoNewline } from "react-icons/go";
 
 const createImageUrl = (url: string, image: File | undefined): string =>
   image

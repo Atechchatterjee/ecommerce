@@ -12,11 +12,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Operand,
-  Tag,
   Text,
-  Tooltip,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { FaCheck } from "react-icons/fa";
 import constants from "../../../util/Constants";
