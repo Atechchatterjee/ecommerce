@@ -8,10 +8,11 @@ import {
   Td,
   Text,
   Checkbox,
+  TableProps,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 
-interface Props {
+interface Props extends TableProps {
   rows: any[][];
   heading: any[];
   tableCaption?: string;
@@ -20,14 +21,15 @@ interface Props {
   selectedRowsState?: [selectedRows: any[], setSelectedRows: Function];
 }
 
-const CustomTable: React.FC<Props> = ({
+const CustomTable = ({
   rows,
   heading,
   tableCaption,
   rowCb,
   select,
   selectedRowsState,
-}) => {
+  ...props
+}: Props) => {
   const [selectTrigger, setSelectTrigger] = useState<boolean>(false);
   const [selectedRows, setSelectedRows] =
     selectedRowsState || useState<any>({});
@@ -68,7 +70,7 @@ const CustomTable: React.FC<Props> = ({
   };
 
   return (
-    <Table variant="simple" size="md" width="full">
+    <Table variant="simple" size="md" width="full" {...props}>
       {tableCaption ? <TableCaption>{tableCaption}</TableCaption> : <></>}
       <Thead>
         <Tr>
@@ -112,7 +114,12 @@ const CustomTable: React.FC<Props> = ({
                       if (rowCb && selectTrigger === false) rowCb(rowEl[0]);
                     }}
                   >
-                    <Text key={indx}>{columnElement}</Text>
+                    {/* {typeof columnElement === "string" ? (
+                      <Text key={indx}>{columnElement}</Text>
+                    ) : (
+                      columnElement
+                    )} */}
+                    {columnElement}
                   </Td>
                 ) : (
                   <></>
