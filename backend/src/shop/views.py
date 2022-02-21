@@ -390,6 +390,17 @@ def add_product_to_cart(request):
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
+def get_serialized_product(product_id: int):
+    product = Product.objects.get(product_id=product_id)
+    serialized_product =  ProductSerializer(product).data
+    serialized_product = {
+        **serialized_product, 
+        "images": ProductImageSerializer(
+            Product_Images.objects.filter(product_id=product),
+            many=True
+        ).data
+    }
+    return serialized_product
 
 @api_view(['GET'])
 @permission_classes([Is_User])
@@ -399,8 +410,16 @@ def get_products_from_cart(request):
     try:
         cart_items = Cart_Details.objects.filter(
             user_id=get_user_by_email(email))
+        serialized_cart_items = CartDetailsSerializer(
+            cart_items, many=True).data 
+        modified_cart_items = [
+            {
+                **item,
+                **get_serialized_product(int(item.get("product_id")))
+            } for item in serialized_cart_items
+        ]
         return Response({
-            "cart_items": CartDetailsSerializer(cart_items, many=True).data
+            "cart_items": modified_cart_items 
         }, status=status.HTTP_200_OK)
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)

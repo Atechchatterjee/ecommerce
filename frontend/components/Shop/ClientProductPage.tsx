@@ -20,7 +20,7 @@ const OptionButtons: React.FC<{
   selectedOption: number;
   selected?: (indx: number) => void;
 }> = ({ optionValues, selectedOption, selected }) => (
-  <>
+  <Box>
     {optionValues.map((optionValue, indx) => (
       <Button
         {...(optionValue.id !== selectedOption
@@ -38,7 +38,7 @@ const OptionButtons: React.FC<{
         {optionValue.value}
       </Button>
     ))}
-  </>
+  </Box>
 );
 
 const fetchOptions = async (product: any): Promise<OptionsData> =>
@@ -59,7 +59,7 @@ const addProductToCart = async (quantity: number, productId: number) => {
   return new Promise((resolve) => {
     axios
       .post(
-        `${constants.url}/shop/addtocart/`,
+        `${constants.url}/shop/add-to-cart/`,
         {
           product_id: productId,
           quantity,
@@ -75,7 +75,7 @@ const checkIfInCart = async (productId: number) => {
   return new Promise((resolve) => {
     axios
       .post(
-        `${constants.url}/shop/productexistsincart/`,
+        `${constants.url}/shop/product-exists-in-cart/`,
         {
           product_id: productId,
         },
@@ -117,6 +117,15 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
       .then(() => setProductExistsInCart(true))
       .catch(() => setProductExistsInCart(false));
   }, []);
+
+  const handleAddToCart = () => {
+    addProductToCart(quantity, product.id);
+    checkIfInCart(product.id)
+      .then(() => {
+        setProductExistsInCart(true);
+      })
+      .catch(() => setProductExistsInCart(false));
+  };
 
   return (
     <>
@@ -220,17 +229,10 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
                 variant="blueOutline"
                 width="10em"
                 left="1em"
-                onClick={() => {
-                  addProductToCart(quantity, product.id);
-                  checkIfInCart(product.id)
-                    .then(() => {
-                      setProductExistsInCart(true);
-                    })
-                    .catch(() => setProductExistsInCart(false));
-                }}
+                onClick={handleAddToCart}
                 disabled={productExistsInCart}
               >
-                Add To Cart
+                {productExistsInCart ? "Added to Cart" : "Add to Cart"}
               </Button>
             </HStack>
           </Container>
