@@ -19,7 +19,7 @@ const ProductPage: NextPage = () => {
 
   useEffect(() => {
     if (!pid) return;
-    axios.get(`/admin/catalogs/allproducts/${pid}`).then(() => {
+    axios.get(`/admin/catalogs/all-products/${pid}`).then(() => {
       getProductInfo(pid).then((product) => {
         console.log({ product });
         setProduct(product);

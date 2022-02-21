@@ -22,7 +22,7 @@ const ProductPage: NextPage = () => {
     if (!pid) {
       setLoading(true);
     } else {
-      axios.get(`/admin/catalogs/allproducts/${pid}`).then(() => {
+      axios.get(`/admin/catalogs/all-products/${pid}`).then(() => {
         getProductInfo(pid).then((product) => {
           setProduct(product);
           setLoading(false);

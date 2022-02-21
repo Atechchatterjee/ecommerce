@@ -84,7 +84,7 @@ const NormalMode: React.FC<Props> = ({ id, name, description, price }) => {
         _hover={{ color: "secondaryPink.200" }}
         onClick={() => {
           if (!admin) window.location.assign(`/shop/${id}`);
-          else window.location.assign(`/admin/catalogs/allproducts/${id}`);
+          else window.location.assign(`/admin/catalogs/all-products/${id}`);
         }}
       >
         {name}
