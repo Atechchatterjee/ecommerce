@@ -57,7 +57,6 @@ const DisplayFetchedOptions: React.FC<{ fetchedOptions: any[] }> = ({
           {option.values.map((value: any) => (
             <Button
               variant="pinkSolid"
-              // marginRight="2em"
               marginLeft="2em"
               borderRadius="full"
               padding="0.7em 2em"
