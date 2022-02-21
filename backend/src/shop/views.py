@@ -1,55 +1,73 @@
 from operator import itemgetter
 from rest_framework import status
+from authentication.tokens import retrieve_payload
 from .models import (
-    Category, Product,
+    Cart_Details, Category, Product,
     Product_Specification_Table,
     Specification_Table_Content, Options,
     OptionValues, Product_Images
 )
 from rest_framework.response import Response
-from authentication.backends import Is_Admin
+from authentication.backends import Is_Admin, Is_User
+from authentication.models import User
 from rest_framework.decorators import parser_classes
 from .serializers import (
     CategorySerializer, ProductSerializer,
     ProductImageSerializer,
-    SpecificationTableContentSerializer
+    SpecificationTableContentSerializer,
+    CartDetailsSerializer
 )
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.decorators import api_view, permission_classes
+from typing import List, BinaryIO
 
 
-def fetch_category(category_id):
+def fetch_category(category_id: int) -> (Category or None):
     return (
         Category.objects.get(
             category_id=category_id
         ) if category_id is not None else None
     )
 
-def get_product_model(product_id):
+def get_product_model(product_id: int) -> (Product):
     return Product.objects.get(product_id=product_id)
 
-def create_option_values(option_values, option_id):
+def create_option_values(option_values: List[str], option_id: Options):
     OptionValues.objects.bulk_create([OptionValues(
         value=option_value,
         option_id=option_id
     ) for option_value in option_values])
 
-def get_option_values(option_id):
+def get_option_values(option_id: int):
     return OptionValues.objects.filter(
         option_id=Options.objects.get(id=option_id))
 
 
-def save_product_images(product_id, images):
+def save_product_images(product_id: Product, images: List[BinaryIO]):
     Product_Images.objects.bulk_create([Product_Images(
         product_id=product_id,
         image=image) for image in images]
     )
 
-def get_product_images(product_id):
+def get_product_images(product_id: Product):
     all_products =  ProductImageSerializer(
             Product_Images.objects.filter(product_id=product_id),
             many=True).data
     return all_products
+
+
+def get_user_by_email(email: str) -> (User):
+    return User.objects.get(email=email)
+
+def does_cart_exists(email: str, product_id: int) -> (bool):
+    try:
+        user = User.objects.get(email=email)
+        product = get_product(product_id)
+        Cart_Details.objects.get(user_id=user, product_id=product)
+        return True
+    except:
+        return False
+
 
 @api_view(['POST'])
 @permission_classes([Is_Admin])
@@ -73,7 +91,7 @@ def create_product(request):
             price = str(product_price),
             description=product_description,
             category=fetch_category(
-                int(category_id)) if category_id is not "" else None
+                int(category_id)) if category_id != "" else None
         )
         new_product.save()
         save_product_images(new_product, product_image)
@@ -314,7 +332,9 @@ def save_options(request):
 
 @api_view(['POST'])
 def get_options(request):
-    product_id = itemgetter('product_id')(request.data)
+    print("request.data = ", request.data)
+    # product_id = itemgetter("product_id")(request.data)
+    product_id = request.data.get("product_id")
     options_structure = []
     try:
         options = Options.objects.filter(product_id=product_id)
@@ -330,7 +350,74 @@ def get_options(request):
                     } for value in option_values
                 ]
             })
+        print({"options_structure": options_structure})
         return Response({"options": options_structure},
                         status=status.HTTP_200_OK)
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+def get_cart_details(email: str, product_id: int) -> (Cart_Details):
+    try:
+        return Cart_Details.objects.get(
+            user_id=get_user_by_email(email),
+            product_id=get_product_model(product_id)
+        )
+    except:
+        return None
+
+
+@api_view(['POST'])
+@permission_classes([Is_User])
+def add_product_to_cart(request):
+    product_id, quantity = itemgetter("product_id", "quantity")(request.data)
+    payload = retrieve_payload(request.COOKIES.get("token"))
+    email = payload.get("email")
+    cart = get_cart_details(email, product_id)
+    if cart != None:
+        cart.quantity += quantity
+        cart.save()
+        return Response(status=status.HTTP_200_OK)
+    else:
+        try:
+            Cart_Details(
+                user_id=get_user_by_email(email),
+                product_id=get_product_model(product_id),
+                quantity=quantity
+            ).save()
+            print("payload = ", payload)
+            return Response(status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([Is_User])
+def get_products_from_cart(request):
+    payload = retrieve_payload(request.COOKIES.get("token"))
+    email = payload.get("email")
+    try:
+        cart_items = Cart_Details.objects.filter(
+            user_id=get_user_by_email(email))
+        return Response({
+            "cart_items": CartDetailsSerializer(cart_items, many=True).data
+        }, status=status.HTTP_200_OK)
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([Is_User])
+def product_exists_in_cart(request):
+    print("request.data = ", request.data)
+    product_id = itemgetter("product_id")(request.data)
+    payload = retrieve_payload(request.COOKIES.get("token"))
+    email = payload.get("email")
+    try:
+        cart_item = Cart_Details.objects.get(
+            user_id=get_user_by_email(email),
+            product_id=get_product_model(product_id)
+        )
+        return Response(status=status.HTTP_200_OK)
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)

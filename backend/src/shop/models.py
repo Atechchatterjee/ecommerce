@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 class Product_Images(models.Model):
     id = models.AutoField(primary_key=True)
@@ -14,6 +15,21 @@ class Product(models.Model):
     description = models.TextField(null=False, default="")
     category = models.ForeignKey(
         'shop.Category', verbose_name="category", on_delete=models.CASCADE)
+
+
+class Cart_Details(models.Model):
+    id = models.AutoField(primary_key=True)
+    user_id = models.ForeignKey('authentication.User', verbose_name="user_id", on_delete=models.CASCADE)
+    product_id = models.ForeignKey('shop.Product', verbose_name="product_id",
+                                   on_delete=models.CASCADE)
+    quantity = models.IntegerField(null=False)
+    total_price = models.TextField(null=False)
+    created = models.DateTimeField(null=False)
+
+    def save(self, *args, **kwargs):
+        self.created = timezone.now()
+        self.total_price = self.quantity * int(self.product_id.price)
+        return super(Cart_Details, self).save(*args, **kwargs)
 
 
 class Category(models.Model):

@@ -14,7 +14,6 @@ import axios from "axios";
 import { OptionsData } from "../../types/shop";
 import { ProductInfoContext } from "../../context/ProductInfoContext";
 import ImageGallery from "./Product/ImageGallery";
-import SpecificationTable from "./ProductPage/SpecificationTable";
 
 const OptionButtons: React.FC<{
   optionValues: { id: number; value: string }[];
@@ -56,6 +55,37 @@ const fetchOptions = async (product: any): Promise<OptionsData> =>
       });
   });
 
+const addProductToCart = async (quantity: number, productId: number) => {
+  return new Promise((resolve) => {
+    axios
+      .post(
+        `${constants.url}/shop/addtocart/`,
+        {
+          product_id: productId,
+          quantity,
+        },
+        { withCredentials: true }
+      )
+      .then(resolve)
+      .catch((err) => console.error(err));
+  });
+};
+
+const checkIfInCart = async (productId: number) => {
+  return new Promise((resolve) => {
+    axios
+      .post(
+        `${constants.url}/shop/productexistsincart/`,
+        {
+          product_id: productId,
+        },
+        { withCredentials: true }
+      )
+      .then(resolve)
+      .catch((err) => console.error(err));
+  });
+};
+
 const ClientProductPage: React.FC<{ product?: any }> = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [colorOptionIndx, setColorOptionIndx] = useState<{
@@ -63,14 +93,30 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
   }>({});
   const [fetchedOptions, setFetchedOptions] = useState<OptionsData>([]);
   const { productInfo } = useContext(ProductInfoContext);
-  const [product, setProduct] = productInfo;
+  const [product] = productInfo;
+  const [quantity, setQuantity] = useState<number>(1);
+  const [productExistsInCart, setProductExistsInCart] =
+    useState<boolean>(false);
 
   useEffect(() => {
     if (product) {
-      fetchOptions(product).then((optionData) => setFetchedOptions(optionData));
+      fetchOptions(product).then((optionData) => {
+        console.log({ optionData });
+        setFetchedOptions(optionData);
+      });
       setLoading(false);
     } else setLoading(true);
   }, [product]);
+
+  useEffect(() => {
+    console.log({ fetchedOptions });
+  }, [fetchedOptions]);
+
+  useEffect(() => {
+    checkIfInCart(product.id)
+      .then(() => setProductExistsInCart(true))
+      .catch(() => setProductExistsInCart(false));
+  }, []);
 
   return (
     <>
@@ -78,7 +124,7 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
         <Spinner />
       ) : (
         <Box margin="4em 5em">
-          <Box float="left" marginBottom="3em">
+          <Box float="left" marginBottom="3em" className="product-images">
             <Container
               boxShadow="0.2em 0.2em 0.2em 0.2em #e1e1e1"
               borderRadius="2xl"
@@ -98,7 +144,11 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
             </Container>
             <ImageGallery width="50em" />
           </Box>
-          <Container float="left" marginLeft="10em">
+          <Container
+            float="left"
+            marginLeft="10em"
+            className="product-description"
+          >
             <Text fontWeight="semibold" fontSize="2.7em">
               {product.name}
             </Text>
@@ -133,9 +183,10 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
                 borderRadius="sm"
                 boxShadow="0.05em 0.05em 0.05em 0.05em #e1e1e1"
                 defaultValue={1}
+                onChange={(e) => setQuantity(parseInt(e.target.value))}
               />
             </HStack>
-            <Box marginTop="3em" width="inherit">
+            <Box marginTop="3em" width="inherit" className="options-area">
               {fetchedOptions.map((option) => (
                 <HStack marginTop="1.5em">
                   <Text fontWeight="semibold" fontSize="1.1em">
@@ -165,7 +216,20 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
               >
                 Buy Now
               </Button>
-              <Button variant="blueOutline" width="10em" left="1em">
+              <Button
+                variant="blueOutline"
+                width="10em"
+                left="1em"
+                onClick={() => {
+                  addProductToCart(quantity, product.id);
+                  checkIfInCart(product.id)
+                    .then(() => {
+                      setProductExistsInCart(true);
+                    })
+                    .catch(() => setProductExistsInCart(false));
+                }}
+                disabled={productExistsInCart}
+              >
                 Add To Cart
               </Button>
             </HStack>

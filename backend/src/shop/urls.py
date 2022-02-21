@@ -17,4 +17,7 @@ urlpatterns = [
     path('saveoptions/', views.save_options, name="save options"),
     path('getoptions/', views.get_options, name="get options"),
     path('addproductimages/', views.add_product_images, name="add product images"),
+    path('addtocart/', views.add_product_to_cart, name="add product to cart"),
+    path('getproductfromcart/', views.get_products_from_cart, name="getting products from cart"),
+    path('productexistsincart/', views.product_exists_in_cart, name="product exists in cart"),
 ]
