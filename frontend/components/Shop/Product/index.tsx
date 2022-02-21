@@ -81,6 +81,7 @@ const Product: React.FC<Props> = ({
             !!image ? (!!image[0] ? image[0].image : "") : "",
             changedImage
           )}
+          fallbackSrc="https://newhorizon-bsh.s3.ap-south-1.amazonaws.com/nhengineering/bsh/wp-content/uploads/2020/01/17113522/default-image.png"
           width="full"
           height="20em"
           cursor={edit ? "pointer" : "auto"}
