@@ -56,9 +56,8 @@ def save_token(user, token, admin=False):
     else:
         print('token already exists')
 
+
 # removes all the entries with the same token
-
-
 def remove_token(token, admin=False):
     TokenObj = Token if admin is False else AdminToken
 
