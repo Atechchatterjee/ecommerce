@@ -16,6 +16,7 @@ import { isAuthenticated } from "../../util/Authenticated";
 import { convertToCategoryTree, getRootNodes } from "../../util/Tree";
 import SelectCategory, { getAllCategory } from "../Admin/SelectCategory";
 import logout from "../../util/Logout";
+import { FiShoppingCart } from "react-icons/fi";
 
 const Header: React.FC = () => {
   const [authenticated, setAuthenticated] = useState<boolean>(false);
@@ -172,6 +173,15 @@ const Header: React.FC = () => {
             <Tooltip label="profile">
               <span>
                 <FaRegUser size={25} style={{ cursor: "pointer" }} />
+              </span>
+            </Tooltip>
+            <Tooltip label="cart">
+              <span>
+                <FiShoppingCart
+                  size={25}
+                  style={{ cursor: "pointer" }}
+                  onClick={() => window.location.assign("/cart")}
+                />
               </span>
             </Tooltip>
           </HStack>
