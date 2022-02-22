@@ -19,6 +19,7 @@ const DragUpload = ({ onFileUpload, clearUpload, ...props }: Props) => {
   const fileInputRef = useRef<any>(null);
   const [clearUploadFiles, setClearUploadFiles] = clearUpload;
   const [hover, setHover] = useState<boolean>(false);
+  const allowedFileTypes = ["image/jpg", "image/png", "images/webp"];
 
   useEffect(() => {
     if (onFileUpload) onFileUpload(uploadedFiles);
@@ -33,7 +34,7 @@ const DragUpload = ({ onFileUpload, clearUpload, ...props }: Props) => {
 
   const saveImagesToState = (files: FileList) => {
     const filesArray: File[] = Array.from(files).filter(
-      (file) => file.type === "image/jpg" || "image/png" || "images/webp"
+      (file) => file.type in allowedFileTypes
     );
     setUploadedFiles([...uploadedFiles, ...filesArray]);
   };
