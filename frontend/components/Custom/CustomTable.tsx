@@ -19,6 +19,8 @@ interface Props extends TableProps {
   rowCb?: Function;
   select?: boolean;
   selectedRowsState?: [selectedRows: any[], setSelectedRows: Function];
+  excludeSelectForRows?: number[];
+  interactive?: boolean;
 }
 
 const CustomTable = ({
@@ -28,6 +30,8 @@ const CustomTable = ({
   rowCb,
   select,
   selectedRowsState,
+  excludeSelectForRows,
+  interactive,
   ...props
 }: Props) => {
   const [selectTrigger, setSelectTrigger] = useState<boolean>(false);
@@ -69,6 +73,11 @@ const CustomTable = ({
     setSelectedRows(copy);
   };
 
+  const rowHoverStyle = {
+    background: "#F7F7F7",
+    cursor: "pointer",
+  };
+
   return (
     <Table variant="simple" size="md" width="full" {...props}>
       {tableCaption ? <TableCaption>{tableCaption}</TableCaption> : <></>}
@@ -98,10 +107,7 @@ const CustomTable = ({
           <>
             <Tr
               key={i}
-              _hover={{
-                background: "#F7F7F7",
-                cursor: "pointer",
-              }}
+              {...(interactive ? { _hover: { rowHoverStyle } } : {})}
               onClick={() => {
                 if (!selectTrigger) setSelectTrigger(false);
               }}
@@ -114,18 +120,21 @@ const CustomTable = ({
                       if (rowCb && selectTrigger === false) rowCb(rowEl[0]);
                     }}
                   >
-                    {/* {typeof columnElement === "string" ? (
-                      <Text key={indx}>{columnElement}</Text>
-                    ) : (
-                      columnElement
-                    )} */}
                     {columnElement}
                   </Td>
                 ) : (
                   <></>
                 )
               )}
-              <SelectRowCheckBox indx={parseInt(rowEl[0])} key={i} />
+              {excludeSelectForRows ? (
+                excludeSelectForRows.includes(i) ? (
+                  <Td></Td>
+                ) : (
+                  <SelectRowCheckBox indx={parseInt(rowEl[0])} key={i} />
+                )
+              ) : (
+                <SelectRowCheckBox indx={parseInt(rowEl[0])} key={i} />
+              )}
             </Tr>
           </>
         ))}
