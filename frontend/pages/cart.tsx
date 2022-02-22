@@ -1,10 +1,11 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { NextPage } from "next";
 import WithAuth from "../util/WithAuth";
-import { Box, Button, Container, Image, Text } from "@chakra-ui/react";
+import { Input, Box, Button, Container, Image, Text } from "@chakra-ui/react";
 import axios from "axios";
 import constants from "../util/Constants";
 import CustomTable from "../components/Custom/CustomTable";
+import { scrollBarStyle } from "../util/ScrollBarStyle";
 
 const createImageUrl = (url: string, image: File | undefined): string =>
   image
@@ -25,52 +26,108 @@ const getCartItems = async (): Promise<any[]> => {
   });
 };
 
-const scrollBarStyle = {
-  "&::-webkit-scrollbar": {
-    width: "7px",
-    height: "0.5em",
-    borderRadius: "7px",
-  },
-  "&::-webkit-scrollbar-track": {
-    display: "none",
-  },
-  "&::-webkit-scrollbar-thumb": {
-    width: "2px",
-    height: "1em",
-    borderRadius: "7px",
-    backgroundColor: `#CAB6E5`,
-    transition: "background-color 0.8s ease-in-out",
-  },
+const deleteItemsFromCart = async (productIds: number[]) =>
+  new Promise((resolve) => {
+    axios
+      .post(
+        `${constants.url}/shop/delete-cart-items/`,
+        {
+          product_ids: productIds,
+        },
+        { withCredentials: true }
+      )
+      .then(resolve)
+      .catch((err) => console.error(err));
+  });
+
+const addProductToCart = async (quantity: number, productId: number) => {
+  return new Promise((resolve) => {
+    axios
+      .post(
+        `${constants.url}/shop/add-to-cart/`,
+        {
+          product_id: productId,
+          quantity,
+        },
+        { withCredentials: true }
+      )
+      .then(resolve)
+      .catch((err) => console.error(err));
+  });
 };
 
 const Cart: NextPage = () => {
-  const [cartItems, setCartItems] = useState<any[]>([]);
+  const [cartItems, setCartItems] = useState<any[][]>([]);
   const heading = ["Image", "product name", "price", "quantity", "total price"];
   const [finalPrice, setFinalPrice] = useState<number>(0);
+  const [selectedItems, setSelectedItems] = useState<any>({});
+  const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
+
+  const fillCartItems = (items: any[], finalPriceCalc: number) => {
+    setCartItems([
+      ...items.map((item) => {
+        finalPriceCalc += parseInt(item.total_price);
+        setQuantities({
+          ...quantities,
+          [item.product_id]: parseInt(item.quantity),
+        });
+        return [
+          item.product_id,
+          <Image
+            src={createImageUrl(item.images[0].image, undefined)}
+            w="20"
+            h="20"
+            objectFit="contain"
+          />,
+          item.name,
+          item.price,
+          <Input
+            value={quantities[item.product_id]}
+            size="md"
+            width="5em"
+            type="number"
+            placeholder={item.quantity}
+            onChange={(e: any) => {
+              setQuantities({
+                ...quantities,
+                [item.product_id]: parseInt(e.target.value),
+              });
+            }}
+            onBlur={(e: any) => {
+              if (e.target.value === "") return;
+              addProductToCart(parseInt(e.target.value), item.product_id);
+              getCartItems().then((items) => {
+                let finalPriceCalc = 0;
+                fillCartItems(items, finalPriceCalc);
+                setFinalPrice(finalPriceCalc);
+              });
+            }}
+          />,
+          <Text color="blueSolid.200" fontWeight="semibold">
+            {item.total_price}
+          </Text>,
+        ];
+      }),
+      new Array(heading.length + 1).fill("").map((_, indx) =>
+        indx < heading.length ? (
+          indx < heading.length - 1 ? (
+            ""
+          ) : (
+            <Text fontWeight="semibold">final price : </Text>
+          )
+        ) : (
+          <Text fontWeight="semibold" textColor="secondaryBlue.200">
+            {finalPriceCalc}
+          </Text>
+        )
+      ),
+    ]);
+  };
 
   useEffect(() => {
-    let finalPriceCalc = 0;
     getCartItems().then((items) => {
-      setCartItems([
-        ...items.map((item, indx) => {
-          finalPriceCalc += parseInt(item.total_price);
-          return [
-            indx,
-            <Image
-              src={createImageUrl(item.images[0].image, undefined)}
-              w="20"
-              h="20"
-              objectFit="contain"
-            />,
-            item.name,
-            item.price,
-            item.quantity,
-            <Text color="blueSolid.200" fontWeight="semibold">
-              {item.total_price}
-            </Text>,
-          ];
-        }),
-      ]);
+      let finalPriceCalc = 0;
+      fillCartItems(items, finalPriceCalc);
       setFinalPrice(finalPriceCalc);
     });
   }, []);
@@ -111,25 +168,31 @@ const Cart: NextPage = () => {
           heading={heading}
           rows={cartItems}
           select
+          excludeSelectForRows={[cartItems.length - 1]}
+          selectedRowsState={[selectedItems, setSelectedItems]}
         />
-        <Button
-          variant="blueGradient"
-          position="absolute"
-          right="2em"
-          bottom="1.5em"
-        >
-          Proceed
-        </Button>
-        <Box fontWeight="semibold" bottom="1.5em" position="absolute">
-          Final Price :
-          <Text
-            marginLeft="0.8em"
-            float="right"
-            textColor="secondaryBlue.200"
-            fontWeight="semibold"
+        <Box position="absolute" right="2em" bottom="1.5em">
+          <Button
+            variant="pinkSolid"
+            float="left"
+            marginRight="1em"
+            onClick={() => {
+              deleteItemsFromCart(
+                Object.keys(selectedItems).map((key) => parseInt(key))
+              ).then(() => {
+                getCartItems().then((items) => {
+                  let finalPriceCalc = 0;
+                  fillCartItems(items, finalPriceCalc);
+                  setFinalPrice(finalPriceCalc);
+                });
+              });
+            }}
           >
-            {finalPrice}
-          </Text>
+            Delete Items
+          </Button>
+          <Button variant="blueSolid" float="left">
+            Proceed
+          </Button>
         </Box>
       </Container>
     </Box>

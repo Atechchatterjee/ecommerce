@@ -375,7 +375,7 @@ def add_product_to_cart(request):
     email = payload.get("email")
     cart = get_cart_details(email, product_id)
     if cart != None:
-        cart.quantity += quantity
+        cart.quantity = quantity
         cart.save()
         return Response(status=status.HTTP_200_OK)
     else:
@@ -428,15 +428,31 @@ def get_products_from_cart(request):
 @api_view(['POST'])
 @permission_classes([Is_User])
 def product_exists_in_cart(request):
-    print("request.data = ", request.data)
     product_id = itemgetter("product_id")(request.data)
     payload = retrieve_payload(request.COOKIES.get("token"))
     email = payload.get("email")
     try:
-        cart_item = Cart_Details.objects.get(
+        Cart_Details.objects.get(
             user_id=get_user_by_email(email),
             product_id=get_product_model(product_id)
         )
+        return Response(status=status.HTTP_200_OK)
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([Is_User])
+def delete_cart_items(request):
+    product_ids = itemgetter("product_ids")(request.data)
+    payload = retrieve_payload(request.COOKIES.get("token"))
+    email = payload.get("email")
+    products = Product.objects.filter(product_id__in=product_ids)
+    try:
+        Cart_Details.objects.filter(
+            product_id__in=products,
+            user_id=get_user_by_email(email)
+        ).delete()
         return Response(status=status.HTTP_200_OK)
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
