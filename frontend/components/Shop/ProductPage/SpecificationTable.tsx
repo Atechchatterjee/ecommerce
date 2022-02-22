@@ -9,7 +9,6 @@ import AddRowModal from "../../Custom/AddRowModal";
 import { SpecTableContext } from "../../../context/SpecTableContext";
 import { GoPlus } from "react-icons/go";
 import { ProductInfoContext } from "../../../context/ProductInfoContext";
-import { RiEjectLine } from "react-icons/ri";
 
 const SpecificationTable: React.FC<{ product?: any }> = () => {
   const [tableContentStruct, setTableContentStruct] = useState<string[][]>([]);
@@ -201,6 +200,7 @@ const SpecificationTable: React.FC<{ product?: any }> = () => {
           }}
           select
           selectedRowsState={[selectedRows, setSelectedRows]}
+          interactive
         />
 
         <AddRowsBtn />
