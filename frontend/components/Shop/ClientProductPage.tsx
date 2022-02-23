@@ -120,11 +120,7 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
 
   const handleAddToCart = () => {
     addProductToCart(quantity, product.id);
-    checkIfInCart(product.id)
-      .then(() => {
-        setProductExistsInCart(true);
-      })
-      .catch(() => setProductExistsInCart(false));
+    setTimeout(() => setProductExistsInCart(true), 200);
   };
 
   return (
