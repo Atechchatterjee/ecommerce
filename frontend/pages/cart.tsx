@@ -59,18 +59,14 @@ const addProductToCart = async (quantity: number, productId: number) => {
 const Cart: NextPage = () => {
   const [cartItems, setCartItems] = useState<any[][]>([]);
   const heading = ["Image", "product name", "price", "quantity", "total price"];
-  const [finalPrice, setFinalPrice] = useState<number>(0);
   const [selectedItems, setSelectedItems] = useState<any>({});
   const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
+  const [reRender, setReRender] = useState<boolean>(false);
 
   const fillCartItems = (items: any[], finalPriceCalc: number) => {
     setCartItems([
       ...items.map((item) => {
         finalPriceCalc += parseInt(item.total_price);
-        setQuantities({
-          ...quantities,
-          [item.product_id]: parseInt(item.quantity),
-        });
         return [
           item.product_id,
           <Image
@@ -96,11 +92,7 @@ const Cart: NextPage = () => {
             onBlur={(e: any) => {
               if (e.target.value === "") return;
               addProductToCart(parseInt(e.target.value), item.product_id);
-              getCartItems().then((items) => {
-                let finalPriceCalc = 0;
-                fillCartItems(items, finalPriceCalc);
-                setFinalPrice(finalPriceCalc);
-              });
+              setReRender(true);
             }}
           />,
           <Text color="blueSolid.200" fontWeight="semibold">
@@ -128,9 +120,9 @@ const Cart: NextPage = () => {
     getCartItems().then((items) => {
       let finalPriceCalc = 0;
       fillCartItems(items, finalPriceCalc);
-      setFinalPrice(finalPriceCalc);
+      setReRender(false);
     });
-  }, []);
+  }, [reRender]);
 
   return (
     <Box
@@ -180,11 +172,7 @@ const Cart: NextPage = () => {
               deleteItemsFromCart(
                 Object.keys(selectedItems).map((key) => parseInt(key))
               ).then(() => {
-                getCartItems().then((items) => {
-                  let finalPriceCalc = 0;
-                  fillCartItems(items, finalPriceCalc);
-                  setFinalPrice(finalPriceCalc);
-                });
+                setReRender(true);
               });
             }}
           >
