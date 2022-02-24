@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import constants from "../../util/Constants";
 import Product from "../Shop/Product";
 import {
@@ -15,6 +15,7 @@ import {
   ModalOverlay,
 } from "@chakra-ui/react";
 import axios from "axios";
+import { Product as ProductType } from "../../types/shop";
 
 interface Product {
   product_id: number;
@@ -25,12 +26,35 @@ interface Product {
   category: number;
 }
 
+const fetchAllProducts = async (): Promise<Product[]> => {
+  console.log("fetching all products");
+  return new Promise((resolve) => {
+    axios
+      .get(`${constants.url}/shop/getallproducts/`, { withCredentials: true })
+      .then((res) => {
+        const allProducts = res.data.allProducts;
+        resolve(allProducts);
+      })
+      .catch((err) => console.error(err));
+  });
+};
+
 const AllProducts: React.FunctionComponent = () => {
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [columns, _] = useState<string>("3");
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [del, setDel] = useState<boolean>(false);
   const [prdDel, setPrdDel] = useState<Product>();
+
+  const deleteProduct = (productId: any) => {
+    axios
+      .delete(`${constants.url}/shop/delete-product/${productId}/`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log(res);
+      });
+  };
 
   // modal to confirm delete-action
   const DeleteModal: React.FC<{ confirmDelete: Function }> = ({
@@ -78,19 +102,15 @@ const AllProducts: React.FunctionComponent = () => {
     setAllProducts(copyProducts);
   };
 
-  const fetchAllProducts = () => {
-    axios
-      .get(`${constants.url}/shop/getallproducts/`, { withCredentials: true })
-      .then((res) => {
-        const allProducts = res.data.allProducts;
-        setAllProducts(allProducts);
-        console.log(allProducts);
-      });
-  };
-
   useEffect(() => {
-    fetchAllProducts();
+    fetchAllProducts().then((allProducts) => setAllProducts(allProducts));
   }, []);
+
+  // useMemo(async () => await fetchAllProducts(), [fetchAllProducts]).then(
+  //   (products) => {
+  //     setAllProducts(products);
+  //   }
+  // );
 
   useEffect(() => {
     if (del) {
@@ -126,7 +146,7 @@ const AllProducts: React.FunctionComponent = () => {
       })
       .then((res) => {
         console.log(res);
-        fetchAllProducts();
+        fetchAllProducts().then((allProducts) => setAllProducts(allProducts));
       })
       .catch((err) => {
         console.error(err);
@@ -187,6 +207,7 @@ const AllProducts: React.FunctionComponent = () => {
       <DeleteModal
         confirmDelete={() => {
           setDel(true);
+          if (prdDel) deleteProduct(prdDel.product_id);
         }}
       />
     </Center>
