@@ -154,7 +154,6 @@ const SelectCategory: React.FC<Props> = ({
               grow={true}
               onSelect={(nodeId) => {
                 let id: number | string | null = nodeId[0];
-                console.log("onSelect id = ", id);
 
                 if (typeof id === "number") {
                   setSelectedCategory(id);
