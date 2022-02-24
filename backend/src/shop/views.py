@@ -73,18 +73,14 @@ def does_cart_exists(email: str, product_id: int) -> (bool):
 @permission_classes([Is_Admin])
 @parser_classes([MultiPartParser, FormParser])
 def create_product(request):
-    (product_name,
-     product_description,
-     product_price,
-     product_image,
-     category_id
-     ) = itemgetter(
-        'productName',
-        'productDescription', 
-        'productPrice',
-        'productImage',
-        'categoryId' 
-    )(request.data)
+    request_params = [
+        'productName', 'productDescription',
+        'productPrice', 'categoryId']
+    [
+        product_name, product_description, product_price, category_id
+    ] = [
+        request.data[request_param] for request_param in request_params
+    ]
     try:
         new_product = Product(
             name=product_name,
@@ -94,11 +90,24 @@ def create_product(request):
                 int(category_id)) if category_id != "" else None
         )
         new_product.save()
-        save_product_images(new_product, product_image)
+        images = []
+        for key in request.data:
+            if key not in request_params:
+                images.append(request.data.get(key))
+        save_product_images(new_product, images)
         return Response(status=status.HTTP_200_OK)
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+
+@api_view(['DELETE'])
+@permission_classes([Is_Admin])
+def delete_product(request, product_id):
+    try:
+        Product.objects.get(product_id=product_id).delete()
+        return Response(status=status.HTTP_200_OK)
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 def get_all_products(request):

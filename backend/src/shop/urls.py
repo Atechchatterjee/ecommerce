@@ -21,4 +21,5 @@ urlpatterns = [
     path('get-products-from-cart/', views.get_products_from_cart, name="getting products from cart"),
     path('product-exists-in-cart/', views.product_exists_in_cart, name="product exists in cart"),
     path('delete-cart-items/', views.delete_cart_items, name="delete cart items"),
+    path('delete-product/<int:product_id>/', views.delete_product, name="delete product"),
 ]
