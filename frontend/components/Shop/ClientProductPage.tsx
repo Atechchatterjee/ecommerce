@@ -14,6 +14,7 @@ import axios from "axios";
 import { OptionsData } from "../../types/shop";
 import { ProductInfoContext } from "../../context/ProductInfoContext";
 import ImageGallery from "./Product/ImageGallery";
+import CustomContainer from "../Custom/CustomContainer";
 
 const OptionButtons: React.FC<{
   optionValues: { id: number; value: string }[];
@@ -130,12 +131,12 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
       ) : (
         <Box margin="4em 5em">
           <Box float="left" marginBottom="3em" className="product-images">
-            <Container
-              boxShadow="0.2em 0.2em 0.2em 0.2em #e1e1e1"
+            <CustomContainer
               borderRadius="2xl"
               height="initial"
               width="50em"
               padding="2em"
+              interactive
             >
               <Image
                 objectFit="scale-down"
@@ -146,7 +147,7 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
                 width="50em"
                 height="40em"
               />
-            </Container>
+            </CustomContainer>
             <ImageGallery width="50em" />
           </Box>
           <Container

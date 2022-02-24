@@ -9,6 +9,7 @@ import AddRowModal from "../../Custom/AddRowModal";
 import { SpecTableContext } from "../../../context/SpecTableContext";
 import { GoPlus } from "react-icons/go";
 import { ProductInfoContext } from "../../../context/ProductInfoContext";
+import CustomContainer from "../../Custom/CustomContainer";
 
 const SpecificationTable: React.FC<{ product?: any }> = () => {
   const [tableContentStruct, setTableContentStruct] = useState<string[][]>([]);
@@ -181,86 +182,89 @@ const SpecificationTable: React.FC<{ product?: any }> = () => {
       });
   }, [product, tableExists]);
 
-  return (
-    <>
-      <Container
-        position="relative"
-        boxShadow="0.2em 0.2em 0.2em 0.2em #e1e1e1"
-        height="inherit"
-        padding="2em 2em 5em 2em"
-        borderRadius="lg"
-      >
-        <CustomTable
-          rows={tableContentStruct}
-          heading={heading}
-          rowCb={(indx: number) => {
-            setOpenAddRowModal(true);
-            setModifyAddRowModal(true);
-            setIndxToModify(indx);
-          }}
-          select
-          selectedRowsState={[selectedRows, setSelectedRows]}
+  if (tableExists)
+    return (
+      <>
+        <CustomContainer
+          position="relative"
+          // boxShadow="0.2em 0.2em 0.2em 0.2em #e1e1e1"
           interactive
-        />
+          height="inherit"
+          padding="2em 2em 5em 2em"
+          borderRadius="lg"
+        >
+          <CustomTable
+            rows={tableContentStruct}
+            heading={heading}
+            rowCb={(indx: number) => {
+              setOpenAddRowModal(true);
+              setModifyAddRowModal(true);
+              setIndxToModify(indx);
+            }}
+            select
+            selectedRowsState={[selectedRows, setSelectedRows]}
+            interactive
+          />
 
-        <AddRowsBtn />
-        {tableContentStruct.length !== 0 ? (
-          <Box>
-            <Tooltip label="Save">
-              <Button
-                variant="blueSolid"
-                marginTop="1em"
-                position="absolute"
-                right="5em"
-                onClick={() => saveTableContent()}
-                isLoading={loadingSaveBtn}
-              >
-                <FaSave />
-              </Button>
-            </Tooltip>
-            <Tooltip label="Delete">
-              <Button
-                variant="pinkSolid"
-                marginTop="1em"
-                position="absolute"
-                right="9em"
-                onClick={() => {
-                  deleteRows();
-                }}
-              >
-                <FaTrash />
-              </Button>
-            </Tooltip>
-          </Box>
-        ) : (
-          <></>
-        )}
-      </Container>
-      <TableModalContext.Provider
-        value={{
-          createTableModal: [openCreateTableModal, setOpenCreateTableModal],
-          colNames: [columnNames, setColumnNames],
-          colNo: [columnNo, setColumnNo],
-          confirmCol: [confirmColumn, setConfirmColumn],
-          addRowModal: [openAddRowModal, setOpenAddRowModal],
-          tableContent: [tableContentStruct, setTableContentStruct],
-          modifyTable: [modifyAddRowModal, setModifyAddRowModal],
-        }}
-      >
-        <AddRowModal
-          title={modifyAddRowModal ? "Modify Row" : "Add Row"}
-          buttonName={modifyAddRowModal ? "Modify" : "Add"}
-          rowPlaceholder={["Specification", "Details"]}
-          cb={(tableContent) => {
-            console.log("table content", tableContent);
-            if (modifyAddRowModal)
-              modifyTableStruct(tableContent, indxToModify);
-            else addRowToTable(tableContent);
+          <AddRowsBtn />
+          {tableContentStruct.length !== 0 ? (
+            <Box>
+              <Tooltip label="Save">
+                <Button
+                  variant="blueSolid"
+                  marginTop="1em"
+                  position="absolute"
+                  right="5em"
+                  onClick={() => saveTableContent()}
+                  isLoading={loadingSaveBtn}
+                >
+                  <FaSave />
+                </Button>
+              </Tooltip>
+              <Tooltip label="Delete">
+                <Button
+                  variant="pinkSolid"
+                  marginTop="1em"
+                  position="absolute"
+                  right="9em"
+                  onClick={() => {
+                    deleteRows();
+                  }}
+                >
+                  <FaTrash />
+                </Button>
+              </Tooltip>
+            </Box>
+          ) : (
+            <></>
+          )}
+        </CustomContainer>
+        <TableModalContext.Provider
+          value={{
+            createTableModal: [openCreateTableModal, setOpenCreateTableModal],
+            colNames: [columnNames, setColumnNames],
+            colNo: [columnNo, setColumnNo],
+            confirmCol: [confirmColumn, setConfirmColumn],
+            addRowModal: [openAddRowModal, setOpenAddRowModal],
+            tableContent: [tableContentStruct, setTableContentStruct],
+            modifyTable: [modifyAddRowModal, setModifyAddRowModal],
           }}
-        />
-      </TableModalContext.Provider>
-    </>
-  );
+        >
+          <AddRowModal
+            title={modifyAddRowModal ? "Modify Row" : "Add Row"}
+            buttonName={modifyAddRowModal ? "Modify" : "Add"}
+            rowPlaceholder={["Specification", "Details"]}
+            cb={(tableContent) => {
+              console.log("table content", tableContent);
+              if (modifyAddRowModal)
+                modifyTableStruct(tableContent, indxToModify);
+              else addRowToTable(tableContent);
+            }}
+          />
+        </TableModalContext.Provider>
+      </>
+    );
+  else return <></>;
 };
 
 export default SpecificationTable;

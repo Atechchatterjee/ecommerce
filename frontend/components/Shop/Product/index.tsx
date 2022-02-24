@@ -6,6 +6,7 @@ import ProductDescription from "./ProductDescription";
 import EditBtn from "./EditBtn";
 import DeleteBtn from "./DeleteBtn";
 import UploadBtn from "./UploadBtn";
+import CustomContainer from "../../../components/Custom/CustomContainer";
 
 interface Props {
   id: number;
@@ -22,6 +23,7 @@ interface Props {
     image?: File
   ) => void;
   onDelete?: Function;
+  defaultBoxShadow?: boolean;
 }
 
 const createImageUrl = (url: string, image: File | undefined): string =>
@@ -38,6 +40,7 @@ const Product: React.FC<Props> = ({
   editable,
   cb,
   onDelete,
+  defaultBoxShadow,
 }) => {
   const [edit, setEdit] = useState<boolean>(false); // toggles the edit mode
   const [triggerUpload, setTriggerUpload] = useState<boolean>(false);
@@ -48,13 +51,13 @@ const Product: React.FC<Props> = ({
   }, [image]);
 
   return (
-    <Container
+    <CustomContainer
       height="40em"
       width="30em"
-      boxShadow="0.2em 0.2em 0.2em 0.2em #e1e1e1"
       padding="0"
       position="relative"
       borderRadius="lg"
+      interactive
     >
       <ProductContext.Provider
         value={{
@@ -97,7 +100,7 @@ const Product: React.FC<Props> = ({
           }}
         />
       </ProductContext.Provider>
-    </Container>
+    </CustomContainer>
   );
 };
 

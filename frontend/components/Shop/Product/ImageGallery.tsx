@@ -3,6 +3,7 @@ import { HStack, Container, Image, ContainerProps } from "@chakra-ui/react";
 import constants from "../../../util/Constants";
 import { ProductInfoContext } from "../../../context/ProductInfoContext";
 import { scrollBarStyle } from "../../../util/ScrollBarStyle";
+import CustomContainer from "../../Custom/CustomContainer";
 
 const createImageUrl = (url: string, image: File | undefined): string =>
   image
@@ -14,8 +15,8 @@ const ImageGallery = ({ ...props }: ContainerProps) => {
   const [product] = productInfo;
 
   return product ? (
-    <Container
-      boxShadow="0.2em 0.2em 0.2em 0.2em #e1e1e1"
+    <CustomContainer
+      // boxShadow="0.2em 0.2em 0.2em 0.2em #e1e1e1"
       width="30em"
       height="10em"
       marginTop="1em"
@@ -23,6 +24,7 @@ const ImageGallery = ({ ...props }: ContainerProps) => {
       overflowX="scroll"
       overflowY="hidden"
       sx={scrollBarStyle}
+      interactive
       {...props}
     >
       <HStack height="inherit">
@@ -40,7 +42,7 @@ const ImageGallery = ({ ...props }: ContainerProps) => {
           <></>
         )}
       </HStack>
-    </Container>
+    </CustomContainer>
   ) : (
     <></>
   );

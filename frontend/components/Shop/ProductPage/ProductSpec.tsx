@@ -147,11 +147,11 @@ const ProductSpec: React.FC = () => {
           </Button>
         </Container>
         <Container float="left" marginTop="2em" marginLeft="2em" width="40em">
+          <SpecificationTable />
           <OptionsTable
             product={product}
             triggerOpen={[isOpenOptionModal, setIsOpenOptionModal]}
           />
-          <SpecificationTable />
         </Container>
       </Box>
     </SpecTableContext.Provider>

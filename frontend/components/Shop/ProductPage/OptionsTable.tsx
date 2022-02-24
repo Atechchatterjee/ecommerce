@@ -18,6 +18,7 @@ import { FaCheck } from "react-icons/fa";
 import constants from "../../../util/Constants";
 import axios from "axios";
 import { OptionsData } from "../../../types/shop";
+import CustomContainer from "../../Custom/CustomContainer";
 
 const scrollBarStyle = {
   "&::-webkit-scrollbar": {
@@ -42,13 +43,14 @@ const DisplayFetchedOptions: React.FC<{ fetchedOptions: any[] }> = ({
 }) => (
   <Container marginTop="2em" marginLeft="-1em" width="50em">
     {fetchedOptions.map((option: any) => (
-      <Container
-        boxShadow="0.2em 0.2em 0.2em 0.2em #e1e1e1"
+      <CustomContainer
         padding="1.8em"
         marginTop="1em"
         borderRadius="lg"
         overflowX="scroll"
+        interactive
         sx={scrollBarStyle}
+        cursor="pointer"
       >
         <HStack>
           <Text marginRight="1em" fontWeight="semibold">
@@ -67,7 +69,7 @@ const DisplayFetchedOptions: React.FC<{ fetchedOptions: any[] }> = ({
             </Button>
           ))}
         </HStack>
-      </Container>
+      </CustomContainer>
     ))}
   </Container>
 );
@@ -220,9 +222,13 @@ const OptionsTable: React.FC<{
           borderRadius="lg"
           marginBottom="2em"
         >
-          <Text fontSize="1.5em" fontWeight="semibold">
-            Options
-          </Text>
+          {/* {optionValues.length > 0 ? (
+            <Text fontSize="1.5em" fontWeight="semibold">
+              Options
+            </Text>
+          ) : (
+            <></>
+          )} */}
           <DisplayFetchedOptions fetchedOptions={fetchedOptions} />
         </Container>
       ) : (
