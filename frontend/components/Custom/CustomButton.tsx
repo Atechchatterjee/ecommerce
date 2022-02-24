@@ -19,7 +19,7 @@ const CustomButtonTheme = extendTheme({
           fontWeight: "medium",
           _hover: { bg: "#314775" },
         }),
-        blueOutline: () => ({
+        blueOutline: (props: any) => ({
           bg: "white",
           color: "#091353",
           outlineColor: "#091354",
@@ -27,7 +27,7 @@ const CustomButtonTheme = extendTheme({
           borderRadius: "sm",
           fontFamily: "Sora",
           fontWeight: "medium",
-          _hover: { bg: "#091353", color: "#ffffff" },
+          _hover: !props.disabled ? { bg: "#091353", color: "#ffffff" } : {},
         }),
         pinkSolid: () => ({
           bg: "#9D84B7",
