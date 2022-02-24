@@ -17,15 +17,15 @@ import React, { useState } from "react";
 import axios from "axios";
 import constants from "../../util/Constants";
 import SelectCategory from "./SelectCategory";
-import CustomFileInput from "../Custom/CustomFileInput";
 import { Formik } from "formik";
+import DragUpload from "../Custom/DragUpload";
 
 interface ProductData {
   productName: string;
   productDescription: string;
   productPrice: string;
   categoryId: number | null;
-  productImage: File | null;
+  productImages: File[] | null;
 }
 
 const createProduct = async ({
@@ -33,7 +33,7 @@ const createProduct = async ({
   productDescription,
   productPrice,
   categoryId,
-  productImage,
+  productImages,
 }: ProductData): Promise<void> => {
   let formData = new FormData();
 
@@ -44,7 +44,10 @@ const createProduct = async ({
   if (typeof categoryId === "number")
     formData.append("categoryId", categoryId.toString());
   else formData.append("categoryId", "");
-  if (productImage) formData.append("productImage", productImage);
+
+  productImages?.forEach((productImage, indx) => {
+    if (productImage) formData.append(`images[${indx}]`, productImage);
+  });
 
   try {
     console.log({ formData });
@@ -60,7 +63,8 @@ const createProduct = async ({
 
 const AddProduct = (props: ContainerProps) => {
   const [categoryId, setCategoryId] = useState<number | null>(null);
-  const [productImage, setProductImage] = useState<File | null>(null);
+  const [productImages, setProductImages] = useState<File[] | null>(null);
+  const [clearUploadFiles, setClearUploadFiles] = useState<boolean>(false);
 
   const toast = useToast();
 
@@ -93,7 +97,7 @@ const AddProduct = (props: ContainerProps) => {
             onSubmit={(values: any, { setSubmitting, resetForm }) => {
               setSubmitting(true);
               values["categoryId"] = categoryId;
-              values["productImage"] = productImage;
+              values["productImages"] = productImages;
               console.log({ values });
               createProduct(values)
                 .then(() => {
@@ -173,15 +177,15 @@ const AddProduct = (props: ContainerProps) => {
                     setCategoryId(selectedCategory)
                   }
                 />
-                <CustomFileInput
-                  variant="pinkSolid"
-                  borderRadius="lg"
-                  width="full"
-                  marginTop="1em"
-                  customText="Upload Image"
-                  onChange={(file) => {
-                    setProductImage(file);
+                <DragUpload
+                  marginTop="2em"
+                  marginLeft="-1em"
+                  width="34em"
+                  onFileUpload={(files) => {
+                    console.log({ files });
+                    setProductImages(files);
                   }}
+                  clearUpload={[clearUploadFiles, setClearUploadFiles]}
                 />
                 <Button
                   borderRadius="lg"
