@@ -93,6 +93,7 @@ const Cart: NextPage = () => {
               if (e.target.value === "") return;
               addProductToCart(parseInt(e.target.value), item.product_id);
               setReRender(true);
+              setQuantities({});
             }}
           />,
           <Text color="blueSolid.200" fontWeight="semibold">
