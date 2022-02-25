@@ -57,7 +57,7 @@ const Login: NextPage = () => {
                 </Tab>
               </TabList>
               <TabPanels>
-                <TabPanel on>
+                <TabPanel>
                   <SignUp />
                 </TabPanel>
                 <TabPanel>
