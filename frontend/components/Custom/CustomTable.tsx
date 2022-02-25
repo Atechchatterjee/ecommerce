@@ -1,4 +1,5 @@
 import {
+  Box,
   Table,
   Thead,
   Tbody,
@@ -18,7 +19,7 @@ interface Props extends TableProps {
   tableCaption?: string;
   rowCb?: Function;
   select?: boolean;
-  selectedRowsState?: [selectedRows: any[], setSelectedRows: Function];
+  selectedRowsState: [selectedRows: any[], setSelectedRows: Function];
   excludeSelectForRows?: number[];
   interactive?: boolean;
 }
@@ -35,8 +36,8 @@ const CustomTable = ({
   ...props
 }: Props) => {
   const [selectTrigger, setSelectTrigger] = useState<boolean>(false);
-  const [selectedRows, setSelectedRows] =
-    selectedRowsState || useState<any>({});
+  // if (!selectedRowsState) selectedRowsState = useState<any>({});
+  const [selectedRows, setSelectedRows] = selectedRowsState;
 
   const toggleSelectedRows = (indx: any) => {
     if (!selectedRows[indx]) setSelectedRows({ ...selectedRows, [indx]: true });
@@ -47,6 +48,7 @@ const CustomTable = ({
     if (select)
       return (
         <Td
+          key={indx}
           textAlign="center"
           onClick={() => {
             toggleSelectedRows(indx);
@@ -104,39 +106,37 @@ const CustomTable = ({
       </Thead>
       <Tbody>
         {rows.map((rowEl, i) => (
-          <>
-            <Tr
-              key={i}
-              {...(interactive ? { _hover: { rowHoverStyle } } : {})}
-              onClick={() => {
-                if (!selectTrigger) setSelectTrigger(false);
-              }}
-            >
-              {rowEl.map((columnElement: any, indx: number) =>
-                indx !== 0 ? (
-                  <Td
-                    key={indx}
-                    onClick={() => {
-                      if (rowCb && selectTrigger === false) rowCb(rowEl[0]);
-                    }}
-                  >
-                    {columnElement}
-                  </Td>
-                ) : (
-                  <></>
-                )
-              )}
-              {excludeSelectForRows ? (
-                excludeSelectForRows.includes(i) ? (
-                  <Td></Td>
-                ) : (
-                  <SelectRowCheckBox indx={parseInt(rowEl[0])} key={i} />
-                )
+          <Tr
+            key={i}
+            {...(interactive ? { _hover: { rowHoverStyle } } : {})}
+            onClick={() => {
+              if (!selectTrigger) setSelectTrigger(false);
+            }}
+          >
+            {rowEl.map((columnElement: any, indx: number) =>
+              indx !== 0 ? (
+                <Td
+                  key={indx}
+                  onClick={() => {
+                    if (rowCb && selectTrigger === false) rowCb(rowEl[0]);
+                  }}
+                >
+                  {columnElement}
+                </Td>
               ) : (
-                <SelectRowCheckBox indx={parseInt(rowEl[0])} key={i} />
-              )}
-            </Tr>
-          </>
+                <Box key={indx} display="none" />
+              )
+            )}
+            {excludeSelectForRows ? (
+              excludeSelectForRows.includes(i) ? (
+                <Td key={i}></Td>
+              ) : (
+                <SelectRowCheckBox indx={parseInt(rowEl[0])} />
+              )
+            ) : (
+              <SelectRowCheckBox indx={parseInt(rowEl[0])} />
+            )}
+          </Tr>
         ))}
       </Tbody>
     </Table>

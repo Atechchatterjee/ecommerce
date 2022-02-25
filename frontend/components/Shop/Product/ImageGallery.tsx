@@ -16,7 +16,6 @@ const ImageGallery = ({ ...props }: ContainerProps) => {
 
   return product ? (
     <CustomContainer
-      // boxShadow="0.2em 0.2em 0.2em 0.2em #e1e1e1"
       width="30em"
       height="10em"
       marginTop="1em"
@@ -29,8 +28,9 @@ const ImageGallery = ({ ...props }: ContainerProps) => {
     >
       <HStack height="inherit">
         {product.image ? (
-          product.image.map(({ image }: any) => (
+          product.image.map(({ image }: any, indx) => (
             <Image
+              key={indx}
               src={createImageUrl(image, undefined)}
               boxSize="10em"
               fit="contain"

@@ -7,6 +7,7 @@ import {
   Text,
   Avatar,
   HStack,
+  Box,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 
@@ -50,7 +51,7 @@ const Footer: React.FC = () => {
         gap={4}
         padding="6em 15em"
       >
-        <Container w="100%">
+        <Container w="100%" key="1">
           <VStack spacing={10}>
             <div>
               <Heading
@@ -115,7 +116,7 @@ const Footer: React.FC = () => {
             </div>
           </VStack>
         </Container>
-        <Container>
+        <Container key="2">
           <VStack style={{ textAlign: "left" }}>
             <div>
               <Heading
@@ -144,7 +145,7 @@ const Footer: React.FC = () => {
             </div>
           </VStack>
         </Container>
-        <Container>
+        <Container key="3">
           <VStack style={{ textAlign: "left" }}>
             <div>
               <Heading
@@ -157,8 +158,8 @@ const Footer: React.FC = () => {
                 My Account
               </Heading>
               <Container marginTop="0.5em" padding="0">
-                {col2.map((val) => (
-                  <>
+                {col2.map((val, indx) => (
+                  <Box key={indx}>
                     <div style={{ height: "0.7em" }}></div>
                     <Link
                       size="sm"
@@ -167,13 +168,13 @@ const Footer: React.FC = () => {
                     >
                       {val}
                     </Link>
-                  </>
+                  </Box>
                 ))}
               </Container>
             </div>
           </VStack>
         </Container>
-        <Container>
+        <Container key="4">
           <VStack style={{ textAlign: "left" }}>
             <div>
               <Heading
@@ -186,8 +187,8 @@ const Footer: React.FC = () => {
                 Customer Service
               </Heading>
               <Container marginTop="0.5em" padding="0">
-                {col3.map((val) => (
-                  <>
+                {col3.map((val, indx) => (
+                  <Box key={indx}>
                     <div style={{ height: "0.7em" }}></div>
                     <Link
                       size="sm"
@@ -196,7 +197,7 @@ const Footer: React.FC = () => {
                     >
                       {val}
                     </Link>
-                  </>
+                  </Box>
                 ))}
               </Container>
             </div>

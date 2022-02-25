@@ -34,6 +34,7 @@ const AddRowModal: React.FC<{
     return [
       ...DisplayRowInputElements(column - 1),
       <RowInputElement
+        key={column}
         column={column}
         placeholder={
           !!rowPlaceholder ? rowPlaceholder[column - 1] : `Row ${column}`
@@ -42,12 +43,13 @@ const AddRowModal: React.FC<{
     ];
   };
 
-  const RowInputElement: React.FC<{ column: number; placeholder: string }> = ({
-    column,
-    placeholder,
-  }): JSX.Element => (
+  const RowInputElement: React.FC<{
+    key: number;
+    column: number;
+    placeholder: string;
+  }> = ({ key, column, placeholder }): JSX.Element => (
     <Input
-      key={column}
+      key={key}
       placeholder={placeholder}
       width="23.8em"
       onChange={(e) => {

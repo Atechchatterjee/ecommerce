@@ -65,20 +65,22 @@ const Cart: NextPage = () => {
 
   const fillCartItems = (items: any[], finalPriceCalc: number) => {
     setCartItems([
-      ...items.map((item) => {
+      ...items.map((item, indx) => {
         finalPriceCalc += parseInt(item.total_price);
         return [
-          item.product_id,
+          <Text key={`${indx}0`}>{item.product_id}</Text>,
           <Image
+            key={`${indx}0`}
             src={createImageUrl(item.images[0].image, undefined)}
             w="20"
             h="20"
             objectFit="contain"
           />,
-          item.name,
-          item.price,
+          <Text key={`${indx}1`}>{item.name}</Text>,
+          <Text key={`${indx}2`}>{item.price}</Text>,
           <Input
             value={quantities[item.product_id]}
+            key={`${indx}3`}
             size="md"
             width="5em"
             type="number"
@@ -96,7 +98,7 @@ const Cart: NextPage = () => {
               setQuantities({});
             }}
           />,
-          <Text color="blueSolid.200" fontWeight="semibold">
+          <Text key={`${indx}4`} color="blueSolid.200" fontWeight="semibold">
             {item.total_price}
           </Text>,
         ];
@@ -123,7 +125,7 @@ const Cart: NextPage = () => {
       fillCartItems(items, finalPriceCalc);
       setReRender(false);
     });
-  }, [reRender]);
+  }, [reRender, fillCartItems]);
 
   return (
     <Box

@@ -96,8 +96,8 @@ const DragUpload = ({ onFileUpload, clearUpload, ...props }: Props) => {
           <></>
         )}
         <DummyInput />
-        {uploadedFiles.map((file) => (
-          <HStack marginTop="1em">
+        {uploadedFiles.map((file, indx) => (
+          <HStack marginTop="1em" key={indx}>
             <ImagePreview imageFile={file} />
             <Text>{file.name}</Text>
           </HStack>

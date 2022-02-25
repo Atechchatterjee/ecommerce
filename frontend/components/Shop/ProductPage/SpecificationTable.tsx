@@ -83,8 +83,8 @@ const SpecificationTable: React.FC<{ product?: any }> = () => {
     if (heading.length === 0)
       setHeading([
         ...heading,
-        <Text>Specification</Text>,
-        <Text>Details</Text>,
+        <Text key={heading.length + 1}>Specification</Text>,
+        <Text key={heading.length + 2}>Details</Text>,
       ]);
   };
 

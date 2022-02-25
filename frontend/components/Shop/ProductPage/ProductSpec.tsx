@@ -28,8 +28,8 @@ const ProductSpec: React.FC = () => {
     if (specTableHeading.length === 0)
       setSpecTableHeading([
         ...specTableHeading,
-        <Text>Specification</Text>,
-        <Text>Details</Text>,
+        <Text key={specTableHeading.length + 1}>Specification</Text>,
+        <Text key={specTableHeading.length + 2}>Details</Text>,
       ]);
   };
 

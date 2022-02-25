@@ -42,8 +42,9 @@ const DisplayFetchedOptions: React.FC<{ fetchedOptions: any[] }> = ({
   fetchedOptions,
 }) => (
   <Container marginTop="2em" marginLeft="-1em" width="50em">
-    {fetchedOptions.map((option: any) => (
+    {fetchedOptions.map((option: any, indx) => (
       <CustomContainer
+        key={indx}
         padding="1.8em"
         marginTop="1em"
         borderRadius="lg"
@@ -56,8 +57,9 @@ const DisplayFetchedOptions: React.FC<{ fetchedOptions: any[] }> = ({
           <Text marginRight="1em" fontWeight="semibold">
             {option.name} :
           </Text>
-          {option.values.map((value: any) => (
+          {option.values.map((value: any, indx: any) => (
             <Button
+              key={indx}
               variant="pinkSolid"
               marginLeft="2em"
               borderRadius="full"

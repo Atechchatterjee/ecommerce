@@ -24,6 +24,7 @@ const OptionButtons: React.FC<{
   <Box>
     {optionValues.map((optionValue, indx) => (
       <Button
+        key={indx}
         {...(optionValue.id !== selectedOption
           ? { colorScheme: "whiteAlpha", textColor: "black" }
           : { variant: "pinkSolid" })}
@@ -193,8 +194,8 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
               />
             </HStack>
             <Box marginTop="3em" width="inherit" className="options-area">
-              {fetchedOptions.map((option) => (
-                <HStack marginTop="1.5em">
+              {fetchedOptions.map((option, indx) => (
+                <HStack marginTop="1.5em" key={indx}>
                   <Text fontWeight="semibold" fontSize="1.1em">
                     {option.name} :
                   </Text>
