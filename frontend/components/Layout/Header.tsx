@@ -48,7 +48,6 @@ const Header: React.FC = () => {
         </MenuButton>
         <MenuList
           style={{ fontSize: "0.9em" }}
-          autoSelect={false}
           borderColor="#091353"
           bgColor="#091353"
         >
