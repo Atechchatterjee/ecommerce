@@ -54,7 +54,7 @@ const Product: React.FC<Props> = ({
     <CustomContainer
       height="40em"
       width="30em"
-      padding="0"
+      padding="0 1em"
       position="relative"
       borderRadius="lg"
       interactive
