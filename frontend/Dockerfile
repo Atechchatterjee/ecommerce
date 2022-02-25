@@ -10,6 +10,6 @@ RUN npm install --frozen-lockfile
 
 COPY . .
 
-#RUN npm run build
+RUN npm run build
 
 EXPOSE 3000
