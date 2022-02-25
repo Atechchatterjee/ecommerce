@@ -77,7 +77,6 @@ const Navbar: React.FC = () => {
                       <MenuButton
                         key={link[0]}
                         rounded={"full"}
-                        variant={"link"}
                         cursor={"pointer"}
                         minW={0}
                       >
