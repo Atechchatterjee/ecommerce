@@ -36,7 +36,6 @@ const CustomTable = ({
   ...props
 }: Props) => {
   const [selectTrigger, setSelectTrigger] = useState<boolean>(false);
-  // if (!selectedRowsState) selectedRowsState = useState<any>({});
   const [selectedRows, setSelectedRows] = selectedRowsState;
 
   const toggleSelectedRows = (indx: any) => {
@@ -58,9 +57,6 @@ const CustomTable = ({
             size="lg"
             colorScheme="pink"
             isChecked={selectedRows[indx]}
-            onChange={() => {
-              toggleSelectedRows(indx);
-            }}
           />
         </Td>
       );
@@ -131,7 +127,7 @@ const CustomTable = ({
               excludeSelectForRows.includes(i) ? (
                 <Td key={i}></Td>
               ) : (
-                <SelectRowCheckBox indx={parseInt(rowEl[0])} />
+                <SelectRowCheckBox indx={parseInt(rowEl[0].props.children)} />
               )
             ) : (
               <SelectRowCheckBox indx={parseInt(rowEl[0])} />
