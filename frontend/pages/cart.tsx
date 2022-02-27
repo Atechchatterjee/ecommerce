@@ -63,6 +63,21 @@ const Cart: NextPage = () => {
   const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
   const [reRender, setReRender] = useState<boolean>(false);
 
+  const finalPriceColumn = (finalPriceCalc: number) =>
+    new Array(heading.length + 1).fill("").map((_, indx) =>
+      indx < heading.length ? (
+        indx < heading.length - 1 ? (
+          ""
+        ) : (
+          <Text fontWeight="semibold">final price : </Text>
+        )
+      ) : (
+        <Text fontWeight="semibold" textColor="secondaryBlue.200">
+          {finalPriceCalc}
+        </Text>
+      )
+    );
+
   const fillCartItems = (items: any[], finalPriceCalc: number) => {
     setCartItems([
       ...items.map((item, indx) => {
@@ -103,19 +118,7 @@ const Cart: NextPage = () => {
           </Text>,
         ];
       }),
-      new Array(heading.length + 1).fill("").map((_, indx) =>
-        indx < heading.length ? (
-          indx < heading.length - 1 ? (
-            ""
-          ) : (
-            <Text fontWeight="semibold">final price : </Text>
-          )
-        ) : (
-          <Text fontWeight="semibold" textColor="secondaryBlue.200">
-            {finalPriceCalc}
-          </Text>
-        )
-      ),
+      finalPriceColumn(finalPriceCalc),
     ]);
   };
 
@@ -125,7 +128,7 @@ const Cart: NextPage = () => {
       fillCartItems(items, finalPriceCalc);
       setReRender(false);
     });
-  }, [reRender, fillCartItems]);
+  }, [reRender]);
 
   return (
     <Box
@@ -160,20 +163,23 @@ const Cart: NextPage = () => {
           top="2em"
           position="absolute"
           width="95%"
-          heading={heading}
           rows={cartItems}
+          heading={heading}
+          interactive
           select
-          excludeSelectForRows={[cartItems.length - 1]}
           selectedRowsState={[selectedItems, setSelectedItems]}
+          excludeSelectForRows={[cartItems.length - 1]}
         />
-        <Box position="absolute" right="2em" bottom="1.5em">
+        <Box position="absolute" bottom="2em" right="2em">
           <Button
             variant="pinkSolid"
             float="left"
             marginRight="1em"
             onClick={() => {
               deleteItemsFromCart(
-                Object.keys(selectedItems).map((key) => parseInt(key))
+                Object.keys(selectedItems).map((key) =>
+                  selectedItems[key] ? parseInt(key) : -1
+                )
               ).then(() => {
                 setReRender(true);
               });
