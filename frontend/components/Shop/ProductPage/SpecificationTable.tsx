@@ -187,7 +187,6 @@ const SpecificationTable: React.FC<{ product?: any }> = () => {
       <>
         <CustomContainer
           position="relative"
-          // boxShadow="0.2em 0.2em 0.2em 0.2em #e1e1e1"
           interactive
           height="inherit"
           padding="2em 2em 5em 2em"
