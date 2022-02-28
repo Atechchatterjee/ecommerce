@@ -12,7 +12,7 @@ import {
 import React, { useState } from "react";
 
 const Footer: React.FC = () => {
-  const [col1, _] = useState<string[]>([
+  const [col1] = useState<string[]>([
     "About Us",
     "Team Member",
     "Career",
@@ -20,7 +20,7 @@ const Footer: React.FC = () => {
     "Affiliate",
     "Order History",
   ]);
-  const [col2, __] = useState<string[]>([
+  const [col2] = useState<string[]>([
     "Track My Order",
     "View Cart",
     "Sign In",
@@ -28,7 +28,7 @@ const Footer: React.FC = () => {
     "My Wishlist",
     "Privacy Policy",
   ]);
-  const [col3, ___] = useState<string[]>([
+  const [col3] = useState<string[]>([
     "Payment Methods",
     "Money-back gaurentee!",
     "Product Returns",
