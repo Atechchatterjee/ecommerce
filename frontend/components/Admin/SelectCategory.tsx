@@ -1,7 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import Tree, { ThemeSettings } from "@naisutech/react-tree";
 import { Category, CategoryMap } from "../../types/shop";
-import { convertToCategoryTree, convertToTree } from "../../util/Tree";
+import {
+  convertToCategoryTree,
+  convertToCustomTree,
+  convertToTree,
+} from "../../util/Tree";
 import axios from "axios";
 import constants from "../../util/Constants";
 import { Button } from "@chakra-ui/button";
@@ -14,6 +18,7 @@ import {
   ModalBody,
   ModalFooter,
 } from "@chakra-ui/modal";
+import CustomTree from "../Custom/CustomTree";
 
 // theme for category tree
 const myTheme: ThemeSettings = {
@@ -89,8 +94,12 @@ const SelectCategory: React.FC<Props> = ({
       }
 
       // creating a categoryTree from given categories from db
+      console.log({ categories });
       const tree = convertToCategoryTree(categories);
+      console.log({ tree });
       const nodeTree = convertToTree(tree);
+      const customTree = convertToCustomTree(categories);
+      console.log({ customTree });
 
       setNodes(nodeTree);
 
@@ -174,6 +183,7 @@ const SelectCategory: React.FC<Props> = ({
                   });
               }}
             />
+            <CustomTree nodes={nodes} />
           </ModalBody>
           <ModalFooter>
             <Button variant="blueSolid" onClick={() => setModalOpen(false)}>

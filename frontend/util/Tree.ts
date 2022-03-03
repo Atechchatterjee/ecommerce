@@ -1,7 +1,7 @@
 import { Category } from "../types/shop";
 
 export class CategoryNode {
-  val: Category | null = null;
+  val: any = null;
   children: CategoryNode[] = [];
 
   constructor(val: Category|null, children: CategoryNode[]) {
@@ -23,12 +23,29 @@ export class CategoryTree {
     return node.children.length === 0;
   }
 
-  createNode(value: Category): CategoryNode {
+  createNode(value: any): CategoryNode {
     return new CategoryNode(value, []);
   }
 
-  add(val: Category, parentId: number) {
+  add(val: any, parentId: number) {
     this.addRec(val, parentId, this.root);
+  }
+
+  addCustomTreeNode(val: any, parentId: number) {
+    this.addCustomTreeNodeRec(val, parentId, this.root);
+  }
+
+  addCustomTreeNodeRec(value: any, parentId: number, cur: CategoryNode) {
+    if(cur.children === null) 
+      return;
+
+    // finding the parent node and adding the new node to its children
+    if(cur.val?.id === parentId) {
+      cur.children.push(this.createNode(value));
+    }
+    for(const child of cur.children) {
+      this.addCustomTreeNodeRec(value, parentId, child);
+    }
   }
 
   addRec(value: Category, parentId: number, cur: CategoryNode) {
@@ -80,6 +97,28 @@ export const convertToCategoryTree = (categoryList: Category[]): CategoryTree =>
   return tree;
 }
 
+export const convertToCustomTree = (categoryList: Category[]): CategoryTree => {
+  let tree = new CategoryTree(null);
+
+  // adding the root categories (that do not belong to any sub category)
+  for(const category of categoryList) {
+    const categoryNode = {
+      name: category.category_name,
+      id: category.category_id,
+      parentId: category.sub_category
+    }
+    if(!category.sub_category) {
+      tree.root.children.push(
+        tree.createNode(categoryNode)
+      );
+    } else {
+      tree.addCustomTreeNode(category, category.sub_category);
+    }
+  }
+
+  return tree;
+}
+
 interface TreeNode {
   label: string;
   id: number;
@@ -87,8 +126,7 @@ interface TreeNode {
   items: TreeNode[] | null;
 }
 
-// traversing through the tree changing the Nodes to TreeNodes
-const traverse = (cur: CategoryNode, tree: CategoryTree, output: TreeNode[]) => {
+const nodesToTreeNodes = (cur: CategoryNode, tree: CategoryTree, output: TreeNode[]) => {
   if(!cur && cur !== tree.root) return;
   
   if(cur.val) {
@@ -131,7 +169,7 @@ const traverse = (cur: CategoryNode, tree: CategoryTree, output: TreeNode[]) => 
     for(const child of cur.children) {
       if(child.val) {
         if(!tree.isLeaf(child)) {
-          traverse(child, tree, output);
+          nodesToTreeNodes(child, tree, output);
         }
       }
     }
@@ -145,7 +183,7 @@ export const getRootNodes = (tree: CategoryTree): CategoryNode[] =>
 export const convertToTree = (tree: CategoryTree): TreeNode[] | null => {
   const output: TreeNode[] = [];
   for(const child of tree.root.children) {
-    traverse(child, tree, output);
+    nodesToTreeNodes(child, tree, output);
   }
   return output;
 }
