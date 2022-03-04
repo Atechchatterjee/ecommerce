@@ -100,19 +100,19 @@ export const convertToCategoryTree = (categoryList: Category[]): CategoryTree =>
 export const convertToCustomTree = (categoryList: Category[]): CategoryTree => {
   let tree = new CategoryTree(null);
 
-  // adding the root categories (that do not belong to any sub category)
   for(const category of categoryList) {
-    const categoryNode = {
+    // val of each node
+    const categoryNode = { 
       name: category.category_name,
       id: category.category_id,
       parentId: category.sub_category
     }
-    if(!category.sub_category) {
+    if(!category.sub_category) { // root nodes
       tree.root.children.push(
         tree.createNode(categoryNode)
       );
     } else {
-      tree.addCustomTreeNode(category, category.sub_category);
+      tree.addCustomTreeNode(categoryNode, category.sub_category);
     }
   }
 
