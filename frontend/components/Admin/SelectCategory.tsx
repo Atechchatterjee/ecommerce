@@ -82,6 +82,7 @@ const SelectCategory: React.FC<Props> = ({
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [nodes, setNodes] = useState<any>([]);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(-2);
+  const [customTree, setCustomTree] = useState<any>([]);
 
   useEffect(() => {
     getAllCategory().then((categories) => {
@@ -100,6 +101,7 @@ const SelectCategory: React.FC<Props> = ({
       const nodeTree = convertToTree(tree);
       const customTree = convertToCustomTree(categories);
       console.log({ customTree });
+      setCustomTree(customTree);
 
       setNodes(nodeTree);
 
@@ -183,7 +185,7 @@ const SelectCategory: React.FC<Props> = ({
                   });
               }}
             />
-            <CustomTree nodes={nodes} />
+            <CustomTree root={customTree.root} key="-1" />
           </ModalBody>
           <ModalFooter>
             <Button variant="blueSolid" onClick={() => setModalOpen(false)}>
