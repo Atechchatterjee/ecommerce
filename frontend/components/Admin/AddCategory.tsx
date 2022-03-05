@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input } from "@chakra-ui/input";
 import { Container, Center, Heading } from "@chakra-ui/layout";
-import { Button, useToast } from "@chakra-ui/react";
+import { Button, useToast, HStack } from "@chakra-ui/react";
 import { Category } from "../../types/shop";
 import SelectCategory from "./SelectCategory";
 import constants from "../../util/Constants";
 import axios from "axios";
+import CustomTree from "../Custom/CustomTree";
+import { convertToCustomTree } from "../../util/Tree";
+import RightClickMenu from "../Custom/RightClickMenu";
+import CustomContainer from "../Custom/CustomContainer";
 
 const createCategory = async (data: Category): Promise<void> => {
   try {
@@ -14,6 +18,39 @@ const createCategory = async (data: Category): Promise<void> => {
   } catch (err) {
     return Promise.reject(err);
   }
+};
+
+const getAllCategory = async (): Promise<Category[]> => {
+  try {
+    const res = await axios.get(`${constants.url}/shop/getallcategory/`, {
+      withCredentials: true,
+    });
+    return Promise.resolve(res.data.categories);
+  } catch (err) {
+    return Promise.reject(err);
+  }
+};
+
+const ListCategories = () => {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [customTreeRoot, setCustomTreeRoot] = useState<any>([]);
+
+  useEffect(() => {
+    getAllCategory().then((categories) => {
+      setCategories(categories);
+      const customTree = convertToCustomTree(categories);
+      console.log({ customTree });
+      setCustomTreeRoot(customTree.root);
+      console.log({ customTree });
+    });
+  }, []);
+  return (
+    <RightClickMenu>
+      <CustomContainer height="33em" padding="1em">
+        <CustomTree root={customTreeRoot} />
+      </CustomContainer>
+    </RightClickMenu>
+  );
 };
 
 const AddCategory = ({ ...props }) => {
@@ -93,6 +130,7 @@ const AddCategory = ({ ...props }) => {
           Add
         </Button>
       </Container>
+      <ListCategories />
     </>
   );
 };
