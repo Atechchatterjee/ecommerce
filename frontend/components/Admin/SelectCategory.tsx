@@ -19,6 +19,7 @@ import {
   ModalFooter,
 } from "@chakra-ui/modal";
 import CustomTree from "../Custom/CustomTree";
+import RightClickMenu from "../Custom/RightClickMenu";
 
 // theme for category tree
 const myTheme: ThemeSettings = {
@@ -157,15 +158,11 @@ const SelectCategory: React.FC<Props> = ({
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Tree
-              theme="theme1"
-              customTheme={myTheme}
-              nodes={nodes}
-              size="full"
-              grow={true}
-              onSelect={(nodeId) => {
-                let id: number | string | null = nodeId[0];
-
+            <CustomTree
+              root={customTree.root}
+              key="-1"
+              marginLeft="-1.8em"
+              selectCb={(id: any) => {
                 if (typeof id === "number") {
                   setSelectedCategory(id);
                   if (id < 0) id = null;
@@ -185,7 +182,6 @@ const SelectCategory: React.FC<Props> = ({
                   });
               }}
             />
-            <CustomTree root={customTree.root} key="-1" />
           </ModalBody>
           <ModalFooter>
             <Button variant="blueSolid" onClick={() => setModalOpen(false)}>
