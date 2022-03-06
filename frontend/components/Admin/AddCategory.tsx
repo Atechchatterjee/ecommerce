@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Input } from "@chakra-ui/input";
-import { Container, Center, Heading } from "@chakra-ui/layout";
-import { Button, useToast, HStack } from "@chakra-ui/react";
+import { Box, Center, Heading } from "@chakra-ui/layout";
+import { Button, Text, useToast, ContainerProps } from "@chakra-ui/react";
 import { Category } from "../../types/shop";
 import SelectCategory from "./SelectCategory";
 import constants from "../../util/Constants";
 import axios from "axios";
 import CustomTree from "../Custom/CustomTree";
 import { convertToCustomTree } from "../../util/Tree";
-import RightClickMenu from "../Custom/RightClickMenu";
 import CustomContainer from "../Custom/CustomContainer";
 
 const createCategory = async (data: Category): Promise<void> => {
@@ -31,7 +30,7 @@ const getAllCategory = async (): Promise<Category[]> => {
   }
 };
 
-const ListCategories = () => {
+const ListCategories = ({ ...props }: ContainerProps) => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [customTreeRoot, setCustomTreeRoot] = useState<any>([]);
 
@@ -44,12 +43,12 @@ const ListCategories = () => {
       console.log({ customTree });
     });
   }, []);
+
   return (
-    <RightClickMenu>
-      <CustomContainer height="33em" padding="1em">
-        <CustomTree root={customTreeRoot} />
-      </CustomContainer>
-    </RightClickMenu>
+    <CustomContainer height="33em" padding="1em" {...props} borderRadius="lg">
+      {customTreeRoot ? <CustomTree root={customTreeRoot} /> : <></>}
+      <Box height="full" />
+    </CustomContainer>
   );
 };
 
@@ -60,8 +59,7 @@ const AddCategory = ({ ...props }) => {
 
   return (
     <>
-      <Container
-        boxShadow="0.2em 0.2em 0.2em 0.2em #e1e1e1"
+      <CustomContainer
         height="33em"
         width="60em"
         padding="3em"
@@ -129,8 +127,8 @@ const AddCategory = ({ ...props }) => {
         >
           Add
         </Button>
-      </Container>
-      <ListCategories />
+      </CustomContainer>
+      <ListCategories marginTop="3em" />
     </>
   );
 };
