@@ -8,6 +8,7 @@ import {
   ListItem,
   HStack,
   Fade,
+  Input,
 } from "@chakra-ui/react";
 import { CategoryNode } from "../../util/Tree";
 // import { MdArrowDropDown } from "react-icons/md";
@@ -25,80 +26,108 @@ const CustomTreeWrapper = ({
   selectCb,
   ...props
 }: CustomTreeProps) => {
-  const [selectedNode, setSelectedNode] =
+  const [selectedNodeId, setSelectedNodeId] =
     useState<{ [key: number]: boolean }>();
-  const [highlightNode, setHighlightNode] = useState<number>(0);
+  const [highlightNode, setHighlightNode] = useState<CategoryNode>();
 
   useEffect(() => {
-    root.children.forEach((child) => {
-      setSelectedNode({ ...selectedNode, [child.val.id]: false });
-    });
+    if (root.children)
+      root.children.forEach((child) => {
+        setSelectedNodeId({ ...selectedNodeId, [child.val.id]: false });
+      });
   }, []);
 
   const CustomTree = ({ root, key, selectCb, ...props }: CustomTreeProps) => {
     if (root.val === null && root.children.length === 0) return null;
     return (
       <Container key={key} {...props}>
-        {root.children.map((child, indx) => (
-          <Box
-            key={indx}
-            display={
-              selectedNode && selectedNode[child.val.parentId]
-                ? "block"
-                : child.val.parentId
-                ? "none"
-                : "block"
-            }
-          >
-            <ListItem
-              padding="0.2em 0.7em"
+        {root.children &&
+          root.children.map((child, indx) => (
+            <Box
               key={indx}
-              bgColor={
-                highlightNode === child.val.id ? "secondaryBlue.200" : "none"
+              display={
+                selectedNodeId && selectedNodeId[child.val.parentId]
+                  ? "block"
+                  : child.val.parentId
+                  ? "none"
+                  : "block"
               }
-              color={highlightNode === child.val.id ? "white" : "none"}
-              fontWeight={
-                highlightNode === child.val.id ? "semibold" : "regular"
-              }
-              cursor="pointer"
-              onClick={() => {
-                if (selectCb) selectCb(child.val.id);
-                setHighlightNode(child.val.id);
-                setSelectedNode({
-                  ...selectedNode,
-                  [child.val.id]: selectedNode
-                    ? !selectedNode[child.val.id]
-                    : false,
-                });
-              }}
-              userSelect="none"
             >
-              <HStack>
-                {child.children.length > 0 ? (
-                  highlightNode === child.val.id ? (
-                    <IoMdArrowDropdown size="20" />
+              <ListItem
+                padding="0.2em 0.7em"
+                key={indx}
+                bgColor={
+                  highlightNode?.val.id === child.val.id
+                    ? "secondaryBlue.200"
+                    : "none"
+                }
+                color={
+                  highlightNode?.val.id === child.val.id ? "white" : "none"
+                }
+                fontWeight={
+                  highlightNode?.val.id === child.val.id
+                    ? "semibold"
+                    : "regular"
+                }
+                cursor="pointer"
+                onClick={() => {
+                  if (selectCb) selectCb(child.val.id);
+                  setHighlightNode(child);
+                  setSelectedNodeId({
+                    ...selectedNodeId,
+                    [child.val.id]: selectedNodeId
+                      ? !selectedNodeId[child.val.id]
+                      : false,
+                  });
+                }}
+                userSelect="none"
+              >
+                <HStack>
+                  {child.children.length > 0 ? (
+                    highlightNode?.val.id === child.val.id ? (
+                      <IoMdArrowDropdown size="20" />
+                    ) : (
+                      <IoMdArrowDropright size="20" />
+                    )
                   ) : (
-                    <IoMdArrowDropright size="20" />
-                  )
-                ) : (
-                  <Box width="1em"></Box>
-                )}
-                <Text>{child.val.name}</Text>
-              </HStack>
-            </ListItem>
-            {child.children.length > 0 ? (
-              <CustomTree root={child} key={child.val.id} selectCb={selectCb} />
-            ) : (
-              <></>
-            )}
-          </Box>
-        ))}
+                    <Box width="1em"></Box>
+                  )}
+                  <Text>{child.val.name}</Text>
+                </HStack>
+              </ListItem>
+              {child.children.length > 0 ? (
+                <CustomTree
+                  root={child}
+                  key={child.val.id}
+                  selectCb={selectCb}
+                />
+              ) : (
+                <></>
+              )}
+            </Box>
+          ))}
       </Container>
     );
   };
 
   return (
-    <RightClickMenu>
+    <RightClickMenu
+      menuItems={[
+        <Text cursor="pointer" key="1">
+          Add
+        </Text>,
+        <Text
+          cursor="pointer"
+          key="2"
+          display={highlightNode?.children.length === 0 ? "block" : "none"}
+        >
+          Delete
+        </Text>,
+        <Text cursor="pointer" key="3">
+          Modify
+        </Text>,
+      ]}
+    >
       <Container {...props} key={key}>
         <List fontSize="1.2em">
           <CustomTree root={root} key={key} selectCb={selectCb} />
