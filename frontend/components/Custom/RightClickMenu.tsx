@@ -1,30 +1,32 @@
-import { Container, Box, List, ListItem } from "@chakra-ui/react";
+import { Text, Box, List, ListItem, Fade } from "@chakra-ui/react";
 import React, { useState, useRef } from "react";
+import CustomContainer from "./CustomContainer";
 
-const RightClickMenu: React.FC = ({ children }) => {
+const RightClickMenu: React.FC<{ menuItems?: any[] }> = ({
+  children,
+  menuItems,
+}) => {
   const [x, setX] = useState<number>(-1);
   const [y, setY] = useState<number>(-1);
   const clickAreaRef = useRef<any>();
+  const [showMenu, setShowMenu] = useState<boolean>(false);
 
-  const ClickMenu = ({ list }: { list: string[] }) => {
+  const ClickMenu = ({ list }: { list: any[] }) => {
     return (
-      <Container
-        bgColor="white"
-        position="absolute"
-        width="5em"
-        top={y + "px"}
-        left={x + "px"}
-        display={x !== -1 && y !== -1 ? "block" : "none"}
-        zIndex="10"
-      >
-        <List>
-          {list.map((item, indx) => (
-            <ListItem key={indx} color="black">
-              {item}
-            </ListItem>
-          ))}
-        </List>
-      </Container>
+      <Fade in={showMenu}>
+        <CustomContainer
+          borderRadius="md"
+          bgColor="white"
+          position="absolute"
+          width="inherit"
+          top={y + "px"}
+          left={x + "px"}
+          zIndex="10"
+          padding="0.5em 1.2em"
+        >
+          <List userSelect="none">{list.map((item) => item)}</List>
+        </CustomContainer>
+      </Fade>
     );
   };
 
@@ -37,10 +39,14 @@ const RightClickMenu: React.FC = ({ children }) => {
         setX(e.pageX);
         setY(e.pageY);
         console.log(`x : ${e.clientX} y : ${e.clientY}`);
+        setShowMenu(true);
+      }}
+      onClick={() => {
+        setShowMenu(false);
       }}
     >
       {children}
-      {/* <ClickMenu list={["a", "b", "c"]} /> */}
+      <ClickMenu list={menuItems || []} />
     </Box>
   );
 };
