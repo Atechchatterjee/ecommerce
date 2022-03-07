@@ -12,22 +12,24 @@ const RightClickMenu: React.FC<{ menuItems?: any[] }> = ({
   const [showMenu, setShowMenu] = useState<boolean>(false);
 
   const ClickMenu = ({ list }: { list: any[] }) => {
-    return (
-      <Fade in={showMenu}>
-        <CustomContainer
-          borderRadius="md"
-          bgColor="white"
-          position="absolute"
-          width="inherit"
-          top={y + "px"}
-          left={x + "px"}
-          zIndex="10"
-          padding="0.5em 1.2em"
-        >
-          <List userSelect="none">{list.map((item) => item)}</List>
-        </CustomContainer>
-      </Fade>
-    );
+    if (showMenu)
+      return (
+        <Fade in={showMenu}>
+          <CustomContainer
+            borderRadius="md"
+            bgColor="white"
+            position="absolute"
+            width="inherit"
+            top={y + "px"}
+            left={x + "px"}
+            zIndex="10"
+            padding="0.5em 1.2em"
+          >
+            <List userSelect="none">{list.map((item) => item)}</List>
+          </CustomContainer>
+        </Fade>
+      );
+    else return null;
   };
 
   return (
