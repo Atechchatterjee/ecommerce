@@ -110,10 +110,14 @@ const CustomTreeWrapper = ({
     );
   };
 
+  const handleAdd = () => {
+    alert(`add to ${highlightNode?.val.name}`);
+  };
+
   return (
     <RightClickMenu
       menuItems={[
-        <Text cursor="pointer" key="1">
+        <Text onClick={handleAdd} cursor="pointer" key="1">
           Add
         </Text>,
         <Text
