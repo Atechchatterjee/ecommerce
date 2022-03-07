@@ -31,12 +31,10 @@ const getAllCategory = async (): Promise<Category[]> => {
 };
 
 const ListCategories = ({ ...props }: ContainerProps) => {
-  const [categories, setCategories] = useState<Category[]>([]);
   const [customTreeRoot, setCustomTreeRoot] = useState<any>([]);
 
   useEffect(() => {
     getAllCategory().then((categories) => {
-      setCategories(categories);
       const customTree = convertToCustomTree(categories);
       console.log({ customTree });
       setCustomTreeRoot(customTree.root);
