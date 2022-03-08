@@ -7,28 +7,32 @@ import {
   List,
   ListItem,
   HStack,
-  Fade,
   Input,
+  TextProps,
 } from "@chakra-ui/react";
 import { CategoryNode } from "../../util/Tree";
-// import { MdArrowDropDown } from "react-icons/md";
 import { IoMdArrowDropright, IoMdArrowDropdown } from "react-icons/io";
 import RightClickMenu from "./RightClickMenu";
 
 interface CustomTreeProps extends ContainerProps {
   root: CategoryNode;
   selectCb?: (selectedCategory: number | null) => void;
+  addCb?: (parentNode: CategoryNode, newNodeName: string) => void;
+  deleteCb?: (node: CategoryNode) => void;
 }
 
 const CustomTreeWrapper = ({
   root,
   key,
   selectCb,
+  addCb,
+  deleteCb,
   ...props
 }: CustomTreeProps) => {
   const [selectedNodeId, setSelectedNodeId] =
     useState<{ [key: number]: boolean }>();
   const [highlightNode, setHighlightNode] = useState<CategoryNode>();
+  const [toAddNode, setToAddNode] = useState<boolean>(false);
 
   useEffect(() => {
     if (root.children)
@@ -37,7 +41,32 @@ const CustomTreeWrapper = ({
       });
   }, []);
 
-  const CustomTree = ({ root, key, selectCb, ...props }: CustomTreeProps) => {
+  const FoldNode = (node: CategoryNode, action: "fold" | "unfold" = "fold") => {
+    if (selectCb) selectCb(node.val.id);
+    setHighlightNode(node);
+    setSelectedNodeId({
+      ...selectedNodeId,
+      [node.val.id]: selectedNodeId
+        ? action === "fold"
+          ? false
+          : true
+        : false,
+    });
+  };
+
+  const handleFold = (node: CategoryNode) => {
+    if (selectedNodeId && selectedNodeId[node.val.id]) FoldNode(node, "fold");
+    else FoldNode(node, "unfold");
+  };
+
+  const CustomTree = ({
+    root,
+    key,
+    selectCb,
+    addCb,
+    deleteCb,
+    ...props
+  }: CustomTreeProps) => {
     if (root.val === null && root.children.length === 0) return null;
     return (
       <Container key={key} {...props}>
@@ -70,16 +99,7 @@ const CustomTreeWrapper = ({
                     : "regular"
                 }
                 cursor="pointer"
-                onClick={() => {
-                  if (selectCb) selectCb(child.val.id);
-                  setHighlightNode(child);
-                  setSelectedNodeId({
-                    ...selectedNodeId,
-                    [child.val.id]: selectedNodeId
-                      ? !selectedNodeId[child.val.id]
-                      : false,
-                  });
-                }}
+                onClick={() => handleFold(child)}
                 userSelect="none"
               >
                 <HStack>
@@ -95,11 +115,27 @@ const CustomTreeWrapper = ({
                   <Text>{child.val.name}</Text>
                 </HStack>
               </ListItem>
+              {toAddNode && child.val.id === highlightNode?.val.id ? (
+                <Input
+                  marginLeft="3.3em"
+                  marginTop="0.5em"
+                  borderRadius="sm"
+                  width="15em"
+                  size="sm"
+                  onBlur={(e: any) => {
+                    setToAddNode(false);
+                    if (addCb && highlightNode && e.target.value !== "") {
+                      addCb(highlightNode, e.target.value);
+                    }
+                  }}
+                  autoFocus
+                />
+              ) : (
+                <></>
+              )}
               {child.children.length > 0 ? (
                 <CustomTree
-                  root={child}
-                  key={child.val.id}
-                  selectCb={selectCb}
+                  {...{ root: child, key, selectCb, addCb, deleteCb }}
                 />
               ) : (
                 <></>
@@ -111,30 +147,51 @@ const CustomTreeWrapper = ({
   };
 
   const handleAdd = () => {
-    alert(`add to ${highlightNode?.val.name}`);
+    if (highlightNode) FoldNode(highlightNode, "unfold");
+    setToAddNode(true);
+  };
+
+  const MenuItemComponent = ({ children, ...props }: TextProps) => {
+    return (
+      <Text
+        cursor="pointer"
+        _hover={{ color: "secondaryBlue.200", fontWeight: "semibold" }}
+        {...props}
+      >
+        {children}
+      </Text>
+    );
+  };
+
+  const handleDelete = () => {
+    if (deleteCb && highlightNode) deleteCb(highlightNode);
   };
 
   return (
     <RightClickMenu
       menuItems={[
-        <Text onClick={handleAdd} cursor="pointer" key="1">
+        <MenuItemComponent onClick={handleAdd} key="1">
           Add
-        </Text>,
-        <Text
-          cursor="pointer"
+        </MenuItemComponent>,
+        <MenuItemComponent
           key="2"
           display={highlightNode?.children.length === 0 ? "block" : "none"}
+          onClick={handleDelete}
         >
           Delete
-        </Text>,
-        <Text cursor="pointer" key="3">
-          Modify
-        </Text>,
+        </MenuItemComponent>,
+        <MenuItemComponent key="3">Modify</MenuItemComponent>,
       ]}
     >
       <Container {...props} key={key}>
         <List fontSize="1.2em">
-          <CustomTree root={root} key={key} selectCb={selectCb} />
+          <CustomTree
+            root={root}
+            key={key}
+            selectCb={selectCb}
+            addCb={addCb}
+            deleteCb={deleteCb}
+          />
         </List>
       </Container>
     </RightClickMenu>
