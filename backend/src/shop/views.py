@@ -226,6 +226,19 @@ def get_sub_category(request):
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['DELETE'])
+@permission_classes([Is_Admin])
+def delete_category(request, category_id):
+    try:
+        category = Category.objects.get(category_id=category_id)
+        sub_categories = Category.objects.filter(sub_categories=category)
+        # making sure the category is not a sub category itself
+        if len(sub_categories) > 0:
+            category.delete()
+        return Response(status=status.HTTP_200_OK)
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)  
+
 
 @api_view(['POST'])
 @permission_classes([Is_Admin])
