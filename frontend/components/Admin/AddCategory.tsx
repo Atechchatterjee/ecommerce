@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Input } from "@chakra-ui/input";
 import { Box, Center, Heading } from "@chakra-ui/layout";
-import { Button, Text, useToast, ContainerProps } from "@chakra-ui/react";
+import { Text, useToast, ContainerProps } from "@chakra-ui/react";
 import { Category } from "../../types/shop";
-import SelectCategory from "./SelectCategory";
 import constants from "../../util/Constants";
 import axios from "axios";
 import CustomTree from "../Custom/CustomTree";
@@ -32,6 +30,7 @@ const getAllCategory = async (): Promise<Category[]> => {
 
 const ListCategories = ({ ...props }: ContainerProps) => {
   const [customTreeRoot, setCustomTreeRoot] = useState<any>([]);
+  const [reRender, setReRender] = useState<boolean>(false);
 
   useEffect(() => {
     getAllCategory().then((categories) => {
@@ -40,11 +39,42 @@ const ListCategories = ({ ...props }: ContainerProps) => {
       setCustomTreeRoot(customTree.root);
       console.log({ customTree });
     });
-  }, []);
+    setReRender(false);
+  }, [reRender]);
 
   return (
-    <CustomContainer height="33em" padding="1em" {...props} borderRadius="lg">
-      {customTreeRoot ? <CustomTree root={customTreeRoot} /> : <></>}
+    <CustomContainer
+      height="inherit"
+      padding="2em 1em"
+      {...props}
+      borderRadius="lg"
+    >
+      <Text
+        fontWeight="bold"
+        fontSize="1.5em"
+        textColor="secondaryBlue.200"
+        textAlign="center"
+      >
+        Categories
+      </Text>
+      {customTreeRoot ? (
+        <CustomTree
+          marginTop="2em"
+          root={customTreeRoot}
+          addCb={(parentNode, newNodeName) => {
+            console.log({
+              sub_category: parentNode.val.id,
+              category_name: newNodeName,
+            });
+            createCategory({
+              sub_category: parentNode.val.id,
+              category_name: newNodeName,
+            }).then(() => setReRender(true));
+          }}
+        />
+      ) : (
+        <></>
+      )}
       <Box height="full" />
     </CustomContainer>
   );
@@ -55,80 +85,7 @@ const AddCategory = ({ ...props }) => {
   const [categoryName, setCategoryName] = useState<string>("");
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
 
-  return (
-    <>
-      <CustomContainer
-        height="33em"
-        width="60em"
-        padding="3em"
-        borderRadius="lg"
-        {...props}
-      >
-        <Center>
-          <Heading
-            size="xl"
-            color="gray.600"
-            fontFamily="Sora"
-            fontWeight="bold"
-          >
-            Add Category
-          </Heading>
-        </Center>
-        <Input
-          borderRadius="lg"
-          placeholder="Category Name"
-          marginBottom="1em"
-          top="2em"
-          size="lg"
-          onChange={(event: any) => setCategoryName(event.target.value)}
-        />
-        <SelectCategory
-          borderRadius="lg"
-          marginTop="4em"
-          bgColor="#9D84B7"
-          variant="pinkSolid"
-          onSelect={({ selectedCategory }) => {
-            setSelectedCategory(selectedCategory);
-          }}
-          includeNone
-        />
-        <Button
-          borderRadius="lg"
-          width="full"
-          variant="blueSolid"
-          marginTop="1em"
-          onClick={() => {
-            createCategory({
-              category_name: categoryName,
-              sub_category: selectedCategory,
-            })
-              .then(() => {
-                toast({
-                  title: "Created",
-                  description: `Category: '${categoryName}' was successfully added`,
-                  status: "success",
-                  duration: 2000,
-                  isClosable: true,
-                });
-              })
-              .catch(() => {
-                toast({
-                  title: "Sorry for the inconvenience",
-                  description: `Category: '${categoryName}' could not be added`,
-                  status: "error",
-                  duration: 2000,
-                  isClosable: true,
-                });
-              });
-          }}
-          bg="#091353"
-        >
-          Add
-        </Button>
-      </CustomContainer>
-      <ListCategories marginTop="3em" />
-    </>
-  );
+  return <ListCategories marginTop="3em" />;
 };
 
 export default AddCategory;
