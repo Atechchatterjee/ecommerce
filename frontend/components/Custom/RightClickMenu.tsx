@@ -1,4 +1,4 @@
-import { Text, Box, List, ListItem, Fade } from "@chakra-ui/react";
+import { Box, List, Fade } from "@chakra-ui/react";
 import React, { useState, useRef } from "react";
 import CustomContainer from "./CustomContainer";
 
