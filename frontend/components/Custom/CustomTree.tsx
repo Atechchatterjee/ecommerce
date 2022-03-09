@@ -34,16 +34,10 @@ const CustomTreeWrapper = ({
   const [highlightNode, setHighlightNode] = useState<CategoryNode>();
   const [toAddNode, setToAddNode] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (root.children)
-      root.children.forEach((child) => {
-        setSelectedNodeId({ ...selectedNodeId, [child.val.id]: false });
-      });
-  }, []);
-
   const FoldNode = (node: CategoryNode, action: "fold" | "unfold" = "fold") => {
     if (selectCb) selectCb(node.val.id);
-    setHighlightNode(node);
+    if (action === "fold") setHighlightNode(undefined);
+    else setHighlightNode(node);
     setSelectedNodeId({
       ...selectedNodeId,
       [node.val.id]: selectedNodeId
@@ -68,6 +62,7 @@ const CustomTreeWrapper = ({
     ...props
   }: CustomTreeProps) => {
     if (root.val === null && root.children.length === 0) return null;
+
     return (
       <Container key={key} {...props}>
         {root.children &&
