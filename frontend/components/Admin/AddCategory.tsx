@@ -45,7 +45,8 @@ const ListCategories = ({ ...props }: ContainerProps) => {
   return (
     <CustomContainer
       height="inherit"
-      padding="2em 1em"
+      padding="2em 1em 5em 1em"
+      marginBottom="5em"
       {...props}
       borderRadius="lg"
     >
