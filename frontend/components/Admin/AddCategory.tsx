@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Box, Center, Heading } from "@chakra-ui/layout";
-import { Text, useToast, ContainerProps } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/layout";
+import { Text, ContainerProps } from "@chakra-ui/react";
 import { Category } from "../../types/shop";
 import constants from "../../util/Constants";
 import axios from "axios";
 import CustomTree from "../Custom/CustomTree";
 import { convertToCustomTree } from "../../util/Tree";
 import CustomContainer from "../Custom/CustomContainer";
+import { CategoryNode } from "../../util/Tree";
 
 const createCategory = async (data: Category): Promise<void> => {
   try {
@@ -15,6 +16,17 @@ const createCategory = async (data: Category): Promise<void> => {
   } catch (err) {
     return Promise.reject(err);
   }
+};
+
+const deleteCategory = async (node: CategoryNode): Promise<void> => {
+  axios
+    .delete(`${constants.url}/shop/delete-category/${node.val.id}/`, {
+      withCredentials: true,
+    })
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => console.error(err));
 };
 
 const getAllCategory = async (): Promise<Category[]> => {
@@ -28,7 +40,7 @@ const getAllCategory = async (): Promise<Category[]> => {
   }
 };
 
-const ListCategories = ({ ...props }: ContainerProps) => {
+const AddCategory = ({ ...props }: ContainerProps) => {
   const [customTreeRoot, setCustomTreeRoot] = useState<any>([]);
   const [reRender, setReRender] = useState<boolean>(false);
 
@@ -44,6 +56,7 @@ const ListCategories = ({ ...props }: ContainerProps) => {
 
   return (
     <CustomContainer
+      marginTop="3em"
       height="inherit"
       padding="2em 1em 5em 1em"
       marginBottom="5em"
@@ -72,6 +85,9 @@ const ListCategories = ({ ...props }: ContainerProps) => {
               category_name: newNodeName,
             }).then(() => setReRender(true));
           }}
+          deleteCb={(node) =>
+            deleteCategory(node).then(() => setReRender(true))
+          }
         />
       ) : (
         <></>
@@ -79,14 +95,6 @@ const ListCategories = ({ ...props }: ContainerProps) => {
       <Box height="full" />
     </CustomContainer>
   );
-};
-
-const AddCategory = ({ ...props }) => {
-  const toast = useToast();
-  const [categoryName, setCategoryName] = useState<string>("");
-  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
-
-  return <ListCategories marginTop="3em" />;
 };
 
 export default AddCategory;
