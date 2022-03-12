@@ -33,11 +33,10 @@ const CustomTreeWrapper = ({
     useState<{ [key: number]: boolean }>();
   const [highlightNode, setHighlightNode] = useState<CategoryNode>();
   const [toAddNode, setToAddNode] = useState<boolean>(false);
+  const [openedNodes, setOpenedNodes] = useState<any>({});
 
   const FoldNode = (node: CategoryNode, action: "fold" | "unfold" = "fold") => {
-    if (selectCb) selectCb(node.val.id);
-    if (action === "fold") setHighlightNode(undefined);
-    else setHighlightNode(node);
+    setHighlightNode(node);
     setSelectedNodeId({
       ...selectedNodeId,
       [node.val.id]: selectedNodeId
@@ -49,8 +48,13 @@ const CustomTreeWrapper = ({
   };
 
   const handleFold = (node: CategoryNode) => {
-    if (selectedNodeId && selectedNodeId[node.val.id]) FoldNode(node, "fold");
-    else FoldNode(node, "unfold");
+    if (selectedNodeId && selectedNodeId[node.val.id]) {
+      FoldNode(node, "fold");
+      setOpenedNodes({ ...openedNodes, [node.val.id]: false });
+    } else {
+      setOpenedNodes({ ...openedNodes, [node.val.id]: true });
+      FoldNode(node, "unfold");
+    }
   };
 
   const CustomTree = ({
@@ -82,8 +86,11 @@ const CustomTreeWrapper = ({
                 key={indx}
                 bgColor={
                   highlightNode?.val.id === child.val.id
-                    ? "secondaryBlue.200"
+                    ? "secondaryPink.200"
                     : "none"
+                }
+                borderRadius={
+                  highlightNode?.val.id === child.val.id ? "full" : "none"
                 }
                 color={
                   highlightNode?.val.id === child.val.id ? "white" : "none"
@@ -99,7 +106,7 @@ const CustomTreeWrapper = ({
               >
                 <HStack>
                   {child.children.length > 0 ? (
-                    highlightNode?.val.id === child.val.id ? (
+                    openedNodes[child.val.id] ? (
                       <IoMdArrowDropdown size="20" />
                     ) : (
                       <IoMdArrowDropright size="20" />
@@ -110,31 +117,33 @@ const CustomTreeWrapper = ({
                   <Text>{child.val.name}</Text>
                 </HStack>
               </ListItem>
-              {toAddNode && child.val.id === highlightNode?.val.id ? (
-                <Input
-                  marginLeft="3.3em"
-                  marginTop="0.5em"
-                  borderRadius="sm"
-                  width="15em"
-                  size="sm"
-                  onBlur={(e: any) => {
-                    setToAddNode(false);
-                    if (addCb && highlightNode && e.target.value !== "") {
-                      addCb(highlightNode, e.target.value);
-                    }
-                  }}
-                  autoFocus
-                />
-              ) : (
-                <></>
-              )}
-              {child.children.length > 0 ? (
-                <CustomTree
-                  {...{ root: child, key, selectCb, addCb, deleteCb }}
-                />
-              ) : (
-                <></>
-              )}
+              <Box>
+                {toAddNode && child.val.id === highlightNode?.val.id ? (
+                  <Input
+                    marginLeft="3.3em"
+                    marginTop="0.5em"
+                    borderRadius="sm"
+                    width="15em"
+                    size="sm"
+                    onBlur={(e: any) => {
+                      setToAddNode(false);
+                      if (addCb && highlightNode && e.target.value !== "") {
+                        addCb(highlightNode, e.target.value);
+                      }
+                    }}
+                    autoFocus
+                  />
+                ) : (
+                  <></>
+                )}
+                {child.children.length > 0 ? (
+                  <CustomTree
+                    {...{ root: child, key, selectCb, addCb, deleteCb }}
+                  />
+                ) : (
+                  <></>
+                )}
+              </Box>
             </Box>
           ))}
       </Container>
@@ -180,13 +189,7 @@ const CustomTreeWrapper = ({
     >
       <Container {...props} key={key}>
         <List fontSize="1.2em">
-          <CustomTree
-            root={root}
-            key={key}
-            selectCb={selectCb}
-            addCb={addCb}
-            deleteCb={deleteCb}
-          />
+          <CustomTree {...{ root, key, selectCb, addCb, deleteCb }} />
         </List>
       </Container>
     </RightClickMenu>
