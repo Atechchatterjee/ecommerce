@@ -111,7 +111,6 @@ const SelectCategory: React.FC<Props> = ({
       case null:
         return (
           <>
-            {" "}
             {includeNone
               ? categoryMap.current[-1]
               : text
