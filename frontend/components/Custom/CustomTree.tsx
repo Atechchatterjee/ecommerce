@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Text,
   ContainerProps,
@@ -16,6 +16,7 @@ import RightClickMenu from "./RightClickMenu";
 
 interface CustomTreeProps extends ContainerProps {
   root: CategoryNode;
+  disableRightClick?: boolean;
   selectCb?: (selectedCategory: number | null) => void;
   addCb?: (parentNode: CategoryNode, newNodeName: string) => void;
   deleteCb?: (node: CategoryNode) => void;
@@ -27,6 +28,7 @@ const CustomTreeWrapper = ({
   selectCb,
   addCb,
   deleteCb,
+  disableRightClick,
   ...props
 }: CustomTreeProps) => {
   const [selectedNodeId, setSelectedNodeId] =
@@ -55,6 +57,7 @@ const CustomTreeWrapper = ({
       setOpenedNodes({ ...openedNodes, [node.val.id]: true });
       FoldNode(node, "unfold");
     }
+    if (selectCb) selectCb(node.val.id);
   };
 
   const CustomTree = ({
@@ -63,6 +66,7 @@ const CustomTreeWrapper = ({
     selectCb,
     addCb,
     deleteCb,
+    disableRightClick,
     ...props
   }: CustomTreeProps) => {
     if (root.val === null && root.children.length === 0) return null;
@@ -138,7 +142,14 @@ const CustomTreeWrapper = ({
                 )}
                 {child.children.length > 0 ? (
                   <CustomTree
-                    {...{ root: child, key, selectCb, addCb, deleteCb }}
+                    {...{
+                      root: child,
+                      key,
+                      selectCb,
+                      addCb,
+                      deleteCb,
+                      disableRightClick,
+                    }}
                   />
                 ) : (
                   <></>
@@ -171,28 +182,42 @@ const CustomTreeWrapper = ({
     if (deleteCb && highlightNode) deleteCb(highlightNode);
   };
 
+  const IncludeRightClick: React.FC<{ include?: boolean }> = ({
+    children,
+    include,
+  }) => {
+    if (!include) return <>{children}</>;
+    return (
+      <RightClickMenu
+        menuItems={[
+          <MenuItemComponent onClick={handleAdd} key="1">
+            Add
+          </MenuItemComponent>,
+          <MenuItemComponent
+            key="2"
+            display={highlightNode?.children.length === 0 ? "block" : "none"}
+            onClick={handleDelete}
+          >
+            Delete
+          </MenuItemComponent>,
+          <MenuItemComponent key="3">Modify</MenuItemComponent>,
+        ]}
+      >
+        {children}
+      </RightClickMenu>
+    );
+  };
+
   return (
-    <RightClickMenu
-      menuItems={[
-        <MenuItemComponent onClick={handleAdd} key="1">
-          Add
-        </MenuItemComponent>,
-        <MenuItemComponent
-          key="2"
-          display={highlightNode?.children.length === 0 ? "block" : "none"}
-          onClick={handleDelete}
-        >
-          Delete
-        </MenuItemComponent>,
-        <MenuItemComponent key="3">Modify</MenuItemComponent>,
-      ]}
-    >
+    <IncludeRightClick include={!disableRightClick}>
       <Container {...props} key={key}>
         <List fontSize="1.2em">
-          <CustomTree {...{ root, key, selectCb, addCb, deleteCb }} />
+          <CustomTree
+            {...{ root, key, selectCb, addCb, deleteCb, disableRightClick }}
+          />
         </List>
       </Container>
-    </RightClickMenu>
+    </IncludeRightClick>
   );
 };
 
