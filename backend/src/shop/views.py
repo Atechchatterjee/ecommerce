@@ -239,6 +239,18 @@ def delete_category(request, category_id):
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)  
 
+@api_view(["PUT"])
+@permission_classes([Is_Admin])
+def modify_category(request, category_id):
+    try:
+        category = Category.objects.get(category_id=category_id)
+        category.category_name = request.data.get('category_name')
+        category.save()
+        return Response(status=status.HTTP_200_OK)
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)  
+
+
 
 @api_view(['POST'])
 @permission_classes([Is_Admin])
