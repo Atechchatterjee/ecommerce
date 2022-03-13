@@ -2,7 +2,7 @@ import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { ChakraProvider, Box } from "@chakra-ui/react";
 import { CookiesProvider } from "react-cookie";
-import CustomButtonTheme from "../components/Custom/CustomButton";
+import theme from "../theme";
 import { useEffect, useState } from "react";
 import { checkWhichUser } from "../util/Authenticated";
 import { UserContext } from "../context/UserContext";
@@ -19,7 +19,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   }, []);
 
   return (
-    <ChakraProvider theme={CustomButtonTheme}>
+    <ChakraProvider theme={theme}>
       <CookiesProvider>
         <UserContext.Provider value={{ admin, setAdmin }}>
           <Component {...pageProps} />
