@@ -3,6 +3,7 @@ import { extendTheme } from "@chakra-ui/react";
 const CustomButtonTheme = extendTheme({
   colors: {
     secondaryBlue: {
+      100: "#2D3875",
       200: "#091353",
     },
     secondaryPink: {
