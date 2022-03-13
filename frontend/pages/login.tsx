@@ -13,7 +13,6 @@ import type { NextPage } from "next";
 import React from "react";
 import SignUp from "../components/Auth/SignUp";
 import SignIn from "../components/Auth/SignIn";
-import Banner from "../components/Layout/Banner";
 import Header from "../components/Layout/Header";
 import Footer from "../components/Layout/Footer";
 
@@ -21,7 +20,6 @@ const Login: NextPage = () => {
   return (
     <>
       <Header />
-      <Banner text="My Account" />
       <Container
         boxShadow="0.2em 0.2em 0.2em 0.2em #e1e1e1"
         height="inherit"
@@ -41,6 +39,7 @@ const Login: NextPage = () => {
                   _focus={{
                     outline: "none",
                   }}
+                  _selected={{ color: "secondaryBlue.100" }}
                 >
                   <Heading as="h2" size="md" isTruncated fontFamily="Sora">
                     Sign Up
@@ -50,6 +49,7 @@ const Login: NextPage = () => {
                   _focus={{
                     outline: "none",
                   }}
+                  _selected={{ color: "secondaryBlue.100" }}
                 >
                   <Heading as="h2" size="md" isTruncated fontFamily="Sora">
                     Sign In
