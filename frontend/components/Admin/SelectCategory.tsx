@@ -1,11 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import Tree, { ThemeSettings } from "@naisutech/react-tree";
 import { Category, CategoryMap } from "../../types/shop";
-import {
-  convertToCategoryTree,
-  convertToCustomTree,
-  convertToTree,
-} from "../../util/Tree";
+import { convertToCustomTree } from "../../util/Tree";
 import axios from "axios";
 import constants from "../../util/Constants";
 import { Button } from "@chakra-ui/button";
@@ -19,25 +14,6 @@ import {
   ModalFooter,
 } from "@chakra-ui/modal";
 import CustomTree from "../Custom/CustomTree";
-import RightClickMenu from "../Custom/RightClickMenu";
-
-// theme for category tree
-const myTheme: ThemeSettings = {
-  theme1: {
-    text: "#3F3F3F",
-    bg: "#ffffff",
-    indicator: "#9D84B7",
-    separator: "#ffffff",
-    icon: "#9D84B7",
-    selectedBg: "#9D84B7",
-    selectedText: "#fafafa",
-    hoverBg: "#9D84B7",
-    hoverText: "#fafafa",
-    accentBg: "#2d3439",
-    accentText: "#999",
-    textSize: "large",
-  },
-};
 
 export const getAllCategory = async (): Promise<Category[]> => {
   try {
@@ -81,39 +57,74 @@ const SelectCategory: React.FC<Props> = ({
 }) => {
   const categoryMap = useRef<CategoryMap>({});
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [nodes, setNodes] = useState<any>([]);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(-2);
   const [customTree, setCustomTree] = useState<any>([]);
 
-  useEffect(() => {
-    getAllCategory().then((categories) => {
-      if (includeNone) {
-        categories.push({
-          category_id: null,
-          category_name: "None",
-          sub_category: null,
-        });
-      }
-
-      // creating a categoryTree from given categories from db
-      console.log({ categories });
-      const tree = convertToCategoryTree(categories);
-      console.log({ tree });
-      const nodeTree = convertToTree(tree);
-      const customTree = convertToCustomTree(categories);
-      console.log({ customTree });
-      setCustomTree(customTree);
-
-      setNodes(nodeTree);
-
-      if (includeNone) categoryMap.current[-1] = "None";
-
-      // setting up the category map
-      categories.forEach(({ category_name, category_id }) => {
-        if (category_id) categoryMap.current[category_id] = category_name;
+  const createTree = (categories: Category[]) => {
+    if (includeNone) {
+      categories.push({
+        category_id: null,
+        category_name: "None",
+        sub_category: null,
       });
+    }
+
+    // creating a categoryTree from given categories from db
+    const customTree = convertToCustomTree(categories);
+    setCustomTree(customTree);
+
+    if (includeNone) categoryMap.current[-1] = "None";
+
+    // setting up the category map
+    categories.forEach(({ category_name, category_id }) => {
+      if (category_id) categoryMap.current[category_id] = category_name;
     });
+  };
+
+  useEffect(() => {
+    getAllCategory().then(createTree);
   }, []);
+
+  const handleSelect = (id: any) => {
+    if (typeof id === "number") {
+      setSelectedCategory(id);
+      if (id < 0) id = null;
+    } else if (typeof id === "string") {
+      id = parseInt(id);
+      if (id < 0) id = null;
+      setSelectedCategory(id);
+    } else {
+      id = null;
+      setSelectedCategory(null);
+    }
+
+    // callback to return category name and selected category id
+    if (onSelect) {
+      onSelect({
+        selectedCategory: id,
+      });
+    }
+  };
+
+  const TriggerButtonText: React.FC = () => {
+    switch (selectedCategory) {
+      case null:
+        return (
+          <>
+            {" "}
+            {includeNone
+              ? categoryMap.current[-1]
+              : text
+              ? text
+              : "Sub Category"}
+          </>
+        );
+      case -2:
+        return <> {text ? text : "Sub Category"}</>;
+      default:
+        return <>{categoryMap.current[selectedCategory]}</>;
+    }
+  };
 
   return (
     <>
@@ -129,24 +140,11 @@ const SelectCategory: React.FC<Props> = ({
           setModalOpen(true);
         }}
       >
-        {(() => {
-          switch (selectedCategory) {
-            case null:
-              return includeNone
-                ? categoryMap.current[-1]
-                : text
-                ? text
-                : "Sub Category";
-            case -2:
-              return text ? text : "Sub Category";
-            default:
-              return categoryMap.current[selectedCategory];
-          }
-        })()}
+        <TriggerButtonText />
       </Button>
       <Modal
         onClose={() => setModalOpen(false)}
-        size={"md"}
+        size={"xl"}
         isOpen={modalOpen}
         blockScrollOnMount={false}
         colorScheme="whiteAlpha"
@@ -162,25 +160,8 @@ const SelectCategory: React.FC<Props> = ({
               root={customTree.root}
               key="-1"
               marginLeft="-1.8em"
-              selectCb={(id: any) => {
-                if (typeof id === "number") {
-                  setSelectedCategory(id);
-                  if (id < 0) id = null;
-                } else if (typeof id === "string") {
-                  id = parseInt(id);
-                  if (id < 0) id = null;
-                  setSelectedCategory(id);
-                } else {
-                  id = null;
-                  setSelectedCategory(null);
-                }
-
-                // callback to return category name and selected category id
-                if (onSelect)
-                  onSelect({
-                    selectedCategory: id,
-                  });
-              }}
+              disableRightClick
+              selectCb={(id: any) => handleSelect(id)}
             />
           </ModalBody>
           <ModalFooter>
