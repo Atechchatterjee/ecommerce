@@ -207,7 +207,7 @@ const Header: React.FC = () => {
       </Center>
       <Center
         className="header-mid"
-        backgroundColor="#3C488C"
+        backgroundColor="secondaryBlue.100"
         marginLeft="-50em"
         height="3em"
       >
