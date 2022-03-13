@@ -28,7 +28,7 @@ const Header: React.FC = () => {
     const menuBtnColor = useRef<string>("#9D84B7");
 
     return (
-      <Menu {...props} autoSelect={false}>
+      <Menu autoSelect={false} {...props}>
         <MenuButton
           backgroundColor={menuBtnColor.current}
           fontFamily="Sora"
@@ -82,17 +82,14 @@ const Header: React.FC = () => {
   useEffect(() => {
     isAuthenticated()
       .then(() => {
-        console.log("user is authenticated");
         setAuthenticated(true);
       })
       .catch(() => {
-        console.log("user is not authenticated");
         setAuthenticated(false);
       });
     getAllCategory().then((categories) => {
       const tree = convertToCategoryTree(categories);
       const rootNodes = getRootNodes(tree);
-      console.log({ rootNodes });
       setRootCategories(rootNodes);
     });
   }, []);
