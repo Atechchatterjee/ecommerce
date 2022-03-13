@@ -366,8 +366,6 @@ def save_options(request):
 
 @api_view(['POST'])
 def get_options(request):
-    print("request.data = ", request.data)
-    # product_id = itemgetter("product_id")(request.data)
     product_id = request.data.get("product_id")
     options_structure = []
     try:
@@ -384,7 +382,6 @@ def get_options(request):
                     } for value in option_values
                 ]
             })
-        print({"options_structure": options_structure})
         return Response({"options": options_structure},
                         status=status.HTTP_200_OK)
     except:
@@ -419,7 +416,6 @@ def add_product_to_cart(request):
                 product_id=get_product_model(product_id),
                 quantity=quantity
             ).save()
-            print("payload = ", payload)
             return Response(status=status.HTTP_200_OK)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
