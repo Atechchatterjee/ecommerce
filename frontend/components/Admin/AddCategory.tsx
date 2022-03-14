@@ -60,12 +60,12 @@ const AddCategory = ({ ...props }: ContainerProps) => {
       height="inherit"
       padding="2em 1em 5em 1em"
       marginBottom="5em"
-      {...props}
       borderRadius="lg"
+      {...props}
     >
       <Text
         fontWeight="bold"
-        fontSize="1.5em"
+        fontSize="2em"
         textColor="secondaryBlue.200"
         textAlign="center"
       >
