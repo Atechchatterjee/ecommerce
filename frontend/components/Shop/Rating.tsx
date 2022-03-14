@@ -62,7 +62,7 @@ const Rating = ({
           return Stars("empty", i);
         })}
       </HStack>
-      <Text positon="absolute" marginLeft="9em" marginTop="-1.25em">
+      <Text position="absolute" marginLeft="9em" marginTop="-1.25em">
         {numberOfReviews}
       </Text>
     </Container>
