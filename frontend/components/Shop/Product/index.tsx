@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Image, Container, Fade } from "@chakra-ui/react";
+import { Image, Fade } from "@chakra-ui/react";
 import { ProductContext } from "../../../context/ProductContext";
 import constants from "../../../util/Constants";
 import ProductDescription from "./ProductDescription";
@@ -24,7 +24,6 @@ interface Props {
     image?: File
   ) => void;
   onDelete?: Function;
-  defaultBoxShadow?: boolean;
 }
 
 const createImageUrl = (url: string, image: File | undefined): string =>
@@ -41,7 +40,6 @@ const Product: React.FC<Props> = ({
   editable,
   cb,
   onDelete,
-  defaultBoxShadow,
 }) => {
   const [edit, setEdit] = useState<boolean>(false); // toggles the edit mode
   const [triggerUpload, setTriggerUpload] = useState<boolean>(false);
