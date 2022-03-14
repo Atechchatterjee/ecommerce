@@ -86,7 +86,7 @@ const CustomTreeWrapper = ({
               }
             >
               <ListItem
-                padding="0.2em 0.7em"
+                padding="0.5em 0.7em"
                 key={indx}
                 bgColor={
                   highlightNode?.val.id === child.val.id
@@ -94,7 +94,7 @@ const CustomTreeWrapper = ({
                     : "none"
                 }
                 borderRadius={
-                  highlightNode?.val.id === child.val.id ? "full" : "none"
+                  highlightNode?.val.id === child.val.id ? "lg" : "none"
                 }
                 color={
                   highlightNode?.val.id === child.val.id ? "white" : "none"
@@ -106,6 +106,11 @@ const CustomTreeWrapper = ({
                 }
                 cursor="pointer"
                 onClick={() => handleFold(child)}
+                _hover={{
+                  bgColor: "#D1BEE8",
+                  color: "white",
+                  borderRadius: "lg",
+                }}
                 userSelect="none"
               >
                 <HStack>
@@ -124,11 +129,12 @@ const CustomTreeWrapper = ({
               <Box>
                 {toAddNode && child.val.id === highlightNode?.val.id ? (
                   <Input
-                    marginLeft="3.3em"
+                    marginLeft="7%"
                     marginTop="0.5em"
                     borderRadius="sm"
-                    width="15em"
-                    size="sm"
+                    // width="17em"
+                    width="80%"
+                    size="md"
                     onBlur={(e: any) => {
                       setToAddNode(false);
                       if (addCb && highlightNode && e.target.value !== "") {
