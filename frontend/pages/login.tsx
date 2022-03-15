@@ -8,6 +8,7 @@ import {
   Stack,
   Heading,
   Container,
+  Box,
 } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import React from "react";
@@ -15,22 +16,18 @@ import SignUp from "../components/Auth/SignUp";
 import SignIn from "../components/Auth/SignIn";
 import Header from "../components/Layout/Header";
 import Footer from "../components/Layout/Footer";
+import CustomContainer from "../components/Custom/CustomContainer";
 
 const Login: NextPage = () => {
   return (
     <>
       <Header />
-      <Container
-        boxShadow="0.2em 0.2em 0.2em 0.2em #e1e1e1"
-        height="inherit"
-        paddingBottom="4em"
-        borderRadius="lg"
-      >
-        <Center color="gray" style={{ marginTop: "7vh" }}>
+      <CustomContainer height="inherit" paddingBottom="4em" borderRadius="lg">
+        <Center color="gray" marginTop="7vh">
           <Stack
             direction={["row", "column"]}
             spacing="35px"
-            width="25em"
+            width="30rem"
             marginTop="3em"
           >
             <Tabs align="center" isFitted={false} variant="line" isLazy>
@@ -67,7 +64,7 @@ const Login: NextPage = () => {
             </Tabs>
           </Stack>
         </Center>
-      </Container>
+      </CustomContainer>
       <Footer />
     </>
   );
