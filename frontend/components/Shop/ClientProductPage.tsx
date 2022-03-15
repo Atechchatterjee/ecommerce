@@ -99,6 +99,7 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
   const [quantity, setQuantity] = useState<number>(1);
   const [productExistsInCart, setProductExistsInCart] =
     useState<boolean>(false);
+  const [selectedImage, setSelectedImage] = useState<number>(0);
 
   useEffect(() => {
     if (product) {
@@ -144,12 +145,17 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
                 src={`${constants.url?.substring(
                   0,
                   constants?.url.lastIndexOf("/")
-                )}${product.image[0].image}`}
+                )}${product.image[selectedImage].image}`}
                 width="50em"
                 height="40em"
               />
             </CustomContainer>
-            <ImageGallery width="50em" />
+            <ImageGallery
+              width="50em"
+              selectCb={(indx) => {
+                setSelectedImage(indx);
+              }}
+            />
           </Box>
           <Container
             float="left"
@@ -170,7 +176,7 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
 
             <HStack
               marginTop="2em"
-              color="secondaryBlue.200"
+              color="secondaryBlue.900"
               fontWeight="semibold"
               position="relative"
             >

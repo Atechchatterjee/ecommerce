@@ -1,16 +1,16 @@
 import React, { useContext } from "react";
-import { HStack, Container, Image, ContainerProps } from "@chakra-ui/react";
+import { HStack, Image, ContainerProps } from "@chakra-ui/react";
 import constants from "../../../util/Constants";
 import { ProductInfoContext } from "../../../context/ProductInfoContext";
 import { scrollBarStyle } from "../../../util/ScrollBarStyle";
 import CustomContainer from "../../Custom/CustomContainer";
+import { createImageUrl } from "../../../util/CreateImageUrl";
 
-const createImageUrl = (url: string, image: File | undefined): string =>
-  image
-    ? URL.createObjectURL(image)
-    : `${constants.url?.substring(0, constants?.url.lastIndexOf("/"))}${url}`;
+interface ImageGalleryProps extends ContainerProps {
+  selectCb?: (indx: number) => void;
+}
 
-const ImageGallery = ({ ...props }: ContainerProps) => {
+const ImageGallery = ({ selectCb, ...props }: ImageGalleryProps) => {
   const { productInfo } = useContext(ProductInfoContext);
   const [product] = productInfo;
 
@@ -30,12 +30,14 @@ const ImageGallery = ({ ...props }: ContainerProps) => {
         {product.image ? (
           product.image.map(({ image }: any, indx) => (
             <Image
+              fallbackSrc={constants.fallbackURL}
               key={indx}
               src={createImageUrl(image, undefined)}
               boxSize="10em"
               fit="contain"
               padding="2em"
               cursor="pointer"
+              onClick={() => selectCb?.(indx)}
             />
           ))
         ) : (
