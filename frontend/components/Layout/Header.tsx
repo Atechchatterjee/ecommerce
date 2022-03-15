@@ -1,7 +1,17 @@
 import React, { useEffect, useState, useRef } from "react";
-import { HStack, Text, Heading, Center, Link } from "@chakra-ui/layout";
+import {
+  Container,
+  Box,
+  HStack,
+  Text,
+  Heading,
+  Center,
+  Link,
+  Flex,
+} from "@chakra-ui/layout";
 import {
   InputGroup,
+  InputGroupProps,
   InputLeftAddon,
   Input,
   InputRightAddon,
@@ -39,7 +49,8 @@ const Header: React.FC = () => {
           style={{ fontSize: "0.9em" }}
           width="35.1"
           fontWeight="medium"
-          borderLeftRadius="3xl"
+          // borderLeftRadius="3xl"
+          borderRadiusLeft="md"
           borderRightRadius="none"
           _hover={{ backgroundColor: "#b799d6" }}
           _active={{ backgroundColor: "#b799d6" }}
@@ -94,140 +105,147 @@ const Header: React.FC = () => {
     });
   }, []);
 
-  return (
-    <div style={{ width: "100%" }}>
-      <Center
-        className="header-up"
-        width="full"
-        height="8em"
-        backgroundColor="#091353"
-        color="white"
-      >
-        <HStack style={{ paddingTop: "0" }}>
-          <Heading
-            as="h1"
-            size="md"
-            fontFamily="Sora"
-            style={{ width: "30rem", marginLeft: "0", cursor: "pointer" }}
-            marginLeft="-5em"
-            onClick={() => window.location.assign("/")}
-          >
-            Ecommerce Design
-          </Heading>
-          <InputGroup
-            style={{ width: "45rem", marginLeft: "7%", color: "gray" }}
-          >
-            <InputLeftAddon
-              style={{ padding: "0.2px" }}
-              borderLeftRadius="3xl"
-              borderRightRadius="none"
-            >
-              <CategoryMenu />
-            </InputLeftAddon>
-            <Input
-              style={{ fontSize: "0.9em" }}
-              placeholder="I am shopping for ..."
-              width="35em"
-              backgroundColor="white"
-              borderWidth="0"
-              borderRadius="none"
-            />
-            <InputRightAddon
-              backgroundColor="#9D84B7"
-              color="white"
-              borderColor="#9D84B7"
-              width="3em"
-              position="relative"
-            >
-              <Button
-                variant="pinkSolid"
-                position="absolute"
-                fontSize="0.9em"
-                marginLeft="-1.3em"
-                width="6.5em"
-                borderRightRadius="full"
-              >
-                Search
-              </Button>
-            </InputRightAddon>
-          </InputGroup>
-          <HStack style={{ marginLeft: "10%" }} spacing={5}>
-            <Tooltip label="whishlist" position="absolute">
-              <span>
-                <FaRegHeart size={25} style={{ cursor: "pointer" }} />
-              </span>
-            </Tooltip>
-            <Tooltip label="shop">
-              <span>
-                <AiOutlineShopping
-                  size={30}
-                  style={{ cursor: "pointer" }}
-                  onClick={() => window.location.assign("/shop")}
-                />
-              </span>
-            </Tooltip>
-            <Tooltip label="profile">
-              <span>
-                <FaRegUser size={25} style={{ cursor: "pointer" }} />
-              </span>
-            </Tooltip>
-            <Tooltip label="cart">
-              <span>
-                <FiShoppingCart
-                  size={25}
-                  style={{ cursor: "pointer" }}
-                  onClick={() => window.location.assign("/cart")}
-                />
-              </span>
-            </Tooltip>
-          </HStack>
-          {!authenticated ? (
-            <Link
-              style={{ marginLeft: "5em" }}
-              href="/login"
-              fontFamily="Sora"
-              textUnderlineOffset="0.1em"
-            >
-              Login
-            </Link>
-          ) : (
-            <Link
-              style={{ marginLeft: "5em" }}
-              onClick={() => logout()}
-              fontFamily="Sora"
-              textUnderlineOffset="0.2em"
-            >
-              logout
-            </Link>
-          )}
-        </HStack>
-      </Center>
-      <Center
-        className="header-mid"
-        backgroundColor="secondaryBlue.100"
-        marginLeft="-50em"
-        height="3em"
-      >
-        <SelectCategory
-          text="Browse Category"
-          bgColor="#9D84B7"
+  const SearchBar = ({ ...props }: InputGroupProps) => {
+    return (
+      <InputGroup color="gray" display="flex" flex="3" {...props}>
+        <InputLeftAddon
+          flex="0.1"
+          style={{ padding: "0.2px" }}
+          borderLeftRadius="md"
+          borderRightRadius="none"
+        >
+          <CategoryMenu />
+        </InputLeftAddon>
+        <Input
+          flex="0.7"
+          style={{ fontSize: "0.9em" }}
+          placeholder="I am shopping for ..."
+          backgroundColor="white"
+          borderWidth="0"
           borderRadius="none"
-          width="13em"
-          height="3em"
+          color="secondaryBlue.900"
         />
-        <Link
-          fontWeight={700}
+        <InputRightAddon
+          flex="0.03"
+          backgroundColor="#9D84B7"
           color="white"
-          marginLeft="1em"
-          width="inherit"
+          borderColor="#9D84B7"
+          position="relative"
+        >
+          <Button
+            variant="pinkSolid"
+            position="absolute"
+            fontSize="0.9em"
+            marginLeft="-1.3em"
+            borderRightRadius="md"
+            borderLeftRadius="none"
+          >
+            Search
+          </Button>
+        </InputRightAddon>
+      </InputGroup>
+    );
+  };
+
+  const ShopIcons = () => {
+    return (
+      <Box flex="0.2">
+        <Flex gridGap={4} gridColumn={4}>
+          <Tooltip label="whishlist" position="absolute">
+            <span>
+              <FaRegHeart
+                size={25}
+                style={{ cursor: "pointer", flex: "2", marginTop: "0.1em" }}
+              />
+            </span>
+          </Tooltip>
+          <Tooltip label="shop">
+            <span>
+              <AiOutlineShopping
+                size={30}
+                style={{ cursor: "pointer", flex: "2" }}
+                onClick={() => window.location.assign("/shop")}
+              />
+            </span>
+          </Tooltip>
+          <Tooltip label="profile">
+            <span>
+              <FaRegUser
+                size={25}
+                style={{ cursor: "pointer", flex: "2", marginTop: "0.1em" }}
+              />
+            </span>
+          </Tooltip>
+          <Tooltip label="cart">
+            <span>
+              <FiShoppingCart
+                size={25}
+                style={{ cursor: "pointer", flex: "2", marginTop: "0.1em" }}
+                onClick={() => window.location.assign("/cart")}
+              />
+            </span>
+          </Tooltip>
+        </Flex>
+      </Box>
+    );
+  };
+
+  const LoginLink = () => {
+    if (!authenticated) {
+      return (
+        <Link
+          style={{ marginLeft: "5em" }}
+          href="/login"
+          fontFamily="Sora"
+          textUnderlineOffset="0.1em"
+          marginTop="0.2em"
+        >
+          Login
+        </Link>
+      );
+    } else {
+      return (
+        <Link
+          style={{ marginLeft: "5em" }}
+          onClick={() => logout()}
           fontFamily="Sora"
           textUnderlineOffset="0.2em"
-          href="/shop"
+          marginTop="0.2em"
         >
-          All Products
+          logout
         </Link>
-      </Center>
-    </div>
+      );
+    }
+  };
+
+  return (
+    <Box
+      width="full"
+      className="header-up"
+      height="8em"
+      backgroundColor="#091353"
+      color="white"
+      padding="2.5em"
+      position="sticky"
+      overflow="hidden"
+    >
+      <Flex flexDirection={"row"} gridColumn={4} gridGap={10} width="100%">
+        <Heading
+          as="h1"
+          size="md"
+          fontFamily="Sora"
+          flex="1"
+          marginTop="0.2em"
+          cursor="pointer"
+          onClick={() => window.location.assign("/")}
+        >
+          Ecommerce Design
+        </Heading>
+        <SearchBar />
+        <ShopIcons />
+        <LoginLink />
+      </Flex>
+    </Box>
   );
 };
 
