@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import constants from "../../util/Constants";
 import Product from "../Shop/Product";
 import {
@@ -15,7 +15,7 @@ import {
   ModalOverlay,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { Product as ProductType } from "../../types/shop";
+import { useDynamicColumns } from "../../hooks/UseDynamicColumns";
 
 interface Product {
   product_id: number;
@@ -41,10 +41,10 @@ const fetchAllProducts = async (): Promise<Product[]> => {
 
 const AllProducts: React.FunctionComponent = () => {
   const [allProducts, setAllProducts] = useState<Product[]>([]);
-  const [columns, _] = useState<string>("3");
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [del, setDel] = useState<boolean>(false);
   const [prdDel, setPrdDel] = useState<Product>();
+  const [columns] = useDynamicColumns(4);
 
   const deleteProduct = (productId: any) => {
     axios
@@ -106,12 +106,6 @@ const AllProducts: React.FunctionComponent = () => {
     fetchAllProducts().then((allProducts) => setAllProducts(allProducts));
   }, []);
 
-  // useMemo(async () => await fetchAllProducts(), [fetchAllProducts]).then(
-  //   (products) => {
-  //     setAllProducts(products);
-  //   }
-  // );
-
   useEffect(() => {
     if (del) {
       removeProduct(prdDel);
@@ -157,12 +151,9 @@ const AllProducts: React.FunctionComponent = () => {
     <Center marginTop="3em" width="100%">
       <Grid
         h="inherit"
-        width="8xl"
-        gap={12}
+        gap={6}
         templateColumns={`repeat(${columns}, 1fr)`}
-        templateRows={`repeat(${Math.ceil(
-          allProducts.length / parseInt(columns)
-        )}, 1fr)`}
+        templateRows={`repeat(${Math.ceil(allProducts.length / columns)}, 1fr)`}
       >
         {allProducts.map(
           ({ name, image, description, price, product_id, category }) => (

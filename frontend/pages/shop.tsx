@@ -4,10 +4,10 @@ import Header from "../components/Layout/Header";
 import Footer from "../components/Layout/Footer";
 import Product from "../components/Shop/Product";
 import React, { useState, useEffect } from "react";
-import { Grid, GridItem, Center } from "@chakra-ui/react";
+import { Grid, GridItem, Box } from "@chakra-ui/react";
 import constants from "../util/Constants";
 import axios from "axios";
-import { checkWhichUser } from "../util/Authenticated";
+import { useDynamicColumns } from "../hooks/UseDynamicColumns";
 
 interface Product {
   product_id: number;
@@ -27,23 +27,22 @@ const getAllProducts = async (): Promise<Product[]> => {
 
 const Shop: NextPage = () => {
   const [allProducts, setAllProducts] = useState<Product[]>([]);
-  const [columns, setColumns] = useState<string>("3");
+  const [columns] = useDynamicColumns(4);
 
   useEffect(() => {
     getAllProducts().then((products) => setAllProducts(products));
   }, []);
 
   return (
-    <>
+    <Box height="100vh" position="relative">
       <Header />
-      <Center marginTop="3em" width="100%">
+      <Box padding="5em 10em 5em 5em" overflow="hidden">
         <Grid
           h="inherit"
-          width="8xl"
-          gap={12}
+          gap={6}
           templateColumns={`repeat(${columns}, 1fr)`}
           templateRows={`repeat(${Math.ceil(
-            allProducts.length / parseInt(columns)
+            allProducts.length / columns
           )}, 1fr)`}
         >
           {allProducts.map(
@@ -60,9 +59,9 @@ const Shop: NextPage = () => {
             )
           )}
         </Grid>
-      </Center>
+      </Box>
       <Footer />
-    </>
+    </Box>
   );
 };
 
