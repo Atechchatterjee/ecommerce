@@ -1,12 +1,5 @@
 import { useState } from "react";
-import {
-  Container,
-  HStack,
-  Text,
-  Box,
-  ContainerProps,
-  Center,
-} from "@chakra-ui/react";
+import { Container, HStack, Text, Box, ContainerProps } from "@chakra-ui/react";
 import { BsStarFill, BsStar } from "react-icons/bs";
 import ColorPalatte from "../../theme/ColorPalatte";
 
@@ -16,7 +9,7 @@ const commonIconStyles = (i: number, interactive?: boolean) => {
   return {
     cursor: interactive ? "pointer" : "default",
     key: i,
-    fill: ColorPalatte.secondaryBlue[200],
+    fill: ColorPalatte.secondaryBlue[900],
   };
 };
 
