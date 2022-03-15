@@ -1,4 +1,11 @@
-import { Container, Button, Heading, Tag, Text } from "@chakra-ui/react";
+import {
+  Container,
+  Box,
+  Button,
+  Tag,
+  Text,
+  ContainerProps,
+} from "@chakra-ui/react";
 import { useState, useContext } from "react";
 import { UploadContext } from "../../../context/UploadContext";
 import Upload from "../../Custom/Upload";
@@ -6,15 +13,30 @@ import { ProductContext } from "../../../context/ProductContext";
 import CustomEditable from "./CustomEditable";
 import { UserContext } from "../../../context/UserContext";
 
-interface Props {
-  cb?: (id: number, name: string, description: string, price: string) => void;
-  id: number;
+// interface Props {
+//   cb?: (id: number, name: string, description: string, price: string) => void;
+//   productId: number;
+//   name: string;
+//   description: string;
+//   price: string;
+// }
+
+interface Props extends ContainerProps {
+  productId: number;
   name: string;
   description: string;
   price: string;
+  cb?: (id: number, name: string, description: string, price: string) => void;
 }
 
-const EditMode: React.FC<Props> = ({ id, name, description, price, cb }) => {
+const EditMode = ({
+  productId,
+  name,
+  description,
+  price,
+  cb,
+  ...props
+}: Props) => {
   const [changedName, setChangedName] = useState<string>(name);
   const [changedDesc, setChangedDesc] = useState<string>(description);
   const [changedPrice, setChangedPrice] = useState<string>(price);
@@ -22,7 +44,7 @@ const EditMode: React.FC<Props> = ({ id, name, description, price, cb }) => {
     useContext(ProductContext);
 
   return (
-    <Container width="full" height="initial" padding="1.5em">
+    <Container width="full" height="initial" padding="1.5em" {...props}>
       <CustomEditable
         text={changedName}
         onChange={(name: string) => setChangedName(name)}
@@ -60,7 +82,7 @@ const EditMode: React.FC<Props> = ({ id, name, description, price, cb }) => {
         _hover={{ bg: "#B096CE" }}
         onClick={() => {
           if (cb) {
-            cb(id, changedName, changedDesc, changedPrice);
+            cb(productId, changedName, changedDesc, changedPrice);
           }
           setEdit(false);
         }}
@@ -71,26 +93,35 @@ const EditMode: React.FC<Props> = ({ id, name, description, price, cb }) => {
   );
 };
 
-const NormalMode: React.FC<Props> = ({ id, name, description, price }) => {
+const NormalMode = ({
+  productId,
+  name,
+  description,
+  price,
+  ...props
+}: Props) => {
   const { admin } = useContext(UserContext);
   return (
-    <Container width="full" height="initial" padding="1em">
-      <Heading
+    <Container width="full" height="initial" padding="1em" {...props}>
+      <Text
         fontFamily="Sora"
         fontWeight="semibold"
-        color="secondaryBlue.200"
-        size="lg"
+        color="secondaryBlue.900"
+        fontSize="1.4em"
         cursor="pointer"
         _hover={{ color: "secondaryPink.200" }}
         onClick={() => {
-          if (!admin) window.location.assign(`/shop/${id}`);
-          else window.location.assign(`/admin/catalogs/all-products/${id}`);
+          if (!admin) window.location.assign(`/shop/${productId}`);
+          else
+            window.location.assign(`/admin/catalogs/all-products/${productId}`);
         }}
       >
         {name}
-      </Heading>
+      </Text>
       <br />
-      <Text color="#2c2c2c">{description}</Text>
+      <Box height="9em">
+        <Text color="#2c2c2c">{description}</Text>
+      </Box>
       <Tag
         size="md"
         bgColor="#9D84B7"
