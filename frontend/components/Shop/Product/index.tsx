@@ -8,6 +8,7 @@ import DeleteBtn from "./DeleteBtn";
 import UploadBtn from "./UploadBtn";
 import CustomContainer from "../../../components/Custom/CustomContainer";
 import Rating from "../Rating";
+import { createImageUrl } from "../../../util/CreateImageUrl";
 
 interface Props {
   id: number;
@@ -25,11 +26,6 @@ interface Props {
   ) => void;
   onDelete?: Function;
 }
-
-const createImageUrl = (url: string, image: File | undefined): string =>
-  image
-    ? URL.createObjectURL(image)
-    : `${constants.url?.substring(0, constants?.url.lastIndexOf("/"))}${url}`;
 
 const Product: React.FC<Props> = ({
   id,
@@ -53,8 +49,8 @@ const Product: React.FC<Props> = ({
   return (
     <Fade in={!loading}>
       <CustomContainer
-        height="40em"
-        width="30em"
+        height="35em"
+        width="25em"
         padding="0 1em"
         position="relative"
         borderRadius="lg"
@@ -86,25 +82,28 @@ const Product: React.FC<Props> = ({
               !!image ? (!!image[0] ? image[0].image : "") : "",
               changedImage
             )}
-            fallbackSrc="https://newhorizon-bsh.s3.ap-south-1.amazonaws.com/nhengineering/bsh/wp-content/uploads/2020/01/17113522/default-image.png"
+            fallbackSrc={constants.fallbackURL}
             width="full"
-            height="20em"
+            height="15em"
             cursor={edit ? "pointer" : "auto"}
           />
           {edit ? <UploadBtn /> : <></>}
           <ProductDescription
-            id={id}
+            productId={id}
             name={name}
             description={description}
             price={price}
             cb={(id, name, description, price) => {
               if (cb) cb(id, name, description, price, changedImage);
             }}
+            height={editable ? "14em" : "17em"}
+            overflowX="hidden"
+            overflowY="hidden"
           />
           <Rating
             position="absolute"
-            left="0.3em"
-            bottom="0.7em"
+            left="1em"
+            bottom="1em"
             rating={Math.random() * 5 + 2}
             numberOfReviews={Math.floor(Math.random() * 1000 + 10)}
           />
