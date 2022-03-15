@@ -15,16 +15,16 @@ const commonStyles = ({includeColor = true}: {includeColor?: boolean} = {}) => (
 export default {
   variants: {
     blueSolid: () => ({
-      bg: secondaryBlue[200],
+      bg: secondaryBlue[900],
       _hover: { bg: "#314775" },
       ...commonStyles(),
     }),
     blueOutline: () => ({
       bg: "white",
-      outlineColor: secondaryBlue[200],
+      outlineColor: secondaryBlue[900],
       outlineOffset: "none",
       borderRadius: "sm",
-      textColor: secondaryBlue[200],
+      textColor: secondaryBlue[900],
       ...commonStyles({includeColor: false}),
     }),
     pinkSolid: () => ({

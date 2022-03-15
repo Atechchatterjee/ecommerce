@@ -176,7 +176,7 @@ const CustomTreeWrapper = ({
     return (
       <Text
         cursor="pointer"
-        _hover={{ color: "secondaryBlue.200", fontWeight: "semibold" }}
+        _hover={{ color: "secondaryBlue.900", fontWeight: "semibold" }}
         {...props}
       >
         {children}

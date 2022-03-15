@@ -87,7 +87,7 @@ const DragUpload = ({ onFileUpload, clearUpload, ...props }: Props) => {
             left="35%"
             fontWeight="semibold"
             fontSize="1.2em"
-            textColor={hover ? "#525E99" : "secondaryBlue.200"}
+            textColor={hover ? "#525E99" : "secondaryBlue.900"}
             fontFamily="Sora"
           >
             Drop Files Here

@@ -72,7 +72,7 @@ const Cart: NextPage = () => {
           <Text fontWeight="semibold">final price : </Text>
         )
       ) : (
-        <Text fontWeight="semibold" textColor="secondaryBlue.200">
+        <Text fontWeight="semibold" textColor="secondaryBlue.900">
           {finalPriceCalc}
         </Text>
       )
@@ -132,7 +132,7 @@ const Cart: NextPage = () => {
 
   return (
     <Box
-      bgGradient="linear(to-b, secondaryBlue.200, secondaryPink.200)"
+      bgGradient="linear(to-b, secondaryBlue.900, secondaryPink.200)"
       width="100%"
       height="100vh"
       position="relative"
