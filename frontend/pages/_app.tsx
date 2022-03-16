@@ -6,6 +6,7 @@ import theme from "../theme";
 import { useEffect, useState } from "react";
 import { checkWhichUser } from "../util/Authenticated";
 import { UserContext } from "../context/UserContext";
+import Head from "next/head";
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const [admin, setAdmin] = useState<boolean | null>(null);
@@ -22,6 +23,13 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
     <ChakraProvider theme={theme}>
       <CookiesProvider>
         <UserContext.Provider value={{ admin, setAdmin }}>
+          <Head>
+            <title>Ecommerce Design</title>
+            <meta
+              name="viewport"
+              content="width=device-width,initial-scale=1"
+            />
+          </Head>
           <Component {...pageProps} />
         </UserContext.Provider>
       </CookiesProvider>
