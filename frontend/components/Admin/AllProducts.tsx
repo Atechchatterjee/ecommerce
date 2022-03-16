@@ -44,7 +44,7 @@ const AllProducts: React.FunctionComponent = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [del, setDel] = useState<boolean>(false);
   const [prdDel, setPrdDel] = useState<Product>();
-  const [columns] = useDynamicColumns(4);
+  const [columns] = useDynamicColumns(4, [1700, 1300, 860]);
 
   const deleteProduct = (productId: any) => {
     axios
@@ -148,7 +148,7 @@ const AllProducts: React.FunctionComponent = () => {
   };
 
   return (
-    <Center marginTop="3em" width="100%">
+    <Center marginTop="3em" width="100%" overflow="hidden">
       <Grid
         h="inherit"
         gap={6}

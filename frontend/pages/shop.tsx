@@ -27,7 +27,7 @@ const getAllProducts = async (): Promise<Product[]> => {
 
 const Shop: NextPage = () => {
   const [allProducts, setAllProducts] = useState<Product[]>([]);
-  const [columns] = useDynamicColumns(4);
+  const [columns] = useDynamicColumns(4, [1700, 1300, 860]);
 
   useEffect(() => {
     getAllProducts().then((products) => setAllProducts(products));
@@ -36,7 +36,7 @@ const Shop: NextPage = () => {
   return (
     <Box height="100vh" position="relative">
       <Header />
-      <Box padding="5em 10em 5em 5em" overflow="hidden">
+      <Box padding="2% 1% 3% 1%" overflow="hidden">
         <Grid
           h="inherit"
           gap={6}
