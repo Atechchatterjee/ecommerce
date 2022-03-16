@@ -5,6 +5,7 @@ import {
   Tag,
   Text,
   ContainerProps,
+  Flex,
 } from "@chakra-ui/react";
 import { useState, useContext } from "react";
 import { UploadContext } from "../../../context/UploadContext";
@@ -12,14 +13,6 @@ import Upload from "../../Custom/Upload";
 import { ProductContext } from "../../../context/ProductContext";
 import CustomEditable from "./CustomEditable";
 import { UserContext } from "../../../context/UserContext";
-
-// interface Props {
-//   cb?: (id: number, name: string, description: string, price: string) => void;
-//   productId: number;
-//   name: string;
-//   description: string;
-//   price: string;
-// }
 
 interface Props extends ContainerProps {
   productId: number;
@@ -52,6 +45,7 @@ const EditMode = ({
       <CustomEditable
         text={changedDesc}
         onChange={(description: string) => setChangedDesc(description)}
+        textArea
       />
       <CustomEditable
         text={changedPrice}
@@ -103,35 +97,43 @@ const NormalMode = ({
   const { admin } = useContext(UserContext);
   return (
     <Container width="full" height="initial" padding="1em" {...props}>
-      <Text
-        fontFamily="Sora"
-        fontWeight="semibold"
-        color="secondaryBlue.900"
-        fontSize="1.4em"
-        cursor="pointer"
-        _hover={{ color: "secondaryPink.200" }}
-        onClick={() => {
-          if (!admin) window.location.assign(`/shop/${productId}`);
-          else
-            window.location.assign(`/admin/catalogs/all-products/${productId}`);
-        }}
-      >
-        {name}
-      </Text>
-      <br />
-      <Box height="9em">
-        <Text color="#2c2c2c">{description}</Text>
-      </Box>
-      <Tag
-        size="md"
-        bgColor="#9D84B7"
-        textColor="white"
-        position="absolute"
-        right="1em"
-        bottom="1em"
-      >
-        <Text fontWeight="bold">₹{price}</Text>
-      </Tag>
+      <Flex flexDirection="column">
+        <Text
+          fontFamily="Sora"
+          overflow="hidden"
+          flexWrap="nowrap"
+          fontWeight="semibold"
+          color="secondaryBlue.900"
+          fontSize="1.4em"
+          cursor="pointer"
+          _hover={{ color: "secondaryPink.200" }}
+          onClick={() => {
+            if (!admin) window.location.assign(`/shop/${productId}`);
+            else
+              window.location.assign(
+                `/admin/catalogs/all-products/${productId}`
+              );
+          }}
+        >
+          {name}
+        </Text>
+        <br />
+        <Box height="9em">
+          <Text color="#2c2c2c" height="inherit" noOfLines={5} lineHeight="7">
+            {description}
+          </Text>
+        </Box>
+        <Tag
+          size="md"
+          bgColor="#9D84B7"
+          textColor="white"
+          position="absolute"
+          right="1em"
+          bottom="1em"
+        >
+          <Text fontWeight="bold">₹{price}</Text>
+        </Tag>
+      </Flex>
     </Container>
   );
 };

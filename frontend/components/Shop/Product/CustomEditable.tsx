@@ -4,7 +4,8 @@ import { Editable, EditablePreview, EditableInput } from "@chakra-ui/react";
 const CustomEditable: React.FC<{
   text: string;
   onChange?: (_: string) => void;
-}> = ({ text, onChange }) => {
+  textArea?: boolean;
+}> = ({ text, onChange, textArea }) => {
   return (
     <Editable
       defaultValue={text}
@@ -13,7 +14,7 @@ const CustomEditable: React.FC<{
       }}
     >
       <EditablePreview />
-      <EditableInput />
+      <EditableInput {...(textArea ? { as: "textarea", height: "7em" } : {})} />
     </Editable>
   );
 };
