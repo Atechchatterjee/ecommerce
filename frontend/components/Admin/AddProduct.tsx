@@ -173,7 +173,7 @@ const AddProduct = (props: ContainerProps) => {
                   marginTop="5em"
                   text="Category"
                   borderRadius="lg"
-                  onSelect={({ selectedCategory }) =>
+                  selectCb={({ selectedCategory }) =>
                     setCategoryId(selectedCategory)
                   }
                 />

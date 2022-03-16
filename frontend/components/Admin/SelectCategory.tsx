@@ -3,7 +3,7 @@ import { Category, CategoryMap } from "../../types/shop";
 import { convertToCustomTree } from "../../util/Tree";
 import axios from "axios";
 import constants from "../../util/Constants";
-import { Button } from "@chakra-ui/button";
+import { Button, ButtonProps } from "@chakra-ui/button";
 import {
   Modal,
   ModalOverlay,
@@ -26,34 +26,21 @@ export const getAllCategory = async (): Promise<Category[]> => {
   }
 };
 
-interface Props {
-  onSelect?: ({
+interface Props extends ButtonProps {
+  selectCb?: ({
     selectedCategory,
   }: {
     selectedCategory: number | null;
   }) => void;
-  colorScheme?: string;
-  marginTop?: string;
-  width?: string;
-  borderRadius?: string;
   text?: string;
   includeNone?: boolean;
-  bgColor?: string;
-  height?: string;
-  variant?: "blueSolid" | "pinkSolid" | "none";
 }
 
 const SelectCategory: React.FC<Props> = ({
-  onSelect,
-  colorScheme,
-  width,
-  marginTop,
-  borderRadius,
+  selectCb: onSelect,
   text,
   includeNone,
-  bgColor,
-  height,
-  variant,
+  ...props
 }) => {
   const categoryMap = useRef<CategoryMap>({});
   const [modalOpen, setModalOpen] = useState<boolean>(false);
@@ -128,16 +115,17 @@ const SelectCategory: React.FC<Props> = ({
   return (
     <>
       <Button
-        variant={variant || "pinkSolid"}
-        colorScheme={colorScheme ? colorScheme : ""}
-        backgroundColor={bgColor ? bgColor : "teal"}
-        width={width ? width : "full"}
-        marginTop={marginTop ? marginTop : "0"}
-        borderRadius={borderRadius ? borderRadius : "md"}
-        height={height ? height : "2.5em"}
+        // variant={variant || "pinkSolid"}
+        // colorScheme={colorScheme ? colorScheme : ""}
+        // backgroundColor={bgColor ? bgColor : "teal"}
+        // width={width ? width : "full"}
+        // marginTop={marginTop ? marginTop : "0"}
+        // borderRadius={borderRadius ? borderRadius : "md"}
+        // height={height ? height : "2.5em"}
         onClick={() => {
           setModalOpen(true);
         }}
+        {...props}
       >
         <TriggerButtonText />
       </Button>
