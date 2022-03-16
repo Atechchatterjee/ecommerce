@@ -1,13 +1,11 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  Container,
   Box,
-  HStack,
-  Text,
   Heading,
-  Center,
   Link,
+  LinkProps,
   Flex,
+  BoxProps,
 } from "@chakra-ui/layout";
 import {
   InputGroup,
@@ -16,79 +14,19 @@ import {
   Input,
   InputRightAddon,
 } from "@chakra-ui/input";
-import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/menu";
 import { Button, Tooltip } from "@chakra-ui/react";
-import { ChevronDownIcon } from "@chakra-ui/icons";
 import { FaRegHeart, FaRegUser } from "react-icons/fa";
 import { AiOutlineShopping } from "react-icons/ai";
-import { useCookies } from "react-cookie";
 import { isAuthenticated } from "../../util/Authenticated";
-import { convertToCategoryTree, getRootNodes } from "../../util/Tree";
-import SelectCategory, { getAllCategory } from "../Admin/SelectCategory";
+import SelectCategory from "../Admin/SelectCategory";
 import logout from "../../util/Logout";
 import { FiShoppingCart } from "react-icons/fi";
+import { useWindowDimensions } from "../../hooks/UseWindowDimensions";
+import { FaSearch } from "react-icons/fa";
 
 const Header: React.FC = () => {
   const [authenticated, setAuthenticated] = useState<boolean>(false);
-  const [rootCategories, setRootCategories] = useState<any[]>([]);
-  const [cookies] = useCookies(["token"]);
-
-  const CategoryMenu: React.FunctionComponent<any> = ({ ...props }) => {
-    const [selectedItem, selectItem] = useState<string>("All Categories");
-    const menuBtnColor = useRef<string>("#9D84B7");
-
-    return (
-      <Menu autoSelect={false} {...props}>
-        <MenuButton
-          backgroundColor={menuBtnColor.current}
-          fontFamily="Sora"
-          color="white"
-          marginLeft="-0.1em"
-          as={Button}
-          rightIcon={<ChevronDownIcon />}
-          style={{ fontSize: "0.9em" }}
-          width="35.1"
-          fontWeight="medium"
-          // borderLeftRadius="3xl"
-          borderRadiusLeft="md"
-          borderRightRadius="none"
-          _hover={{ backgroundColor: "#b799d6" }}
-          _active={{ backgroundColor: "#b799d6" }}
-        >
-          <Text>{selectedItem}</Text>
-        </MenuButton>
-        <MenuList
-          style={{ fontSize: "0.9em" }}
-          borderColor="#091353"
-          bgColor="#091353"
-        >
-          <MenuItem
-            value="All Categories"
-            onClick={(event: any) => selectItem(event.target.value)}
-            bgColor="#091353"
-            color="white"
-            _hover={{ backgroundColor: "#3C488C" }}
-            borderColor="#091353"
-          >
-            All Categories
-          </MenuItem>
-          {rootCategories.map((categoryNode: any) => (
-            <MenuItem
-              key={categoryNode.val.category_name}
-              value={categoryNode.val.category_name}
-              onClick={(event: any) => selectItem(event.target.value)}
-              bgColor="#091353"
-              color="white"
-              _hover={{ backgroundColor: "#3C488C" }}
-              borderColor="#091353"
-            >
-              {categoryNode.val.category_name}
-            </MenuItem>
-          ))}
-        </MenuList>
-      </Menu>
-    );
-  };
+  const [width, height] = useWindowDimensions();
 
   useEffect(() => {
     isAuthenticated()
@@ -98,58 +36,41 @@ const Header: React.FC = () => {
       .catch(() => {
         setAuthenticated(false);
       });
-    getAllCategory().then((categories) => {
-      const tree = convertToCategoryTree(categories);
-      const rootNodes = getRootNodes(tree);
-      setRootCategories(rootNodes);
-    });
   }, []);
 
   const SearchBar = ({ ...props }: InputGroupProps) => {
     return (
-      <InputGroup color="gray" display="flex" flex="3" {...props}>
-        <InputLeftAddon
-          flex="0.1"
-          style={{ padding: "0.2px" }}
-          borderLeftRadius="md"
-          borderRightRadius="none"
-        >
-          <CategoryMenu />
-        </InputLeftAddon>
+      <InputGroup color="gray" display="flex" {...props}>
         <Input
-          flex="0.7"
-          style={{ fontSize: "0.9em" }}
-          placeholder="I am shopping for ..."
+          flex="0.78"
+          placeholder="Search"
           backgroundColor="white"
           borderWidth="0"
+          borderLeftRadius="md"
           borderRadius="none"
+          height="4.2vh"
+          minHeight="2.5em"
           color="secondaryBlue.900"
         />
         <InputRightAddon
-          flex="0.03"
+          flex="0"
           backgroundColor="#9D84B7"
+          height="4.2vh"
+          minHeight="2.5em"
           color="white"
           borderColor="#9D84B7"
           position="relative"
+          cursor="pointer"
         >
-          <Button
-            variant="pinkSolid"
-            position="absolute"
-            fontSize="0.9em"
-            marginLeft="-1.3em"
-            borderRightRadius="md"
-            borderLeftRadius="none"
-          >
-            Search
-          </Button>
+          <FaSearch />
         </InputRightAddon>
       </InputGroup>
     );
   };
 
-  const ShopIcons = () => {
+  const ShopIcons = ({ ...props }: BoxProps) => {
     return (
-      <Box flex="0.2">
+      <Box {...props}>
         <Flex gridGap={4} gridColumn={4}>
           <Tooltip label="whishlist" position="absolute">
             <span>
@@ -190,15 +111,15 @@ const Header: React.FC = () => {
     );
   };
 
-  const LoginLink = () => {
+  const LoginLink = ({ ...props }: LinkProps) => {
     if (!authenticated) {
       return (
         <Link
-          style={{ marginLeft: "5em" }}
           href="/login"
           fontFamily="Sora"
           textUnderlineOffset="0.1em"
           marginTop="0.2em"
+          {...props}
         >
           Login
         </Link>
@@ -206,11 +127,10 @@ const Header: React.FC = () => {
     } else {
       return (
         <Link
-          style={{ marginLeft: "5em" }}
           onClick={() => logout()}
           fontFamily="Sora"
           textUnderlineOffset="0.2em"
-          marginTop="0.2em"
+          {...props}
         >
           logout
         </Link>
@@ -222,28 +142,37 @@ const Header: React.FC = () => {
     <Box
       width="full"
       className="header-up"
-      height="8em"
+      height="initial"
+      minHeight="4em"
       backgroundColor="#091353"
       color="white"
-      padding="2.5em"
-      position="sticky"
+      padding="2%"
       overflow="hidden"
     >
-      <Flex flexDirection={"row"} gridColumn={4} gridGap={10} width="100%">
+      <Flex
+        flexDirection={"row"}
+        gridColumn={4}
+        gridGap={10}
+        paddingTop="0.3em"
+        width="100%"
+        height="inherit"
+        flexWrap="wrap"
+      >
         <Heading
           as="h1"
           size="md"
           fontFamily="Sora"
-          flex="1"
+          flex="1.5"
           marginTop="0.2em"
           cursor="pointer"
           onClick={() => window.location.assign("/")}
+          isTruncated
         >
           Ecommerce Design
         </Heading>
-        <SearchBar />
-        <ShopIcons />
-        <LoginLink />
+        <SearchBar flex="4" />
+        {width > 950 ? <ShopIcons flex="1" marginTop="0.1em" /> : null}
+        <LoginLink flex="1" marginTop="0.2em" />
       </Flex>
     </Box>
   );
