@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { Container, HStack, Text, Box, ContainerProps } from "@chakra-ui/react";
+import {
+  Container,
+  Flex,
+  HStack,
+  Text,
+  Box,
+  ContainerProps,
+} from "@chakra-ui/react";
 import { BsStarFill, BsStar } from "react-icons/bs";
 import ColorPalatte from "../../theme/ColorPalatte";
 
@@ -49,15 +56,15 @@ const Rating = ({
 
   return (
     <Container width="30em" {...props}>
-      <HStack width="30em" position="relative">
-        {[...Array(MAX_RATING)].map((_, i) => {
-          if (i < rating) return Stars("filled", i);
-          return Stars("empty", i);
-        })}
-      </HStack>
-      <Text position="absolute" marginLeft="9em" marginTop="-1.25em">
-        {numberOfReviews}
-      </Text>
+      <Flex flexDirection="row">
+        <HStack flex="1">
+          {[...Array(MAX_RATING)].map((_, i) => {
+            if (i < rating) return Stars("filled", i);
+            return Stars("empty", i);
+          })}
+        </HStack>
+        <Text flex="2">{numberOfReviews}</Text>
+      </Flex>
     </Container>
   );
 };

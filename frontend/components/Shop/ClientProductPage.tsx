@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import {
+  Flex,
   HStack,
   Button,
   Input,
@@ -131,8 +132,13 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
       {loading ? (
         <Spinner />
       ) : (
-        <Box margin="4em 5em">
-          <Box float="left" marginBottom="3em" className="product-images">
+        <Flex
+          margin="4em 5em"
+          flexDirection="row"
+          flexWrap="wrap"
+          overflow="hidden"
+        >
+          <Box marginBottom="3em" className="product-images" flex="0.2">
             <CustomContainer
               borderRadius="2xl"
               height="initial"
@@ -157,11 +163,7 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
               }}
             />
           </Box>
-          <Container
-            float="left"
-            marginLeft="10em"
-            className="product-description"
-          >
+          <Container marginLeft="10em" className="product-description" flex="1">
             <Text fontWeight="semibold" fontSize="2.7em">
               {product.name}
             </Text>
@@ -240,7 +242,7 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
               </Button>
             </HStack>
           </Container>
-        </Box>
+        </Flex>
       )}
     </>
   );

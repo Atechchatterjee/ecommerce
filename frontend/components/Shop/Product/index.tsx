@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Image, Fade } from "@chakra-ui/react";
+import { Image, Fade, Flex } from "@chakra-ui/react";
 import { ProductContext } from "../../../context/ProductContext";
 import constants from "../../../util/Constants";
 import ProductDescription from "./ProductDescription";
@@ -50,64 +50,67 @@ const Product: React.FC<Props> = ({
     <Fade in={!loading}>
       <CustomContainer
         height="35em"
-        width="25em"
-        padding="0 1em"
+        minWidth="20em"
+        maxWidth="30em"
+        padding="0 2%"
         position="relative"
         borderRadius="lg"
         interactive
       >
-        <ProductContext.Provider
-          value={{
-            edit,
-            setEdit,
-            changedImage,
-            setChangedImage,
-            triggerUpload,
-            setTriggerUpload,
-          }}
-        >
-          {editable ? (
-            <>
-              <EditBtn />
-              <DeleteBtn onDelete={onDelete} />
-            </>
-          ) : (
-            <></>
-          )}
-          <Image
-            padding="2em"
-            objectFit="scale-down"
-            userSelect="none"
-            src={createImageUrl(
-              !!image ? (!!image[0] ? image[0].image : "") : "",
-              changedImage
-            )}
-            fallbackSrc={constants.fallbackURL}
-            width="full"
-            height="15em"
-            cursor={edit ? "pointer" : "auto"}
-          />
-          {edit ? <UploadBtn /> : <></>}
-          <ProductDescription
-            productId={id}
-            name={name}
-            description={description}
-            price={price}
-            cb={(id, name, description, price) => {
-              if (cb) cb(id, name, description, price, changedImage);
+        <Flex flexDirection="column">
+          <ProductContext.Provider
+            value={{
+              edit,
+              setEdit,
+              changedImage,
+              setChangedImage,
+              triggerUpload,
+              setTriggerUpload,
             }}
-            height={editable ? "14em" : "17em"}
-            overflowX="hidden"
-            overflowY="hidden"
-          />
-          <Rating
-            position="absolute"
-            left="1em"
-            bottom="1em"
-            rating={Math.random() * 5 + 2}
-            numberOfReviews={Math.floor(Math.random() * 1000 + 10)}
-          />
-        </ProductContext.Provider>
+          >
+            {editable ? (
+              <>
+                <EditBtn />
+                <DeleteBtn onDelete={onDelete} />
+              </>
+            ) : (
+              <></>
+            )}
+            <Image
+              padding="2em"
+              objectFit="scale-down"
+              userSelect="none"
+              src={createImageUrl(
+                !!image ? (!!image[0] ? image[0].image : "") : "",
+                changedImage
+              )}
+              fallbackSrc={constants.fallbackURL}
+              width="full"
+              height="15em"
+              cursor={edit ? "pointer" : "auto"}
+            />
+            {edit ? <UploadBtn /> : <></>}
+            <ProductDescription
+              productId={id}
+              name={name}
+              description={description}
+              price={price}
+              cb={(id, name, description, price) => {
+                if (cb) cb(id, name, description, price, changedImage);
+              }}
+              height={editable ? "14em" : "17em"}
+              overflowX="hidden"
+              overflowY="hidden"
+            />
+            <Rating
+              position="absolute"
+              left="1em"
+              bottom="1em"
+              rating={Math.random() * 5 + 2}
+              numberOfReviews={Math.floor(Math.random() * 1000 + 10)}
+            />
+          </ProductContext.Provider>
+        </Flex>
       </CustomContainer>
     </Fade>
   );
