@@ -22,13 +22,18 @@ const Login: NextPage = () => {
   return (
     <>
       <Header />
-      <CustomContainer height="inherit" paddingBottom="4em" borderRadius="lg">
+      <CustomContainer
+        height="inherit"
+        paddingBottom="4em"
+        borderRadius="lg"
+        width="100%"
+      >
         <Center color="gray" marginTop="7vh">
           <Stack
             direction={["row", "column"]}
             spacing="35px"
-            width="30rem"
             marginTop="3em"
+            width="75%"
           >
             <Tabs align="center" isFitted={false} variant="line" isLazy>
               <TabList>
