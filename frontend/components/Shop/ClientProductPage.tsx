@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
 import {
-  Flex,
   HStack,
   Button,
   Input,
@@ -9,6 +8,7 @@ import {
   Image,
   Text,
   Spinner,
+  Grid,
 } from "@chakra-ui/react";
 import constants from "../../util/Constants";
 import axios from "axios";
@@ -16,6 +16,7 @@ import { OptionsData } from "../../types/shop";
 import { ProductInfoContext } from "../../context/ProductInfoContext";
 import ImageGallery from "./Product/ImageGallery";
 import CustomContainer from "../Custom/CustomContainer";
+import { useDynamicColumns } from "../../hooks/UseDynamicColumns";
 
 const OptionButtons: React.FC<{
   optionValues: { id: number; value: string }[];
@@ -101,6 +102,7 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
   const [productExistsInCart, setProductExistsInCart] =
     useState<boolean>(false);
   const [selectedImage, setSelectedImage] = useState<number>(0);
+  const [columns] = useDynamicColumns(2, [1000]);
 
   useEffect(() => {
     if (product) {
@@ -132,17 +134,19 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
       {loading ? (
         <Spinner />
       ) : (
-        <Flex
-          margin="4em 5em"
-          flexDirection="row"
-          flexWrap="wrap"
+        <Grid
+          margin="4% 5%"
           overflow="hidden"
+          templateColumns={`repeat(${columns}, 1fr)`}
+          templateRows={`repeat(1, 1fr)`}
+          gap={20}
         >
-          <Box marginBottom="3em" className="product-images" flex="0.2">
+          <Box marginBottom="3em" className="product-images">
             <CustomContainer
               borderRadius="2xl"
-              height="initial"
-              width="50em"
+              width="80%"
+              height="80%"
+              maxHeight="38em"
               padding="2em"
               interactive
             >
@@ -152,27 +156,22 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
                   0,
                   constants?.url.lastIndexOf("/")
                 )}${product.image[selectedImage].image}`}
-                width="50em"
-                height="40em"
+                width="100%"
+                height="inherit"
               />
             </CustomContainer>
             <ImageGallery
-              width="50em"
+              width="80%"
               selectCb={(indx) => {
                 setSelectedImage(indx);
               }}
             />
           </Box>
-          <Container marginLeft="10em" className="product-description" flex="1">
-            <Text fontWeight="semibold" fontSize="2.7em">
+          <Container className="product-description" padding="0 10%">
+            <Text fontWeight="semibold" fontSize="250%">
               {product.name}
             </Text>
-            <Text
-              fontWeight="regular"
-              fontSize="1em"
-              marginTop="2em"
-              lineHeight="1.7em"
-            >
+            <Text fontSize="100%" marginTop="2em" lineHeight="190%">
               {product.description}
             </Text>
 
@@ -182,15 +181,15 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
               fontWeight="semibold"
               position="relative"
             >
-              <Text fontSize="1.2em" marginTop="0.7em">
+              <Text fontSize="16" marginTop="0.7em">
                 ₹
               </Text>
               <Text fontSize="2em" fontWeight="600">
                 {product.price}
               </Text>
             </HStack>
-            <HStack width="27em" marginTop="2em">
-              <Text width="7em" fontWeight="semibold">
+            <HStack width="80%" marginTop="2em">
+              <Text width="30%" fontWeight="semibold">
                 Quantity :
               </Text>
               <Input
@@ -238,11 +237,13 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
                 onClick={handleAddToCart}
                 disabled={productExistsInCart}
               >
-                {productExistsInCart ? "Added to Cart" : "Add to Cart"}
+                <Text isTruncated>
+                  {productExistsInCart ? "Added to Cart" : "Add to Cart"}
+                </Text>
               </Button>
             </HStack>
           </Container>
-        </Flex>
+        </Grid>
       )}
     </>
   );
