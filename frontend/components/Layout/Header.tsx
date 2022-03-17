@@ -162,15 +162,15 @@ const Header: React.FC = () => {
           as="h1"
           size="md"
           fontFamily="Sora"
-          flex="1.5"
-          marginTop="0.2em"
+          flex="3.2"
+          margin="auto"
           cursor="pointer"
           onClick={() => window.location.assign("/")}
           isTruncated
         >
           Ecommerce Design
         </Heading>
-        <SearchBar flex="4" />
+        <SearchBar flex="5" margin="auto" />
         {width > 950 ? <ShopIcons flex="1" marginTop="0.1em" /> : null}
         <LoginLink flex="1" marginTop="0.2em" />
       </Flex>
