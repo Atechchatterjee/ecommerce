@@ -6,6 +6,7 @@ import axios from "axios";
 import constants from "../util/Constants";
 import CustomTable from "../components/Custom/CustomTable";
 import { scrollBarStyle } from "../util/ScrollBarStyle";
+import { MdDelete } from "react-icons/md";
 
 const createImageUrl = (url: string, image: File | undefined): string =>
   image
@@ -69,7 +70,9 @@ const Cart: NextPage = () => {
         indx < heading.length - 1 ? (
           ""
         ) : (
-          <Text fontWeight="semibold">final price : </Text>
+          <Text fontWeight="semibold" isTruncated>
+            final price :
+          </Text>
         )
       ) : (
         <Text fontWeight="semibold" textColor="secondaryBlue.900">
@@ -91,7 +94,9 @@ const Cart: NextPage = () => {
             h="20"
             objectFit="contain"
           />,
-          <Text key={`${indx}1`}>{item.name}</Text>,
+          <Text key={`${indx}1`} isTruncated>
+            {item.name}
+          </Text>,
           <Text key={`${indx}2`}>{item.price}</Text>,
           <Input
             value={quantities[item.product_id]}
@@ -153,28 +158,32 @@ const Cart: NextPage = () => {
         width="100%"
         maxWidth="75%"
         bgColor="white"
-        height="85vh"
+        height="85%"
+        minHeight="50%"
         marginTop="1.5em"
-        position="relative"
-        overflowY="scroll"
+        overflowX="scroll"
         sx={scrollBarStyle}
+        position="relative"
       >
         <CustomTable
           top="2em"
-          position="absolute"
           width="95%"
           rows={cartItems}
           heading={heading}
+          marginTop="1em"
           interactive
           select
           selectedRowsState={[selectedItems, setSelectedItems]}
           excludeSelectForRows={[cartItems.length - 1]}
         />
-        <Box position="absolute" bottom="2em" right="2em">
+        <Box
+          position="absolute"
+          // textAlign="right"
+          right="1em"
+          bottom="1em"
+        >
           <Button
             variant="pinkSolid"
-            float="left"
-            marginRight="1em"
             onClick={() => {
               deleteItemsFromCart(
                 Object.keys(selectedItems).map((key) =>
@@ -185,9 +194,9 @@ const Cart: NextPage = () => {
               });
             }}
           >
-            Delete Items
+            <MdDelete size="20" />
           </Button>
-          <Button variant="blueSolid" float="left">
+          <Button marginLeft="1em" variant="blueSolid">
             Proceed
           </Button>
         </Box>
