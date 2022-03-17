@@ -3,20 +3,18 @@ import { Formik } from "formik";
 import axios from "axios";
 import { ShowError } from "../Custom/ShowError";
 import { CustomField } from "../Custom/CustomField";
-// import "../../styles/signup.module.css";
-import { Button, Link, Text } from "@chakra-ui/react";
+import { Button, Box, Flex, Link, Text } from "@chakra-ui/react";
 import constants from "../../util/Constants";
 import GoogleAuth from "./GoogleAuth";
 
 const SignIn: React.FunctionComponent = () => {
-  // failedErr: user already exists
   const [failedError, setFailedError] = useState<string>("");
   const [err, setErr] = useState<boolean>(false);
   const formikRef = useRef<any>();
 
   return (
     <>
-      <div className="SignUp-Wrapper">
+      <Box className="SignUp-Wrapper">
         <Formik
           innerRef={formikRef}
           initialValues={{
@@ -49,15 +47,21 @@ const SignIn: React.FunctionComponent = () => {
                   condition={failedError.length > 0}
                   error={failedError}
                 />
-                <div style={{ marginTop: "1em" }}>
+                <Flex
+                  marginTop="1em"
+                  flexDirection="column"
+                  gridGap="4"
+                  width="100%"
+                >
                   <CustomField
                     placeholder="Email Address"
                     name="email"
                     label="Email Id"
                     onChange={handleChange}
                     isInvalid={err}
+                    width="80%"
+                    flex="1"
                   />
-                  <br />
                   <CustomField
                     placeholder="Password"
                     name="password"
@@ -65,42 +69,36 @@ const SignIn: React.FunctionComponent = () => {
                     label="Password"
                     onChange={handleChange}
                     isInvalid={err}
+                    width="80%"
+                    flex="1"
                   />
-                  <br />
                   <Link
                     color="red.400"
                     fontSize="0.8em"
-                    marginLeft="19em"
                     onClick={() => window.location.assign("/forgotpassword")}
+                    textAlign="right"
+                    flex="1"
                   >
                     Forgot Password ?
                   </Link>
-                  <br />
                   <Button
                     type="submit"
                     variant="blueSolid"
-                    marginTop="1em"
                     width="100%"
                     borderRadius="none"
                   >
                     Submit
                   </Button>
-                  <br />
-                  <div
-                    className="social-media-login"
-                    style={{
-                      marginTop: "1em",
-                    }}
-                  >
+                  <Box className="social-media-login" flex="1">
                     <Text fontSize="sm">OR</Text>
                     <GoogleAuth />
-                  </div>
-                </div>
+                  </Box>
+                </Flex>
               </form>
             );
           }}
         </Formik>
-      </div>
+      </Box>
     </>
   );
 };

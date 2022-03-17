@@ -5,7 +5,7 @@ import axios from "axios";
 import * as yup from "yup";
 import { ShowError } from "../Custom/ShowError";
 import { CustomField } from "../Custom/CustomField";
-import { Button } from "@chakra-ui/react";
+import { Box, Button, Flex } from "@chakra-ui/react";
 import constants from "../../util/Constants";
 
 // validation with yup
@@ -55,23 +55,27 @@ const SignUp: React.FunctionComponent = () => {
       >
         {({ handleSubmit, errors, handleChange }) => (
           <form onSubmit={handleSubmit}>
-            <ShowError condition={failedErr.length > 0} error={failedErr} />
-            <div style={{ marginTop: "1em" }}>
+            <Flex flexDirection="column" gridGap="4">
+              <ShowError
+                condition={failedErr.length > 0}
+                error={failedErr}
+                flex="1"
+              />
               <CustomField
                 placeholder="Email Address"
                 name="email"
                 label="Email Id"
                 onChange={handleChange}
                 isInvalid={!!errors.email}
+                flex="1"
               />
-              <br />
               <CustomField
                 placeholder="Name"
                 name="name"
                 label="Name"
                 onChange={handleChange}
+                flex="1"
               />
-              <br />
               <CustomField
                 placeholder="Password"
                 name="password"
@@ -79,16 +83,16 @@ const SignUp: React.FunctionComponent = () => {
                 label="Password"
                 onChange={handleChange}
                 isInvalid={!!errors.password}
+                flex="1"
               />
-              <br />
               <CustomField
                 placeholder="Phone Number"
                 name="phNumber"
                 label="Phone Number"
                 onChange={handleChange}
                 isInvalid={!!errors.phNumber}
+                flex="1"
               />
-              <br />
               <Button
                 type="submit"
                 variant="blueSolid"
@@ -97,7 +101,7 @@ const SignUp: React.FunctionComponent = () => {
               >
                 Submit
               </Button>
-            </div>
+            </Flex>
           </form>
         )}
       </Formik>
