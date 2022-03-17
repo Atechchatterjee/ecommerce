@@ -1,23 +1,23 @@
-import { CSSProperties } from "react";
+import { Box, BoxProps } from "@chakra-ui/react";
 
-// displays error msg with proper styling if the condition satisfies
-export const ShowError: React.FunctionComponent<{
+interface ShowErrorProps extends BoxProps {
   condition: boolean | undefined | null;
   error: string | undefined;
-  style?: CSSProperties | undefined;
-}> = ({ condition, error, ...style }) => {
+}
+
+// displays error msg with proper styling if the condition satisfies
+export const ShowError = ({ condition, error, ...props }: ShowErrorProps) => {
   return condition ? (
-    <div
+    <Box
       className="error"
-      style={{
-        fontSize: "0.85em",
-        color: "red",
-        backgroundColor: "#FFEBE8",
-        padding: "1em 0em",
-      }}
+      fontSize="0.85em"
+      color="red"
+      backgroundColor="#FFEBE8"
+      padding="1em 0em"
+      {...props}
     >
-      <span {...style}>{error}</span>
-    </div>
+      <span>{error}</span>
+    </Box>
   ) : (
     <></>
   );
