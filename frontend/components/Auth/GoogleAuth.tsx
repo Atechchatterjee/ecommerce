@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useGoogleLogin } from "react-google-login";
 import { GetUser } from "../../util/GetUser";
 import constants from "../../util/Constants";
-import { Button } from "@chakra-ui/button";
+import { Button, ButtonProps } from "@chakra-ui/button";
 import { useDisclosure } from "@chakra-ui/hooks";
 import {
   Modal,
@@ -64,7 +64,7 @@ const PopUp: React.FC<{
   );
 };
 
-const GoogleAuth: React.FC = () => {
+const GoogleAuth = ({ ...props }: ButtonProps) => {
   const [googleAuth, setGoogleAuth] = useState<boolean>(false);
   const [userExist, setUserExist] = useState<boolean>(false);
   const googleId = useRef<string>("");
@@ -146,6 +146,7 @@ const GoogleAuth: React.FC = () => {
       boxShadow="base"
       marginTop="0.8em"
       onClick={() => signIn()}
+      {...props}
     >
       <HStack>
         <Avatar src="google.svg" backgroundColor="inherit" size="xs" />
