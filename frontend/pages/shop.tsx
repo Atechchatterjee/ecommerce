@@ -34,9 +34,9 @@ const Shop: NextPage = () => {
   }, []);
 
   return (
-    <Box height="100vh" position="relative">
+    <>
       <Header />
-      <Box padding="2% 1% 3% 1%" overflow="hidden">
+      <Box padding="2% 2% 3% 2%" overflow="hidden">
         <Grid
           h="inherit"
           gap={6}
@@ -61,7 +61,7 @@ const Shop: NextPage = () => {
         </Grid>
       </Box>
       <Footer />
-    </Box>
+    </>
   );
 };
 
