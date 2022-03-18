@@ -59,7 +59,7 @@ const SignIn: React.FunctionComponent = () => {
                     label="Email Id"
                     onChange={handleChange}
                     isInvalid={err}
-                    width="80%"
+                    width="100%"
                     flex="1"
                   />
                   <CustomField
@@ -69,7 +69,7 @@ const SignIn: React.FunctionComponent = () => {
                     label="Password"
                     onChange={handleChange}
                     isInvalid={err}
-                    width="80%"
+                    width="100%"
                     flex="1"
                   />
                   <Link
@@ -83,7 +83,7 @@ const SignIn: React.FunctionComponent = () => {
                   </Link>
                   <Button
                     type="submit"
-                    variant="blueSolid"
+                    variant="primarySolid"
                     width="100%"
                     borderRadius="none"
                   >

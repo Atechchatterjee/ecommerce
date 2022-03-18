@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
 import { TableModalContext } from "../../context/TableModalContext";
+import { CustomField } from "./CustomField";
 
 const AddRowModal: React.FC<{
   title: string;
@@ -48,11 +49,11 @@ const AddRowModal: React.FC<{
     column: number;
     placeholder: string;
   }> = ({ key, column, placeholder }): JSX.Element => (
-    <Input
+    <CustomField
       key={key}
       placeholder={placeholder}
       width="23.8em"
-      onChange={(e) => {
+      onChange={(e: any) => {
         let tableContentLocalCopy = tableContentLocal;
         tableContentLocal[column - 1] = e.target.value;
         setTableContentLocal(tableContentLocalCopy);
@@ -75,7 +76,7 @@ const AddRowModal: React.FC<{
           <HStack>{DisplayRowInputElements(columnNo)}</HStack>
         </ModalBody>
         <ModalFooter>
-          <Button variant="blueSolid" size="md" onClick={onClose}>
+          <Button variant="primarySolid" size="md" onClick={onClose}>
             {buttonName}
           </Button>
         </ModalFooter>

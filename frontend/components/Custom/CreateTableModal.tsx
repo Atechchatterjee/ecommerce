@@ -20,6 +20,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import { TableModalContext } from "../../context/TableModalContext";
+import { CustomField } from "./CustomField";
 
 const CreateTableModal: React.FC<{ cb?: Function }> = ({ cb }) => {
   const { confirmCol, colNames, colNo, createTableModal } =
@@ -50,7 +51,7 @@ const CreateTableModal: React.FC<{ cb?: Function }> = ({ cb }) => {
   const ColumnNameInput: React.FC<{ column: number }> = ({ column }) => {
     return (
       <HStack position="relative" key={column}>
-        <Input
+        <CustomField
           placeholder={
             Object.keys(columnNames).length !== 0
               ? columnNames[column]
@@ -58,7 +59,7 @@ const CreateTableModal: React.FC<{ cb?: Function }> = ({ cb }) => {
           }
           width="21em"
           marginTop="1em"
-          onChange={(e) => {
+          onChange={(e: any) => {
             let copyColumnNames = columnNames;
             copyColumnNames[column] = e.target.value;
             if (setColumnNames) setColumnNames(copyColumnNames);
@@ -68,7 +69,7 @@ const CreateTableModal: React.FC<{ cb?: Function }> = ({ cb }) => {
           right="0.8em"
           top="1em"
           position="absolute"
-          variant="pinkSolid"
+          variant="secondarySolid"
           aria-label="delete"
           size="md"
           icon={<DeleteIcon />}
@@ -109,7 +110,7 @@ const CreateTableModal: React.FC<{ cb?: Function }> = ({ cb }) => {
               </NumberInputStepper>
             </NumberInput>
             <IconButton
-              variant="pinkSolid"
+              variant="secondarySolid"
               aria-label="enter"
               icon={<CheckIcon />}
               onClick={() => {
@@ -134,7 +135,7 @@ const CreateTableModal: React.FC<{ cb?: Function }> = ({ cb }) => {
         </ModalBody>
 
         <ModalFooter>
-          <Button variant="blueSolid" mr={3} onClick={onClose}>
+          <Button variant="primarySolid" mr={3} onClick={onClose}>
             create
           </Button>
         </ModalFooter>

@@ -16,7 +16,7 @@ const commonIconStyles = (i: number, interactive?: boolean) => {
   return {
     cursor: interactive ? "pointer" : "default",
     key: i,
-    fill: ColorPalatte.secondaryBlue[900],
+    fill: ColorPalatte.primary[900],
   };
 };
 

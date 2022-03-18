@@ -17,13 +17,16 @@ import SignIn from "../components/Auth/SignIn";
 import Header from "../components/Layout/Header";
 import Footer from "../components/Layout/Footer";
 import CustomContainer from "../components/Custom/CustomContainer";
+import ScrollBarWrapper from "../components/Custom/ScrollBarWrapper";
 
 const Login: NextPage = () => {
   return (
     <>
+      {/* <ScrollBarWrapper position="sticky"> */}
+      {/* <Box height="100vh"> */}
       <Header />
       <CustomContainer
-        height="inherit"
+        height="35em"
         paddingBottom="4em"
         borderRadius="lg"
         width="100%"
@@ -41,7 +44,7 @@ const Login: NextPage = () => {
                   _focus={{
                     outline: "none",
                   }}
-                  _selected={{ color: "secondaryBlue.100" }}
+                  _selected={{ color: "primary.500" }}
                 >
                   <Heading as="h2" size="md" isTruncated fontFamily="Sora">
                     Sign Up
@@ -51,7 +54,7 @@ const Login: NextPage = () => {
                   _focus={{
                     outline: "none",
                   }}
-                  _selected={{ color: "secondaryBlue.100" }}
+                  _selected={{ color: "primary.500" }}
                 >
                   <Heading as="h2" size="md" isTruncated fontFamily="Sora">
                     Sign In

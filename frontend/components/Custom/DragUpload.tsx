@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { HStack, Text, Container, Image, Input } from "@chakra-ui/react";
 import { ContainerProps } from "@chakra-ui/react";
+import { CustomField } from "./CustomField";
 
 const ImagePreview: React.FC<{ imageFile: File }> = ({ imageFile }) => (
   <Image src={URL.createObjectURL(imageFile)} fit="contain" boxSize="5em" />
@@ -45,11 +46,11 @@ const DragUpload = ({ onFileUpload, clearUpload, ...props }: Props) => {
 
   const DummyInput: React.FC = () => {
     return (
-      <Input
+      <CustomField
         ref={fileInputRef}
         type="file"
         display="none"
-        onChange={(event) => {
+        onChange={(event: any) => {
           if (event.target.files) saveImagesToState(event.target.files);
         }}
       />
@@ -62,7 +63,7 @@ const DragUpload = ({ onFileUpload, clearUpload, ...props }: Props) => {
         height="inherit"
         paddingBottom={uploadedFiles.length === 0 ? "6em" : "1em"}
         border="0.15em dashed"
-        borderColor={hover ? "#D6C2ED" : "secondaryPink.200"}
+        borderColor={hover ? "#D6C2ED" : "secondary.200"}
         onDragOver={(event) => {
           event.preventDefault();
         }}
@@ -87,7 +88,7 @@ const DragUpload = ({ onFileUpload, clearUpload, ...props }: Props) => {
             left="35%"
             fontWeight="semibold"
             fontSize="1.2em"
-            textColor={hover ? "#525E99" : "secondaryBlue.900"}
+            textColor={hover ? "#525E99" : "primary.900"}
             fontFamily="Sora"
           >
             Drop Files Here

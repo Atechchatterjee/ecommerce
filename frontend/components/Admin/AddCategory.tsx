@@ -66,7 +66,7 @@ const AddCategory = ({ ...props }: ContainerProps) => {
       <Text
         fontWeight="bold"
         fontSize="2em"
-        textColor="secondaryBlue.900"
+        textColor="primary.900"
         textAlign="center"
       >
         Categories

@@ -1,6 +1,6 @@
 import ColorPalatte from "./ColorPalatte"
 
-const {secondaryBlue, secondaryPink} = ColorPalatte;
+const {primary, secondary} = ColorPalatte;
 
 const includeProperty = (property: any, condition: boolean) => (
   condition ? property : {}
@@ -9,37 +9,46 @@ const includeProperty = (property: any, condition: boolean) => (
 const commonStyles = ({includeColor = true}: {includeColor?: boolean} = {}) => ({
   fontFamily: "Sora",
   fontWeight: "medium",
+  focusBorderColor: "secondary.200",
   ...includeProperty({color: "white"}, includeColor),
 })
 
 export default {
   variants: {
-    blueSolid: () => ({
-      bg: secondaryBlue[900],
-      _hover: { bg: "#314775" },
+    primarySolid: () => ({
+      bg: primary[800],
+      _hover: { bg: "primary.500" },
       ...commonStyles(),
     }),
-    blueOutline: () => ({
+    primaryOutline: () => ({
       bg: "white",
-      outlineColor: secondaryBlue[900],
+      outlineColor: primary[800],
       outlineOffset: "none",
       borderRadius: "sm",
-      textColor: secondaryBlue[900],
+      textColor: primary[900],
       ...commonStyles({includeColor: false}),
     }),
-    pinkSolid: () => ({
-      bg: secondaryPink[200],
-      _hover: { bg: "#B199CC" },
+    secondaryOutline: () => ({
+      bg: "white",
+      outlineColor: secondary[200],
+      outlineOffset: "none",
+      borderRadius: "sm",
+      textColor: secondary[200],
+      ...commonStyles({includeColor: false}),
+    }),
+    secondarySolid: () => ({
+      bg: secondary[200],
+      _hover: { bg: secondary[200] },
       ...commonStyles(),
     }),
-    pinkGradient: () => ({
+    secondaryGradient: () => ({
       bgGradient: "linear(to-b, #9D84B7, #E863B6)",
       _hover: {
         bgGradient: "linear(to-b, #9D84B7, #E863B6)",
       },
       ...commonStyles(),
     }),
-    blueGradient: () => ({
+    primaryGradient: () => ({
       bgGradient: "linear(to-b, #161F4F, #4E2A81)",
       _hover: {
         bgGradient: "linear(to-b, #222D68, #6C48A5)",

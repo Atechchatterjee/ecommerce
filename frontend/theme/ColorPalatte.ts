@@ -1,9 +1,13 @@
 export default {
-  secondaryBlue: {
-    100: "#2D3875",
+  primary: {
+    200: "#3B498E",
+    500: "#2D3875",
+    800: "#131E5B",
+    // 800: "#365778",
     900: "#091353",
   },
-  secondaryPink: {
-    200: "#9D84B7",
+  secondary: {
+    // 200: "#9D84B7",
+    200: "#7E79CE",
   }
 }

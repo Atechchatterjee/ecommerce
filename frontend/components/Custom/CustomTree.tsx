@@ -13,6 +13,7 @@ import {
 import { CategoryNode } from "../../util/Tree";
 import { IoMdArrowDropright, IoMdArrowDropdown } from "react-icons/io";
 import RightClickMenu from "./RightClickMenu";
+import { CustomField } from "./CustomField";
 
 interface CustomTreeProps extends ContainerProps {
   root: CategoryNode;
@@ -90,7 +91,7 @@ const CustomTreeWrapper = ({
                 key={indx}
                 bgColor={
                   highlightNode?.val.id === child.val.id
-                    ? "secondaryPink.200"
+                    ? "secondary.200"
                     : "none"
                 }
                 borderRadius={
@@ -128,7 +129,7 @@ const CustomTreeWrapper = ({
               </ListItem>
               <Box>
                 {toAddNode && child.val.id === highlightNode?.val.id ? (
-                  <Input
+                  <CustomField
                     marginLeft="7%"
                     marginTop="0.5em"
                     borderRadius="sm"
@@ -176,7 +177,7 @@ const CustomTreeWrapper = ({
     return (
       <Text
         cursor="pointer"
-        _hover={{ color: "secondaryBlue.900", fontWeight: "semibold" }}
+        _hover={{ color: "primary.900", fontWeight: "semibold" }}
         {...props}
       >
         {children}

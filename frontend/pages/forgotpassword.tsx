@@ -109,7 +109,7 @@ const ForgotPassword: NextPage = () => {
                 onChange={(event: any) => setEmail(event.target.value)}
               />
               <Button
-                variant="pinkSolid"
+                variant="secondarySolid"
                 marginLeft="26.2em"
                 marginTop="1em"
                 borderRadius="none"
@@ -186,7 +186,7 @@ const ForgotPassword: NextPage = () => {
               />
               <Button
                 // colorScheme="teal"
-                variant="pinkSolid"
+                variant="secondarySolid"
                 marginLeft="26.2em"
                 marginTop="1em"
                 borderRadius="none"
@@ -267,7 +267,7 @@ const ForgotPassword: NextPage = () => {
               />
               <Button
                 // colorScheme="teal"
-                variant="pinkSolid"
+                variant="secondarySolid"
                 marginLeft="26.2em"
                 marginTop="1em"
                 borderRadius="none"
@@ -309,7 +309,7 @@ const ForgotPassword: NextPage = () => {
             onChange={(event: any) => setPhNumber(event.target.value)}
           />
           <Button
-            variant="pinkSolid"
+            variant="secondarySolid"
             marginLeft="25.8em"
             marginTop="1em"
             borderRadius="none"
@@ -362,7 +362,7 @@ const ForgotPassword: NextPage = () => {
           />
           <Button
             colorScheme="teal"
-            variant="pinkSolid"
+            variant="secondarySolid"
             marginLeft="24.8em"
             marginTop="1em"
             borderRadius="none"

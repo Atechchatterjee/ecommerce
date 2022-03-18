@@ -19,6 +19,7 @@ import constants from "../../util/Constants";
 import SelectCategory from "./SelectCategory";
 import { Formik } from "formik";
 import DragUpload from "../Custom/DragUpload";
+import { CustomField } from "../Custom/CustomField";
 
 interface ProductData {
   productName: string;
@@ -130,7 +131,7 @@ const AddProduct = (props: ContainerProps) => {
               isSubmitting,
             }) => (
               <form onSubmit={handleSubmit}>
-                <Input
+                <CustomField
                   name="productName"
                   placeholder="Product Name"
                   value={values.productName}
@@ -167,7 +168,7 @@ const AddProduct = (props: ContainerProps) => {
                   </NumberInputStepper>
                 </NumberInput>
                 <SelectCategory
-                  variant="pinkSolid"
+                  variant="secondarySolid"
                   bgColor="#9D84B7"
                   colorScheme=""
                   marginTop="5em"
@@ -189,7 +190,7 @@ const AddProduct = (props: ContainerProps) => {
                 />
                 <Button
                   borderRadius="lg"
-                  variant="blueSolid"
+                  variant="primarySolid"
                   size="md"
                   top="3em"
                   width="full"

@@ -57,7 +57,7 @@ const ProductSpec: React.FC = () => {
           marginTop="1.5em"
           marginLeft="4em"
           width="30em"
-          variant="blueSolid"
+          variant="primarySolid"
           onClick={() => {
             createTableHeading();
             createTable();
@@ -101,7 +101,7 @@ const ProductSpec: React.FC = () => {
         modifyRowModal: [modifyAddRowModal, setModifyAddRowModal],
       }}
     >
-      <Box marginLeft="12em">
+      <Box marginLeft="12em" position="absolute">
         <Container margin="0" marginTop="2em" marginBottom="2em" float="left">
           {product ? (
             <Product
@@ -128,7 +128,7 @@ const ProductSpec: React.FC = () => {
           />
           <Button
             marginLeft="10.5%"
-            variant="blueSolid"
+            variant="primarySolid"
             marginTop="1em"
             width="30em"
             onClick={uploadAllImages}
@@ -140,7 +140,7 @@ const ProductSpec: React.FC = () => {
             width="30em"
             marginLeft="10.5%"
             marginTop="1.5em"
-            variant="blueSolid"
+            variant="primarySolid"
             onClick={() => setIsOpenOptionModal(true)}
           >
             Add Options

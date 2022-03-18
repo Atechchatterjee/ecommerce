@@ -6,6 +6,7 @@ import { GetUser } from "../../util/GetUser";
 import constants from "../../util/Constants";
 import { Button, ButtonProps } from "@chakra-ui/button";
 import { useDisclosure } from "@chakra-ui/hooks";
+import { Text } from "@chakra-ui/react";
 import {
   Modal,
   ModalOverlay,
@@ -140,7 +141,7 @@ const GoogleAuth = ({ ...props }: ButtonProps) => {
 
   return (
     <Button
-      variant="pinkSolid"
+      variant="secondarySolid"
       width="100%"
       borderRadius="none"
       boxShadow="base"
@@ -164,9 +165,7 @@ const GoogleAuth = ({ ...props }: ButtonProps) => {
         ) : (
           <></>
         )}
-        <div style={{ marginLeft: "1em", marginTop: "0.2em" }}>
-          Google Sign In
-        </div>
+        <Text marginLeft="1em">Google Sign In</Text>
       </HStack>
     </Button>
   );

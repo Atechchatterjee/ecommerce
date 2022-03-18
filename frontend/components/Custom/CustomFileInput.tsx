@@ -9,7 +9,7 @@ interface Props {
   borderRadius?: string;
   onChange?: (_: File) => void;
   bgColor?: string;
-  variant?: "pinkSolid" | "blueSolid" | "none";
+  variant?: "secondarySolid" | "primarySolid" | "none";
 }
 
 const CustomFileInput: React.FC<Props> = ({

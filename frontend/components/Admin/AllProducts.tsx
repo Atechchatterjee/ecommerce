@@ -3,6 +3,7 @@ import constants from "../../util/Constants";
 import Product from "../Shop/Product";
 import {
   Button,
+  Box,
   Center,
   Grid,
   GridItem,
@@ -148,7 +149,8 @@ const AllProducts: React.FunctionComponent = () => {
   };
 
   return (
-    <Center marginTop="3em" width="100%" overflow="hidden">
+    // <Center marginTop="3em" width="100%" overflowX="hidden">
+    <Box marginTop="3em" width="100%" overflow="hidden" padding="0 2% 3% 2%">
       <Grid
         h="inherit"
         gap={6}
@@ -201,7 +203,8 @@ const AllProducts: React.FunctionComponent = () => {
           if (prdDel) deleteProduct(prdDel.product_id);
         }}
       />
-    </Center>
+    </Box>
+    // </Center>
   );
 };
 

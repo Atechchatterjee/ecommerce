@@ -66,7 +66,7 @@ const EditMode = ({
         />
       </UploadContext.Provider>
       <Button
-        variant="pinkSolid"
+        variant="secondarySolid"
         size="sm"
         borderRadius="3xl"
         position="absolute"
@@ -103,10 +103,10 @@ const NormalMode = ({
           overflow="hidden"
           flexWrap="nowrap"
           fontWeight="semibold"
-          color="secondaryBlue.900"
+          color="primary.900"
           fontSize="1.4em"
           cursor="pointer"
-          _hover={{ color: "secondaryPink.200" }}
+          _hover={{ color: "secondary.200" }}
           onClick={() => {
             if (!admin) window.location.assign(`/shop/${productId}`);
             else
@@ -125,7 +125,7 @@ const NormalMode = ({
         </Box>
         <Tag
           size="md"
-          bgColor="#9D84B7"
+          bgColor="secondary.200"
           textColor="white"
           position="absolute"
           right="1em"

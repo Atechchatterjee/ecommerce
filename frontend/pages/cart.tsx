@@ -7,6 +7,7 @@ import constants from "../util/Constants";
 import CustomTable from "../components/Custom/CustomTable";
 import { scrollBarStyle } from "../util/ScrollBarStyle";
 import { MdDelete } from "react-icons/md";
+import { CustomField } from "../components/Custom/CustomField";
 
 const createImageUrl = (url: string, image: File | undefined): string =>
   image
@@ -75,7 +76,7 @@ const Cart: NextPage = () => {
           </Text>
         )
       ) : (
-        <Text fontWeight="semibold" textColor="secondaryBlue.900">
+        <Text fontWeight="semibold" textColor="primary.900">
           {finalPriceCalc}
         </Text>
       )
@@ -98,7 +99,7 @@ const Cart: NextPage = () => {
             {item.name}
           </Text>,
           <Text key={`${indx}2`}>{item.price}</Text>,
-          <Input
+          <CustomField
             value={quantities[item.product_id]}
             key={`${indx}3`}
             size="md"
@@ -118,7 +119,7 @@ const Cart: NextPage = () => {
               setQuantities({});
             }}
           />,
-          <Text key={`${indx}4`} color="blueSolid.200" fontWeight="semibold">
+          <Text key={`${indx}4`} color="primarySolid.200" fontWeight="semibold">
             {item.total_price}
           </Text>,
         ];
@@ -137,7 +138,7 @@ const Cart: NextPage = () => {
 
   return (
     <Box
-      bgGradient="linear(to-b, secondaryBlue.900, secondaryPink.200)"
+      bgGradient="linear(to-b, primary.900, secondary.200)"
       width="100%"
       height="100vh"
       position="relative"
@@ -162,7 +163,7 @@ const Cart: NextPage = () => {
         minHeight="50%"
         marginTop="1.5em"
         overflowX="scroll"
-        sx={scrollBarStyle}
+        sx={scrollBarStyle()}
         position="relative"
       >
         <CustomTable
@@ -176,14 +177,9 @@ const Cart: NextPage = () => {
           selectedRowsState={[selectedItems, setSelectedItems]}
           excludeSelectForRows={[cartItems.length - 1]}
         />
-        <Box
-          position="absolute"
-          // textAlign="right"
-          right="1em"
-          bottom="1em"
-        >
+        <Box position="absolute" right="1em" bottom="1em">
           <Button
-            variant="pinkSolid"
+            variant="secondarySolid"
             onClick={() => {
               deleteItemsFromCart(
                 Object.keys(selectedItems).map((key) =>
@@ -196,7 +192,7 @@ const Cart: NextPage = () => {
           >
             <MdDelete size="20" />
           </Button>
-          <Button marginLeft="1em" variant="blueSolid">
+          <Button marginLeft="1em" variant="primarySolid">
             Proceed
           </Button>
         </Box>
