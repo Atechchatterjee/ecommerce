@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { checkWhichUser } from "../util/Authenticated";
 import { UserContext } from "../context/UserContext";
 import Head from "next/head";
+import ScrollBarWrapper from "../components/Custom/ScrollBarWrapper";
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const [admin, setAdmin] = useState<boolean | null>(null);
@@ -30,7 +31,9 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
               content="width=device-width,initial-scale=1"
             />
           </Head>
-          <Component {...pageProps} />
+          <ScrollBarWrapper color="secondary">
+            <Component {...pageProps} />
+          </ScrollBarWrapper>
         </UserContext.Provider>
       </CookiesProvider>
     </ChakraProvider>
