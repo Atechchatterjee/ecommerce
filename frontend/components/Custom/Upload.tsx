@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useContext } from "react";
 import { UploadContext } from "../../context/UploadContext";
 import { Input } from "@chakra-ui/react";
+import { CustomField } from "./CustomField";
 
 interface Props {
   getFile?: (_: File) => void;
@@ -15,7 +16,7 @@ const Upload: React.FC<Props> = ({ getFile }) => {
   }, [triggerUpload, setTriggerUpload]);
 
   return (
-    <Input
+    <CustomField
       type="file"
       defaultValue={undefined}
       ref={InputRef}

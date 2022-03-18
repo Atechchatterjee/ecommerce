@@ -19,24 +19,8 @@ import constants from "../../../util/Constants";
 import axios from "axios";
 import { OptionsData } from "../../../types/shop";
 import CustomContainer from "../../Custom/CustomContainer";
-
-const scrollBarStyle = {
-  "&::-webkit-scrollbar": {
-    width: "7px",
-    height: "0.5em",
-    borderRadius: "7px",
-  },
-  "&::-webkit-scrollbar-track": {
-    display: "none",
-  },
-  "&::-webkit-scrollbar-thumb": {
-    width: "2px",
-    height: "1em",
-    borderRadius: "7px",
-    backgroundColor: `#CAB6E5`,
-    transition: "background-color 0.8s ease-in-out",
-  },
-};
+import { scrollBarStyle } from "../../../util/ScrollBarStyle";
+import { CustomField } from "../../Custom/CustomField";
 
 const DisplayFetchedOptions: React.FC<{ fetchedOptions: any[] }> = ({
   fetchedOptions,
@@ -50,7 +34,7 @@ const DisplayFetchedOptions: React.FC<{ fetchedOptions: any[] }> = ({
         borderRadius="lg"
         overflowX="scroll"
         interactive
-        sx={scrollBarStyle}
+        sx={scrollBarStyle()}
         cursor="pointer"
       >
         <HStack>
@@ -60,7 +44,7 @@ const DisplayFetchedOptions: React.FC<{ fetchedOptions: any[] }> = ({
           {option.values.map((value: any, indx: any) => (
             <Button
               key={indx}
-              variant="pinkSolid"
+              variant="secondarySolid"
               marginLeft="2em"
               borderRadius="full"
               padding="0.7em 2em"
@@ -145,17 +129,17 @@ const OptionsTable: React.FC<{
           <ModalCloseButton />
           <ModalBody>
             <Box position="relative">
-              <Input
+              <CustomField
                 placeholder="Option"
                 marginTop="1.5em"
                 borderRadius="3"
                 float="left"
                 width="90%"
                 value={currentOptionName}
-                onChange={(e) => setCurrentOptionName(e.target.value)}
+                onChange={(e: any) => setCurrentOptionName(e.target.value)}
               />
               <Button
-                variant="blueSolid"
+                variant="primarySolid"
                 size="sm"
                 borderRadius="3"
                 padding="1.38em 1em"
@@ -172,7 +156,7 @@ const OptionsTable: React.FC<{
                 (function OptionValueInputs(no): any[] {
                   if (no <= 0) return [];
                   const input = (
-                    <Input
+                    <CustomField
                       key={no}
                       width="90%"
                       marginTop="1em"
@@ -198,7 +182,7 @@ const OptionsTable: React.FC<{
           <ModalFooter position="relative" padding="3em">
             {optionValues.length > 0 ? (
               <Button
-                variant="blueSolid"
+                variant="primarySolid"
                 position="absolute"
                 left="1.8em"
                 padding="1.3em 2em"
