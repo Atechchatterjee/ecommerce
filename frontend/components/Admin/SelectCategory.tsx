@@ -115,13 +115,6 @@ const SelectCategory: React.FC<Props> = ({
   return (
     <>
       <Button
-        // variant={variant || "pinkSolid"}
-        // colorScheme={colorScheme ? colorScheme : ""}
-        // backgroundColor={bgColor ? bgColor : "teal"}
-        // width={width ? width : "full"}
-        // marginTop={marginTop ? marginTop : "0"}
-        // borderRadius={borderRadius ? borderRadius : "md"}
-        // height={height ? height : "2.5em"}
         onClick={() => {
           setModalOpen(true);
         }}
@@ -152,7 +145,7 @@ const SelectCategory: React.FC<Props> = ({
             />
           </ModalBody>
           <ModalFooter>
-            <Button variant="blueSolid" onClick={() => setModalOpen(false)}>
+            <Button variant="primarySolid" onClick={() => setModalOpen(false)}>
               Select
             </Button>
           </ModalFooter>
