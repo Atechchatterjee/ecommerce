@@ -54,10 +54,12 @@ const Navbar: React.FC = () => {
 
   return (
     <>
-      <Box bgColor="#091353" textColor="white" px={4}>
+      <Box bgColor="primary.800" textColor="white" px={4}>
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           <IconButton
             size={"md"}
+            backgroundColor="primary.500"
+            _hover={{ backgroundColor: "primary.500" }}
             icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
             aria-label={"Open Menu"}
             display={{ md: "none" }}
