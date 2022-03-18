@@ -153,7 +153,7 @@ const SpecificationTable: React.FC<{ product?: any }> = () => {
             marginTop="1em"
             position="absolute"
             right="1em"
-            variant="pinkSolid"
+            variant="secondarySolid"
             padding="0.8em"
             onClick={() => {
               setModifyAddRowModal(false);
@@ -210,7 +210,7 @@ const SpecificationTable: React.FC<{ product?: any }> = () => {
             <Box>
               <Tooltip label="Save">
                 <Button
-                  variant="blueSolid"
+                  variant="primarySolid"
                   marginTop="1em"
                   position="absolute"
                   right="5em"
@@ -222,7 +222,7 @@ const SpecificationTable: React.FC<{ product?: any }> = () => {
               </Tooltip>
               <Tooltip label="Delete">
                 <Button
-                  variant="pinkSolid"
+                  variant="secondarySolid"
                   marginTop="1em"
                   position="absolute"
                   right="9em"
