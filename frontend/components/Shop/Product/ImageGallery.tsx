@@ -22,7 +22,7 @@ const ImageGallery = ({ selectCb, ...props }: ImageGalleryProps) => {
       borderRadius="lg"
       overflowX="scroll"
       overflowY="hidden"
-      sx={scrollBarStyle}
+      sx={scrollBarStyle()}
       interactive
       {...props}
     >
