@@ -1,18 +1,22 @@
-export const scrollBarStyle = {
+interface ScrollBarStyleProps { 
+  color: "primary" | "secondary";
+  borderRadius?: "sm" | "md" | "lg";
+}
+
+export const scrollBarStyle = ({ color, borderRadius }: ScrollBarStyleProps = {color: "primary"}) => ({
   "&::-webkit-scrollbar": {
-    width: "7px",
+    width: "0.5rem",
     height: "0.5em",
-    borderRadius: "7px",
-    backgroundColor: "#EADEF7",
+    backgroundColor: "white",
   },
   "&::-webkit-scrollbar-track": {
     display: "none",
   },
   "&::-webkit-scrollbar-thumb": {
-    width: "2px",
-    height: "1em",
-    borderRadius: "7px",
-    backgroundColor: "secondaryPink.200",
+    width: "2em",
+    height: "3px",
+    borderRadius:  borderRadius ? borderRadius: "none",
+    backgroundColor: color === "secondary" ? "secondary.200" : "primary.200",
     transition: "background-color 0.8s ease-in-out",
   },
-};
+});
