@@ -1,21 +1,27 @@
 import React from "react";
-import { Heading, Center } from "@chakra-ui/layout";
+import { Heading, Box, Center, BoxProps } from "@chakra-ui/layout";
+import { string } from "yup";
 
-const Banner: React.FC<{ text: string }> = ({ text }) => {
+interface BannerProps extends BoxProps {
+  text: string;
+  textColor?: string;
+}
+
+const Banner = ({ text, textColor, ...props }: BannerProps) => {
   return (
-    <div style={{ height: "10em", backgroundColor: "#EEEEEE" }}>
+    <Box height="15em" backgroundColor="primary.800" {...props}>
       <Center>
         <Heading
           as="h1"
-          color="#333333"
-          marginTop="1.6em"
-          fontFamily="Sora"
+          color={textColor || "white"}
+          marginTop="2.5em"
+          fontFamily="Montserrat"
           isTruncated
         >
           {text}
         </Heading>
       </Center>
-    </div>
+    </Box>
   );
 };
 
