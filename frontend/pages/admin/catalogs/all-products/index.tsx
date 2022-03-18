@@ -4,6 +4,7 @@ import { Center, Container } from "@chakra-ui/react";
 import AllProducts from "../../../../components/Admin/AllProducts";
 import Navbar from "../../../../components/Admin/Navbar";
 import WithAuth from "../../../../util/WithAuth";
+import { Box } from "@chakra-ui/react";
 
 const Product: NextPage = () => {
   return (
