@@ -16,10 +16,10 @@ export const CustomField: React.FC<FieldAttributes<any>> = ({
       <Input
         variant="outline"
         size="md"
-        style={{ width: "100%" }}
-        borderRadius="none"
-        {...props}
+        borderRadius="sm"
+        focusBorderColor="secondary.200"
         errorBorderColor="red.300"
+        {...props}
       />
     </FormControl>
   );
