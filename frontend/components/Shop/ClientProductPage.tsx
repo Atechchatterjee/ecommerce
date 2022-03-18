@@ -17,6 +17,8 @@ import { ProductInfoContext } from "../../context/ProductInfoContext";
 import ImageGallery from "./Product/ImageGallery";
 import CustomContainer from "../Custom/CustomContainer";
 import { useDynamicColumns } from "../../hooks/UseDynamicColumns";
+import { CustomField } from "../Custom/CustomField";
+import { useWindowDimensions } from "../../hooks/UseWindowDimensions";
 
 const OptionButtons: React.FC<{
   optionValues: { id: number; value: string }[];
@@ -29,7 +31,7 @@ const OptionButtons: React.FC<{
         key={indx}
         {...(optionValue.id !== selectedOption
           ? { colorScheme: "whiteAlpha", textColor: "black" }
-          : { variant: "pinkSolid" })}
+          : { variant: "secondarySolid" })}
         fontFamily="Sora"
         borderRadius="full"
         width="9em"
@@ -103,6 +105,8 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
     useState<boolean>(false);
   const [selectedImage, setSelectedImage] = useState<number>(0);
   const [columns] = useDynamicColumns(2, [1000]);
+  const [width] = useWindowDimensions();
+  const [addToCardLoader, setAddToCartLoader] = useState<boolean>(false);
 
   useEffect(() => {
     if (product) {
@@ -125,8 +129,12 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
   }, []);
 
   const handleAddToCart = () => {
+    setAddToCartLoader(true);
     addProductToCart(quantity, product.id);
-    setTimeout(() => setProductExistsInCart(true), 200);
+    setTimeout(() => {
+      setProductExistsInCart(true);
+      setAddToCartLoader(false);
+    }, 200);
   };
 
   return (
@@ -136,7 +144,6 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
       ) : (
         <Grid
           margin="4% 5%"
-          overflow="hidden"
           templateColumns={`repeat(${columns}, 1fr)`}
           templateRows={`repeat(1, 1fr)`}
           gap={20}
@@ -167,7 +174,10 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
               }}
             />
           </Box>
-          <Container className="product-description" padding="0 10%">
+          <Container
+            className="product-description"
+            padding={width > 1000 ? "0 10% 5% 0%" : "0 10% 5% 10%"}
+          >
             <Text fontWeight="semibold" fontSize="250%">
               {product.name}
             </Text>
@@ -177,7 +187,7 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
 
             <HStack
               marginTop="2em"
-              color="secondaryBlue.900"
+              color="primary.900"
               fontWeight="semibold"
               position="relative"
             >
@@ -189,15 +199,16 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
               </Text>
             </HStack>
             <HStack width="80%" marginTop="2em">
-              <Text width="30%" fontWeight="semibold">
+              <Text width="30%" fontWeight="semibold" isTruncated>
                 Quantity :
               </Text>
-              <Input
+              <CustomField
                 type="number"
+                variant="outline"
                 borderRadius="sm"
                 boxShadow="0.05em 0.05em 0.05em 0.05em #e1e1e1"
                 defaultValue={1}
-                onChange={(e) => setQuantity(parseInt(e.target.value))}
+                onChange={(e: any) => setQuantity(parseInt(e.target.value))}
               />
             </HStack>
             <Box marginTop="3em" width="inherit" className="options-area">
@@ -223,7 +234,7 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
             </Box>
             <HStack marginTop="7em">
               <Button
-                variant="blueSolid"
+                variant="primarySolid"
                 width="10em"
                 borderRadius="3"
                 padding="1.4em 2em"
@@ -231,11 +242,12 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
                 Buy Now
               </Button>
               <Button
-                variant="blueOutline"
+                variant="primaryOutline"
                 width="10em"
                 left="1em"
                 onClick={handleAddToCart}
                 disabled={productExistsInCart}
+                isLoading={addToCardLoader}
               >
                 <Text isTruncated>
                   {productExistsInCart ? "Added to Cart" : "Add to Cart"}
