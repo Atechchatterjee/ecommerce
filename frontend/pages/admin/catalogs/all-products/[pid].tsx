@@ -2,7 +2,6 @@ import React, { useEffect, useState, useContext } from "react";
 import { useRouter } from "next/router";
 import { NextPage } from "next";
 import axios from "axios";
-import constants from "../../../../util/Constants";
 import ProductSpec from "../../../../components/Shop/ProductPage/ProductSpec";
 import Navbar from "../../../../components/Admin/Navbar";
 import WithAuth from "../../../../util/WithAuth";
@@ -10,6 +9,7 @@ import { UserContext } from "../../../../context/UserContext";
 import { ProductInfoContext } from "../../../../context/ProductInfoContext";
 import { Product } from "../../../../types/shop";
 import { getProductInfo } from "../../../../util/ProductInfo";
+import { Box } from "@chakra-ui/react";
 
 const ProductPage: NextPage = () => {
   const router = useRouter();
@@ -33,12 +33,14 @@ const ProductPage: NextPage = () => {
 
   return !loading ? (
     admin === true ? (
-      <ProductInfoContext.Provider
-        value={{ productInfo: [product, setProduct] }}
-      >
-        <Navbar />
-        <ProductSpec />
-      </ProductInfoContext.Provider>
+      <Box position="sticky">
+        <ProductInfoContext.Provider
+          value={{ productInfo: [product, setProduct] }}
+        >
+          <Navbar />
+          <ProductSpec />
+        </ProductInfoContext.Provider>
+      </Box>
     ) : (
       <></>
     )
