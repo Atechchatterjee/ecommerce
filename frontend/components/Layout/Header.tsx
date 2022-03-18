@@ -10,23 +10,22 @@ import {
 import {
   InputGroup,
   InputGroupProps,
-  InputLeftAddon,
   Input,
   InputRightAddon,
 } from "@chakra-ui/input";
-import { Button, Tooltip } from "@chakra-ui/react";
-import { FaRegHeart, FaRegUser } from "react-icons/fa";
+import { Tooltip } from "@chakra-ui/react";
+import { FaRegHeart, FaRegUser, FaHeart } from "react-icons/fa";
 import { AiOutlineShopping } from "react-icons/ai";
 import { isAuthenticated } from "../../util/Authenticated";
-import SelectCategory from "../Admin/SelectCategory";
 import logout from "../../util/Logout";
 import { FiShoppingCart } from "react-icons/fi";
 import { useWindowDimensions } from "../../hooks/UseWindowDimensions";
 import { FaSearch } from "react-icons/fa";
+import { CustomField } from "../Custom/CustomField";
 
 const Header: React.FC = () => {
   const [authenticated, setAuthenticated] = useState<boolean>(false);
-  const [width, height] = useWindowDimensions();
+  const [width] = useWindowDimensions();
 
   useEffect(() => {
     isAuthenticated()
@@ -41,29 +40,33 @@ const Header: React.FC = () => {
   const SearchBar = ({ ...props }: InputGroupProps) => {
     return (
       <InputGroup color="gray" display="flex" {...props}>
-        <Input
+        <CustomField
           flex="0.78"
           placeholder="Search"
           backgroundColor="white"
           borderWidth="0"
           borderLeftRadius="md"
-          borderRadius="none"
-          height="4.2vh"
+          borderRightRadius={width >= 700 ? "none" : "md"}
+          height="4.2%"
           minHeight="2.5em"
-          color="secondaryBlue.900"
+          color="primary.900"
         />
-        <InputRightAddon
-          flex="0"
-          backgroundColor="#9D84B7"
-          height="4.2vh"
-          minHeight="2.5em"
-          color="white"
-          borderColor="#9D84B7"
-          position="relative"
-          cursor="pointer"
-        >
-          <FaSearch />
-        </InputRightAddon>
+        {width >= 700 ? (
+          <InputRightAddon
+            flex="1"
+            backgroundColor="secondary.200"
+            height="4.2%"
+            minHeight="2.5em"
+            color="white"
+            borderColor="secondary.200"
+            position="relative"
+            cursor="pointer"
+          >
+            <FaSearch />
+          </InputRightAddon>
+        ) : (
+          <></>
+        )}
       </InputGroup>
     );
   };
@@ -144,7 +147,7 @@ const Header: React.FC = () => {
       className="header-up"
       height="initial"
       minHeight="4em"
-      backgroundColor="#091353"
+      backgroundColor="primary.800"
       color="white"
       padding="2%"
       overflow="hidden"
@@ -162,16 +165,18 @@ const Header: React.FC = () => {
           as="h1"
           size="md"
           fontFamily="Sora"
-          flex="3.2"
-          margin="auto"
+          flex="3"
+          marginTop="0.7vh"
           cursor="pointer"
           onClick={() => window.location.assign("/")}
           isTruncated
         >
           Ecommerce Design
         </Heading>
-        <SearchBar flex="5" margin="auto" />
-        {width > 950 ? <ShopIcons flex="1" marginTop="0.1em" /> : null}
+        <SearchBar flex="4" marginTop="0.2%" marginLeft="-4%" />
+        {width > 950 ? (
+          <ShopIcons flex="1" marginTop="0.1em" marginLeft="5%" />
+        ) : null}
         <LoginLink flex="1" marginTop="0.2em" />
       </Flex>
     </Box>
