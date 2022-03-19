@@ -26,8 +26,8 @@ const CartItems = () => {
 
   return (
     <Flex flexDirection="column">
-      {cartItems.map((product) => (
-        <Text>{product.name}</Text>
+      {cartItems.map((product, i) => (
+        <Text key={i}>{product.name}</Text>
       ))}
     </Flex>
   );
