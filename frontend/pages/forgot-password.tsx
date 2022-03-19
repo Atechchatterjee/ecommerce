@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { NextPage } from "next";
-import { Center, Container, Stack, Heading, Box } from "@chakra-ui/layout";
-import Banner from "../components/Layout/Banner";
+import { Center, Stack, Heading, Box } from "@chakra-ui/layout";
 import {
   Accordion,
   AccordionItem,
@@ -17,6 +16,7 @@ import Header from "../components/Layout/Header";
 import Footer from "../components/Layout/Footer";
 import axios from "axios";
 import constants from "../util/Constants";
+import CustomContainer from "../components/Custom/CustomContainer";
 
 interface Email {
   subject: string;
@@ -36,6 +36,19 @@ const CustomSpinner = ({ ...props }) => {
       {...props}
     />
   );
+};
+
+const AccordianButtonStyle = {
+  color: "white",
+  backgroundColor: "primary.200",
+  _hover: {
+    backgroundColor: "primary.800",
+  },
+  _focus: {
+    outline: "none",
+  },
+  borderTopWidth: "0",
+  borderBottomWidth: "0",
 };
 
 const ForgotPassword: NextPage = () => {
@@ -70,7 +83,7 @@ const ForgotPassword: NextPage = () => {
     const sendEmail = async (emailBody: Email): Promise<void> => {
       try {
         setLoading(true);
-        const res = await axios.post(`${constants.url}/auth/sendemail/`, {
+        await axios.post(`${constants.url}/auth/sendemail/`, {
           emailBody,
         });
 
@@ -185,7 +198,6 @@ const ForgotPassword: NextPage = () => {
                 }
               />
               <Button
-                // colorScheme="teal"
                 variant="secondarySolid"
                 marginLeft="26.2em"
                 marginTop="1em"
@@ -266,7 +278,6 @@ const ForgotPassword: NextPage = () => {
                 }}
               />
               <Button
-                // colorScheme="teal"
                 variant="secondarySolid"
                 marginLeft="26.2em"
                 marginTop="1em"
@@ -392,13 +403,7 @@ const ForgotPassword: NextPage = () => {
   return (
     <>
       <Header />
-      <Banner text="My Account" />
-      <Container
-        style={{
-          boxShadow: "0.2em 0.2em 0.2em 0.2em #e1e1e1",
-          height: "33em",
-        }}
-      >
+      <CustomContainer height="33em">
         <Center color="gray" style={{ marginTop: "7vh" }}>
           <Stack
             direction={["row", "column"]}
@@ -416,11 +421,7 @@ const ForgotPassword: NextPage = () => {
         <Accordion marginTop="2em" padding="1em" defaultIndex={[0]}>
           <AccordionItem>
             <h2>
-              <AccordionButton
-                backgroundColor="#F5F5F5"
-                borderTopWidth="0"
-                borderBottomWidth="0"
-              >
+              <AccordionButton {...AccordianButtonStyle}>
                 <Box flex="1" textAlign="left">
                   Reset Your Password
                 </Box>
@@ -472,11 +473,7 @@ const ForgotPassword: NextPage = () => {
 
           <AccordionItem>
             <h2>
-              <AccordionButton
-                backgroundColor="#F5F5F5"
-                borderTopWidth="0"
-                borderBottomWidth="0"
-              >
+              <AccordionButton {...AccordianButtonStyle}>
                 <Box flex="1" textAlign="left">
                   Login via OTP
                 </Box>
@@ -513,7 +510,7 @@ const ForgotPassword: NextPage = () => {
             })()}
           </AccordionItem>
         </Accordion>
-      </Container>
+      </CustomContainer>
       <Footer />
     </>
   );
