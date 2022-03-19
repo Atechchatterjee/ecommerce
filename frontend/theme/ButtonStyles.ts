@@ -26,6 +26,18 @@ export default {
       outlineOffset: "none",
       borderRadius: "sm",
       textColor: primary[900],
+      _hover: {
+        bg: secondary[200],
+        color: "white",
+        borderColor: secondary[200],
+        outlineColor: secondary[200],
+        outlineOffset: "none",
+      },
+       _disabled: {
+         _hover: {
+          textColor: primary[900]
+         }
+      },
       ...commonStyles({includeColor: false}),
     }),
     secondaryOutline: () => ({
