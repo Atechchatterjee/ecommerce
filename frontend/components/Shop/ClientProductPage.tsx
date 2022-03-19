@@ -19,6 +19,9 @@ import CustomContainer from "../Custom/CustomContainer";
 import { useDynamicColumns } from "../../hooks/UseDynamicColumns";
 import { CustomField } from "../Custom/CustomField";
 import { useWindowDimensions } from "../../hooks/UseWindowDimensions";
+import { SpecTableContext } from "../../context/SpecTableContext";
+import SpecificationTable from "./ProductPage/SpecificationTable";
+import OptionsTable from "./ProductPage/OptionsTable";
 
 const OptionButtons: React.FC<{
   optionValues: { id: number; value: string }[];
@@ -104,9 +107,43 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
   const [productExistsInCart, setProductExistsInCart] =
     useState<boolean>(false);
   const [selectedImage, setSelectedImage] = useState<number>(0);
-  const [columns] = useDynamicColumns(2, [1000]);
+  const [columns] = useDynamicColumns(2, [1200]);
   const [width] = useWindowDimensions();
   const [addToCardLoader, setAddToCartLoader] = useState<boolean>(false);
+
+  const [specTableHeading, setSpecTableHeading] = useState<any[]>([]);
+  const [tableExists, setTableExists] = useState<boolean>(
+    specTableHeading.length !== 0
+  );
+  const [openAddRowModal, setOpenAddRowModal] = useState<boolean>(false);
+  const [modifyAddRowModal, setModifyAddRowModal] = useState<boolean>(false);
+  const [isOpenOptionModal, setIsOpenOptionModal] = useState<boolean>(false);
+
+  const createTableHeading = () => {
+    if (specTableHeading.length === 0)
+      setSpecTableHeading([
+        ...specTableHeading,
+        <Text key={specTableHeading.length + 1}>Specification</Text>,
+        <Text key={specTableHeading.length + 2}>Details</Text>,
+      ]);
+  };
+
+  const createTable = async () => {
+    await axios
+      .post(
+        `${constants.url}/shop/createtable/`,
+        {
+          product_id: product.id,
+        },
+        {
+          withCredentials: true,
+        }
+      )
+      .then(() => {
+        setTableExists(true);
+      })
+      .catch((err) => console.error(err));
+  };
 
   useEffect(() => {
     if (product) {
@@ -115,6 +152,9 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
         setFetchedOptions(optionData);
       });
       setLoading(false);
+      createTableHeading();
+      setTableExists(true);
+      // createTable();
     } else setLoading(true);
   }, [product]);
 
@@ -145,7 +185,7 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
         <Grid
           margin="4% 5%"
           templateColumns={`repeat(${columns}, 1fr)`}
-          templateRows={`repeat(1, 1fr)`}
+          templateRows={`repeat(1, 2fr)`}
           gap={20}
         >
           <Box marginBottom="3em" className="product-images">
@@ -206,7 +246,8 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
                 type="number"
                 variant="outline"
                 borderRadius="sm"
-                boxShadow="0.05em 0.05em 0.05em 0.05em #e1e1e1"
+                boxShadow="rgba(149, 157, 165, 0.2) 0px 0px 7px"
+                borderColor="white"
                 defaultValue={1}
                 onChange={(e: any) => setQuantity(parseInt(e.target.value))}
               />
@@ -232,7 +273,12 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
                 </HStack>
               ))}
             </Box>
-            <HStack marginTop="7em">
+            <OptionsTable
+              product={product}
+              triggerOpen={[isOpenOptionModal, setIsOpenOptionModal]}
+              simple
+            />
+            <HStack marginTop="5%">
               <Button
                 variant="primarySolid"
                 width="10em"
@@ -255,6 +301,18 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
               </Button>
             </HStack>
           </Container>
+          <Box marginBottom="5%" width="80%" marginLeft="10%">
+            <SpecTableContext.Provider
+              value={{
+                headings: [specTableHeading, setSpecTableHeading],
+                tableExist: [tableExists, setTableExists],
+                openRowModal: [openAddRowModal, setOpenAddRowModal],
+                modifyRowModal: [modifyAddRowModal, setModifyAddRowModal],
+              }}
+            >
+              <SpecificationTable readOnly />
+            </SpecTableContext.Provider>
+          </Box>
         </Grid>
       )}
     </>
