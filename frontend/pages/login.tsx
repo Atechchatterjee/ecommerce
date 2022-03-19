@@ -9,6 +9,7 @@ import {
   Heading,
   Container,
   Box,
+  Fade,
 } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import React from "react";
@@ -17,28 +18,37 @@ import SignIn from "../components/Auth/SignIn";
 import Header from "../components/Layout/Header";
 import Footer from "../components/Layout/Footer";
 import CustomContainer from "../components/Custom/CustomContainer";
-import ScrollBarWrapper from "../components/Custom/ScrollBarWrapper";
+import { useWindowDimensions } from "../hooks/UseWindowDimensions";
 
 const Login: NextPage = () => {
+  const [width] = useWindowDimensions();
+
   return (
     <>
-      {/* <ScrollBarWrapper position="sticky"> */}
-      {/* <Box height="100vh"> */}
       <Header />
       <CustomContainer
         height="35em"
-        paddingBottom="4em"
         borderRadius="lg"
+        marginBottom="7%"
         width="100%"
+        position="relative"
       >
-        <Center color="gray" marginTop="7vh">
-          <Stack
-            direction={["row", "column"]}
-            spacing="35px"
+        <Center color="gray" marginTop="7vh" position="relative">
+          <Box
+            padding={width >= 500 ? "0 10% 0% 10%" : "0"}
             marginTop="3em"
-            width="75%"
+            width="100%"
+            height="60%"
+            position="relative"
           >
-            <Tabs align="center" isFitted={false} variant="line" isLazy>
+            <Tabs
+              align="center"
+              isFitted={false}
+              variant="line"
+              isLazy
+              position="relative"
+              defaultIndex={1}
+            >
               <TabList>
                 <Tab
                   _focus={{
@@ -61,16 +71,20 @@ const Login: NextPage = () => {
                   </Heading>
                 </Tab>
               </TabList>
-              <TabPanels>
+              <TabPanels position="relative">
                 <TabPanel>
-                  <SignUp />
+                  <Fade in={true}>
+                    <SignUp />
+                  </Fade>
                 </TabPanel>
                 <TabPanel>
-                  <SignIn />
+                  <Fade in={true}>
+                    <SignIn />
+                  </Fade>
                 </TabPanel>
               </TabPanels>
             </Tabs>
-          </Stack>
+          </Box>
         </Center>
       </CustomContainer>
       <Footer />
