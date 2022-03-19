@@ -9,6 +9,7 @@ import {
   ModalFooter,
   Button,
   HStack,
+  Flex,
 } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
 import { TableModalContext } from "../../context/TableModalContext";
@@ -50,9 +51,11 @@ const AddRowModal: React.FC<{
     placeholder: string;
   }> = ({ key, column, placeholder }): JSX.Element => (
     <CustomField
+      flex="2"
       key={key}
       placeholder={placeholder}
-      width="23.8em"
+      width="100%"
+      position="relative"
       onChange={(e: any) => {
         let tableContentLocalCopy = tableContentLocal;
         tableContentLocal[column - 1] = e.target.value;
@@ -73,7 +76,9 @@ const AddRowModal: React.FC<{
         <ModalHeader>{title}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <HStack>{DisplayRowInputElements(columnNo)}</HStack>
+          <Flex flexDirection="row" gridGap={3} width="100%">
+            {DisplayRowInputElements(columnNo)}
+          </Flex>
         </ModalBody>
         <ModalFooter>
           <Button variant="primarySolid" size="md" onClick={onClose}>
