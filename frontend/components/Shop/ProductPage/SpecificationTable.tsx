@@ -10,8 +10,11 @@ import { SpecTableContext } from "../../../context/SpecTableContext";
 import { GoPlus } from "react-icons/go";
 import { ProductInfoContext } from "../../../context/ProductInfoContext";
 import CustomContainer from "../../Custom/CustomContainer";
+import { scrollBarStyle } from "../../../util/ScrollBarStyle";
 
-const SpecificationTable: React.FC<{ product?: any }> = () => {
+const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
+  readOnly,
+}) => {
   const [tableContentStruct, setTableContentStruct] = useState<string[][]>([]);
   const [openCreateTableModal, setOpenCreateTableModal] =
     useState<boolean>(false);
@@ -191,49 +194,67 @@ const SpecificationTable: React.FC<{ product?: any }> = () => {
           height="inherit"
           padding="2em 2em 5em 2em"
           borderRadius="lg"
+          overflowX="scroll"
+          sx={scrollBarStyle()}
         >
           <CustomTable
+            bgSize="contain"
             rows={tableContentStruct}
             heading={heading}
             rowCb={(indx: number) => {
-              setOpenAddRowModal(true);
-              setModifyAddRowModal(true);
-              setIndxToModify(indx);
+              if (!readOnly) {
+                setOpenAddRowModal(true);
+                setModifyAddRowModal(true);
+                setIndxToModify(indx);
+              }
             }}
-            select
-            selectedRowsState={[selectedRows, setSelectedRows]}
+            {...(!readOnly
+              ? {
+                  select: true,
+                  selectedRowsState: [selectedRows, setSelectedRows],
+                }
+              : {
+                  select: false,
+                  selectedRowsState: [selectedRows, setSelectedRows],
+                })}
             interactive
           />
 
-          <AddRowsBtn />
-          {tableContentStruct.length !== 0 ? (
-            <Box>
-              <Tooltip label="Save">
-                <Button
-                  variant="primarySolid"
-                  marginTop="1em"
-                  position="absolute"
-                  right="5em"
-                  onClick={() => saveTableContent()}
-                  isLoading={loadingSaveBtn}
-                >
-                  <FaSave />
-                </Button>
-              </Tooltip>
-              <Tooltip label="Delete">
-                <Button
-                  variant="secondarySolid"
-                  marginTop="1em"
-                  position="absolute"
-                  right="9em"
-                  onClick={() => {
-                    deleteRows();
-                  }}
-                >
-                  <FaTrash />
-                </Button>
-              </Tooltip>
-            </Box>
+          {!readOnly ? (
+            <>
+              <AddRowsBtn />
+              {tableContentStruct.length !== 0 ? (
+                <Box>
+                  <Tooltip label="Save">
+                    <Button
+                      variant="primarySolid"
+                      marginTop="1em"
+                      position="absolute"
+                      right="5em"
+                      onClick={() => saveTableContent()}
+                      isLoading={loadingSaveBtn}
+                    >
+                      <FaSave />
+                    </Button>
+                  </Tooltip>
+                  <Tooltip label="Delete">
+                    <Button
+                      variant="secondarySolid"
+                      marginTop="1em"
+                      position="absolute"
+                      right="9em"
+                      onClick={() => {
+                        deleteRows();
+                      }}
+                    >
+                      <FaTrash />
+                    </Button>
+                  </Tooltip>
+                </Box>
+              ) : (
+                <></>
+              )}
+            </>
           ) : (
             <></>
           )}
@@ -263,7 +284,7 @@ const SpecificationTable: React.FC<{ product?: any }> = () => {
         </TableModalContext.Provider>
       </>
     );
-  else return <></>;
+  else return <Text>Table does not exist</Text>;
 };
 
 export default SpecificationTable;
