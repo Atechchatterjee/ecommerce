@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Box,
   Heading,
@@ -7,12 +7,7 @@ import {
   Flex,
   BoxProps,
 } from "@chakra-ui/layout";
-import {
-  InputGroup,
-  InputGroupProps,
-  Input,
-  InputRightAddon,
-} from "@chakra-ui/input";
+import { InputGroup, InputGroupProps, InputRightAddon } from "@chakra-ui/input";
 import { Tooltip } from "@chakra-ui/react";
 import { FaRegHeart, FaRegUser, FaHeart } from "react-icons/fa";
 import { AiOutlineShopping } from "react-icons/ai";
@@ -22,9 +17,17 @@ import { FiShoppingCart } from "react-icons/fi";
 import { useWindowDimensions } from "../../hooks/UseWindowDimensions";
 import { FaSearch } from "react-icons/fa";
 import { CustomField } from "../Custom/CustomField";
+import Fuse from "fuse.js";
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  products?: [any[], (_: any[]) => void];
+  originalProducts?: any[];
+}
+
+const Header: React.FC<HeaderProps> = ({ products, originalProducts }) => {
   const [authenticated, setAuthenticated] = useState<boolean>(false);
+  const [allProducts, setAllProducts] = products || [];
+  const [searchBarAutoFocus, setSearchBarAutoFocus] = useState<boolean>(false);
   const [width] = useWindowDimensions();
 
   useEffect(() => {
@@ -37,16 +40,52 @@ const Header: React.FC = () => {
       });
   }, []);
 
+  const [searchPhrase, setSearchPhrase] = useState<string>("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const SearchBar = ({ ...props }: InputGroupProps) => {
+    const search = () => {
+      console.log({ allProducts, searchPhrase });
+      if (allProducts && originalProducts) {
+        const fuse = new Fuse(originalProducts, { keys: ["name", "price"] });
+        const output = fuse.search(searchPhrase);
+        console.log(output);
+        const filteredProduct: any[] = output.map((eachOutput) => {
+          return eachOutput.item;
+        });
+        console.log(filteredProduct);
+        if (setAllProducts && filteredProduct.length > 0) {
+          setAllProducts(filteredProduct);
+        } else if (setAllProducts) {
+          setAllProducts(originalProducts);
+        }
+      }
+    };
+
     return (
       <InputGroup color="gray" display="flex" {...props}>
         <CustomField
+          key={1}
+          ref={inputRef}
           flex="0.78"
           placeholder="Search"
+          value={searchPhrase}
           backgroundColor="white"
           borderWidth="0"
           borderLeftRadius="md"
           borderRightRadius={width >= 700 ? "none" : "md"}
+          onChange={(e: any) => {
+            setSearchBarAutoFocus(true);
+            setSearchPhrase(e.target.value);
+            search();
+            inputRef.current?.focus();
+          }}
+          onBlur={(e: any) => {
+            if (e.target.value === "" && originalProducts && setAllProducts) {
+              setAllProducts(originalProducts);
+            }
+          }}
+          autoFocus={searchBarAutoFocus}
           height="4.2%"
           minHeight="2.5em"
           color="primary.900"
@@ -121,6 +160,9 @@ const Header: React.FC = () => {
           href="/login"
           fontFamily="Sora"
           textUnderlineOffset="0.1em"
+          _focus={{
+            outline: "none",
+          }}
           marginTop="0.2em"
           {...props}
         >
