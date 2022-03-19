@@ -2,14 +2,14 @@ import type { NextPage } from "next";
 import WithAuth from "../util/WithAuth";
 import Header from "../components/Layout/Header";
 import Footer from "../components/Layout/Footer";
-import Product from "../components/Shop/Product";
+import ProductType from "../components/Shop/Product";
 import React, { useState, useEffect } from "react";
 import { Grid, GridItem, Box } from "@chakra-ui/react";
 import constants from "../util/Constants";
 import axios from "axios";
 import { useDynamicColumns } from "../hooks/UseDynamicColumns";
 
-interface Product {
+interface ProductType {
   product_id: number;
   description: string;
   image: string;
@@ -18,7 +18,7 @@ interface Product {
   category: number;
 }
 
-const getAllProducts = async (): Promise<Product[]> => {
+const getAllProducts = async (): Promise<ProductType[]> => {
   const res = await axios.get(`${constants.url}/shop/getallproducts/`, {
     withCredentials: true,
   });
@@ -26,16 +26,23 @@ const getAllProducts = async (): Promise<Product[]> => {
 };
 
 const Shop: NextPage = () => {
-  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [allProducts, setAllProducts] = useState<ProductType[]>([]);
+  const [originalProducts, setOriginalProducts] = useState<ProductType[]>([]);
   const [columns] = useDynamicColumns(4, [1700, 1300, 860]);
 
   useEffect(() => {
-    getAllProducts().then((products) => setAllProducts(products));
+    getAllProducts().then((products) => {
+      setAllProducts(products);
+      setOriginalProducts(products);
+    });
   }, []);
 
   return (
     <>
-      <Header />
+      <Header
+        products={[allProducts, setAllProducts]}
+        originalProducts={originalProducts}
+      />
       <Box padding="2% 2% 3% 2%" overflow="hidden">
         <Grid
           h="inherit"
@@ -48,7 +55,7 @@ const Shop: NextPage = () => {
           {allProducts.map(
             ({ name, image, description, price, product_id }) => (
               <GridItem key={product_id}>
-                <Product
+                <ProductType
                   id={product_id}
                   name={name}
                   image={image}
