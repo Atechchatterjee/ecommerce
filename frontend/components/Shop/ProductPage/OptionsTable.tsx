@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Container,
+  Flex,
   HStack,
   Input,
   Modal,
@@ -22,14 +23,16 @@ import CustomContainer from "../../Custom/CustomContainer";
 import { scrollBarStyle } from "../../../util/ScrollBarStyle";
 import { CustomField } from "../../Custom/CustomField";
 
-const DisplayFetchedOptions: React.FC<{ fetchedOptions: any[] }> = ({
-  fetchedOptions,
-}) => (
+const DisplayFetchedOptions: React.FC<{
+  fetchedOptions: any[];
+  simple?: boolean;
+}> = ({ fetchedOptions, simple }) => (
   <Container marginTop="2em" marginLeft="-1em" width="50em">
     {fetchedOptions.map((option: any, indx) => (
       <CustomContainer
+        disableEffect={!!simple}
         key={indx}
-        padding="1.8em"
+        padding={!simple ? "1.8em" : "0.5em 0.5em 0.5em 0"}
         marginTop="1em"
         borderRadius="lg"
         overflowX="scroll"
@@ -37,16 +40,18 @@ const DisplayFetchedOptions: React.FC<{ fetchedOptions: any[] }> = ({
         sx={scrollBarStyle()}
         cursor="pointer"
       >
-        <HStack>
-          <Text marginRight="1em" fontWeight="semibold">
+        <Flex flexDirection="row" gridGap={5}>
+          <Text fontWeight="semibold" flex="1" marginTop="1%">
             {option.name} :
           </Text>
           {option.values.map((value: any, indx: any) => (
             <Button
+              flex="1"
               key={indx}
-              variant="secondarySolid"
-              marginLeft="2em"
-              borderRadius="full"
+              {...(indx === 0 && simple
+                ? { variant: "secondarySolid" }
+                : { variant: "primaryOutline" })}
+              borderRadius="md"
               padding="0.7em 2em"
             >
               <Text fontSize="sm" fontWeight="semibold">
@@ -54,7 +59,7 @@ const DisplayFetchedOptions: React.FC<{ fetchedOptions: any[] }> = ({
               </Text>
             </Button>
           ))}
-        </HStack>
+        </Flex>
       </CustomContainer>
     ))}
   </Container>
@@ -63,7 +68,8 @@ const DisplayFetchedOptions: React.FC<{ fetchedOptions: any[] }> = ({
 const OptionsTable: React.FC<{
   product: any;
   triggerOpen: [isOpen: boolean, setIsOpen: (_: boolean) => void];
-}> = ({ product, triggerOpen: [isOpen, setIsOpen] }) => {
+  simple?: boolean;
+}> = ({ product, triggerOpen: [isOpen, setIsOpen], simple }) => {
   const [currentOptionName, setCurrentOptionName] = useState<string>("");
   const [noOfOptionValues, setNoOfOptionValues] = useState<number>(1);
   const [optionValues, setOptionValues] = useState<string[]>([]);
@@ -215,7 +221,10 @@ const OptionsTable: React.FC<{
           ) : (
             <></>
           )} */}
-          <DisplayFetchedOptions fetchedOptions={fetchedOptions} />
+          <DisplayFetchedOptions
+            fetchedOptions={fetchedOptions}
+            simple={!!simple}
+          />
         </Container>
       ) : (
         <></>
