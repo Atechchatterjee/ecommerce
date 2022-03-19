@@ -1,13 +1,22 @@
 import { useState, useEffect } from "react";
 import { NextPage } from "next";
 import WithAuth from "../util/WithAuth";
-import { Input, Box, Button, Container, Image, Text } from "@chakra-ui/react";
+import {
+  Input,
+  Box,
+  Button,
+  Container,
+  Image,
+  Text,
+  Flex,
+} from "@chakra-ui/react";
 import axios from "axios";
 import constants from "../util/Constants";
 import CustomTable from "../components/Custom/CustomTable";
 import { scrollBarStyle } from "../util/ScrollBarStyle";
 import { MdDelete } from "react-icons/md";
 import { CustomField } from "../components/Custom/CustomField";
+import { IoIosArrowBack } from "react-icons/io";
 
 const createImageUrl = (url: string, image: File | undefined): string =>
   image
@@ -177,7 +186,25 @@ const Cart: NextPage = () => {
           selectedRowsState={[selectedItems, setSelectedItems]}
           excludeSelectForRows={[cartItems.length - 1]}
         />
-        <Box position="absolute" right="1em" bottom="1em">
+        <Box
+          position="absolute"
+          left="1.5em"
+          bottom="2em"
+          width="0.1em"
+          height="1em"
+        >
+          <Button
+            variant="primaryOutline"
+            borderRadius="full"
+            onClick={() => window.location.assign("/shop")}
+          >
+            <Flex flexDirection="row" gridGap={1.5}>
+              <IoIosArrowBack size={20} />
+              <Text flex="1">Back</Text>
+            </Flex>
+          </Button>
+        </Box>
+        <Box position="absolute" bottom="1em" right="1em">
           <Button
             variant="secondarySolid"
             onClick={() => {
