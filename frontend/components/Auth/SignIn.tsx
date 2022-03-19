@@ -72,15 +72,17 @@ const SignIn: React.FunctionComponent = () => {
                     width="100%"
                     flex="1"
                   />
-                  <Link
-                    color="red.400"
-                    fontSize="0.8em"
-                    onClick={() => window.location.assign("/forgotpassword")}
-                    textAlign="right"
-                    flex="1"
-                  >
-                    Forgot Password ?
-                  </Link>
+                  <Box flex="1" textAlign="right" marginBottom="3%">
+                    <Link
+                      color="red.400"
+                      fontSize="0.8em"
+                      width="20%"
+                      href="/forgot-password"
+                      flex="1"
+                    >
+                      Forgot Password ?
+                    </Link>
+                  </Box>
                   <Button
                     type="submit"
                     variant="primarySolid"
