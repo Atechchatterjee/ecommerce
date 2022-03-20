@@ -41,12 +41,12 @@ const DisplayFetchedOptions: React.FC<{
         cursor="pointer"
       >
         <Flex flexDirection="row" gridGap={5}>
-          <Text fontWeight="semibold" flex="1" marginTop="1%">
+          <Text fontWeight="semibold" flex="0.3" marginTop="1%" isTruncated>
             {option.name} :
           </Text>
           {option.values.map((value: any, indx: any) => (
             <Button
-              flex="1"
+              flex="0.4"
               key={indx}
               {...(indx === 0 && simple
                 ? { variant: "secondarySolid" }
