@@ -144,7 +144,7 @@ const Header: React.FC<HeaderProps> = ({ products, originalProducts }) => {
               <FiShoppingCart
                 size={25}
                 style={{ cursor: "pointer", flex: "2", marginTop: "0.1em" }}
-                onClick={() => window.location.assign("/cart")}
+                onClick={() => window.location.assign("/checkout")}
               />
             </span>
           </Tooltip>
