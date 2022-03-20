@@ -50,6 +50,9 @@ export default {
     }),
     secondarySolid: () => ({
       bg: secondary[200],
+      outlineColor: secondary[200],
+      outlineOffset: "none",
+      borderRadius: "none",
       _hover: { bg: secondary[200] },
       ...commonStyles(),
     }),
