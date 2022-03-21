@@ -1,11 +1,11 @@
-import { FieldAttributes } from "formik";
-import { FormControl, FormLabel, Input } from "@chakra-ui/react";
+import { FormControl, FormLabel, Input, InputProps } from "@chakra-ui/react";
 import React from "react";
 
-export const CustomField: React.FC<FieldAttributes<any>> = ({
-  label,
-  ...props
-}) => {
+interface CustomFieldProps extends InputProps {
+  label?: string;
+}
+
+export const CustomField = ({ label, ...props }: CustomFieldProps) => {
   return (
     <FormControl isRequired style={{ width: "inherit" }}>
       {label ? (
