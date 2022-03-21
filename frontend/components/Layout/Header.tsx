@@ -41,19 +41,14 @@ const Header: React.FC<HeaderProps> = ({ products, originalProducts }) => {
   }, []);
 
   const [searchPhrase, setSearchPhrase] = useState<string>("");
-  const inputRef = useRef<HTMLInputElement>(null);
-
   const SearchBar = ({ ...props }: InputGroupProps) => {
     const search = () => {
-      console.log({ allProducts, searchPhrase });
       if (allProducts && originalProducts) {
         const fuse = new Fuse(originalProducts, { keys: ["name", "price"] });
         const output = fuse.search(searchPhrase);
-        console.log(output);
-        const filteredProduct: any[] = output.map((eachOutput) => {
-          return eachOutput.item;
-        });
-        console.log(filteredProduct);
+        const filteredProduct: any[] = output.map(
+          (eachOutput) => eachOutput.item
+        );
         if (setAllProducts && filteredProduct.length > 0) {
           setAllProducts(filteredProduct);
         } else if (setAllProducts) {
@@ -62,11 +57,18 @@ const Header: React.FC<HeaderProps> = ({ products, originalProducts }) => {
       }
     };
 
+    const handleSearchPhraseChange = (
+      e: React.ChangeEvent<HTMLInputElement>
+    ) => {
+      setSearchBarAutoFocus(true);
+      setSearchPhrase(e.target.value);
+      search();
+    };
+
     return (
       <InputGroup color="gray" display="flex" {...props}>
         <CustomField
           key={1}
-          ref={inputRef}
           flex="0.78"
           placeholder="Search"
           value={searchPhrase}
@@ -74,12 +76,7 @@ const Header: React.FC<HeaderProps> = ({ products, originalProducts }) => {
           borderWidth="0"
           borderLeftRadius="md"
           borderRightRadius={width >= 700 ? "none" : "md"}
-          onChange={(e: any) => {
-            setSearchBarAutoFocus(true);
-            setSearchPhrase(e.target.value);
-            search();
-            inputRef.current?.focus();
-          }}
+          onChange={handleSearchPhraseChange}
           onBlur={(e: any) => {
             if (e.target.value === "" && originalProducts && setAllProducts) {
               setAllProducts(originalProducts);
