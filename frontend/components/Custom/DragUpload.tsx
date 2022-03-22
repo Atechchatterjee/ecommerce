@@ -47,7 +47,7 @@ const DragUpload = ({ onFileUpload, clearUpload, ...props }: Props) => {
   const DummyInput: React.FC = () => {
     return (
       <CustomField
-        ref={fileInputRef}
+        itemRef={fileInputRef.current}
         type="file"
         display="none"
         onChange={(event: any) => {

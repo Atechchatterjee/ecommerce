@@ -19,7 +19,7 @@ const Upload: React.FC<Props> = ({ getFile }) => {
     <CustomField
       type="file"
       defaultValue={undefined}
-      ref={InputRef}
+      itemRef={InputRef.current}
       display="none"
       onChange={(event: any) => {
         const file: File = event.target.files[0];
