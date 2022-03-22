@@ -14,6 +14,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
+  Tooltip,
 } from "@chakra-ui/react";
 import { FaCheck } from "react-icons/fa";
 import constants from "../../../util/Constants";
@@ -26,44 +27,61 @@ import { CustomField } from "../../Custom/CustomField";
 const DisplayFetchedOptions: React.FC<{
   fetchedOptions: any[];
   simple?: boolean;
-}> = ({ fetchedOptions, simple }) => (
-  <Container marginTop="2em" marginLeft="-1em" width="50em">
-    {fetchedOptions.map((option: any, indx) => (
-      <CustomContainer
-        disableEffect={!!simple}
-        key={indx}
-        padding={!simple ? "1.8em" : "0.5em 0.5em 0.5em 0"}
-        marginTop="1em"
-        borderRadius="lg"
-        overflowX="scroll"
-        interactive
-        sx={scrollBarStyle()}
-        cursor="pointer"
-      >
-        <Flex flexDirection="row" gridGap={5}>
-          <Text fontWeight="semibold" flex="0.3" marginTop="1%" isTruncated>
-            {option.name} :
-          </Text>
-          {option.values.map((value: any, indx: any) => (
-            <Button
-              flex="0.4"
-              key={indx}
-              {...(indx === 0 && simple
-                ? { variant: "secondarySolid" }
-                : { variant: "primaryOutline" })}
-              borderRadius="md"
-              padding="0.7em 2em"
-            >
-              <Text fontSize="sm" fontWeight="semibold">
-                {value.value}
+}> = ({ fetchedOptions, simple }) => {
+  const [selectedOption, setSelectedOption] = useState<{
+    [option: string]: number;
+  }>({});
+
+  const handleOptionChange = (option: string, indx: number) => {
+    setSelectedOption({
+      ...selectedOption,
+      [option]: selectedOption[option] >= 0 ? -1 : indx,
+    });
+  };
+
+  return (
+    <Container marginTop="2em" marginLeft="-1em" width="50em">
+      <pre>{JSON.stringify(selectedOption)}</pre>
+      {fetchedOptions.map((option: any, indx) => (
+        <CustomContainer
+          disableEffect={!!simple}
+          key={indx}
+          padding={!simple ? "1.8em" : "0.5em 0.5em 0.5em 0"}
+          marginTop="1em"
+          borderRadius="lg"
+          overflowX="scroll"
+          interactive
+          sx={scrollBarStyle()}
+          cursor="pointer"
+        >
+          <Flex flexDirection="row" gridGap={5}>
+            <Tooltip label={option.name}>
+              <Text fontWeight="semibold" flex="0.3" marginTop="1%" isTruncated>
+                {option.name} :
               </Text>
-            </Button>
-          ))}
-        </Flex>
-      </CustomContainer>
-    ))}
-  </Container>
-);
+            </Tooltip>
+            {option.values.map((value: any, indx: any) => (
+              <Button
+                flex="0.4"
+                key={indx}
+                {...(indx === selectedOption[value.value] && simple
+                  ? { variant: "secondarySolid" }
+                  : { variant: "primaryOutline" })}
+                borderRadius="md"
+                padding="0.7em 2em"
+                onClick={() => handleOptionChange(value.value, indx)}
+              >
+                <Text fontSize="sm" fontWeight="semibold">
+                  {value.value}
+                </Text>
+              </Button>
+            ))}
+          </Flex>
+        </CustomContainer>
+      ))}
+    </Container>
+  );
+};
 
 const OptionsTable: React.FC<{
   product: any;
