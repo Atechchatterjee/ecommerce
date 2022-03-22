@@ -57,6 +57,7 @@ const CustomTable = ({
             size="lg"
             colorScheme="pink"
             isChecked={selectedRows[indx]}
+            borderColor="gray.300"
           />
         </Td>
       );
