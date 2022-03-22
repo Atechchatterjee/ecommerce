@@ -7,12 +7,8 @@ interface CustomFieldProps extends InputProps {
 
 export const CustomField = ({ label, ...props }: CustomFieldProps) => {
   return (
-    <FormControl isRequired style={{ width: "inherit" }}>
-      {label ? (
-        <FormLabel style={{ fontSize: "0.87em" }}>{label}</FormLabel>
-      ) : (
-        <></>
-      )}
+    <FormControl isRequired width="inherit">
+      {label ? <FormLabel fontSize="0.87em">{label}</FormLabel> : <></>}
       <Input
         variant="outline"
         size="md"
