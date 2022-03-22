@@ -8,6 +8,7 @@ import { MdDelete } from "react-icons/md";
 import { CustomField } from "../Custom/CustomField";
 import { IoIosArrowBack } from "react-icons/io";
 import { createImageUrl } from "../../util/CreateImageUrl";
+import CustomContainer from "../Custom/CustomContainer";
 
 const getCartItems = async (): Promise<any[]> => {
   return new Promise((resolve) => {
@@ -136,28 +137,16 @@ const Cart: React.FC<CartProps> = ({ proceed }) => {
   }, [reRender]);
 
   return (
-    <Container
-      borderRadius="lg"
-      width="100%"
-      maxWidth="75%"
-      bgColor="white"
-      height="83%"
-      minHeight="50%"
-      marginTop="4em"
-      overflowX="scroll"
-      sx={scrollBarStyle()}
-      position="relative"
-    >
+    <Box padding="1% 2% 0 2%">
       <CustomTable
-        top="2em"
         width="95%"
         rows={cartItems}
         heading={heading}
-        marginTop="1em"
         interactive
         select
         selectedRowsState={[selectedItems, setSelectedItems]}
         excludeSelectForRows={[cartItems.length - 1]}
+        variant="unstyled"
       />
       <Box
         position="absolute"
@@ -201,7 +190,7 @@ const Cart: React.FC<CartProps> = ({ proceed }) => {
           Proceed
         </Button>
       </Box>
-    </Container>
+    </Box>
   );
 };
 
