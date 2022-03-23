@@ -41,7 +41,6 @@ const DisplayFetchedOptions: React.FC<{
 
   return (
     <Container marginTop="2em" marginLeft="-1em" width="50em">
-      <pre>{JSON.stringify(selectedOption)}</pre>
       {fetchedOptions.map((option: any, indx) => (
         <CustomContainer
           disableEffect={!!simple}
