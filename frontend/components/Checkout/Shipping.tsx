@@ -32,7 +32,7 @@ const Shipping = ({ ...props }: ContainerProps) => {
   const [state, setState] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [pincode, setPincode] = useState<string>("");
-  const FORM_BORDER_COLOR = "gray.300";
+  const FORM_BORDER_COLOR = "gray.400";
 
   const handlePincodeBlur = (e: any) => {
     const currentPincode: string = e.target.value;
@@ -114,7 +114,7 @@ const Shipping = ({ ...props }: ContainerProps) => {
               />
             )}
           </Box>
-          <Button variant="primarySolid" marginTop="3%">
+          <Button variant="primarySolid" marginTop="5%">
             Submit
           </Button>
         </Flex>
