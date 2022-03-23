@@ -1,14 +1,20 @@
 import { useState, useEffect } from "react";
-import { Box, Button, Container, Image, Text, Flex } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Image,
+  Text,
+  Flex,
+  Grid,
+  GridItem,
+} from "@chakra-ui/react";
 import axios from "axios";
 import constants from "../../util/Constants";
 import CustomTable from "../Custom/CustomTable";
-import { scrollBarStyle } from "../../util/ScrollBarStyle";
 import { MdDelete } from "react-icons/md";
 import { CustomField } from "../Custom/CustomField";
 import { IoIosArrowBack } from "react-icons/io";
 import { createImageUrl } from "../../util/CreateImageUrl";
-import CustomContainer from "../Custom/CustomContainer";
 
 const getCartItems = async (): Promise<any[]> => {
   return new Promise((resolve) => {
@@ -91,6 +97,10 @@ const Cart: React.FC<CartProps> = ({ proceed }) => {
           <Image
             key={`${indx}0`}
             src={createImageUrl(item.images[0].image, undefined)}
+            backgroundColor="white"
+            padding="2%"
+            borderRadius="lg"
+            opacity="0.8"
             w="20"
             h="20"
             objectFit="contain"
@@ -106,6 +116,8 @@ const Cart: React.FC<CartProps> = ({ proceed }) => {
             width="5em"
             type="number"
             placeholder={item.quantity}
+            borderColor="gray.400"
+            _hover={{ borderColor: "gray.300" }}
             onChange={(e: any) => {
               setQuantities({
                 ...quantities,
@@ -136,61 +148,72 @@ const Cart: React.FC<CartProps> = ({ proceed }) => {
     });
   }, [reRender]);
 
+  const handleDelete = () => {
+    deleteItemsFromCart(
+      Object.keys(selectedItems).map((key) =>
+        selectedItems[key] ? parseInt(key) : -1
+      )
+    ).then(() => {
+      setReRender(true);
+    });
+  };
+
   return (
-    <Box padding="1% 2% 0 2%">
-      <CustomTable
-        width="95%"
-        rows={cartItems}
-        heading={heading}
-        interactive
-        select
-        selectedRowsState={[selectedItems, setSelectedItems]}
-        excludeSelectForRows={[cartItems.length - 1]}
-        variant="unstyled"
-      />
-      <Box
-        position="absolute"
-        left="1.5em"
-        bottom="2.5em"
-        width="0.1em"
-        height="1em"
-      >
-        <Button
-          variant="primaryOutline"
-          borderRadius="full"
-          onClick={() => window.location.assign("/shop")}
-        >
-          <Flex flexDirection="row" gridGap={1.5}>
-            <IoIosArrowBack size={20} />
-            <Text flex="1">Back</Text>
-          </Flex>
-        </Button>
-      </Box>
-      <Box position="absolute" bottom="1em" right="1em">
-        <Button
-          variant="secondarySolid"
-          borderRadius="md"
-          onClick={() => {
-            deleteItemsFromCart(
-              Object.keys(selectedItems).map((key) =>
-                selectedItems[key] ? parseInt(key) : -1
-              )
-            ).then(() => {
-              setReRender(true);
-            });
-          }}
-        >
-          <MdDelete size="20" />
-        </Button>
-        <Button
-          marginLeft="1em"
-          variant="primarySolid"
-          onClick={() => proceed && proceed()}
-        >
-          Proceed
-        </Button>
-      </Box>
-    </Box>
+    <Grid
+      padding="1% 2% 0 2%"
+      templateRows="repeat(20, 1fr)"
+      templateColumns="repeat(20, 1fr)"
+      gap="9"
+    >
+      <GridItem rowSpan={20} colSpan={20}>
+        <CustomTable
+          width="95%"
+          rows={cartItems}
+          heading={heading}
+          interactive
+          select
+          selectedRowsState={[selectedItems, setSelectedItems]}
+          excludeSelectForRows={[cartItems.length - 1]}
+          variant="unstyled"
+        />
+      </GridItem>
+      <GridItem rowSpan={1} colSpan={16} textAlign="left">
+        <Box>
+          <Button
+            variant="primaryOutline"
+            borderRadius="full"
+            backgroundColor={`rgba(255,255,255, 0.1)`}
+            onClick={() => window.location.assign("/shop")}
+          >
+            <Flex flexDirection="row" gridGap={1.5}>
+              <IoIosArrowBack size={20} />
+              <Text flex="1">Back</Text>
+            </Flex>
+          </Button>
+        </Box>
+      </GridItem>
+
+      <GridItem rowSpan={1} colSpan={4} textAlign="right">
+        <Flex flexDirection="row" gridGap="2" width="full">
+          <Button
+            flex="0.2"
+            variant="secondarySolid"
+            borderRadius="md"
+            onClick={handleDelete}
+          >
+            <MdDelete size="20" />
+          </Button>
+          <Button
+            flex="1"
+            marginLeft="1em"
+            variant="primarySolid"
+            onClick={() => proceed && proceed()}
+          >
+            Proceed
+          </Button>
+        </Flex>
+      </GridItem>
+    </Grid>
   );
 };
 
