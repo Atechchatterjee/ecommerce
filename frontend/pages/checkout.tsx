@@ -1,4 +1,4 @@
-import { Box, Fade, SliderMark, Text } from "@chakra-ui/react";
+import { Box, Fade, SliderMark, Text, ContainerProps } from "@chakra-ui/react";
 import { NextPage } from "next";
 import Cart from "../components/Checkout/Cart";
 import CustomSlider from "../components/Custom/CustomSlider";
@@ -9,6 +9,21 @@ import Head from "next/head";
 import CustomContainer from "../components/Custom/CustomContainer";
 import { scrollBarStyle } from "../util/ScrollBarStyle";
 
+const ContainerStyles: ContainerProps = {
+  borderRadius: "lg",
+  width: "100%",
+  maxWidth: "75%",
+  bgColor: "white",
+  height: "83%",
+  minHeight: "50%",
+  marginTop: "4em",
+  sx: scrollBarStyle(),
+  position: "relative",
+  overflow: "scroll",
+  backgroundColor: `rgba(255,255,255, 0.7)`,
+  backdropFilter: "blur(4px)",
+};
+
 const Checkout: NextPage = () => {
   const [stageNo, setStageNo] = useState<number>(1);
   const [stageNames, setStageNames] = useState<string[]>([
@@ -16,35 +31,42 @@ const Checkout: NextPage = () => {
     "Shipping",
     "Payment",
   ]);
-  const [hover, setHover] = useState<boolean>(false);
 
-  const Slider = () => (
-    <CustomSlider
-      max={4}
-      value={stageNo}
-      width="70%"
-      marginTop="1.5%"
-      onChange={(value) => (value < stageNo ? setStageNo(value) : null)}
-    >
-      {stageNames.map((stageName, indx) => (
-        <SliderMark
-          value={indx + 1}
-          key={indx + 1}
-          mt="5"
-          ml={`-${stageName.length}`}
-          color={indx + 1 === stageNo ? "white" : "gray.300"}
-          fontSize="md"
-          textAlign="center"
-        >
-          {stageName}
-        </SliderMark>
-      ))}
-    </CustomSlider>
-  );
+  const Slider = () => {
+    const handleSliderChange = (value: number) => {
+      value < stageNo ? setStageNo(value) : null;
+    };
+
+    return (
+      <CustomSlider
+        max={4}
+        value={stageNo}
+        width="70%"
+        marginTop="1.5%"
+        onChange={handleSliderChange}
+      >
+        {stageNames.map((stageName, indx) => (
+          <SliderMark
+            value={indx + 1}
+            key={indx + 1}
+            mt="5"
+            ml={`-${stageName.length}`}
+            color={indx + 1 === stageNo ? "white" : "gray.400"}
+            fontSize="md"
+            textAlign="center"
+          >
+            {stageName}
+          </SliderMark>
+        ))}
+      </CustomSlider>
+    );
+  };
 
   return (
     <Box
-      bgImage="/checkout-screen-background-2.png"
+      bgGradient="linear(to-b, primary.200, primary.500)"
+      bgRepeat="no-repeat"
+      bgSize="cover"
       width="100%"
       height="100vh"
       position="relative"
@@ -55,23 +77,7 @@ const Checkout: NextPage = () => {
       </Head>
       <Slider />
 
-      <CustomContainer
-        borderRadius="lg"
-        width="100%"
-        maxWidth="75%"
-        bgColor="white"
-        height="83%"
-        minHeight="50%"
-        marginTop="4em"
-        sx={scrollBarStyle()}
-        position="relative"
-        backgroundColor={`rgba(255,255,255, 0.85)`}
-        backdropFilter={hover ? "blur(8px)" : "blur(14px)"}
-        transition={`all 0.2s ease-in-out`}
-        interactive
-        onMouseEnter={() => setHover(true)}
-        onMouseLeave={() => setHover(false)}
-      >
+      <CustomContainer {...ContainerStyles}>
         {(() => {
           switch (stageNo) {
             case 1:
