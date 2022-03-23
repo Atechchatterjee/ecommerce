@@ -28,7 +28,7 @@ const CustomSlider = ({ icon, children, ...props }: CustomSliderProps) => {
       {...props}
     >
       {children}
-      <SliderTrack bg="primary.200">
+      <SliderTrack bg="gray.300" opacity="0.8">
         {icon ? icon : <SliderFilledTrack bg="secondary.200" />}
       </SliderTrack>
       <SliderThumb boxSize={8}>
