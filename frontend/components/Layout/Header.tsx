@@ -8,16 +8,18 @@ import {
   BoxProps,
 } from "@chakra-ui/layout";
 import { InputGroup, InputGroupProps, InputRightAddon } from "@chakra-ui/input";
-import { Tooltip } from "@chakra-ui/react";
+import { Button, ButtonProps, Fade, Tooltip } from "@chakra-ui/react";
 import { FaRegHeart, FaRegUser, FaHeart } from "react-icons/fa";
 import { AiOutlineShopping } from "react-icons/ai";
 import { isAuthenticated } from "../../util/Authenticated";
 import logout from "../../util/Logout";
 import { FiShoppingCart } from "react-icons/fi";
-import { useWindowDimensions } from "../../hooks/UseWindowDimensions";
+import { useWindowDimensions } from "../../hooks/useWindowDimensions";
 import { FaSearch } from "react-icons/fa";
 import { CustomField } from "../Custom/CustomField";
 import Fuse from "fuse.js";
+import { GiHamburgerMenu } from "react-icons/gi";
+import CategorySidebar from "../Widgets/CategorySidebar";
 
 interface HeaderProps {
   products?: [any[], (_: any[]) => void];
@@ -29,6 +31,8 @@ const Header: React.FC<HeaderProps> = ({ products, originalProducts }) => {
   const [allProducts, setAllProducts] = products || [];
   const [searchBarAutoFocus, setSearchBarAutoFocus] = useState<boolean>(false);
   const [width] = useWindowDimensions();
+  const [searchPhrase, setSearchPhrase] = useState<string>("");
+  const [showSideBar, setShowSideBar] = useState<boolean>(false);
 
   useEffect(() => {
     isAuthenticated()
@@ -40,7 +44,21 @@ const Header: React.FC<HeaderProps> = ({ products, originalProducts }) => {
       });
   }, []);
 
-  const [searchPhrase, setSearchPhrase] = useState<string>("");
+  const HamburgerButton = ({ ...props }: ButtonProps) => {
+    return (
+      <Button
+        variant="secondarySolid"
+        borderRadius="md"
+        onClick={() => {
+          setShowSideBar(!showSideBar);
+        }}
+        {...props}
+      >
+        <GiHamburgerMenu size={24} />
+      </Button>
+    );
+  };
+
   const SearchBar = ({ ...props }: InputGroupProps) => {
     const search = () => {
       if (allProducts && originalProducts) {
@@ -72,7 +90,7 @@ const Header: React.FC<HeaderProps> = ({ products, originalProducts }) => {
           flex="0.78"
           placeholder="Search"
           value={searchPhrase}
-          backgroundColor="white"
+          backgroundColor="primary.200"
           borderWidth="0"
           borderLeftRadius="md"
           borderRightRadius={width >= 700 ? "none" : "md"}
@@ -82,20 +100,21 @@ const Header: React.FC<HeaderProps> = ({ products, originalProducts }) => {
               setAllProducts(originalProducts);
             }
           }}
+          _focus={{ border: "none" }}
           autoFocus={searchBarAutoFocus}
           height="4.2%"
           minHeight="2.5em"
-          color="primary.900"
+          color="white"
         />
         {width >= 700 ? (
           <InputRightAddon
             flex="1"
-            backgroundColor="secondary.200"
+            backgroundColor="primary.200"
             height="4.2%"
             minHeight="2.5em"
             color="white"
-            borderColor="secondary.200"
-            position="relative"
+            borderColor="primary.200"
+            osition="relative"
             cursor="pointer"
           >
             <FaSearch />
@@ -181,44 +200,48 @@ const Header: React.FC<HeaderProps> = ({ products, originalProducts }) => {
   };
 
   return (
-    <Box
-      width="full"
-      className="header-up"
-      height="initial"
-      minHeight="4em"
-      backgroundColor="primary.800"
-      color="white"
-      padding="2%"
-      overflow="hidden"
-    >
-      <Flex
-        flexDirection={"row"}
-        gridColumn={4}
-        gridGap={10}
-        paddingTop="0.3em"
-        width="100%"
-        height="inherit"
-        flexWrap="wrap"
+    <>
+      {showSideBar ? <CategorySidebar zIndex={9} /> : <></>}
+      <Box
+        width="full"
+        className="header-up"
+        height="initial"
+        minHeight="4em"
+        backgroundColor="primary.800"
+        color="white"
+        padding="2%"
+        overflow="hidden"
       >
-        <Heading
-          as="h1"
-          size="md"
-          fontFamily="Sora"
-          flex="3"
-          marginTop="0.7vh"
-          cursor="pointer"
-          onClick={() => window.location.assign("/")}
-          isTruncated
+        <Flex
+          flexDirection={"row"}
+          gridColumn={4}
+          gridGap={10}
+          paddingTop="0.3em"
+          width="100%"
+          height="inherit"
+          flexWrap="wrap"
         >
-          Ecommerce Design
-        </Heading>
-        <SearchBar flex="4" marginTop="0.2%" marginLeft="-4%" />
-        {width > 950 ? (
-          <ShopIcons flex="1" marginTop="0.1em" marginLeft="5%" />
-        ) : null}
-        <LoginLink flex="1" marginTop="0.2em" />
-      </Flex>
-    </Box>
+          <HamburgerButton flex="0.1" />
+          <Heading
+            as="h1"
+            size="md"
+            fontFamily="Sora"
+            flex="3"
+            marginTop="0.7vh"
+            cursor="pointer"
+            onClick={() => window.location.assign("/")}
+            isTruncated
+          >
+            Ecommerce Design
+          </Heading>
+          <SearchBar flex="4" marginTop="0.2%" marginLeft="-4%" />
+          {width > 950 ? (
+            <ShopIcons flex="1" marginTop="0.1em" marginLeft="5%" />
+          ) : null}
+          <LoginLink flex="1" marginTop="0.2em" />
+        </Flex>
+      </Box>
+    </>
   );
 };
 
