@@ -7,7 +7,7 @@ import React, { useState, useEffect } from "react";
 import { Grid, GridItem, Box } from "@chakra-ui/react";
 import constants from "../util/Constants";
 import axios from "axios";
-import { useDynamicColumns } from "../hooks/UseDynamicColumns";
+import { useDynamicColumns } from "../hooks/useDynamicColumns";
 
 interface ProductType {
   product_id: number;

@@ -16,7 +16,7 @@ import {
   ModalOverlay,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useDynamicColumns } from "../../hooks/UseDynamicColumns";
+import { useDynamicColumns } from "../../hooks/useDynamicColumns";
 
 interface Product {
   product_id: number;

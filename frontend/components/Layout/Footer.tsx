@@ -11,7 +11,7 @@ import {
   Grid,
 } from "@chakra-ui/react";
 import React from "react";
-import { useDynamicColumns } from "../../hooks/UseDynamicColumns";
+import { useDynamicColumns } from "../../hooks/useDynamicColumns";
 
 const col2 = [
   "About Us",
