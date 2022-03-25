@@ -87,7 +87,7 @@ const SignIn: React.FunctionComponent = () => {
                     type="submit"
                     variant="primarySolid"
                     width="100%"
-                    borderRadius="none"
+                    borderRadius="sm"
                   >
                     Submit
                   </Button>

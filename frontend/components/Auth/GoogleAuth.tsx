@@ -143,7 +143,7 @@ const GoogleAuth = ({ ...props }: ButtonProps) => {
     <Button
       variant="secondarySolid"
       width="100%"
-      borderRadius="none"
+      borderRadius="sm"
       boxShadow="base"
       marginTop="0.8em"
       onClick={() => signIn()}

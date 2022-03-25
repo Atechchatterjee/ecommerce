@@ -18,7 +18,7 @@ import SignIn from "../components/Auth/SignIn";
 import Header from "../components/Layout/Header";
 import Footer from "../components/Layout/Footer";
 import CustomContainer from "../components/Custom/CustomContainer";
-import { useWindowDimensions } from "../hooks/UseWindowDimensions";
+import { useWindowDimensions } from "../hooks/useWindowDimensions";
 
 const Login: NextPage = () => {
   const [width] = useWindowDimensions();
@@ -28,7 +28,7 @@ const Login: NextPage = () => {
       <Header />
       <CustomContainer
         height="35em"
-        borderRadius="lg"
+        borderRadius="xl"
         marginBottom="7%"
         width="100%"
         position="relative"
