@@ -98,7 +98,7 @@ const SignUp: React.FunctionComponent = () => {
                 variant="primarySolid"
                 width="100%"
                 marginTop="5%"
-                borderRadius="none"
+                borderRadius="sm"
               >
                 Submit
               </Button>
