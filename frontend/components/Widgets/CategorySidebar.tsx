@@ -1,22 +1,33 @@
 import { useState, useEffect } from "react";
-import { Box, ContainerProps, Flex, FlexProps, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  ContainerProps,
+  Flex,
+  FlexProps,
+  Text,
+} from "@chakra-ui/react";
 import CustomContainer from "../Custom/CustomContainer";
 import { useCategoryData } from "../../hooks/useCategoryData";
+import { IoIosArrowBack } from "react-icons/io";
 
 interface DisplayCategoriesProps extends FlexProps {
   categories?: any[];
+  selectCb?: (_: any) => void;
 }
 
 const DisplayCategories = ({
   categories,
+  selectCb,
   ...props
 }: DisplayCategoriesProps) => {
   const [hoverId, setHoverId] = useState<number>(-1);
 
   return (
-    <Flex flexDirection="column" gridGap={3} {...props}>
-      {categories?.map((category: any) => (
+    <Flex flexDirection="column" gridGap={5} {...props}>
+      {categories?.map((category: any, indx) => (
         <Box
+          key={indx}
           display="flex"
           w="95%"
           h="5vh"
@@ -29,14 +40,14 @@ const DisplayCategories = ({
             : { backgroundColor: "rgba(255,255,255,0.4)" })}
           onMouseEnter={() => setHoverId(category.val.id)}
           onMouseLeave={() => setHoverId(-1)}
-          boxShadow="rgba(0, 0, 0, 0.2) 0px 0px 10px 0px"
-          justifyContent="center"
-          alignItems="center"
-          padding="4%"
+          boxShadow="rgba(0, 0, 0, 0.15) 0px 0px 4px 0px"
+          padding="4% 8%"
           flex="1"
           cursor="pointer"
-          interactive
           margin="0"
+          onClick={() => {
+            if (selectCb) selectCb(category);
+          }}
         >
           <Text>{category.val.name}</Text>
         </Box>
@@ -46,32 +57,64 @@ const DisplayCategories = ({
 };
 
 const CategorySidebar = ({ ...props }: ContainerProps) => {
-  const [categories, setCategories, categoryTree] = useCategoryData({
+  const [, , categoryTree] = useCategoryData({
     returnTree: true,
   });
+  const [categoriesToDisplay, setCategoriesToDisplay] = useState<any[]>(
+    categoryTree?.root.children || []
+  );
+  const [categoryStack, setCategoryStack] = useState<any[]>([]);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (categoryStack.length > 0) {
+      setCategoriesToDisplay(categoryStack[categoryStack.length - 1].children);
+    } else if (categoryTree) {
+      setCategoriesToDisplay(categoryTree.root.children);
+    }
+  }, [categoryTree, categoryStack]);
+
+  const popCategoryFromStack = () => {
+    setCategoryStack(categoryStack.slice(0, categoryStack.length - 1));
+  };
 
   return (
-    <CustomContainer
+    <Box
       position="fixed"
-      top="10%"
-      left="2%"
-      w="20%"
-      h="85vh"
-      borderRadius="lg"
-      backgroundColor="rgba(255,255,255,0.8)"
-      backdropFilter="blur(10px)"
+      top="9%"
+      left="1%"
+      w="18%"
+      h="88vh"
+      borderRadius="2xl"
+      backgroundColor="rgba(240,240,240,0.75)"
+      backdropFilter="blur(20px)"
+      boxShadow="rgba(0, 0, 0, 0.3) 0px 5px 15px"
       padding="1.5% 1% 0 2%"
+      transition="all 0.2s ease-in-out"
       {...props}
     >
-      <Flex flexDirection="column" gridGap={7}>
+      <Flex flexDirection="column" gridGap={8}>
         <Text fontWeight="semibold" fontSize="1.5rem" flex="1">
           Categories
         </Text>
-        <DisplayCategories categories={categoryTree?.root.children} flex="1" />
+        <DisplayCategories
+          categories={categoriesToDisplay}
+          flex="1"
+          selectCb={(category) => {
+            if (category.children.length > 0) {
+              setCategoriesToDisplay(category.children);
+              setCategoryStack([...categoryStack, category]);
+            }
+          }}
+        />
+        <Button
+          color="primary.500"
+          variant="primaryBlurSolid"
+          onClick={popCategoryFromStack}
+        >
+          <IoIosArrowBack />
+        </Button>
       </Flex>
-    </CustomContainer>
+    </Box>
   );
 };
 
