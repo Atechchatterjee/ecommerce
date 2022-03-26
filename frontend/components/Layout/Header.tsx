@@ -6,6 +6,8 @@ import {
   LinkProps,
   Flex,
   BoxProps,
+  Grid,
+  GridItem,
 } from "@chakra-ui/layout";
 import { InputGroup, InputGroupProps, InputRightAddon } from "@chakra-ui/input";
 import { Button, ButtonProps, Fade, Tooltip } from "@chakra-ui/react";
@@ -20,6 +22,7 @@ import { CustomField } from "../Custom/CustomField";
 import Fuse from "fuse.js";
 import { GiHamburgerMenu } from "react-icons/gi";
 import CategorySidebar from "../Widgets/CategorySidebar";
+import { motion } from "framer-motion";
 
 interface HeaderProps {
   products?: [any[], (_: any[]) => void];
@@ -47,14 +50,14 @@ const Header: React.FC<HeaderProps> = ({ products, originalProducts }) => {
   const HamburgerButton = ({ ...props }: ButtonProps) => {
     return (
       <Button
-        variant="secondarySolid"
+        variant="blurSolid"
         borderRadius="md"
         onClick={() => {
           setShowSideBar(!showSideBar);
         }}
         {...props}
       >
-        <GiHamburgerMenu size={24} />
+        <GiHamburgerMenu size={16} />
       </Button>
     );
   };
@@ -91,6 +94,7 @@ const Header: React.FC<HeaderProps> = ({ products, originalProducts }) => {
           placeholder="Search"
           value={searchPhrase}
           backgroundColor="primary.200"
+          opacity="0.7"
           borderWidth="0"
           borderLeftRadius="md"
           borderRightRadius={width >= 700 ? "none" : "md"}
@@ -113,9 +117,11 @@ const Header: React.FC<HeaderProps> = ({ products, originalProducts }) => {
             height="4.2%"
             minHeight="2.5em"
             color="white"
-            borderColor="primary.200"
-            osition="relative"
+            // borderColor="primary.200"
+            border="none"
+            position="relative"
             cursor="pointer"
+            opacity="0.7"
           >
             <FaSearch />
           </InputRightAddon>
@@ -200,29 +206,30 @@ const Header: React.FC<HeaderProps> = ({ products, originalProducts }) => {
   };
 
   return (
-    <>
+    <Box>
       {showSideBar ? <CategorySidebar zIndex={9} /> : <></>}
       <Box
         width="full"
         className="header-up"
-        height="initial"
-        minHeight="4em"
+        height="7vh"
+        position="fixed"
         backgroundColor="primary.800"
+        zIndex={10}
         color="white"
-        padding="2%"
+        padding="0.7%"
         overflow="hidden"
       >
-        <Flex
-          flexDirection={"row"}
-          gridColumn={4}
-          gridGap={10}
-          paddingTop="0.3em"
+        <Grid
+          templateRows="repeat(1, 1fr)"
+          templateColumns="repeat(100, 1fr)"
+          gap={10}
           width="100%"
           height="inherit"
-          flexWrap="wrap"
         >
-          <HamburgerButton flex="0.1" />
-          <Heading
+          <GridItem rowSpan={1} colSpan={10}>
+            <HamburgerButton />
+          </GridItem>
+          {/* <Heading
             as="h1"
             size="md"
             fontFamily="Sora"
@@ -233,15 +240,28 @@ const Header: React.FC<HeaderProps> = ({ products, originalProducts }) => {
             isTruncated
           >
             Ecommerce Design
-          </Heading>
-          <SearchBar flex="4" marginTop="0.2%" marginLeft="-4%" />
-          {width > 950 ? (
-            <ShopIcons flex="1" marginTop="0.1em" marginLeft="5%" />
-          ) : null}
-          <LoginLink flex="1" marginTop="0.2em" />
-        </Flex>
+          </Heading> */}
+
+          <GridItem rowSpan={1} colSpan={25} marginTop="-0.2%">
+            <SearchBar marginTop="0.2%" />
+          </GridItem>
+          {/* {width > 950 ? ( */}
+          {/* <GridItem rowSpan={1} colSpan={20}>
+            <ShopIcons marginTop="0.1em" marginLeft="5%" />
+          </GridItem> */}
+          {/* ) : null} */}
+          <GridItem
+            rowSpan={1}
+            colSpan={12}
+            display="flex"
+            justifyItems="center"
+            justifyContent="right"
+          >
+            <LoginLink marginTop="0.2em" />
+          </GridItem>
+        </Grid>
       </Box>
-    </>
+    </Box>
   );
 };
 
