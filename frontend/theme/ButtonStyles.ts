@@ -48,6 +48,14 @@ export default {
       textColor: secondary[200],
       ...commonStyles({includeColor: false}),
     }),
+    blurSolid: () => ({
+      bgImage: "linear-gradient(to bottom, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.2))",
+      backdropFilter: "blur(20px)",
+    }),
+    primaryBlurSolid: () => ({
+      bgImage: "linear-gradient(to bottom, rgba(71, 84, 153, 0.4), rgba(59, 73, 148, 0.5))",
+      backdropFilter: "blur(30px)",
+    }),
     secondarySolid: () => ({
       bg: secondary[200],
       outlineColor: secondary[200],
