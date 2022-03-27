@@ -7,9 +7,9 @@ import {
   FlexProps,
   Text,
 } from "@chakra-ui/react";
-import CustomContainer from "../Custom/CustomContainer";
-import { useCategoryData } from "../../hooks/useCategoryData";
 import { IoIosArrowBack } from "react-icons/io";
+import { CategoryTree } from "../../util/Tree";
+import { AnimatePresence, motion } from "framer-motion";
 
 interface DisplayCategoriesProps extends FlexProps {
   categories?: any[];
@@ -26,40 +26,52 @@ const DisplayCategories = ({
   return (
     <Flex flexDirection="column" gridGap={5} {...props}>
       {categories?.map((category: any, indx) => (
-        <Box
-          key={indx}
-          display="flex"
-          w="95%"
-          h="5vh"
-          borderRadius="lg"
-          {...(hoverId === category.val.id
-            ? {
-                bgGradient:
-                  "linear(to-r, rgba(71, 84, 153, 0.2), rgba(59, 73, 148, 0.2))",
+        <AnimatePresence>
+          <motion.div
+            key="modal"
+            initial={{ x: -10 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <Box
+              key={indx}
+              display="flex"
+              w="95%"
+              h="5vh"
+              borderRadius="lg"
+              backgroundColor={
+                hoverId !== category.val.id ? "rgba(255,255,255,0.4)" : ""
               }
-            : { backgroundColor: "rgba(255,255,255,0.4)" })}
-          onMouseEnter={() => setHoverId(category.val.id)}
-          onMouseLeave={() => setHoverId(-1)}
-          boxShadow="rgba(0, 0, 0, 0.15) 0px 0px 4px 0px"
-          padding="4% 8%"
-          flex="1"
-          cursor="pointer"
-          margin="0"
-          onClick={() => {
-            if (selectCb) selectCb(category);
-          }}
-        >
-          <Text>{category.val.name}</Text>
-        </Box>
+              bgGradient={
+                hoverId === category.val.id
+                  ? "linear(to-r, rgba(71, 84, 153, 0.2), rgba(59, 73, 148, 0.2))"
+                  : ""
+              }
+              onMouseEnter={() => setHoverId(category.val.id)}
+              onMouseLeave={() => setHoverId(-1)}
+              boxShadow="rgba(0, 0, 0, 0.15) 0px 0px 4px 0px"
+              padding="4% 8%"
+              flex="1"
+              cursor="pointer"
+              margin="0"
+              onClick={() => {
+                if (selectCb) selectCb(category);
+              }}
+            >
+              <Text isTruncated>{category.val.name}</Text>
+            </Box>
+          </motion.div>
+        </AnimatePresence>
       ))}
     </Flex>
   );
 };
 
-const CategorySidebar = ({ ...props }: ContainerProps) => {
-  const [, , categoryTree] = useCategoryData({
-    returnTree: true,
-  });
+interface CategorySidebarProps extends ContainerProps {
+  categoryTree: CategoryTree;
+}
+
+const CategorySidebar = ({ categoryTree, ...props }: CategorySidebarProps) => {
   const [categoriesToDisplay, setCategoriesToDisplay] = useState<any[]>(
     categoryTree?.root.children || []
   );
@@ -77,15 +89,23 @@ const CategorySidebar = ({ ...props }: ContainerProps) => {
     setCategoryStack(categoryStack.slice(0, categoryStack.length - 1));
   };
 
+  const peekCategoryStack = () =>
+    categoryStack[categoryStack.length - 1] || categoryTree.root;
+
+  const DynamicHeading = () => {
+    const category = peekCategoryStack();
+    return category.val !== null ? category.val.name : "CATEGORIES";
+  };
+
   return (
     <Box
       position="fixed"
       top="9%"
-      left="1%"
+      left="0.5%"
       w="18%"
-      h="88vh"
+      h="89vh"
       borderRadius="2xl"
-      backgroundColor="rgba(240,240,240,0.75)"
+      backgroundColor="rgba(250,250,250,0.75)"
       backdropFilter="blur(20px)"
       boxShadow="rgba(0, 0, 0, 0.3) 0px 5px 15px"
       padding="1.5% 1% 0 2%"
@@ -93,12 +113,12 @@ const CategorySidebar = ({ ...props }: ContainerProps) => {
       {...props}
     >
       <Flex flexDirection="column" gridGap={8}>
-        <Text fontWeight="semibold" fontSize="1.5rem" flex="1">
-          Categories
+        <Text fontWeight="bold" fontSize="1.1rem" flex="1">
+          <DynamicHeading />
         </Text>
         <DisplayCategories
-          categories={categoriesToDisplay}
           flex="1"
+          categories={categoriesToDisplay}
           selectCb={(category) => {
             if (category.children.length > 0) {
               setCategoriesToDisplay(category.children);
@@ -109,6 +129,7 @@ const CategorySidebar = ({ ...props }: ContainerProps) => {
         <Button
           color="primary.500"
           variant="primaryBlurSolid"
+          w="95%"
           onClick={popCategoryFromStack}
         >
           <IoIosArrowBack />
