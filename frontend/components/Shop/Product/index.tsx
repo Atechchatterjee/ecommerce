@@ -7,7 +7,7 @@ import EditBtn from "./EditBtn";
 import DeleteBtn from "./DeleteBtn";
 import UploadBtn from "./UploadBtn";
 import CustomContainer from "../../../components/Custom/CustomContainer";
-import Rating from "../Rating";
+import Rating from "../../Widgets/Rating";
 import { createImageUrl } from "../../../util/CreateImageUrl";
 
 interface Props {
@@ -87,6 +87,7 @@ const Product: React.FC<Props> = ({
               fallbackSrc={constants.fallbackURL}
               width="full"
               height="15em"
+              zIndex={1}
               cursor={edit ? "pointer" : "auto"}
             />
             {edit ? <UploadBtn /> : <></>}
