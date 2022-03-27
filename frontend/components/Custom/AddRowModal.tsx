@@ -5,22 +5,27 @@ import {
   ModalHeader,
   ModalCloseButton,
   ModalBody,
-  Input,
   ModalFooter,
   Button,
-  HStack,
   Flex,
 } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
 import { TableModalContext } from "../../context/TableModalContext";
 import { CustomField } from "./CustomField";
 
-const AddRowModal: React.FC<{
+interface AddRowModalProps {
   title: string;
   buttonName: string;
   rowPlaceholder?: string[];
   cb?: (_: string[]) => void;
-}> = ({ title, cb, buttonName, rowPlaceholder }) => {
+}
+
+const AddRowModal: React.FC<AddRowModalProps> = ({
+  title,
+  cb,
+  buttonName,
+  rowPlaceholder,
+}) => {
   const [tableContentLocal, setTableContentLocal] = useState<string[]>([]);
   const { colNo, addRowModal } = useContext(TableModalContext);
   const [columnNo] = colNo;
@@ -39,7 +44,7 @@ const AddRowModal: React.FC<{
         key={column}
         column={column}
         placeholder={
-          !!rowPlaceholder ? rowPlaceholder[column - 1] : `Row ${column}`
+          rowPlaceholder ? rowPlaceholder[column - 1] : `Row ${column}`
         }
       />,
     ];
