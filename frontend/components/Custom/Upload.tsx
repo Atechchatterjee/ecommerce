@@ -1,6 +1,5 @@
 import React, { useRef, useEffect, useContext } from "react";
 import { UploadContext } from "../../context/UploadContext";
-import { Input } from "@chakra-ui/react";
 import { CustomField } from "./CustomField";
 
 interface Props {
