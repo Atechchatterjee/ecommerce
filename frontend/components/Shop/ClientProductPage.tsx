@@ -154,7 +154,6 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
       setLoading(false);
       createTableHeading();
       setTableExists(true);
-      // createTable();
     } else setLoading(true);
   }, [product]);
 
@@ -178,12 +177,12 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
   };
 
   return (
-    <>
+    <Box>
       {loading ? (
         <Spinner />
       ) : (
         <Grid
-          margin="4% 5%"
+          padding="6% 3%"
           templateColumns={`repeat(${columns}, 1fr)`}
           templateRows={`repeat(1, 2fr)`}
           gap={20}
@@ -315,7 +314,7 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
           </Box>
         </Grid>
       )}
-    </>
+    </Box>
   );
 };
 
