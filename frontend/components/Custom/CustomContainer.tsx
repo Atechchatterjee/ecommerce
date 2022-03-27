@@ -16,8 +16,11 @@ const CustomContainer = ({
   const [hover, setHover] = useState<boolean>(false);
   const normalBS = "rgba(149, 157, 165, 0.2) 0px 8px 24px";
   const hoverBS = "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px";
+
   if (disableEffect) return <Container {...props}></Container>;
+
   if (!interactive) return <Container boxShadow={`${normalBS}`} {...props} />;
+
   return (
     <Container
       {...(hover
