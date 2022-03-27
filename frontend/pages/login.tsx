@@ -4,10 +4,7 @@ import {
   Tab,
   TabPanels,
   TabPanel,
-  Center,
-  Stack,
   Heading,
-  Container,
   Box,
   Fade,
 } from "@chakra-ui/react";
@@ -16,7 +13,6 @@ import React from "react";
 import SignUp from "../components/Auth/SignUp";
 import SignIn from "../components/Auth/SignIn";
 import Header from "../components/Layout/Header";
-import Footer from "../components/Layout/Footer";
 import CustomContainer from "../components/Custom/CustomContainer";
 import { useWindowDimensions } from "../hooks/useWindowDimensions";
 
@@ -34,7 +30,7 @@ const Login: NextPage = () => {
         position="absolute"
         display="flex"
         alignContent="center"
-        top="12%"
+        top="20%"
         left="31%"
       >
         <Box
