@@ -2,12 +2,10 @@ import React, { useEffect, useState, useContext } from "react";
 import { useRouter } from "next/router";
 import { NextPage } from "next";
 import axios from "axios";
-import constants from "../../util/Constants";
 import { UserContext } from "../../context/UserContext";
 import Header from "../../components/Layout/Header";
 import ClientProductPage from "../../components/Shop/ClientProductPage";
 import { ProductInfoContext } from "../../context/ProductInfoContext";
-import { Product } from "../../types/shop";
 import { getProductInfo } from "../../util/ProductInfo";
 
 const ProductPage: NextPage = () => {

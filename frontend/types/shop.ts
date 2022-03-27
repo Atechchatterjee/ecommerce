@@ -17,7 +17,7 @@ export type OptionsData = {
   }[];
 }[];
 
-export type Product = {
+export type ProductType = {
   id: number;
   name: string;
   price: string;

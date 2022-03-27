@@ -7,14 +7,14 @@ import Navbar from "../../../../components/Admin/Navbar";
 import WithAuth from "../../../../util/WithAuth";
 import { UserContext } from "../../../../context/UserContext";
 import { ProductInfoContext } from "../../../../context/ProductInfoContext";
-import { Product } from "../../../../types/shop";
+import { ProductType } from "../../../../types/shop";
 import { getProductInfo } from "../../../../util/ProductInfo";
 import { Box } from "@chakra-ui/react";
 
 const ProductPage: NextPage = () => {
   const router = useRouter();
   const { pid } = router.query;
-  const [product, setProduct] = useState<Product>({} as Product);
+  const [product, setProduct] = useState<ProductType>({} as ProductType);
   const [loading, setLoading] = useState<boolean>(true);
   const { admin } = useContext(UserContext);
 

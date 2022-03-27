@@ -1,8 +1,8 @@
 import axios from "axios";
 import constants from "./Constants";
-import {Product} from "../types/shop";
+import {ProductType} from "../types/shop";
 
-export const getProductInfo = async (productId: any): Promise<Product> => {
+export const getProductInfo = async (productId: any): Promise<ProductType> => {
     return new Promise((resolve, reject) => {
       axios
         .post(`${constants.url}/shop/getproduct/`, {

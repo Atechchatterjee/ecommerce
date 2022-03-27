@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import constants from "../../util/Constants";
 import { Flex, Text } from "@chakra-ui/react";
-import { Product as ProductType } from "../../types/shop";
+import { ProductType } from "../../types/shop";
 
 const CartItems = () => {
   const [cartItems, setCartItems] = useState<ProductType[]>([]);
