@@ -8,7 +8,7 @@ import { Grid, GridItem, Box } from "@chakra-ui/react";
 import constants from "../util/Constants";
 import axios from "axios";
 import { useDynamicColumns } from "../hooks/useDynamicColumns";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 interface ProductType {
   product_id: number;
@@ -50,12 +50,13 @@ const Shop: NextPage = () => {
         originalProducts={originalProducts}
       />
       <Box
-        padding="5% 2% 3% 2%"
+        padding="5% 5% 3% 3%"
         overflow="hidden"
         onScroll={(e: any) => alert(e.target.scrollTop)}
       >
         <motion.div
-          animate={{ x: 50, opacity: 1 }}
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ x: 0, opacity: 1 }}
           transition={{ ease: "easeOut", duration: 1 }}
         >
           <Grid
@@ -68,15 +69,19 @@ const Shop: NextPage = () => {
           >
             {allProducts.map(
               ({ name, image, description, price, product_id }) => (
-                <GridItem key={product_id}>
-                  <ProductType
-                    id={product_id}
-                    name={name}
-                    image={image}
-                    description={description}
-                    price={price}
-                  />
-                </GridItem>
+                <AnimatePresence>
+                  <GridItem key={product_id}>
+                    <motion.div layout>
+                      <ProductType
+                        id={product_id}
+                        name={name}
+                        image={image}
+                        description={description}
+                        price={price}
+                      />
+                    </motion.div>
+                  </GridItem>
+                </AnimatePresence>
               )
             )}
           </Grid>
