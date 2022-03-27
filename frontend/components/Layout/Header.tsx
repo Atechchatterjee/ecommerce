@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
   Box,
-  Heading,
   Link,
   LinkProps,
   Flex,
@@ -22,7 +21,8 @@ import { CustomField } from "../Custom/CustomField";
 import Fuse from "fuse.js";
 import { GiHamburgerMenu } from "react-icons/gi";
 import CategorySidebar from "../Widgets/CategorySidebar";
-import { motion } from "framer-motion";
+import { useCategoryData } from "../../hooks/useCategoryData";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface HeaderProps {
   products?: [any[], (_: any[]) => void];
@@ -36,6 +36,9 @@ const Header: React.FC<HeaderProps> = ({ products, originalProducts }) => {
   const [width] = useWindowDimensions();
   const [searchPhrase, setSearchPhrase] = useState<string>("");
   const [showSideBar, setShowSideBar] = useState<boolean>(false);
+  const [, , categoryTree] = useCategoryData({
+    returnTree: true,
+  });
 
   useEffect(() => {
     isAuthenticated()
@@ -83,7 +86,11 @@ const Header: React.FC<HeaderProps> = ({ products, originalProducts }) => {
     ) => {
       setSearchBarAutoFocus(true);
       setSearchPhrase(e.target.value);
-      search();
+      if (e.target.value.length > 0) {
+        search();
+      } else if (setAllProducts && originalProducts) {
+        setAllProducts(originalProducts);
+      }
     };
 
     return (
@@ -117,7 +124,6 @@ const Header: React.FC<HeaderProps> = ({ products, originalProducts }) => {
             height="4.2%"
             minHeight="2.5em"
             color="white"
-            // borderColor="primary.200"
             border="none"
             position="relative"
             cursor="pointer"
@@ -129,49 +135,6 @@ const Header: React.FC<HeaderProps> = ({ products, originalProducts }) => {
           <></>
         )}
       </InputGroup>
-    );
-  };
-
-  const ShopIcons = ({ ...props }: BoxProps) => {
-    return (
-      <Box {...props}>
-        <Flex gridGap={4} gridColumn={4}>
-          <Tooltip label="whishlist" position="absolute">
-            <span>
-              <FaRegHeart
-                size={25}
-                style={{ cursor: "pointer", flex: "2", marginTop: "0.1em" }}
-              />
-            </span>
-          </Tooltip>
-          <Tooltip label="shop">
-            <span>
-              <AiOutlineShopping
-                size={30}
-                style={{ cursor: "pointer", flex: "2" }}
-                onClick={() => window.location.assign("/shop")}
-              />
-            </span>
-          </Tooltip>
-          <Tooltip label="profile">
-            <span>
-              <FaRegUser
-                size={25}
-                style={{ cursor: "pointer", flex: "2", marginTop: "0.1em" }}
-              />
-            </span>
-          </Tooltip>
-          <Tooltip label="cart">
-            <span>
-              <FiShoppingCart
-                size={25}
-                style={{ cursor: "pointer", flex: "2", marginTop: "0.1em" }}
-                onClick={() => window.location.assign("/checkout")}
-              />
-            </span>
-          </Tooltip>
-        </Flex>
-      </Box>
     );
   };
 
@@ -207,7 +170,26 @@ const Header: React.FC<HeaderProps> = ({ products, originalProducts }) => {
 
   return (
     <Box>
-      {showSideBar ? <CategorySidebar zIndex={9} /> : <></>}
+      <AnimatePresence>
+        {showSideBar && categoryTree ? (
+          <motion.div
+            style={{
+              position: "fixed",
+              zIndex: 9,
+              width: "100%",
+              padding: "0",
+              marginTop: "4.5%",
+            }}
+            key="modal"
+            animate={{ x: 3, opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <CategorySidebar categoryTree={categoryTree} zIndex={9} />
+          </motion.div>
+        ) : (
+          <></>
+        )}
+      </AnimatePresence>
       <Box
         width="full"
         className="header-up"
@@ -229,27 +211,9 @@ const Header: React.FC<HeaderProps> = ({ products, originalProducts }) => {
           <GridItem rowSpan={1} colSpan={10}>
             <HamburgerButton />
           </GridItem>
-          {/* <Heading
-            as="h1"
-            size="md"
-            fontFamily="Sora"
-            flex="3"
-            marginTop="0.7vh"
-            cursor="pointer"
-            onClick={() => window.location.assign("/")}
-            isTruncated
-          >
-            Ecommerce Design
-          </Heading> */}
-
           <GridItem rowSpan={1} colSpan={25} marginTop="-0.2%">
             <SearchBar marginTop="0.2%" />
           </GridItem>
-          {/* {width > 950 ? ( */}
-          {/* <GridItem rowSpan={1} colSpan={20}>
-            <ShopIcons marginTop="0.1em" marginLeft="5%" />
-          </GridItem> */}
-          {/* ) : null} */}
           <GridItem
             rowSpan={1}
             colSpan={12}
