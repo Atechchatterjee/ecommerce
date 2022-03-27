@@ -1,7 +1,6 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { ChakraProvider, Box } from "@chakra-ui/react";
-import { CookiesProvider } from "react-cookie";
 import theme from "../theme";
 import { useEffect, useState } from "react";
 import { checkWhichUser } from "../util/Authenticated";
@@ -11,6 +10,7 @@ import ScrollBarWrapper from "../components/Custom/ScrollBarWrapper";
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const [admin, setAdmin] = useState<boolean | null>(null);
+
   useEffect(() => {
     checkWhichUser()
       .then(({ admin }) => setAdmin(admin))
@@ -22,20 +22,15 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
 
   return (
     <ChakraProvider theme={theme}>
-      <CookiesProvider>
-        <UserContext.Provider value={{ admin, setAdmin }}>
-          <Head>
-            <title>Ecommerce Design</title>
-            <meta
-              name="viewport"
-              content="width=device-width,initial-scale=1"
-            />
-          </Head>
-          <ScrollBarWrapper color="secondary">
-            <Component {...pageProps} />
-          </ScrollBarWrapper>
-        </UserContext.Provider>
-      </CookiesProvider>
+      <UserContext.Provider value={{ admin, setAdmin }}>
+        <Head>
+          <title>Ecommerce Design</title>
+          <meta name="viewport" content="width=device-width,initial-scale=1" />
+        </Head>
+        <ScrollBarWrapper color="secondary">
+          <Component {...pageProps} />
+        </ScrollBarWrapper>
+      </UserContext.Provider>
     </ChakraProvider>
   );
 };
