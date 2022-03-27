@@ -1,10 +1,10 @@
 import { createContext } from 'react';
-import {Product} from '../types/shop';
+import {ProductType} from '../types/shop';
 
 interface ProductInfoProps {
     productInfo :
-      [product: Product,
-      setProduct: (_:Product) => void]
+      [product: ProductType,
+      setProduct: (_:ProductType) => void]
 }
 
 export const ProductInfoContext = createContext<ProductInfoProps>({
