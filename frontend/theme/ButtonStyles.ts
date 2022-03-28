@@ -49,11 +49,15 @@ export default {
       ...commonStyles({includeColor: false}),
     }),
     blurSolid: () => ({
-      bgImage: "linear-gradient(to bottom, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.2))",
+      bgImage: "linear-gradient(to bottom, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.15))",
       backdropFilter: "blur(20px)",
     }),
     primaryBlurSolid: () => ({
       bgImage: "linear-gradient(to bottom, rgba(71, 84, 153, 0.4), rgba(59, 73, 148, 0.5))",
+      backdropFilter: "blur(30px)",
+    }),
+    secondaryBlurSolid: () => ({
+      bgImage: "linear-gradient(to right, rgba(161, 157, 242, 0.9), rgba(161, 157, 242, 0.8))",
       backdropFilter: "blur(30px)",
     }),
     secondarySolid: () => ({
