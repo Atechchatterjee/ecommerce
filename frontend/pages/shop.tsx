@@ -68,8 +68,8 @@ const Shop: NextPage = () => {
             )}, 1fr)`}
           >
             {allProducts.map(
-              ({ name, image, description, price, product_id }) => (
-                <AnimatePresence>
+              ({ name, image, description, price, product_id }, indx) => (
+                <AnimatePresence key={indx}>
                   <GridItem key={product_id}>
                     <motion.div layout>
                       <ProductType

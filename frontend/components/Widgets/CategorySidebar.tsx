@@ -26,7 +26,7 @@ const DisplayCategories = ({
   return (
     <Flex flexDirection="column" gridGap={5} {...props}>
       {categories?.map((category: any, indx) => (
-        <AnimatePresence>
+        <AnimatePresence key={indx}>
           <motion.div
             key="modal"
             initial={{ x: -10 }}
