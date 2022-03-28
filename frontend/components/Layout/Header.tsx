@@ -170,26 +170,11 @@ const Header: React.FC<HeaderProps> = ({ products, originalProducts }) => {
 
   return (
     <Box>
-      <AnimatePresence>
-        {showSideBar && categoryTree ? (
-          <motion.div
-            style={{
-              position: "fixed",
-              zIndex: 9,
-              width: "100%",
-              padding: "0",
-              marginTop: "4.5%",
-            }}
-            key="modal"
-            animate={{ x: 3, opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <CategorySidebar categoryTree={categoryTree} zIndex={9} />
-          </motion.div>
-        ) : (
-          <></>
-        )}
-      </AnimatePresence>
+      <CategorySidebar
+        categoryTree={categoryTree}
+        open={showSideBar}
+        zIndex={9}
+      />
       <Box
         width="full"
         className="header-up"

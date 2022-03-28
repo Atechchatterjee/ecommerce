@@ -24,7 +24,7 @@ const DisplayCategories = ({
   const [hoverId, setHoverId] = useState<number>(-1);
 
   return (
-    <Flex flexDirection="column" gridGap={5} {...props}>
+    <Flex flexDirection="column" gridGap={4} {...props}>
       {categories?.map((category: any, indx) => (
         <AnimatePresence key={indx}>
           <motion.div
@@ -38,7 +38,7 @@ const DisplayCategories = ({
               display="flex"
               w="95%"
               h="5vh"
-              borderRadius="lg"
+              borderRadius="md"
               backgroundColor={
                 hoverId !== category.val.id ? "rgba(255,255,255,0.4)" : ""
               }
@@ -68,10 +68,15 @@ const DisplayCategories = ({
 };
 
 interface CategorySidebarProps extends ContainerProps {
-  categoryTree: CategoryTree;
+  categoryTree?: CategoryTree;
+  open?: boolean;
 }
 
-const CategorySidebar = ({ categoryTree, ...props }: CategorySidebarProps) => {
+const CategorySidebar = ({
+  open,
+  categoryTree,
+  ...props
+}: CategorySidebarProps) => {
   const [categoriesToDisplay, setCategoriesToDisplay] = useState<any[]>(
     categoryTree?.root.children || []
   );
@@ -90,53 +95,72 @@ const CategorySidebar = ({ categoryTree, ...props }: CategorySidebarProps) => {
   };
 
   const peekCategoryStack = () =>
-    categoryStack[categoryStack.length - 1] || categoryTree.root;
+    categoryStack[categoryStack.length - 1] || categoryTree?.root || {};
 
   const DynamicHeading = () => {
     const category = peekCategoryStack();
-    return category.val !== null ? category.val.name : "CATEGORIES";
+    return category.val !== null ? category.val.name : "Categories";
   };
 
-  return (
-    <Box
-      position="fixed"
-      top="9%"
-      left="0.5%"
-      w="18%"
-      h="89vh"
-      borderRadius="2xl"
-      backgroundColor="rgba(250,250,250,0.75)"
-      backdropFilter="blur(20px)"
-      boxShadow="rgba(0, 0, 0, 0.3) 0px 5px 15px"
-      padding="1.5% 1% 0 2%"
-      transition="all 0.2s ease-in-out"
-      {...props}
-    >
-      <Flex flexDirection="column" gridGap={8}>
-        <Text fontWeight="bold" fontSize="1.1rem" flex="1">
-          <DynamicHeading />
-        </Text>
-        <DisplayCategories
-          flex="1"
-          categories={categoriesToDisplay}
-          selectCb={(category) => {
-            if (category.children.length > 0) {
-              setCategoriesToDisplay(category.children);
-              setCategoryStack([...categoryStack, category]);
-            }
+  if (open) {
+    return (
+      <AnimatePresence>
+        <motion.div
+          style={{
+            position: "fixed",
+            zIndex: 9,
+            width: "100%",
+            padding: "0",
+            marginTop: "4.5%",
           }}
-        />
-        <Button
-          color="primary.500"
-          variant="primaryBlurSolid"
-          w="95%"
-          onClick={popCategoryFromStack}
+          key="modal"
+          animate={{ x: 3, opacity: 1 }}
+          exit={{ opacity: 0 }}
         >
-          <IoIosArrowBack />
-        </Button>
-      </Flex>
-    </Box>
-  );
+          <Box
+            position="fixed"
+            left="0.5%"
+            w="18%"
+            h="89.8vh"
+            borderRadius="md"
+            backgroundColor="rgba(250,250,250,0.7)"
+            backdropFilter="blur(20px)"
+            boxShadow="rgba(0, 0, 0, 0.3) 0px 5px 15px"
+            padding="1.5% 1% 0 2%"
+            transition="all 0.2s ease-in-out"
+            {...props}
+          >
+            <Flex flexDirection="column" gridGap={6}>
+              <Text fontWeight="bold" fontSize="1.1rem" flex="1">
+                <DynamicHeading />
+              </Text>
+              <DisplayCategories
+                flex="1"
+                categories={categoriesToDisplay}
+                selectCb={(category) => {
+                  if (category.children.length > 0) {
+                    setCategoriesToDisplay(category.children);
+                    setCategoryStack([...categoryStack, category]);
+                  }
+                }}
+              />
+              <Button
+                color="gray.100"
+                variant="primaryBlurSolid"
+                marginTop="4%"
+                w="95%"
+                onClick={popCategoryFromStack}
+              >
+                <IoIosArrowBack />
+              </Button>
+            </Flex>
+          </Box>
+        </motion.div>
+      </AnimatePresence>
+    );
+  } else {
+    return <></>;
+  }
 };
 
 export default CategorySidebar;
