@@ -193,7 +193,7 @@ const Header: React.FC<HeaderProps> = ({ products, originalProducts }) => {
           width="100%"
           height="inherit"
         >
-          <GridItem rowSpan={1} colSpan={10}>
+          <GridItem rowSpan={1} colSpan={11}>
             <HamburgerButton />
           </GridItem>
           <GridItem rowSpan={1} colSpan={25} marginTop="-0.2%">
