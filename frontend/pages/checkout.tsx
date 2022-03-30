@@ -8,6 +8,7 @@ import Shipping from "../components/Checkout/Shipping";
 import Head from "next/head";
 import CustomContainer from "../components/Custom/CustomContainer";
 import { scrollBarStyle } from "../util/ScrollBarStyle";
+import { isFirefox } from "../util/CheckBrowser";
 
 const ContainerStyles: ContainerProps = {
   borderRadius: "lg",
@@ -17,11 +18,13 @@ const ContainerStyles: ContainerProps = {
   height: "83%",
   minHeight: "50%",
   marginTop: "4em",
-  sx: scrollBarStyle(),
   position: "relative",
   overflow: "scroll",
-  backgroundColor: `rgba(255,255,255, 0.7)`,
+  backgroundColor: isFirefox()
+    ? `rgba(255,255,255, 1)`
+    : `rgba(255,255,255, 0.7)`,
   backdropFilter: "blur(4px)",
+  sx: scrollBarStyle(),
 };
 
 const Checkout: NextPage = () => {
