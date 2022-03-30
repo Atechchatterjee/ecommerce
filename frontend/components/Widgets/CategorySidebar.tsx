@@ -10,6 +10,7 @@ import {
 import { IoIosArrowBack } from "react-icons/io";
 import { CategoryTree } from "../../util/Tree";
 import { AnimatePresence, motion } from "framer-motion";
+import { isFirefox } from "../../util/CheckBrowser";
 
 interface DisplayCategoriesProps extends FlexProps {
   categories?: any[];
@@ -72,8 +73,6 @@ interface CategorySidebarProps extends ContainerProps {
   open?: boolean;
 }
 
-const isFireFox = () => window.navigator.userAgent.indexOf("Firefox") > -1;
-
 const CategorySidebar = ({
   open,
   categoryTree,
@@ -83,19 +82,6 @@ const CategorySidebar = ({
     categoryTree?.root.children || []
   );
   const [categoryStack, setCategoryStack] = useState<any[]>([]);
-  const [browserIsFirefox, setBrowserIsFirefox] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (categoryStack.length > 0) {
-      setCategoriesToDisplay(categoryStack[categoryStack.length - 1].children);
-    } else if (categoryTree) {
-      setCategoriesToDisplay(categoryTree.root.children);
-    }
-  }, [categoryTree, categoryStack]);
-
-  useEffect(() => {
-    if (isFireFox()) setBrowserIsFirefox(true);
-  }, []);
 
   const popCategoryFromStack = () => {
     setCategoryStack(categoryStack.slice(0, categoryStack.length - 1));
@@ -103,6 +89,14 @@ const CategorySidebar = ({
 
   const peekCategoryStack = () =>
     categoryStack[categoryStack.length - 1] || categoryTree?.root || {};
+
+  useEffect(() => {
+    if (categoryStack.length > 0) {
+      setCategoriesToDisplay(peekCategoryStack().children);
+    } else if (categoryTree) {
+      setCategoriesToDisplay(categoryTree.root.children);
+    }
+  }, [categoryTree, categoryStack]);
 
   const DynamicHeading = () => {
     const category = peekCategoryStack();
@@ -131,7 +125,7 @@ const CategorySidebar = ({
             h="89.8vh"
             borderRadius="md"
             backgroundColor={
-              browserIsFirefox ? "rgba(250,250,250,1)" : "rgba(250,250,250,0.7)"
+              isFirefox() ? "rgba(250,250,250,1)" : "rgba(250,250,250,0.7)"
             }
             backdropFilter="blur(20px)"
             boxShadow="rgba(0, 0, 0, 0.3) 0px 5px 15px"
