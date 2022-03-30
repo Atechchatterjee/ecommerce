@@ -84,7 +84,7 @@ const Navbar: React.FC = () => {
                       >
                         {link[0]}
                       </MenuButton>
-                      <MenuList bg="#091353" borderColor="#212C6B">
+                      <MenuList bg="#091353" borderColor="#212C6B" zIndex={10}>
                         {link.slice(1).map((item) => (
                           <MenuItem
                             key={item}
