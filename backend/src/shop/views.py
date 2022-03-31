@@ -271,16 +271,16 @@ def save_table_content(request):
     added_rows, modified_rows, product_id = itemgetter(
         "addedRows", "modifiedRows", "product_id"
     )(request.data)
+    print("added rows", added_rows)
     try:
         table_id = Product_Specification_Table.objects.get(
             product_id=product_id)
         # adding rows
-        for row in added_rows:
-            Specification_Table_Content(
-                specification=row[1],
-                details=row[2],
-                table_id=table_id
-            ).save()
+        Specification_Table_Content(
+            specification=added_rows[1],
+            details=added_rows[2],
+            table_id=table_id
+        ).save()
         # modifying/updating rows
         for row in modified_rows:
             Specification_Table_Content.objects.filter(
