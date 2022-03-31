@@ -10,7 +10,7 @@ import {
 import { IoIosArrowBack } from "react-icons/io";
 import { CategoryTree } from "../../util/Tree";
 import { AnimatePresence, motion } from "framer-motion";
-import { isFirefox } from "../../util/CheckBrowser";
+import { checkBrowser } from "../../util/CheckBrowser";
 
 interface DisplayCategoriesProps extends FlexProps {
   categories?: any[];
@@ -125,7 +125,9 @@ const CategorySidebar = ({
             h="89.8vh"
             borderRadius="md"
             backgroundColor={
-              isFirefox() ? "rgba(250,250,250,1)" : "rgba(250,250,250,0.7)"
+              checkBrowser(window, "firefox")
+                ? "rgba(250,250,250,1)"
+                : "rgba(250,250,250,0.7)"
             }
             backdropFilter="blur(20px)"
             boxShadow="rgba(0, 0, 0, 0.3) 0px 5px 15px"

@@ -8,24 +8,7 @@ import Shipping from "../components/Checkout/Shipping";
 import Head from "next/head";
 import CustomContainer from "../components/Custom/CustomContainer";
 import { scrollBarStyle } from "../util/ScrollBarStyle";
-import { isFirefox } from "../util/CheckBrowser";
-
-const ContainerStyles: ContainerProps = {
-  borderRadius: "lg",
-  width: "100%",
-  maxWidth: "75%",
-  bgColor: "white",
-  height: "83%",
-  minHeight: "50%",
-  marginTop: "4em",
-  position: "relative",
-  overflow: "scroll",
-  backgroundColor: isFirefox()
-    ? `rgba(255,255,255, 1)`
-    : `rgba(255,255,255, 0.7)`,
-  backdropFilter: "blur(4px)",
-  sx: scrollBarStyle(),
-};
+import { checkBrowser } from "../util/CheckBrowser";
 
 const Checkout: NextPage = () => {
   const [stageNo, setStageNo] = useState<number>(1);
@@ -34,6 +17,23 @@ const Checkout: NextPage = () => {
     "Shipping",
     "Payment",
   ]);
+
+  const ContainerStyles: ContainerProps = {
+    borderRadius: "lg",
+    width: "100%",
+    maxWidth: "75%",
+    bgColor: "white",
+    height: "83%",
+    minHeight: "50%",
+    marginTop: "4em",
+    position: "relative",
+    overflow: "scroll",
+    backgroundColor: checkBrowser(window, "firefox")
+      ? `rgba(255,255,255, 1)`
+      : `rgba(255,255,255, 0.7)`,
+    backdropFilter: "blur(4px)",
+    sx: scrollBarStyle(),
+  };
 
   const Slider = () => {
     const handleSliderChange = (value: number) => {
