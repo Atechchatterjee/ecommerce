@@ -1,15 +1,7 @@
 import axios from "axios";
 import React, { useContext, useEffect, useReducer, useState } from "react";
 import constants from "../../../util/Constants";
-import {
-  Box,
-  Button,
-  Container,
-  extendTheme,
-  Input,
-  Text,
-  Tooltip,
-} from "@chakra-ui/react";
+import { Box, Button, Text, Tooltip } from "@chakra-ui/react";
 import { FaSave, FaTrash } from "react-icons/fa";
 import CustomTable from "../../Custom/CustomTable";
 import { TableModalContext } from "../../../context/TableModalContext";
@@ -20,6 +12,11 @@ import { ProductInfoContext } from "../../../context/ProductInfoContext";
 import CustomContainer from "../../Custom/CustomContainer";
 import { scrollBarStyle } from "../../../util/ScrollBarStyle";
 import { CustomField } from "../../Custom/CustomField";
+import {
+  getTableContent,
+  saveTableContent,
+  doesTableExist,
+} from "../../../services/SpecTableService";
 
 const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
   readOnly,
@@ -33,7 +30,6 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
   const [indxToModify, setIndxToModify] = useState<number>(0);
   const [lastIndxInTableStruct, setLastIndxInTableStruct] = useState<number>(0);
   const [modifiedRows, setModifiedRows] = useState<string[][]>([]);
-  const [addedRows, setAddedRows] = useState<string[][]>([]);
   const [selectedRows, setSelectedRows] = useState<any>({});
   const [loadingSaveBtn, setLoadingSaveBtn] = useState<boolean>(false);
   const specTableContext = useContext(SpecTableContext);
@@ -63,11 +59,14 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
   const [newRow, dispatchNewRow] = useReducer(addNewRow, []);
 
   const addRowToTable = () => {
-    setTableContentStruct([...tableContentStruct, newRow]);
     setReRender(true);
-    saveTableContent().then(() => {
-      setReRender(true);
-    });
+    setLoadingSaveBtn(true);
+    saveTableContent(product, modifiedRows, newRow, lastIndxInTableStruct).then(
+      () => {
+        setReRender(true);
+        setLoadingSaveBtn(false);
+      }
+    );
     setLastIndxInTableStruct(lastIndxInTableStruct + 1);
   };
 
@@ -85,27 +84,6 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
     );
   };
 
-  const doesTableExist = async (productId: number): Promise<void> => {
-    console.log(`doestableexist product id = ${productId}`);
-    return new Promise((resolve, reject) => {
-      if (product)
-        axios
-          .post(
-            `${constants.url}/shop/existstable/`,
-            {
-              product_id: productId,
-            },
-            { withCredentials: true }
-          )
-          .then(() => {
-            resolve();
-          })
-          .catch(() => {
-            reject();
-          });
-    });
-  };
-
   const createTableHeading = () => {
     if (heading.length === 0)
       setHeading([
@@ -115,65 +93,32 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
       ]);
   };
 
-  const saveTableContent = async (): Promise<void> => {
-    setLoadingSaveBtn(true);
-    return new Promise((resolve) => {
-      axios
-        .post(
-          `${constants.url}/shop/savetablecontent/`,
-          {
-            addedRows: [(lastIndxInTableStruct + 1).toString(), ...newRow],
-            modifiedRows: modifiedRows,
-            product_id: product.id,
-          },
-          { withCredentials: true }
-        )
-        .then(() => {
-          setTimeout(() => {
-            setLoadingSaveBtn(false);
-          }, 1000);
-          resolve();
-        })
-        .catch((err) => console.error(err));
-    });
-  };
-
-  const getTableContent = async () => {
-    axios
-      .post(
-        `${constants.url}/shop/gettablecontent/`,
-        {
-          product_id: product.id,
-        },
-        { withCredentials: true }
-      )
-      .then((res) => {
-        let lastIndx = 0;
-        setTableContentStruct([
-          ...res.data.content.map((el: any, indx: any) => {
-            if (lastIndx <= indx) lastIndx = indx;
-            if (lastIndxInTableStruct < el.id) setLastIndxInTableStruct(el.id);
-            return [el.id, el.specification, el.details];
-          }),
-          [
-            "",
-            <CustomField
-              key={lastIndx + 1}
-              placeholder="Specification"
-              onChange={(e: any) => {
-                dispatchNewRow({ type: "spec", value: e.target.value });
-              }}
-            />,
-            <CustomField
-              key={lastIndx + 2}
-              placeholder="Details"
-              onChange={(e: any) => {
-                dispatchNewRow({ type: "details", value: e.target.value });
-              }}
-            />,
-          ],
-        ]);
-      });
+  const updateTableContentStruct = (data: any) => {
+    let lastIndx = 0;
+    setTableContentStruct([
+      ...data.content.map((el: any, indx: any) => {
+        if (lastIndx <= indx) lastIndx = indx;
+        if (lastIndxInTableStruct < el.id) setLastIndxInTableStruct(el.id);
+        return [el.id, el.specification, el.details];
+      }),
+      [
+        "",
+        <CustomField
+          key={lastIndx + 1}
+          placeholder="Specification"
+          onChange={(e: any) => {
+            dispatchNewRow({ type: "spec", value: e.target.value });
+          }}
+        />,
+        <CustomField
+          key={lastIndx + 2}
+          placeholder="Details"
+          onChange={(e: any) => {
+            dispatchNewRow({ type: "details", value: e.target.value });
+          }}
+        />,
+      ],
+    ]);
   };
 
   const deleteRows = () => {
@@ -186,8 +131,9 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
         { withCredentials: true }
       )
       .then((res) => {
-        console.log(res);
-        getTableContent();
+        getTableContent(product).then((res) =>
+          updateTableContentStruct(res.data)
+        );
       })
       .catch((err) => {
         alert("could not delete rows");
@@ -206,8 +152,6 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
             variant="primarySolid"
             padding="0.8em"
             onClick={() => {
-              // setModifyAddRowModal(false);
-              //  setOpenAddRowModal(true);
               addRowToTable();
             }}
           >
@@ -219,23 +163,23 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
   };
 
   useEffect(() => {
-    doesTableExist(product.id)
+    doesTableExist(product)
       .then(() => {
-        console.log("table does exist");
         setProduct(product);
         setTableExists(true);
         createTableHeading();
-        getTableContent();
+        getTableContent(product).then((res) =>
+          updateTableContentStruct(res.data)
+        );
       })
       .catch(() => {
-        console.log("table does not exist");
         setTableExists(false);
       });
   }, [product, tableExists]);
 
   useEffect(() => {
     createTableHeading();
-    getTableContent();
+    getTableContent(product).then((res) => updateTableContentStruct(res.data));
     setReRender(false);
   }, [reRender]);
 
@@ -255,13 +199,6 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
             bgSize="contain"
             rows={tableContentStruct}
             heading={heading}
-            // rowCb={(indx: number) => {
-            //   if (!readOnly) {
-            //     setOpenAddRowModal(true);
-            //     setModifyAddRowModal(true);
-            //     setIndxToModify(indx);
-            //   }
-            // }}
             {...(!readOnly
               ? {
                   select: true,
@@ -285,7 +222,17 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
                       marginTop="1em"
                       position="absolute"
                       right="5em"
-                      onClick={() => saveTableContent()}
+                      onClick={() => {
+                        setLoadingSaveBtn(true);
+                        saveTableContent(
+                          product,
+                          modifiedRows,
+                          newRow,
+                          lastIndxInTableStruct
+                        ).then(() => {
+                          setLoadingSaveBtn(false);
+                        });
+                      }}
                       isLoading={loadingSaveBtn}
                     >
                       <FaSave />
@@ -329,14 +276,11 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
             buttonName={modifyAddRowModal ? "Modify" : "Add"}
             rowPlaceholder={["Specification", "Details"]}
             cb={(tableContent) => {
-              console.log("table content", tableContent);
               if (modifyAddRowModal)
                 modifyTableStruct(tableContent, indxToModify);
-              // else addRowToTable(tableContent);
             }}
           />
         </TableModalContext.Provider>
-        <pre>{JSON.stringify(newRow, null, 2)}</pre>
       </>
     );
   else return <Text>Table does not exist</Text>;
