@@ -128,7 +128,13 @@ const CustomTable = ({
               excludeSelectForRows.includes(i) ? (
                 <Td key={i}></Td>
               ) : (
-                <SelectRowCheckBox indx={parseInt(rowEl[0].props.children)} />
+                <>
+                  <SelectRowCheckBox
+                    indx={parseInt(
+                      rowEl[0].props ? rowEl[0].props.children : rowEl[0]
+                    )}
+                  />
+                </>
               )
             ) : (
               <SelectRowCheckBox indx={parseInt(rowEl[0])} />
