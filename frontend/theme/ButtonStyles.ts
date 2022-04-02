@@ -18,6 +18,11 @@ export default {
     primarySolid: () => ({
       bg: primary[800],
       _hover: { bg: "primary.500" },
+      _disabled: {
+        _hover: {
+          textColor: primary[900],
+        }
+      },
       ...commonStyles(),
     }),
     primaryOutline: () => ({
