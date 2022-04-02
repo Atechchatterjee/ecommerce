@@ -62,7 +62,7 @@ const DragUpload = ({ onFileUpload, clearUpload, ...props }: Props) => {
       <Container
         height="inherit"
         paddingBottom={uploadedFiles.length === 0 ? "6em" : "1em"}
-        border="0.15em dashed"
+        border="0.15em solid"
         borderColor={hover ? "#D6C2ED" : "secondary.200"}
         onDragOver={(event) => {
           event.preventDefault();
