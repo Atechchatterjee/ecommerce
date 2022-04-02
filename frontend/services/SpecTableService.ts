@@ -61,3 +61,26 @@ export const getTableContent = async (product: ProductType): Promise<AxiosRespon
       })
   })
 )
+
+export const deleteRows = (selectedRows: any) => (
+    new Promise((resolve, reject) => {
+    axios
+      .post(
+        `${constants.url}/shop/deletetablecontent/`,
+        {
+          deleteIndices: selectedRows,
+        },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        resolve(res);
+        // getTableContent(product).then((res) =>
+        //   updateTableContentStruct(res.data)
+        // );
+      })
+      .catch((err) => {
+        console.error(err);
+        reject(err);
+      })
+})
+  );
