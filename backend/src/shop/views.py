@@ -294,6 +294,26 @@ def save_table_content(request):
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['POST'])
+@permission_classes([Is_Admin])
+def modify_table_content(request):
+    row_id, table_id, specification, details = itemgetter(
+        "rowId",
+        "tableId",
+        "specification",
+        "details"
+    )(request.data)
+    try:
+        table = Product_Specification_Table.objects.get(table_id=int(table_id))
+        table_content = Specification_Table_Content.objects.filter(
+            table_id=table, id=int(row_id))
+        table_content.specification = specification
+        table_content.details = details
+        table_content.save()
+        return Response(status=status.HTTP_200_OK)
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['POST'])
 @permission_classes([Is_Admin])

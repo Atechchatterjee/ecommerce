@@ -11,6 +11,7 @@ urlpatterns = [
     path('getproduct/', views.get_product, name="get product"),
     path('createtable/', views.create_table, name="create table"),
     path('savetablecontent/', views.save_table_content, name="save table content"),
+    path('modify-table-content/', views.modify_table_content, name="modify table content"),
     path('existstable/', views.exists_table, name="table exists"),
     path('gettablecontent/', views.get_table_content, name="get table content"),
     path('deletetablecontent/', views.delete_table_content, name="delete table content"),
