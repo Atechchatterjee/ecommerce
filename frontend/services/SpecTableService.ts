@@ -83,11 +83,11 @@ export const deleteRows = (selectedRows: any) => (
 );
 
 export const modifyTableContent = async (
-  tableId:number, rowId: number, modifiedRow: any[]
+  productId:number, rowId: number, modifiedRow: any[]
 ) => {
   new Promise((resolve, reject) => {
     axios.post(`${constants.url}/shop/modify-table-content/`, {
-      tableId, rowId, modifiedRow
+      productId, rowId, specification: modifiedRow[0], details: modifiedRow[1]
     }, { withCredentials: true }).then((res) => {
       resolve(res);
     }).catch((err) => {
