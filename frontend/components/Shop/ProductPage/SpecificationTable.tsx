@@ -1,12 +1,16 @@
-import axios from "axios";
-import React, { useContext, useEffect, useReducer, useState } from "react";
-import constants from "../../../util/Constants";
+import React, {
+  useRef,
+  useContext,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
 import {
+  AlertDescription,
   Button,
   ButtonProps,
   Flex,
   FlexProps,
-  Input,
   Text,
 } from "@chakra-ui/react";
 import CustomTable from "../../Custom/CustomTable";
@@ -20,6 +24,7 @@ import {
   saveTableContent,
   doesTableExist,
   deleteRows,
+  modifyTableContent,
 } from "../../../services/SpecTableService";
 
 const newRowReducer = (state: any, action: any) => {
@@ -30,6 +35,8 @@ const newRowReducer = (state: any, action: any) => {
       return [state[0], action.value];
     case "addIndx":
       return [action.id, state[0], state[1]];
+    case "clear":
+      return [];
     default:
       return state;
   }
@@ -43,31 +50,34 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
   const [modifiedRows, setModifiedRows] = useState<string[][]>([]);
   const [selectedRows, setSelectedRows] = useState<any>({});
   const [reRender, setReRender] = useState<boolean>(false);
-  const [canModify, setCanModify] = useState<boolean>(false);
+  const [oneRowSelected, setOneRowSelected] = useState<boolean>(false);
 
   const specTableContext = useContext(SpecTableContext);
   const [heading, setHeading] = specTableContext.headings;
   const [tableExists, setTableExists] = specTableContext.tableExist;
-  specTableContext.modifyRowModal;
   const { productInfo } = useContext(ProductInfoContext);
   const [product, setProduct] = productInfo;
 
   const [newRow, dispatchNewRow] = useReducer(newRowReducer, []);
 
-  const hasSelectedRows = (): boolean => {
-    let doesHaveSelectedRows = false;
+  const inputRowRef = useRef<any>(null);
+
+  const hasSelectedRows = (n?: number): boolean => {
+    let doesHaveSelectedRows = false,
+      numberOfRowsSelected = 0;
     Object.keys(selectedRows).forEach((key) => {
       if (selectedRows[key] === true) {
         doesHaveSelectedRows = true;
+        numberOfRowsSelected++;
       }
     });
-    return doesHaveSelectedRows;
+    return n ? numberOfRowsSelected === n : doesHaveSelectedRows;
   };
 
   useEffect(() => {
-    if (hasSelectedRows()) {
-      setCanModify(true);
-    } else setCanModify(false);
+    if (hasSelectedRows(1)) {
+      setOneRowSelected(true);
+    } else setOneRowSelected(false);
   }, [selectedRows]);
 
   useEffect(() => {
@@ -89,21 +99,8 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
     createTableHeading();
     getTableContent(product).then((res) => updateTableContentStruct(res.data));
     setReRender(false);
+    dispatchNewRow({ type: "clear" });
   }, [reRender]);
-
-  const modifyTableStruct = (tableContentLocal: string[], rowId: number) => {
-    setModifiedRows([
-      ...modifiedRows,
-      [rowId.toString(), ...tableContentLocal],
-    ]);
-    setTableContentStruct(
-      tableContentStruct.map((el) =>
-        el[0] == rowId.toString()
-          ? [rowId.toString(), ...tableContentLocal]
-          : el
-      )
-    );
-  };
 
   const createTableHeading = () => {
     if (heading.length === 0)
@@ -113,23 +110,6 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
         <Text key={heading.length + 2}>Details</Text>,
       ]);
   };
-
-  const InputRow = ({ ...props }: FlexProps) => (
-    <Flex flexDirection="row" gridGap={5} {...props}>
-      <CustomField
-        placeholder={canModify ? "Modify Specification" : "Add Specification"}
-        onChange={(e: any) => {
-          dispatchNewRow({ type: "spec", value: e.target.value });
-        }}
-      />
-      <CustomField
-        placeholder={canModify ? "Modify Details" : "Add Details"}
-        onChange={(e: any) => {
-          dispatchNewRow({ type: "details", value: e.target.value });
-        }}
-      />
-    </Flex>
-  );
 
   const updateTableContentStruct = (data: any) => {
     let lastIndx = 0;
@@ -165,10 +145,37 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
     });
   };
 
+  const setInputValue = (value: [specification: string, detail: string]) => {
+    dispatchNewRow({ type: "clear" });
+    const rowInputElements: any[] = [...inputRowRef.current.children];
+    rowInputElements.forEach((input: any, indx) => {
+      input.lastChild.value = value[indx];
+    });
+  };
+
+  const getSelectedRowIndx = (): number => {
+    let selectedKey = -1;
+    if (!hasSelectedRows(1)) return -1;
+    Object.keys(selectedRows).forEach((key) => {
+      if (selectedRows[key] === true) {
+        selectedKey = parseInt(key);
+      }
+    });
+    return selectedKey;
+  };
+
+  const handleModifyRow = () => {
+    const rowIdToModify = getSelectedRowIndx();
+    modifyTableContent(product.id, rowIdToModify, newRow);
+    setInputValue(["", ""]);
+    setReRender(true);
+  };
+
   const handleAddRow = () => {
     setReRender(true);
     saveTableContent(product, modifiedRows, newRow, lastIndxInTableStruct).then(
       () => {
+        setInputValue(["", ""]);
         setReRender(true);
       }
     );
@@ -194,16 +201,44 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
           selectedRowsState={[selectedRows, setSelectedRows]}
           interactive
         />
-        <InputRow mt="5%" padding="1%" />
+        <Flex
+          flexDirection="row"
+          gridGap={5}
+          mt="5%"
+          padding="1%"
+          ref={inputRowRef}
+        >
+          <CustomField
+            placeholder={
+              oneRowSelected ? "Modify Specification" : "Add Specification"
+            }
+            value={newRow[0]}
+            onChange={(e: any) => {
+              dispatchNewRow({ type: "spec", value: e.target.value });
+            }}
+          />
+          <CustomField
+            placeholder={oneRowSelected ? "Modify Details" : "Add Details"}
+            value={newRow[1]}
+            onChange={(e: any) => {
+              dispatchNewRow({ type: "details", value: e.target.value });
+            }}
+          />
+        </Flex>
         {!readOnly ? (
           <Flex flexDirection="row" mt="2em" gridGap={2} justifyContent="right">
             <AddRowsBtn />
             {tableContentStruct.length !== 0 ? (
               [
-                <Button variant="primarySolid" onClick={handleDelete}>
+                <Button variant="primarySolid" onClick={handleDelete} key={1}>
                   Delete
                 </Button>,
-                <Button variant="primarySolid" disabled={!hasSelectedRows()}>
+                <Button
+                  variant="primarySolid"
+                  disabled={!hasSelectedRows(1)}
+                  key={2}
+                  onClick={handleModifyRow}
+                >
                   Modify
                 </Button>,
               ]
