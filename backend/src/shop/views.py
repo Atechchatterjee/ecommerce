@@ -297,19 +297,22 @@ def save_table_content(request):
 @api_view(['POST'])
 @permission_classes([Is_Admin])
 def modify_table_content(request):
-    row_id, table_id, specification, details = itemgetter(
+    row_id, product_id, specification, details = itemgetter(
         "rowId",
-        "tableId",
+        "productId",
         "specification",
         "details"
     )(request.data)
     try:
-        table = Product_Specification_Table.objects.get(table_id=int(table_id))
-        table_content = Specification_Table_Content.objects.filter(
-            table_id=table, id=int(row_id))
-        table_content.specification = specification
-        table_content.details = details
-        table_content.save()
+        table_id = Product_Specification_Table.objects.get(
+            product_id=product_id)
+        Specification_Table_Content.objects.filter(
+            id=int(row_id)
+        ).update(
+            specification=specification,
+            details=details,
+            table_id=table_id
+        )
         return Response(status=status.HTTP_200_OK)
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
