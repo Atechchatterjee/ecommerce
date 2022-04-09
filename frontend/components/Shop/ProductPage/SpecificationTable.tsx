@@ -5,14 +5,7 @@ import React, {
   useReducer,
   useState,
 } from "react";
-import {
-  AlertDescription,
-  Button,
-  ButtonProps,
-  Flex,
-  FlexProps,
-  Text,
-} from "@chakra-ui/react";
+import { Button, ButtonProps, Flex, Text } from "@chakra-ui/react";
 import CustomTable from "../../Custom/CustomTable";
 import { SpecTableContext } from "../../../context/SpecTableContext";
 import { ProductInfoContext } from "../../../context/ProductInfoContext";
@@ -33,6 +26,8 @@ const newRowReducer = (state: any, action: any) => {
       return [action.value, state[1]];
     case "details":
       return [state[0], action.value];
+    case "add":
+      return action.value;
     case "addIndx":
       return [action.id, state[0], state[1]];
     case "clear":
@@ -42,12 +37,22 @@ const newRowReducer = (state: any, action: any) => {
   }
 };
 
+const createHashTableforSpecData = (specData: any[]): any => {
+  const hashTable: any = {};
+  specData.forEach((row) => {
+    hashTable[parseInt(row[0])] = row.slice(1);
+  });
+  return hashTable;
+};
+
 const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
   readOnly,
 }) => {
   const [tableContentStruct, setTableContentStruct] = useState<any[][]>([]);
+  const [hashTableForTableContent, setHashTableForTableContent] = useState<any>(
+    {}
+  );
   const [lastIndxInTableStruct, setLastIndxInTableStruct] = useState<number>(0);
-  const [modifiedRows, setModifiedRows] = useState<string[][]>([]);
   const [selectedRows, setSelectedRows] = useState<any>({});
   const [reRender, setReRender] = useState<boolean>(false);
   const [oneRowSelected, setOneRowSelected] = useState<boolean>(false);
@@ -77,8 +82,19 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
   useEffect(() => {
     if (hasSelectedRows(1)) {
       setOneRowSelected(true);
-    } else setOneRowSelected(false);
+    } else {
+      setOneRowSelected(false);
+    }
   }, [selectedRows]);
+
+  useEffect(() => {
+    const selectedRowIndx = getSelectedRowIndx();
+    const selectedRow: any = hashTableForTableContent[selectedRowIndx] || [
+      "",
+      "",
+    ];
+    dispatchNewRow({ type: "add", value: selectedRow });
+  }, [oneRowSelected]);
 
   useEffect(() => {
     doesTableExist(product)
@@ -86,9 +102,9 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
         setProduct(product);
         setTableExists(true);
         createTableHeading();
-        getTableContent(product).then((res) =>
-          updateTableContentStruct(res.data)
-        );
+        getTableContent(product).then((res) => {
+          updateTableContentStruct(res.data);
+        });
       })
       .catch(() => {
         setTableExists(false);
@@ -97,9 +113,12 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
 
   useEffect(() => {
     createTableHeading();
-    getTableContent(product).then((res) => updateTableContentStruct(res.data));
+    getTableContent(product).then((res) => {
+      updateTableContentStruct(res.data);
+    });
     setReRender(false);
     dispatchNewRow({ type: "clear" });
+    setSelectedRows({});
   }, [reRender]);
 
   const createTableHeading = () => {
@@ -113,13 +132,19 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
 
   const updateTableContentStruct = (data: any) => {
     let lastIndx = 0;
-    setTableContentStruct([
+    const newTableContentStruct = [
       ...data.content.map((el: any, indx: any) => {
         if (lastIndx <= indx) lastIndx = indx;
         if (lastIndxInTableStruct < el.id) setLastIndxInTableStruct(el.id);
         return [el.id, el.specification, el.details];
       }),
-    ]);
+    ];
+    setTableContentStruct(newTableContentStruct);
+    if (newTableContentStruct) {
+      setHashTableForTableContent(
+        createHashTableforSpecData(newTableContentStruct)
+      );
+    }
   };
 
   const AddRowsBtn = ({ ...props }: ButtonProps) => {
@@ -147,10 +172,12 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
 
   const setInputValue = (value: [specification: string, detail: string]) => {
     dispatchNewRow({ type: "clear" });
-    const rowInputElements: any[] = [...inputRowRef.current.children];
-    rowInputElements.forEach((input: any, indx) => {
-      input.lastChild.value = value[indx];
-    });
+    if (inputRowRef.current) {
+      const rowInputElements: any[] = [...inputRowRef.current.children];
+      rowInputElements.forEach((input: any, indx) => {
+        input.lastChild.value = value[indx];
+      });
+    }
   };
 
   const getSelectedRowIndx = (): number => {
@@ -173,12 +200,10 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
 
   const handleAddRow = () => {
     setReRender(true);
-    saveTableContent(product, modifiedRows, newRow, lastIndxInTableStruct).then(
-      () => {
-        setInputValue(["", ""]);
-        setReRender(true);
-      }
-    );
+    saveTableContent(product, newRow, lastIndxInTableStruct).then(() => {
+      setInputValue(["", ""]);
+      setReRender(true);
+    });
     setLastIndxInTableStruct(lastIndxInTableStruct + 1);
   };
 
