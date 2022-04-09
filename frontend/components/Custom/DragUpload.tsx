@@ -80,6 +80,7 @@ const DragUpload = ({ onFileUpload, clearUpload, ...props }: Props) => {
         }}
         position="relative"
         borderRadius="lg"
+        transition="all ease-in-out 0.5s"
       >
         {uploadedFiles.length === 0 ? (
           <Text
@@ -90,6 +91,7 @@ const DragUpload = ({ onFileUpload, clearUpload, ...props }: Props) => {
             fontSize="1.2em"
             textColor={hover ? "#525E99" : "primary.900"}
             fontFamily="Sora"
+            transition="all ease-in-out 0.5s"
           >
             Drop Files Here
           </Text>
