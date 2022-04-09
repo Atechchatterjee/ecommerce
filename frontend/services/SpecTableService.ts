@@ -20,7 +20,6 @@ export const doesTableExist = async (product: ProductType): Promise<void> => {
 
 export const saveTableContent = async (
   product: ProductType,
-  modifiedRows: any[],
   newRow: any[],
   lastIndxInTableStruct: number
 ): Promise<void> => (
@@ -30,7 +29,6 @@ export const saveTableContent = async (
           `${constants.url}/shop/savetablecontent/`,
           {
             addedRows: [(lastIndxInTableStruct + 1).toString(), ...newRow],
-            modifiedRows: modifiedRows,
             product_id: product.id,
           },
           { withCredentials: true }
