@@ -268,8 +268,8 @@ def create_table(request):
 @api_view(['POST'])
 @permission_classes([Is_Admin])
 def save_table_content(request):
-    added_rows, modified_rows, product_id = itemgetter(
-        "addedRows", "modifiedRows", "product_id"
+    added_rows, product_id = itemgetter(
+        "addedRows", "product_id"
     )(request.data)
     print("added rows", added_rows)
     try:
@@ -281,15 +281,6 @@ def save_table_content(request):
             details=added_rows[2],
             table_id=table_id
         ).save()
-        # modifying/updating rows
-        for row in modified_rows:
-            Specification_Table_Content.objects.filter(
-                id=int(row[0])
-            ).update(
-                specification=row[1],
-                details=row[2],
-                table_id=table_id
-            )
         return  Response(status=status.HTTP_200_OK)
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
