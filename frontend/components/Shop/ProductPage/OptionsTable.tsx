@@ -145,29 +145,29 @@ const OptionsTable: React.FC<{
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
-            <Text fontSize="1.5em" fontWeight="medium">
+            <Text fontSize="1.3em" fontWeight="semibold">
               Add an option
             </Text>
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Box position="relative">
+            <Box position="relative" marginTop="1rem">
               <CustomField
                 placeholder="Option"
-                marginTop="1.5em"
                 borderRadius="3"
                 float="left"
-                width="90%"
+                size="lg"
+                width="88%"
                 value={currentOptionName}
                 onChange={(e: any) => setCurrentOptionName(e.target.value)}
               />
               <Button
                 variant="primarySolid"
-                size="sm"
+                size="md"
+                height="12"
                 borderRadius="3"
                 padding="1.38em 1em"
                 float="left"
-                marginTop="1.75em"
                 marginLeft="0.5em"
                 onClick={() => {
                   setDisplayOptionInputs(true);
