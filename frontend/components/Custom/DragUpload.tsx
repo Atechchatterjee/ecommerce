@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { HStack, Text, Container, Image, Input } from "@chakra-ui/react";
 import { ContainerProps } from "@chakra-ui/react";
 import { CustomField } from "./CustomField";
+import { RiFolderUploadFill } from "react-icons/ri";
 
 const ImagePreview: React.FC<{ imageFile: File }> = ({ imageFile }) => (
   <Image src={URL.createObjectURL(imageFile)} fit="contain" boxSize="5em" />
@@ -62,8 +63,7 @@ const DragUpload = ({ onFileUpload, clearUpload, ...props }: Props) => {
       <Container
         height="inherit"
         paddingBottom={uploadedFiles.length === 0 ? "6em" : "1em"}
-        border="0.15em solid"
-        borderColor={hover ? "#D6C2ED" : "secondary.200"}
+        border="2px dashed"
         onDragOver={(event) => {
           event.preventDefault();
         }}
@@ -71,6 +71,7 @@ const DragUpload = ({ onFileUpload, clearUpload, ...props }: Props) => {
         onClick={() => {
           if (fileInputRef.current) fileInputRef.current.click();
         }}
+        opacity={hover ? "0.85" : "0.95"}
         cursor="pointer"
         onMouseEnter={() => {
           setHover(true);
@@ -85,15 +86,20 @@ const DragUpload = ({ onFileUpload, clearUpload, ...props }: Props) => {
         {uploadedFiles.length === 0 ? (
           <Text
             position="absolute"
-            top="35%"
-            left="35%"
+            top="27%"
+            left="47%"
             fontWeight="semibold"
             fontSize="1.2em"
             textColor={hover ? "#525E99" : "primary.900"}
             fontFamily="Sora"
             transition="all ease-in-out 0.5s"
+            display="flex"
+            flexDirection="column"
           >
-            Drop Files Here
+            <RiFolderUploadFill size="10%" />
+            <Text ml="-20%" mt="2%" fontFamily="Sora">
+              Drop Files Here
+            </Text>
           </Text>
         ) : (
           <></>
