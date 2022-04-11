@@ -45,12 +45,13 @@ const DisplayCategories = ({
               }
               bgGradient={
                 hoverId === category.val.id
-                  ? "linear(to-r, rgba(71, 84, 153, 0.2), rgba(59, 73, 148, 0.2))"
+                  ? "linear(to-r, rgba(46, 60, 126, 0.7), rgba(46, 60, 126, 0.6))"
                   : ""
               }
+              color={hoverId === category.val.id ? "white" : "gray.800"}
               onMouseEnter={() => setHoverId(category.val.id)}
               onMouseLeave={() => setHoverId(-1)}
-              boxShadow="rgba(0, 0, 0, 0.15) 0px 0px 4px 0px"
+              boxShadow="rgba(99, 99, 99, 0.2) 0px 2px 8px 0px"
               padding="4% 8%"
               flex="1"
               cursor="pointer"
@@ -58,6 +59,7 @@ const DisplayCategories = ({
               onClick={() => {
                 if (selectCb) selectCb(category);
               }}
+              transition="all ease-in-out 0.1s"
             >
               <Text isTruncated>{category.val.name}</Text>
             </Box>
@@ -130,7 +132,7 @@ const CategorySidebar = ({
                 : "rgba(250,250,250,0.7)"
             }
             backdropFilter="blur(20px)"
-            boxShadow="rgba(0, 0, 0, 0.3) 0px 5px 15px"
+            boxShadow="rgba(99, 99, 99, 0.2) 0px 2px 8px 0px"
             padding="1.5% 1% 0 2%"
             transition="all 0.2s ease-in-out"
             {...props}
@@ -151,7 +153,8 @@ const CategorySidebar = ({
               />
               <Button
                 color="gray.100"
-                variant="primaryBlurSolid"
+                variant="primarySolid"
+                opacity="0.8"
                 marginTop="4%"
                 w="95%"
                 onClick={popCategoryFromStack}
