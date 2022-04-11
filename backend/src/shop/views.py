@@ -137,10 +137,15 @@ def get_all_products(request):
 @api_view(['POST'])
 @permission_classes([Is_Admin])
 def update_product(request):
+    print(f"request.data = {request.data}")
     (id, name, description, price) = itemgetter(
         'id', 'name', 'description', 'price'
     )(request.data)
-    image = request.data['image'] or None
+
+    image = None
+    if 'image' in request.data:
+        image = request.data['image']
+
     try:
         product = Product.objects.get(product_id=id)
         Product.objects.update_or_create(
