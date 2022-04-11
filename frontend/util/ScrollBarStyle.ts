@@ -16,7 +16,7 @@ export const scrollBarStyle = ({ color, borderRadius }: ScrollBarStyleProps = {c
   "&::-webkit-scrollbar-thumb": {
     width: "2em",
     height: "3px",
-    borderRadius:  borderRadius ? borderRadius: "none",
+    borderRadius:  borderRadius ? borderRadius: "full",
     backgroundColor: color === "secondary" ? "secondary.200" : "primary.200",
     transition: "background-color 0.8s ease-in-out",
   },
