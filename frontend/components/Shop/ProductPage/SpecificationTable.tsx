@@ -19,6 +19,8 @@ import {
   deleteRows,
   modifyTableContent,
 } from "../../../services/SpecTableService";
+import { FaTrash } from "react-icons/fa";
+import { TiTick } from "react-icons/ti";
 
 const newRowReducer = (state: any, action: any) => {
   switch (action.type) {
@@ -147,16 +149,16 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
     }
   };
 
-  const AddRowsBtn = ({ ...props }: ButtonProps) => {
+  const SaveButton = ({ ...props }: ButtonProps) => {
     if (tableExists)
       return (
         <Button
           variant="primarySolid"
           padding="0.8em"
-          onClick={handleAddRow}
+          onClick={() => (oneRowSelected ? handleModifyRow() : handleAddRow())}
           {...props}
         >
-          Add
+          <TiTick size="1.5rem" />
         </Button>
       );
     else return <></>;
@@ -226,51 +228,51 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
           selectedRowsState={[selectedRows, setSelectedRows]}
           interactive
         />
-        <Flex
-          flexDirection="row"
-          gridGap={5}
-          mt="5%"
-          padding="1%"
-          ref={inputRowRef}
-        >
-          <CustomField
-            placeholder={
-              oneRowSelected ? "Modify Specification" : "Add Specification"
-            }
-            value={newRow[0]}
-            onChange={(e: any) => {
-              dispatchNewRow({ type: "spec", value: e.target.value });
-            }}
-          />
-          <CustomField
-            placeholder={oneRowSelected ? "Modify Details" : "Add Details"}
-            value={newRow[1]}
-            onChange={(e: any) => {
-              dispatchNewRow({ type: "details", value: e.target.value });
-            }}
-          />
-        </Flex>
         {!readOnly ? (
-          <Flex flexDirection="row" mt="2em" gridGap={2} justifyContent="right">
-            <AddRowsBtn />
-            {tableContentStruct.length !== 0 ? (
-              [
+          [
+            <Flex
+              flexDirection="row"
+              gridGap={5}
+              mt="5%"
+              padding="1%"
+              width="100%"
+              ref={inputRowRef}
+              key="1"
+            >
+              <CustomField
+                placeholder={
+                  oneRowSelected ? "Modify Specification" : "Add Specification"
+                }
+                value={newRow[0]}
+                onChange={(e: any) => {
+                  dispatchNewRow({ type: "spec", value: e.target.value });
+                }}
+              />
+              <CustomField
+                placeholder={oneRowSelected ? "Modify Details" : "Add Details"}
+                value={newRow[1]}
+                onChange={(e: any) => {
+                  dispatchNewRow({ type: "details", value: e.target.value });
+                }}
+              />
+            </Flex>,
+            <Flex
+              flexDirection="row"
+              mt="2em"
+              gridGap={4}
+              justifyContent="right"
+              key="2"
+            >
+              <SaveButton />
+              {tableContentStruct.length !== 0 ? (
                 <Button variant="primarySolid" onClick={handleDelete} key={1}>
-                  Delete
-                </Button>,
-                <Button
-                  variant="primarySolid"
-                  disabled={!hasSelectedRows(1)}
-                  key={2}
-                  onClick={handleModifyRow}
-                >
-                  Modify
-                </Button>,
-              ]
-            ) : (
-              <></>
-            )}
-          </Flex>
+                  <FaTrash />
+                </Button>
+              ) : (
+                <></>
+              )}
+            </Flex>,
+          ]
         ) : (
           <></>
         )}
