@@ -80,7 +80,7 @@ const Checkout: NextPage = () => {
       </Head>
       <Slider />
 
-      <CustomContainer {...ContainerStyles}>
+      <CustomContainer transition="all ease-in-out 0.5s" {...ContainerStyles}>
         {(() => {
           switch (stageNo) {
             case 1:
