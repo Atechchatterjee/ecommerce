@@ -1,10 +1,11 @@
 import React, { useContext } from "react";
-import { HStack, Image, ContainerProps } from "@chakra-ui/react";
+import { Button, HStack, Image, ContainerProps, Box } from "@chakra-ui/react";
 import constants from "../../../util/Constants";
 import { ProductInfoContext } from "../../../context/ProductInfoContext";
 import { scrollBarStyle } from "../../../util/ScrollBarStyle";
 import CustomContainer from "../../Custom/CustomContainer";
 import { createImageUrl } from "../../../util/CreateImageUrl";
+import { IoMdClose } from "react-icons/io";
 
 interface ImageGalleryProps extends ContainerProps {
   selectCb?: (indx: number) => void;
@@ -26,19 +27,35 @@ const ImageGallery = ({ selectCb, ...props }: ImageGalleryProps) => {
       interactive
       {...props}
     >
-      <HStack height="inherit">
+      <HStack height="inherit" position="relative">
         {product.image ? (
           product.image.map(({ image }: any, indx) => (
-            <Image
-              fallbackSrc={constants.fallbackURL}
-              key={indx}
-              src={createImageUrl(image, undefined)}
-              boxSize="10em"
-              fit="contain"
-              padding="2em"
-              cursor="pointer"
-              onClick={() => selectCb?.(indx)}
-            />
+            <Box key={indx} position="relative" w="100%" h="100%">
+              <Button
+                position="absolute"
+                top="5%"
+                right="0"
+                variant="outline"
+                borderRadius="full"
+                padding="0"
+                size="xs"
+                _focus={{ outline: "none" }}
+                _hover={{ color: "white", bgColor: "secondary.200" }}
+              >
+                <IoMdClose size={13} />
+              </Button>
+              <Image
+                fallbackSrc={constants.fallbackURL}
+                key={indx}
+                src={createImageUrl(image, undefined)}
+                boxSize="115%"
+                w="120"
+                fit="contain"
+                padding="1.5em"
+                cursor="pointer"
+                onClick={() => selectCb?.(indx)}
+              />
+            </Box>
           ))
         ) : (
           <></>
