@@ -5,7 +5,7 @@ import React, {
   useReducer,
   useState,
 } from "react";
-import { Button, ButtonProps, Flex, Text } from "@chakra-ui/react";
+import { Spinner, Button, Flex, Text } from "@chakra-ui/react";
 import CustomTable from "../../Custom/CustomTable";
 import { SpecTableContext } from "../../../context/SpecTableContext";
 import { ProductInfoContext } from "../../../context/ProductInfoContext";
@@ -58,6 +58,7 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
   const [selectedRows, setSelectedRows] = useState<any>({});
   const [reRender, setReRender] = useState<boolean>(false);
   const [oneRowSelected, setOneRowSelected] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const specTableContext = useContext(SpecTableContext);
   const [heading, setHeading] = specTableContext.headings;
@@ -149,29 +150,6 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
     }
   };
 
-  const SaveButton = ({ ...props }: ButtonProps) => {
-    if (tableExists)
-      return (
-        <Button
-          variant="primarySolid"
-          padding="0.8em"
-          onClick={() => (oneRowSelected ? handleModifyRow() : handleAddRow())}
-          {...props}
-        >
-          <TiTick size="1.5rem" />
-        </Button>
-      );
-    else return <></>;
-  };
-
-  const handleDelete = () => {
-    deleteRows(selectedRows).then(() => {
-      getTableContent(product).then((res) =>
-        updateTableContentStruct(res.data)
-      );
-    });
-  };
-
   const setInputValue = (value: [specification: string, detail: string]) => {
     dispatchNewRow({ type: "clear" });
     if (inputRowRef.current) {
@@ -196,17 +174,27 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
   const handleModifyRow = () => {
     const rowIdToModify = getSelectedRowIndx();
     modifyTableContent(product.id, rowIdToModify, newRow);
+    dispatchNewRow({ type: "clear" });
     setInputValue(["", ""]);
     setReRender(true);
   };
 
   const handleAddRow = () => {
-    setReRender(true);
     saveTableContent(product, newRow, lastIndxInTableStruct).then(() => {
       setInputValue(["", ""]);
+      dispatchNewRow({ type: "clear" });
       setReRender(true);
     });
     setLastIndxInTableStruct(lastIndxInTableStruct + 1);
+  };
+
+  const handleDelete = () => {
+    deleteRows(selectedRows).then(() => {
+      getTableContent(product).then((res) => {
+        updateTableContentStruct(res.data);
+        setReRender(true);
+      });
+    });
   };
 
   if (tableExists)
@@ -228,54 +216,56 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
           selectedRowsState={[selectedRows, setSelectedRows]}
           interactive
         />
-        {!readOnly ? (
-          [
-            <Flex
-              flexDirection="row"
-              gridGap={5}
-              mt="5%"
-              padding="1%"
-              width="100%"
-              ref={inputRowRef}
-              key="1"
+        {!readOnly && [
+          <Flex
+            flexDirection="row"
+            gridGap={5}
+            mt="5%"
+            padding="1%"
+            width="100%"
+            ref={inputRowRef}
+            key="1"
+          >
+            <CustomField
+              placeholder={
+                oneRowSelected ? "Modify Specification" : "Add Specification"
+              }
+              value={newRow[0]}
+              onChange={(e: any) => {
+                dispatchNewRow({ type: "spec", value: e.target.value });
+              }}
+            />
+            <CustomField
+              placeholder={oneRowSelected ? "Modify Details" : "Add Details"}
+              value={newRow[1]}
+              onChange={(e: any) => {
+                dispatchNewRow({ type: "details", value: e.target.value });
+              }}
+            />
+          </Flex>,
+          <Flex
+            flexDirection="row"
+            mt="2em"
+            gridGap={4}
+            justifyContent="right"
+            key="2"
+          >
+            <Button
+              variant="primarySolid"
+              padding="0.8em"
+              onClick={() =>
+                oneRowSelected ? handleModifyRow() : handleAddRow()
+              }
             >
-              <CustomField
-                placeholder={
-                  oneRowSelected ? "Modify Specification" : "Add Specification"
-                }
-                value={newRow[0]}
-                onChange={(e: any) => {
-                  dispatchNewRow({ type: "spec", value: e.target.value });
-                }}
-              />
-              <CustomField
-                placeholder={oneRowSelected ? "Modify Details" : "Add Details"}
-                value={newRow[1]}
-                onChange={(e: any) => {
-                  dispatchNewRow({ type: "details", value: e.target.value });
-                }}
-              />
-            </Flex>,
-            <Flex
-              flexDirection="row"
-              mt="2em"
-              gridGap={4}
-              justifyContent="right"
-              key="2"
-            >
-              <SaveButton />
-              {tableContentStruct.length !== 0 ? (
-                <Button variant="primarySolid" onClick={handleDelete} key={1}>
-                  <FaTrash />
-                </Button>
-              ) : (
-                <></>
-              )}
-            </Flex>,
-          ]
-        ) : (
-          <></>
-        )}
+              {loading ? <Spinner /> : <TiTick size="1.5rem" />}
+            </Button>
+            {tableContentStruct.length !== 0 && (
+              <Button variant="primarySolid" onClick={handleDelete} key={1}>
+                {loading ? <Spinner /> : <FaTrash />}
+              </Button>
+            )}
+          </Flex>,
+        ]}
       </CustomContainer>
     );
   else return <Text>Table does not exist</Text>;
