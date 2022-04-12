@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useReducer } from "react";
+import React, { useState, useContext, useReducer } from "react";
 import {
   Spinner,
   Box,
@@ -195,94 +195,98 @@ const ProductSpec: React.FC = () => {
       });
   };
 
-  return product ? (
-    <SpecTableContext.Provider
-      value={{
-        headings: [specTableHeading, setSpecTableHeading],
-        tableExist: [tableExists, setTableExists],
-        openRowModal: [openAddRowModal, setOpenAddRowModal],
-        modifyRowModal: [modifyAddRowModal, setModifyAddRowModal],
-      }}
-    >
-      <Box marginLeft="12em" position="absolute">
-        <Container margin="0" marginTop="2em" marginBottom="2em" float="left">
-          {product ? (
-            <CustomContainer
-              borderRadius="2xl"
-              width="100%"
-              height="80%"
-              maxHeight="38em"
-              padding="2em"
-              interactive
-              transition="all ease-in-out 0.5s"
-            >
-              <Image
-                objectFit="contain"
-                src={`${constants.url?.substring(
-                  0,
-                  constants?.url.lastIndexOf("/")
-                )}${product.image[selectedImage].image}
-                    `}
+  if (product)
+    return (
+      <SpecTableContext.Provider
+        value={{
+          headings: [specTableHeading, setSpecTableHeading],
+          tableExist: [tableExists, setTableExists],
+          openRowModal: [openAddRowModal, setOpenAddRowModal],
+          modifyRowModal: [modifyAddRowModal, setModifyAddRowModal],
+        }}
+      >
+        <Flex
+          marginLeft="12em"
+          position="absolute"
+          flexDirection="row"
+          gridGap="100"
+          pb="5%"
+        >
+          <Container margin="0" marginTop="2em" marginBottom="2em">
+            {product && (
+              <CustomContainer
+                borderRadius="2xl"
                 width="100%"
-                height="30em"
-              />
-            </CustomContainer>
-          ) : (
-            <></>
-          )}
-          <ImageGallery
-            marginTop="2em"
-            width="100%"
-            selectCb={(indx) => {
-              setSelectedImage(indx);
-            }}
-          />
-          <DragUpload
-            marginTop="10%"
-            marginLeft="-3%"
-            width="110%"
-            height="14vh"
-            clearUpload={[clearUploadedFiles, setClearUploadedFiles]}
-            onFileUpload={(files) => {
-              console.log({ files });
-              if (files.length !== 0) {
-                setUploadedImages(files);
-              }
-            }}
-          />
-          <Button
-            variant="primarySolid"
-            marginTop="2em"
-            size="lg"
-            width="100%"
-            onClick={uploadAllImages}
-          >
-            Upload Additional Images
-          </Button>
-          <CreateSpecificationTableBtn />
-          <Button
-            width="100%"
-            size="lg"
-            marginTop="1.5em"
-            variant="primarySolid"
-            onClick={() => setIsOpenOptionModal(true)}
-          >
-            Add Options
-          </Button>
-        </Container>
-        <Container float="left" marginTop="2em" marginLeft="5em" width="40em">
-          <UpdateProductValueForm />
-          <SpecificationTable />
-          <OptionsTable
-            product={product}
-            triggerOpen={[isOpenOptionModal, setIsOpenOptionModal]}
-          />
-        </Container>
-      </Box>
-    </SpecTableContext.Provider>
-  ) : (
-    <></>
-  );
+                height="80%"
+                maxHeight="38em"
+                padding="2em"
+                interactive
+                transition="all ease-in-out 0.5s"
+              >
+                <Image
+                  objectFit="contain"
+                  src={`${constants.url?.substring(
+                    0,
+                    constants?.url.lastIndexOf("/")
+                  )}${product.image[selectedImage].image}
+                    `}
+                  width="100%"
+                  height="30em"
+                />
+              </CustomContainer>
+            )}
+            <ImageGallery
+              marginTop="2em"
+              width="100%"
+              selectCb={(indx) => {
+                setSelectedImage(indx);
+              }}
+            />
+            <DragUpload
+              marginTop="10%"
+              marginLeft="-3%"
+              width="110%"
+              height="14vh"
+              clearUpload={[clearUploadedFiles, setClearUploadedFiles]}
+              onFileUpload={(files) => {
+                console.log({ files });
+                if (files.length !== 0) {
+                  setUploadedImages(files);
+                }
+              }}
+            />
+            <Button
+              variant="primarySolid"
+              marginTop="2em"
+              size="lg"
+              width="100%"
+              onClick={uploadAllImages}
+            >
+              Upload Additional Images
+            </Button>
+            <CreateSpecificationTableBtn />
+            <Button
+              width="100%"
+              size="lg"
+              marginTop="1.5em"
+              variant="primarySolid"
+              onClick={() => setIsOpenOptionModal(true)}
+            >
+              Add Options
+            </Button>
+          </Container>
+          <Container marginTop="2em" width="40em">
+            <UpdateProductValueForm />
+            <SpecificationTable />
+            <OptionsTable
+              product={product}
+              triggerOpen={[isOpenOptionModal, setIsOpenOptionModal]}
+            />
+          </Container>
+        </Flex>
+      </SpecTableContext.Provider>
+    );
+  else return <></>;
 };
 
 export default ProductSpec;
