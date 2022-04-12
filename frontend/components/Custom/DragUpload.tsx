@@ -1,11 +1,15 @@
 import React, { useEffect, useState, useRef } from "react";
 import { HStack, Text, Container, Image, Input } from "@chakra-ui/react";
 import { ContainerProps } from "@chakra-ui/react";
-import { CustomField } from "./CustomField";
 import { RiFolderUploadFill } from "react-icons/ri";
 
 const ImagePreview: React.FC<{ imageFile: File }> = ({ imageFile }) => (
-  <Image src={URL.createObjectURL(imageFile)} fit="contain" boxSize="5em" />
+  <Image
+    src={URL.createObjectURL(imageFile)}
+    fallbackSrc="https://jkfenner.com/wp-content/uploads/2019/11/default.jpg"
+    fit="contain"
+    boxSize="5em"
+  />
 );
 
 interface Props extends ContainerProps {
@@ -47,8 +51,8 @@ const DragUpload = ({ onFileUpload, clearUpload, ...props }: Props) => {
 
   const DummyInput: React.FC = () => {
     return (
-      <CustomField
-        itemRef={fileInputRef.current}
+      <Input
+        ref={fileInputRef}
         type="file"
         display="none"
         onChange={(event: any) => {
@@ -59,11 +63,13 @@ const DragUpload = ({ onFileUpload, clearUpload, ...props }: Props) => {
   };
 
   return (
-    <Container width="35em" {...props}>
+    <Container width="35em" {...props} height="initial" minHeight="10%">
       <Container
         height="inherit"
+        minHeight="10em"
         paddingBottom={uploadedFiles.length === 0 ? "6em" : "1em"}
-        border="2px dashed"
+        bgImage="/dashed-border-bg.jpg"
+        bgSize="cover"
         onDragOver={(event) => {
           event.preventDefault();
         }}
