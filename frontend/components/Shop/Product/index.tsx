@@ -68,14 +68,6 @@ const Product: React.FC<Props> = ({
               setTriggerUpload,
             }}
           >
-            {editable ? (
-              <>
-                <EditBtn />
-                <DeleteBtn onDelete={onDelete} />
-              </>
-            ) : (
-              <></>
-            )}
             <Image
               padding="2em"
               objectFit="scale-down"
