@@ -56,6 +56,7 @@ const Product: React.FC<Props> = ({
         position="relative"
         borderRadius="lg"
         interactive
+        reverseEffect
       >
         <Flex flexDirection="column">
           <ProductContext.Provider
