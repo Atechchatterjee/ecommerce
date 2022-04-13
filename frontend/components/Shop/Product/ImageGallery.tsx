@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Button, HStack, Image, ContainerProps, Box } from "@chakra-ui/react";
 import constants from "../../../util/Constants";
 import { ProductInfoContext } from "../../../context/ProductInfoContext";
@@ -9,10 +9,12 @@ import { IoMdClose } from "react-icons/io";
 
 interface ImageGalleryProps extends ContainerProps {
   selectCb?: (indx: number) => void;
+  allowEdit?: boolean;
 }
 
-const ImageGallery = ({ selectCb, ...props }: ImageGalleryProps) => {
+const ImageGallery = ({ allowEdit, selectCb, ...props }: ImageGalleryProps) => {
   const { productInfo } = useContext(ProductInfoContext);
+  const [edit, setEdit] = useState<boolean>(false);
   const [product] = productInfo;
 
   return product ? (
@@ -30,30 +32,38 @@ const ImageGallery = ({ selectCb, ...props }: ImageGalleryProps) => {
       <HStack height="inherit" position="relative">
         {product.image ? (
           product.image.map(({ image }: any, indx) => (
-            <Box key={indx} position="relative" w="100%" h="100%">
-              <Button
-                position="absolute"
-                top="5%"
-                right="0"
-                variant="outline"
-                borderRadius="full"
-                padding="0"
-                size="xs"
-                _focus={{ outline: "none" }}
-                _hover={{ color: "white", bgColor: "secondary.200" }}
-              >
-                <IoMdClose size={13} />
-              </Button>
+            <Box key={indx} position="relative" h="100%">
+              {allowEdit && edit ? (
+                <Button
+                  position="absolute"
+                  top="5%"
+                  right="0"
+                  variant="outline"
+                  borderRadius="full"
+                  padding="0"
+                  size="xs"
+                  _focus={{ outline: "none" }}
+                  _hover={{ color: "white", bgColor: "primary.200" }}
+                  _active={{ bgColor: "primary.500" }}
+                  transition="all ease-in-out 0.3s"
+                >
+                  <IoMdClose size={13} />
+                </Button>
+              ) : (
+                <></>
+              )}
               <Image
                 fallbackSrc={constants.fallbackURL}
                 key={indx}
                 src={createImageUrl(image, undefined)}
-                boxSize="115%"
+                boxSize={allowEdit && edit ? "105%" : "100%"}
                 w="120"
                 fit="contain"
-                padding="1.5em"
+                padding="2em 0.4em"
                 cursor="pointer"
                 onClick={() => selectCb?.(indx)}
+                onDoubleClick={() => setEdit(!edit)}
+                transition="all ease-in-out 0.2s"
               />
             </Box>
           ))
