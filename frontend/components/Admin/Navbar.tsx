@@ -84,7 +84,7 @@ const Navbar: React.FC = () => {
                       >
                         {link[0]}
                       </MenuButton>
-                      <MenuList bg="#091353" borderColor="#212C6B" zIndex={10}>
+                      <MenuList bg="#091353" borderColor="#212C6B" zIndex={11}>
                         {link.slice(1).map((item) => (
                           <MenuItem
                             key={item}
@@ -124,7 +124,7 @@ const Navbar: React.FC = () => {
               >
                 <Avatar size={"sm"} />
               </MenuButton>
-              <MenuList bg="#091353" borderColor="#212C6B">
+              <MenuList bg="#091353" borderColor="#212C6B" zIndex={11}>
                 <MenuItem _hover={{ bg: "#212C6B" }}>Profile</MenuItem>
                 <MenuDivider />
                 <MenuItem
