@@ -20,6 +20,7 @@ import SelectCategory from "./SelectCategory";
 import { Formik } from "formik";
 import DragUpload from "../Custom/DragUpload";
 import { CustomField } from "../Custom/CustomField";
+import CustomContainer from "../Custom/CustomContainer";
 
 interface ProductData {
   productName: string;
@@ -70,9 +71,8 @@ const AddProduct = (props: ContainerProps) => {
   const toast = useToast();
 
   return (
-    <Center>
-      <Container
-        boxShadow="0.2em 0.2em 0.2em 0.2em #e1e1e1"
+    <Center marginBottom="2%">
+      <CustomContainer
         height="inherit"
         width="60em"
         padding="2em 4em 7em 4em"
@@ -135,17 +135,20 @@ const AddProduct = (props: ContainerProps) => {
                   name="productName"
                   placeholder="Product Name"
                   value={values.productName}
-                  borderRadius="lg"
+                  borderRadius="sm"
                   onChange={handleChange}
-                  top="2em"
+                  top="1em"
                 />
-                <Textarea
+                <CustomField
                   name="productDescription"
                   placeholder="Product Description"
                   value={values.productDescription}
-                  borderRadius="lg"
+                  borderRadius="sm"
                   onChange={handleChange}
+                  padding="0.5em"
+                  minHeight="10em"
                   top="3em"
+                  as="textarea"
                 />
                 <NumberInput
                   top="4em"
@@ -154,10 +157,10 @@ const AddProduct = (props: ContainerProps) => {
                   borderRadius="lg"
                   onReset={() => alert("reseting")}
                 >
-                  <NumberInputField
+                  <CustomField
                     value={values.productPrice}
                     placeholder="Prodcut Price"
-                    borderRadius="lg"
+                    borderRadius="sm"
                     name="productPrice"
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -168,12 +171,10 @@ const AddProduct = (props: ContainerProps) => {
                   </NumberInputStepper>
                 </NumberInput>
                 <SelectCategory
-                  variant="secondarySolid"
-                  bgColor="#9D84B7"
-                  colorScheme=""
-                  marginTop="5em"
+                  marginTop="6em"
                   text="Category"
-                  borderRadius="lg"
+                  width="100%"
+                  borderRadius="sm"
                   selectCb={({ selectedCategory }) =>
                     setCategoryId(selectedCategory)
                   }
@@ -189,7 +190,7 @@ const AddProduct = (props: ContainerProps) => {
                   clearUpload={[clearUploadFiles, setClearUploadFiles]}
                 />
                 <Button
-                  borderRadius="lg"
+                  borderRadius="sm"
                   variant="primarySolid"
                   size="md"
                   top="3em"
@@ -203,7 +204,7 @@ const AddProduct = (props: ContainerProps) => {
             )}
           </Formik>
         </Container>
-      </Container>
+      </CustomContainer>
     </Center>
   );
 };
