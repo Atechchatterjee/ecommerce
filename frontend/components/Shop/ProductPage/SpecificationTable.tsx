@@ -39,6 +39,17 @@ const newRowReducer = (state: any, action: any) => {
   }
 };
 
+const loadingReducer = (state: any, action: any) => {
+  switch (action.type) {
+    case "loading-save-btn":
+      return { ...state, saveBtn: action.value };
+    case "loading-delete-btn":
+      return { ...state, deleteBtn: action.value };
+    default:
+      return state;
+  }
+};
+
 const createHashTableforSpecData = (specData: any[]): any => {
   const hashTable: any = {};
   specData.forEach((row) => {
@@ -58,7 +69,6 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
   const [selectedRows, setSelectedRows] = useState<any>({});
   const [reRender, setReRender] = useState<boolean>(false);
   const [oneRowSelected, setOneRowSelected] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
 
   const specTableContext = useContext(SpecTableContext);
   const [heading, setHeading] = specTableContext.headings;
@@ -67,6 +77,10 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
   const [product, setProduct] = productInfo;
 
   const [newRow, dispatchNewRow] = useReducer(newRowReducer, []);
+  const [loading, dispatchLoading] = useReducer(loadingReducer, {
+    saveBtn: false,
+    deleteBtn: false,
+  });
 
   const inputRowRef = useRef<any>(null);
 
@@ -173,26 +187,33 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
 
   const handleModifyRow = () => {
     const rowIdToModify = getSelectedRowIndx();
-    modifyTableContent(product.id, rowIdToModify, newRow);
-    dispatchNewRow({ type: "clear" });
-    setInputValue(["", ""]);
-    setReRender(true);
+    dispatchLoading({ type: "loading-save-btn", value: true });
+    modifyTableContent(product.id, rowIdToModify, newRow).then(() => {
+      dispatchNewRow({ type: "clear" });
+      setInputValue(["", ""]);
+      setReRender(true);
+      dispatchLoading({ type: "loading-save-btn", value: false });
+    });
   };
 
   const handleAddRow = () => {
+    dispatchLoading({ type: "loading-save-btn", value: true });
     saveTableContent(product, newRow, lastIndxInTableStruct).then(() => {
       setInputValue(["", ""]);
       dispatchNewRow({ type: "clear" });
       setReRender(true);
+      dispatchLoading({ type: "loading-save-btn", value: false });
     });
     setLastIndxInTableStruct(lastIndxInTableStruct + 1);
   };
 
   const handleDelete = () => {
+    dispatchLoading({ type: "loading-delete-btn", value: true });
     deleteRows(selectedRows).then(() => {
       getTableContent(product).then((res) => {
         updateTableContentStruct(res.data);
         setReRender(true);
+        dispatchLoading({ type: "loading-delete-btn", value: false });
       });
     });
   };
@@ -257,11 +278,15 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
                 oneRowSelected ? handleModifyRow() : handleAddRow()
               }
             >
-              {loading ? <Spinner /> : <TiTick size="1.5rem" />}
+              {loading.saveBtn ? (
+                <Spinner size="sm" />
+              ) : (
+                <TiTick size="1.5rem" />
+              )}
             </Button>
             {tableContentStruct.length !== 0 && (
               <Button variant="primarySolid" onClick={handleDelete} key={1}>
-                {loading ? <Spinner /> : <FaTrash />}
+                {loading.deleteBtn ? <Spinner size="sm" /> : <FaTrash />}
               </Button>
             )}
           </Flex>,
