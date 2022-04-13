@@ -16,8 +16,11 @@ const commonStyles = ({includeColor = true}: {includeColor?: boolean} = {}) => (
 export default {
   variants: {
     primarySolid: () => ({
-      bg: primary[800],
-      _hover: { bg: "primary.500" },
+      bg: primary[500],
+      _hover: { bg: "primary.200" },
+      _active: {
+        outlineColor: primary[200],
+      },
       _disabled: {
         _hover: {
           textColor: primary[900],
@@ -32,10 +35,10 @@ export default {
       borderRadius: "sm",
       textColor: primary[900],
       _hover: {
-        bg: secondary[200],
+        bg: primary[500],
         color: "white",
-        borderColor: secondary[200],
-        outlineColor: secondary[200],
+        borderColor: primary[500],
+        outlineColor: primary[500],
         outlineOffset: "none",
       },
        _disabled: {
