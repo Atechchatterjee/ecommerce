@@ -1,7 +1,6 @@
 import React, { useState, useContext, useReducer } from "react";
 import {
   Spinner,
-  Box,
   Button,
   Container,
   Text,
@@ -157,8 +156,8 @@ const ProductSpec: React.FC = () => {
         !tableExists && (
           <Button
             marginTop="1.5em"
-            marginLeft="4em"
-            width="30em"
+            size="lg"
+            width="100%"
             variant="primarySolid"
             onClick={() => {
               createTableHeading();
@@ -216,23 +215,35 @@ const ProductSpec: React.FC = () => {
             {product && (
               <CustomContainer
                 borderRadius="2xl"
-                width="100%"
+                width="38em"
                 height="80%"
                 maxHeight="38em"
-                padding="2em"
+                padding="5%"
+                position="relative"
                 interactive
                 transition="all ease-in-out 0.5s"
               >
-                <Image
-                  objectFit="contain"
-                  src={`${constants.url?.substring(
-                    0,
-                    constants?.url.lastIndexOf("/")
-                  )}${product.image[selectedImage].image}
+                {product.image.map((curImg, indx) => (
+                  <Image
+                    position="absolute"
+                    zIndex={10 + indx}
+                    key={indx}
+                    objectFit="contain"
+                    src={`${constants.url?.substring(
+                      0,
+                      constants?.url.lastIndexOf("/")
+                    )}${curImg.image}
                     `}
-                  width="100%"
-                  height="30em"
-                />
+                    opacity={
+                      curImg.image === product.image[selectedImage].image
+                        ? 1
+                        : 0
+                    }
+                    width="90%"
+                    height="30em"
+                    transition="all ease-in-out 0.5s"
+                  />
+                ))}
               </CustomContainer>
             )}
             <ImageGallery
@@ -241,11 +252,12 @@ const ProductSpec: React.FC = () => {
               selectCb={(indx) => {
                 setSelectedImage(indx);
               }}
+              allowEdit
             />
             <DragUpload
               marginTop="10%"
               marginLeft="-3%"
-              width="110%"
+              width="106%"
               height="14vh"
               clearUpload={[clearUploadedFiles, setClearUploadedFiles]}
               onFileUpload={(files) => {
