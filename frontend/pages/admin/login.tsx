@@ -15,7 +15,7 @@ interface FormData {
 
 const AdminLogin: NextPage = () => {
   const formikRef = useRef<any>();
-  const redirectURL = useRef<string>("/admin/dashboard");
+  const redirectURL = useRef<string>("/admin/catalogs/all-products");
   const [err, setErr] = useState<boolean>(false);
 
   const adminAuth = (
