@@ -118,6 +118,7 @@ const SelectCategory: React.FC<Props> = ({
         onClick={() => {
           setModalOpen(true);
         }}
+        variant="primarySolid"
         {...props}
       >
         <TriggerButtonText />
