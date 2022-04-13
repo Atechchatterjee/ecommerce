@@ -6,9 +6,8 @@ import {
   Container,
   List,
   ListItem,
-  HStack,
-  Input,
   TextProps,
+  Flex,
 } from "@chakra-ui/react";
 import { CategoryNode } from "../../util/Tree";
 import { IoMdArrowDropright, IoMdArrowDropdown } from "react-icons/io";
@@ -32,8 +31,9 @@ const CustomTreeWrapper = ({
   disableRightClick,
   ...props
 }: CustomTreeProps) => {
-  const [selectedNodeId, setSelectedNodeId] =
-    useState<{ [key: number]: boolean }>();
+  const [selectedNodeId, setSelectedNodeId] = useState<{
+    [key: number]: boolean;
+  }>();
   const [highlightNode, setHighlightNode] = useState<CategoryNode>();
   const [toAddNode, setToAddNode] = useState<boolean>(false);
   const [openedNodes, setOpenedNodes] = useState<any>({});
@@ -85,6 +85,7 @@ const CustomTreeWrapper = ({
                   ? "none"
                   : "block"
               }
+              transition="all ease-in-out 0.2s"
             >
               <ListItem
                 padding="0.5em 0.7em"
@@ -94,9 +95,7 @@ const CustomTreeWrapper = ({
                     ? "secondary.200"
                     : "none"
                 }
-                borderRadius={
-                  highlightNode?.val.id === child.val.id ? "lg" : "none"
-                }
+                ml={child.children.length === 0 ? "1em" : "0"}
                 color={
                   highlightNode?.val.id === child.val.id ? "white" : "none"
                 }
@@ -107,14 +106,15 @@ const CustomTreeWrapper = ({
                 }
                 cursor="pointer"
                 onClick={() => handleFold(child)}
-                _hover={{
-                  bgColor: "#D1BEE8",
-                  color: "white",
-                  borderRadius: "lg",
-                }}
                 userSelect="none"
+                transition="all ease-in-out 0.2s"
               >
-                <HStack>
+                <Flex
+                  flexDirection="row"
+                  alignItems="center"
+                  gridGap={3}
+                  transition="all ease-in-out 0.2s"
+                >
                   {child.children.length > 0 ? (
                     openedNodes[child.val.id] ? (
                       <IoMdArrowDropdown size="20" />
@@ -122,10 +122,11 @@ const CustomTreeWrapper = ({
                       <IoMdArrowDropright size="20" />
                     )
                   ) : (
-                    <Box width="1em"></Box>
+                    <></>
+                    // <Box width="1.5em"></Box>
                   )}
                   <Text>{child.val.name}</Text>
-                </HStack>
+                </Flex>
               </ListItem>
               <Box>
                 {toAddNode && child.val.id === highlightNode?.val.id ? (
