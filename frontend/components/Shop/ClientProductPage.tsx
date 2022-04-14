@@ -21,7 +21,7 @@ import { CustomField } from "../Custom/CustomField";
 import { useWindowDimensions } from "../../hooks/useWindowDimensions";
 import { SpecTableContext } from "../../context/SpecTableContext";
 import SpecificationTable from "./ProductPage/SpecificationTable";
-import OptionsTable from "./ProductPage/OptionsTable";
+import DisplayOptions from "./ProductPage/OptionsModal";
 
 const OptionButtons: React.FC<{
   optionValues: { id: number; value: string }[];
@@ -254,7 +254,7 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
                 </HStack>
               ))}
             </Box>
-            <OptionsTable
+            <DisplayOptions
               product={product}
               triggerOpen={[isOpenOptionModal, setIsOpenOptionModal]}
               simple
