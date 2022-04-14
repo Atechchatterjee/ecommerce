@@ -110,7 +110,6 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
   const [columns] = useDynamicColumns(2, [1200]);
   const [width] = useWindowDimensions();
   const [addToCardLoader, setAddToCartLoader] = useState<boolean>(false);
-
   const [specTableHeading, setSpecTableHeading] = useState<any[]>([]);
   const [tableExists, setTableExists] = useState<boolean>(
     specTableHeading.length !== 0
@@ -126,23 +125,6 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
         <Text key={specTableHeading.length + 1}>Specification</Text>,
         <Text key={specTableHeading.length + 2}>Details</Text>,
       ]);
-  };
-
-  const createTable = async () => {
-    await axios
-      .post(
-        `${constants.url}/shop/createtable/`,
-        {
-          product_id: product.id,
-        },
-        {
-          withCredentials: true,
-        }
-      )
-      .then(() => {
-        setTableExists(true);
-      })
-      .catch((err) => console.error(err));
   };
 
   useEffect(() => {
