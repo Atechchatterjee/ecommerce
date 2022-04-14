@@ -11,13 +11,14 @@ import axios from "axios";
 import constants from "../../../util/Constants";
 import SpecificationTable from "./SpecificationTable";
 import { SpecTableContext } from "../../../context/SpecTableContext";
-import OptionsTable from "./OptionsTable";
+import OptionModal from "./OptionsModal";
 import ImageGallery from "../Product/ImageGallery";
 import DragUpload from "../../Custom/DragUpload";
 import { ProductInfoContext } from "../../../context/ProductInfoContext";
 import { getProductInfo } from "../../../util/ProductInfo";
 import CustomContainer from "../../Custom/CustomContainer";
 import { CustomField } from "../../Custom/CustomField";
+import OptionsTable from "../../Admin/OptionsTable";
 
 const productValueReducer = (state: any, action: any) => {
   switch (action.type) {
@@ -128,8 +129,12 @@ const ProductSpec: React.FC = () => {
     if (specTableHeading.length === 0)
       setSpecTableHeading([
         ...specTableHeading,
-        <Text key={specTableHeading.length + 1}>Specification</Text>,
-        <Text key={specTableHeading.length + 2}>Details</Text>,
+        <Text key={specTableHeading.length + 1} fontWeight="bold">
+          Specification
+        </Text>,
+        <Text key={specTableHeading.length + 2} fontWeight="bold">
+          Details
+        </Text>,
       ]);
   };
 
@@ -290,10 +295,11 @@ const ProductSpec: React.FC = () => {
           <Container marginTop="2em" width="40em">
             <UpdateProductValueForm />
             <SpecificationTable />
-            <OptionsTable
+            <OptionModal
               product={product}
               triggerOpen={[isOpenOptionModal, setIsOpenOptionModal]}
             />
+            <OptionsTable mt="5%" borderRadius="lg" />
           </Container>
         </Flex>
       </SpecTableContext.Provider>
