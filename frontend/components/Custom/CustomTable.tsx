@@ -19,7 +19,7 @@ interface Props extends TableProps {
   tableCaption?: string;
   rowCb?: Function;
   select?: boolean;
-  selectedRowsState: [selectedRows: any[], setSelectedRows: Function];
+  selectedRowsState?: [selectedRows: any[], setSelectedRows: Function];
   excludeSelectForRows?: number[];
   interactive?: boolean;
 }
@@ -30,7 +30,7 @@ const CustomTable = ({
   tableCaption,
   rowCb,
   select,
-  selectedRowsState,
+  selectedRowsState = [[], () => {}],
   excludeSelectForRows,
   interactive,
   ...props
