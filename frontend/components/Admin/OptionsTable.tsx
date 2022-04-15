@@ -3,15 +3,18 @@ import { fetchOptions } from "../../services/OptionsService";
 import CustomContainer from "../Custom/CustomContainer";
 import CustomTable from "../Custom/CustomTable";
 import { ProductInfoContext } from "../../context/ProductInfoContext";
-import { ContainerProps, Text } from "@chakra-ui/react";
+import { Box, Button, ContainerProps, Text } from "@chakra-ui/react";
 import { scrollBarStyle } from "../../util/ScrollBarStyle";
+import OptionModal from "../Shop/ProductPage/OptionsModal";
+import { FiPlus } from "react-icons/fi";
 
 const OptionsTable = ({ ...props }: ContainerProps) => {
   const [rows, setRows] = useState<any[][]>();
   const [longestRowLength, setLongestRowLength] = useState<number>(2);
+  const [isOpenOptionModal, setIsOpenOptionModal] = useState<boolean>(false);
 
   const { productInfo } = useContext(ProductInfoContext);
-  const [product, setProduct] = productInfo;
+  const [product] = productInfo;
 
   const convertToRows = (options: any) => {
     const rows: any[] = [];
@@ -21,7 +24,9 @@ const OptionsTable = ({ ...props }: ContainerProps) => {
       }
       rows.push([
         option.id,
-        <Text fontWeight="semibold">{option.name}</Text>,
+        <Text fontWeight="semibold" key="1">
+          {option.name}
+        </Text>,
         ...option.values.map((val: any) => val.value),
       ]);
     });
@@ -41,9 +46,13 @@ const OptionsTable = ({ ...props }: ContainerProps) => {
       padding="2%"
       overflowX="scroll"
       sx={scrollBarStyle()}
+      display="flex"
+      flexDirection="column"
+      gridGap={5}
       {...props}
     >
       <CustomTable
+        flex="1"
         rows={rows || []}
         heading={[
           "Name",
@@ -51,6 +60,21 @@ const OptionsTable = ({ ...props }: ContainerProps) => {
           ...new Array(longestRowLength - 1).fill(""),
         ]}
       />
+      <Box flex="1" textAlign="right" width="100%" paddingRight="2%">
+        <OptionModal
+          product={product}
+          triggerOpen={[isOpenOptionModal, setIsOpenOptionModal]}
+        >
+          <Button
+            width="9%"
+            padding="0.8em"
+            variant="primarySolid"
+            onClick={() => setIsOpenOptionModal(true)}
+          >
+            <FiPlus size="30" />
+          </Button>
+        </OptionModal>
+      </Box>
     </CustomContainer>
   );
 };

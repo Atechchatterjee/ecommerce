@@ -282,23 +282,10 @@ const ProductSpec: React.FC = () => {
               Upload Additional Images
             </Button>
             <CreateSpecificationTableBtn />
-            <Button
-              width="100%"
-              size="lg"
-              marginTop="1.5em"
-              variant="primarySolid"
-              onClick={() => setIsOpenOptionModal(true)}
-            >
-              Add Options
-            </Button>
           </Container>
           <Container marginTop="2em" width="40em">
             <UpdateProductValueForm />
             <SpecificationTable />
-            <OptionModal
-              product={product}
-              triggerOpen={[isOpenOptionModal, setIsOpenOptionModal]}
-            />
             <OptionsTable mt="5%" borderRadius="lg" />
           </Container>
         </Flex>
