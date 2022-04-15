@@ -197,7 +197,11 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
   };
 
   const handleAddRow = () => {
-    dispatchLoading({ type: "loading-save-btn", value: true });
+    if (newRow[0] === "" || newRow[1] === "") return;
+    dispatchLoading({
+      type: "loading-save-btn",
+      value: newRow[0] === "" || newRow[1] === "",
+    });
     saveTableContent(product, newRow, lastIndxInTableStruct).then(() => {
       setInputValue(["", ""]);
       dispatchNewRow({ type: "clear" });
