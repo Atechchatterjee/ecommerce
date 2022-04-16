@@ -7,15 +7,15 @@ export default {
       border: '1px',
       borderRadius: 'sm',
       _checked: {
-        bgColor: "primary.200",
-        borderColor: "primary.200",
+        bgColor: "secondary.200",
+        borderColor: "secondary.200",
         _hover: {
-          bgColor: "primary.800",
-          borderColor: "primary.800",
+          bgColor: "secondary.200",
+          borderColor: "secondary.200",
         },
       },
       _disabled: {
-        borderColor: 'secondary.800',
+        borderColor: 'primary.800',
         bg: 'gray.200',
       },
     },
