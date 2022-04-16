@@ -103,7 +103,13 @@ const UpdateProductValueForm = () => {
         type="number"
         onChange={(e: any) => handleChange(e, "set-product-price")}
       />
-      <Button mt="3%" mb="5%" variant="primarySolid" onClick={updateProduct}>
+      <Button
+        size="lg"
+        mt="3%"
+        mb="5%"
+        variant="primarySolid"
+        onClick={updateProduct}
+      >
         {loading ? <Spinner size="sm" /> : "Save"}
       </Button>
     </Flex>
