@@ -122,8 +122,12 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
     if (specTableHeading.length === 0)
       setSpecTableHeading([
         ...specTableHeading,
-        <Text key={specTableHeading.length + 1}>Specification</Text>,
-        <Text key={specTableHeading.length + 2}>Details</Text>,
+        <Text fontWeight="semibold" key={specTableHeading.length + 1}>
+          Specification
+        </Text>,
+        <Text fontWeight="semibold" key={specTableHeading.length + 2}>
+          Details
+        </Text>,
       ]);
   };
 
