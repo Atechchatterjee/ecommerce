@@ -12,6 +12,7 @@ import {
   TableProps,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
+import CustomContainer from "./CustomContainer";
 
 interface Props extends TableProps {
   rows: any[][];
@@ -80,14 +81,17 @@ const CustomTable = ({
   return (
     <Table variant="simple" size="md" width="full" {...props}>
       {tableCaption ? <TableCaption>{tableCaption}</TableCaption> : <></>}
-      <Thead>
+      <Thead bgColor="primary.100" height="3.5em">
         <Tr>
           {heading.map((headingElement, indx: number) => (
-            <Th key={indx}>{headingElement}</Th>
+            <Th textColor="white" key={indx}>
+              {headingElement}
+            </Th>
           ))}
           {select ? (
             <Th width={1} key={heading.length + 1}>
               <Text
+                textColor="white"
                 cursor="pointer"
                 onClick={() => {
                   selectAllRows();
@@ -110,6 +114,7 @@ const CustomTable = ({
               if (!selectTrigger) setSelectTrigger(false);
             }}
           >
+            {/* <CustomContainer> */}
             {rowEl.map((columnElement: any, indx: number) =>
               indx !== 0 ? (
                 <Td
@@ -139,6 +144,7 @@ const CustomTable = ({
             ) : (
               <SelectRowCheckBox indx={parseInt(rowEl[0])} />
             )}
+            {/* </CustomContainer> */}
           </Tr>
         ))}
       </Tbody>
