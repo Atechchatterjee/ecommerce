@@ -141,9 +141,12 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
   const createTableHeading = () => {
     if (heading.length === 0)
       setHeading([
-        ...heading,
-        <Text key={heading.length + 1}>Specification</Text>,
-        <Text key={heading.length + 2}>Details</Text>,
+        <Text fontWeight="semibold" key={1}>
+          Specification
+        </Text>,
+        <Text fontWeight="semibold" key={2}>
+          Detail
+        </Text>,
       ]);
   };
 
@@ -198,10 +201,11 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
 
   const handleAddRow = () => {
     if (newRow[0] === "" || newRow[1] === "") return;
-    dispatchLoading({
-      type: "loading-save-btn",
-      value: newRow[0] === "" || newRow[1] === "",
-    });
+    else
+      dispatchLoading({
+        type: "loading-save-btn",
+        value: true,
+      });
     saveTableContent(product, newRow, lastIndxInTableStruct).then(() => {
       setInputValue(["", ""]);
       dispatchNewRow({ type: "clear" });
@@ -228,7 +232,7 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
         position="relative"
         interactive
         height="inherit"
-        padding="2em 2em 1.5em 2em"
+        padding="0"
         borderRadius="lg"
         overflowX="scroll"
         sx={scrollBarStyle()}
@@ -246,8 +250,11 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
             flexDirection="row"
             gridGap={5}
             mt="5%"
-            padding="1%"
+            padding="1% 3%"
             width="100%"
+            justifyContent="center"
+            alignItems="center"
+            textAlign="center"
             ref={inputRowRef}
             key="1"
           >
@@ -270,9 +277,10 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
           </Flex>,
           <Flex
             flexDirection="row"
-            mt="2em"
+            // mt="2em"
             gridGap={4}
             justifyContent="right"
+            padding="3%"
             key="2"
           >
             <Button
