@@ -26,13 +26,23 @@ const OptionModal: React.FC<{
   const [displayOptionInputs, setDisplayOptionInputs] =
     useState<boolean>(false);
 
-  const onClose = () => {
+  const closeModal = () => {
     setIsOpen(false);
+  };
+
+  const handleSave = () => {
+    saveOptions(product.id, optionValues, currentOptionName).then(() => {
+      setOptionValues([]);
+      setCurrentOptionName("");
+      setDisplayOptionInputs(false);
+      setNoOfOptionValues(1);
+    });
+    closeModal();
   };
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose} size="xl">
+      <Modal isOpen={isOpen} onClose={closeModal} size="xl">
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
@@ -53,9 +63,8 @@ const OptionModal: React.FC<{
                 onChange={(e: any) => setCurrentOptionName(e.target.value)}
               />
               <Button
-                variant="primaryOutline"
-                marginTop="0.2rem"
-                height="2.2rem"
+                variant="primarySolid"
+                height="2.45rem"
                 size="md"
                 borderRadius="3"
                 float="left"
@@ -66,7 +75,7 @@ const OptionModal: React.FC<{
               >
                 <FaCheck />
               </Button>
-              {displayOptionInputs ? (
+              {displayOptionInputs &&
                 (function OptionValueInputs(no): any[] {
                   if (no <= 0) return [];
                   const input = (
@@ -86,36 +95,21 @@ const OptionModal: React.FC<{
                     />
                   );
                   return [...OptionValueInputs(no - 1), input];
-                })(noOfOptionValues)
-              ) : (
-                <></>
-              )}
+                })(noOfOptionValues)}
             </Box>
           </ModalBody>
 
           <ModalFooter position="relative" padding="3em">
-            {optionValues.length > 0 ? (
+            {optionValues.length > 0 && (
               <Button
                 variant="primarySolid"
                 position="absolute"
                 left="1.8em"
                 padding="1.3em 2em"
-                onClick={() => {
-                  saveOptions(product.id, optionValues, currentOptionName).then(
-                    () => {
-                      setOptionValues([]);
-                      setCurrentOptionName("");
-                      setDisplayOptionInputs(false);
-                      setNoOfOptionValues(1);
-                    }
-                  );
-                  onClose();
-                }}
+                onClick={handleSave}
               >
                 Save
               </Button>
-            ) : (
-              <></>
             )}
           </ModalFooter>
         </ModalContent>
