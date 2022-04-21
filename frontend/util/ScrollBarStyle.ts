@@ -8,10 +8,12 @@ export const scrollBarStyle = ({ color, borderRadius }: ScrollBarStyleProps = {c
     width: "0.5rem",
     height: "0.5em",
     backgroundColor: "rgba(255,255,255,0)",
+    borderRadius:  borderRadius ? borderRadius: "full",
   },
   "&::-webkit-scrollbar-track": {
     display: "none",
     backgroundColor: "rgba(255,255,255,0)",
+    borderRadius:  borderRadius ? borderRadius: "full",
   },
   "&::-webkit-scrollbar-thumb": {
     width: "2em",
