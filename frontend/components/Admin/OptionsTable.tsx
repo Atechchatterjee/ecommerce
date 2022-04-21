@@ -27,8 +27,10 @@ const OptionsTable = ({ ...props }: ContainerProps) => {
         <Text fontWeight="semibold" key="1">
           {option.name}
         </Text>,
-        ...option.values.map((val: any) => (
-          <Tag color="gray.700">{val.value}</Tag>
+        ...option.values.map((val: any, indx: number) => (
+          <Tag color="gray.700" key={indx}>
+            {val.value}
+          </Tag>
         )),
       ]);
     });
