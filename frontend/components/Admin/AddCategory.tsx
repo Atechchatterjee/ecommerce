@@ -2,25 +2,23 @@ import React, { useEffect, useState } from "react";
 import { Box } from "@chakra-ui/layout";
 import { Text, ContainerProps } from "@chakra-ui/react";
 import CustomTree from "../Custom/CustomTree";
-import { convertToCustomTree } from "../../util/Tree";
+import { CategoryTree, convertToCustomTree } from "../../util/Tree";
 import CustomContainer from "../Custom/CustomContainer";
 import {
   createCategory,
   deleteCategory,
   getAllCategory,
 } from "../../services/CategoryService";
-import { searchCategory } from "../../util/SearchCategory";
+import CategorySearch from "../Widgets/CategorySearch";
 
 const AddCategory = ({ ...props }: ContainerProps) => {
-  const [customTreeRoot, setCustomTreeRoot] = useState<any>([]);
+  const [customTree, setCustomTree] = useState<CategoryTree>();
   const [reRender, setReRender] = useState<boolean>(false);
 
   useEffect(() => {
     getAllCategory().then((categories) => {
       const customTree = convertToCustomTree(categories);
-      setCustomTreeRoot(customTree.root);
-      searchCategory(customTree, "Laptop");
-      console.log({ customTree });
+      setCustomTree(customTree);
     });
     setReRender(false);
   }, [reRender]);
@@ -42,10 +40,11 @@ const AddCategory = ({ ...props }: ContainerProps) => {
       >
         Categories
       </Text>
-      {customTreeRoot ? (
+      {customTree && <CategorySearch categoryTree={customTree} />}
+      {customTree && customTree.root && (
         <CustomTree
           marginTop="2em"
-          root={customTreeRoot}
+          root={customTree.root}
           addCb={(parentNode, newNodeName) => {
             console.log({
               sub_category: parentNode.val.id,
@@ -60,8 +59,6 @@ const AddCategory = ({ ...props }: ContainerProps) => {
             deleteCategory(node).then(() => setReRender(true))
           }
         />
-      ) : (
-        <></>
       )}
       <Box height="full" />
     </CustomContainer>
