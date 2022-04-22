@@ -46,10 +46,6 @@ const AddCategory = ({ ...props }: ContainerProps) => {
           marginTop="2em"
           root={customTree.root}
           addCb={(parentNode, newNodeName) => {
-            console.log({
-              sub_category: parentNode.val.id,
-              category_name: newNodeName,
-            });
             createCategory({
               sub_category: parentNode.val.id,
               category_name: newNodeName,
