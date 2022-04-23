@@ -1,24 +1,31 @@
 import React, { useEffect, useState } from "react";
-import CustomContainer from "../Custom/CustomContainer";
 import { ContainerProps, Box } from "@chakra-ui/react";
 import { scrollBarStyle } from "../../util/ScrollBarStyle";
 import { AnimatePresence, motion } from "framer-motion";
 import { useKeyPress } from "../../hooks/useKeyPress";
+import CustomContainer from "../Custom/CustomContainer";
 
 interface SearchDropDownProps extends ContainerProps {
   items: any[];
+  selectedCb?: (item: any, enter?: boolean) => void;
 }
 
-const SearchDropDown = ({ items, ...props }: SearchDropDownProps) => {
+const SearchDropDown = ({
+  selectedCb,
+  items,
+  ...props
+}: SearchDropDownProps) => {
   const [selectedItem, setSelectedItem] = useState<any>(
     items[0] && items[0].item
   );
   const [lastItemSelected, setLastItemSelected] = useState<number>(0);
   const downPress = useKeyPress("ArrowDown");
   const upPress = useKeyPress("ArrowUp");
+  const enterPress = useKeyPress("Enter");
 
   const handleSelectItem = (item: any) => {
     setSelectedItem(item);
+    if (selectedCb) selectedCb(item);
   };
 
   useEffect(() => {
@@ -29,6 +36,7 @@ const SearchDropDown = ({ items, ...props }: SearchDropDownProps) => {
     // move selection to the next item in the list
     if (items[lastItemSelected] && downPress) {
       if (lastItemSelected < items.length - 1) {
+        if (selectedCb) selectedCb(items[lastItemSelected + 1].item);
         setSelectedItem(items[lastItemSelected + 1].item);
         setLastItemSelected(lastItemSelected + 1);
       }
@@ -36,11 +44,17 @@ const SearchDropDown = ({ items, ...props }: SearchDropDownProps) => {
     // move selection to the previous item in the list
     if (items[lastItemSelected] && upPress) {
       if (lastItemSelected > 0) {
+        if (selectedCb) selectedCb(items[lastItemSelected - 1].item);
         setSelectedItem(items[lastItemSelected - 1].item);
         setLastItemSelected(lastItemSelected - 1);
       }
     }
-  }, [downPress, upPress]);
+    if (items[lastItemSelected] && enterPress) {
+      if (lastItemSelected >= 0 && lastItemSelected < items.length) {
+        if (selectedCb) selectedCb(items[lastItemSelected].item, true);
+      }
+    }
+  }, [downPress, upPress, enterPress]);
 
   return (
     <AnimatePresence>
@@ -55,8 +69,12 @@ const SearchDropDown = ({ items, ...props }: SearchDropDownProps) => {
           position="absolute"
           height="35vh"
           padding="0.8em"
-          overflow="scroll"
-          sx={scrollBarStyle({ color: "primary", borderRadius: "lg" })}
+          overflow="auto"
+          sx={scrollBarStyle({
+            hidden: true,
+            color: "primary",
+            borderRadius: "lg",
+          })}
           transition="all ease-in-out 0.5s"
           onKeyDown={(e: any) => {
             alert(e.keyCode);
