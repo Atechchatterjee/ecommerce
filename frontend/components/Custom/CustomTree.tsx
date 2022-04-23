@@ -13,6 +13,7 @@ import { CategoryNode } from "../../util/Tree";
 import { IoMdArrowDropright, IoMdArrowDropdown } from "react-icons/io";
 import RightClickMenu from "./RightClickMenu";
 import { CustomField } from "./CustomField";
+import { AnimatePresence, motion } from "framer-motion";
 
 interface CustomTreeProps extends ContainerProps {
   root: CategoryNode;
@@ -87,54 +88,64 @@ const CustomTreeWrapper = ({
               }
               transition="all ease-in-out 0.2s"
             >
-              <ListItem
-                padding="0.5em 0.7em"
-                key={indx}
-                bgColor={
-                  highlightNode?.val.id === child.val.id
-                    ? "secondary.200"
-                    : "none"
-                }
-                ml={child.children.length === 0 ? "1em" : "0"}
-                color={
-                  highlightNode?.val.id === child.val.id ? "white" : "none"
-                }
-                fontWeight={
-                  highlightNode?.val.id === child.val.id
-                    ? "semibold"
-                    : "regular"
-                }
-                cursor="pointer"
-                onClick={() => handleFold(child)}
-                userSelect="none"
-                transition="all ease-in-out 0.2s"
-              >
-                <Flex
-                  flexDirection="row"
-                  alignItems="center"
-                  gridGap={3}
-                  transition="all ease-in-out 0.2s"
+              <AnimatePresence>
+                <motion.div
+                  animate={{ y: 20, opacity: 1 }}
+                  initial={{ opacity: 0.8 }}
+                  transition={{ ease: "easeOut", duration: 0.5 }}
+                  style={{ width: "100%" }}
                 >
-                  {child.children.length > 0 ? (
-                    openedNodes[child.val.id] ? (
-                      <IoMdArrowDropdown size="20" />
-                    ) : (
-                      <IoMdArrowDropright size="20" />
-                    )
-                  ) : (
-                    <></>
-                    // <Box width="1.5em"></Box>
-                  )}
-                  <Text>{child.val.name}</Text>
-                </Flex>
-              </ListItem>
+                  <ListItem
+                    padding="0.5em 0.7em"
+                    key={indx}
+                    _hover={{
+                      bgColor:
+                        highlightNode?.val.id === child.val.id
+                          ? ""
+                          : "gray.300",
+                    }}
+                    bgColor={
+                      highlightNode?.val.id === child.val.id
+                        ? "secondary.200"
+                        : "none"
+                    }
+                    ml={child.children.length === 0 ? "1em" : "0"}
+                    color={
+                      highlightNode?.val.id === child.val.id ? "white" : "none"
+                    }
+                    fontWeight={
+                      highlightNode?.val.id === child.val.id
+                        ? "semibold"
+                        : "regular"
+                    }
+                    cursor="pointer"
+                    onClick={() => handleFold(child)}
+                    userSelect="none"
+                    transition="all ease-in-out 0.2s"
+                  >
+                    <Flex
+                      flexDirection="row"
+                      alignItems="center"
+                      gridGap={3}
+                      transition="all ease-in-out 0.2s"
+                    >
+                      {child.children.length > 0 &&
+                        (openedNodes[child.val.id] ? (
+                          <IoMdArrowDropdown size="20" />
+                        ) : (
+                          <IoMdArrowDropright size="20" />
+                        ))}
+                      <Text>{child.val.name}</Text>
+                    </Flex>
+                  </ListItem>
+                </motion.div>
+              </AnimatePresence>
               <Box>
                 {toAddNode && child.val.id === highlightNode?.val.id ? (
                   <CustomField
                     marginLeft="7%"
                     marginTop="0.5em"
                     borderRadius="sm"
-                    // width="17em"
                     width="80%"
                     size="md"
                     onBlur={(e: any) => {
