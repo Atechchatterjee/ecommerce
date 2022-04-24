@@ -12,6 +12,7 @@ from rest_framework.decorators import api_view, permission_classes
 from .util import fetch_category
 
 @api_view(['POST'])
+@permission_classes([Is_Admin])
 def create_category(request):
     category_name, sub_category = itemgetter(
         'category_name', 'sub_category')(request.data)
