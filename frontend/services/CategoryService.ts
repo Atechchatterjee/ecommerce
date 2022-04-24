@@ -5,16 +5,17 @@ import constants from "../util/Constants";
 
 export const createCategory = async (data: Category): Promise<void> => {
   try {
-    await axios.post(`${constants.url}/shop/createcategory/`, data);
+    if(data.category_name.length === 0) return;
+    await axios.post(`${constants.url}/shop/createcategory/`, data, {withCredentials: true});
     return Promise.resolve();
   } catch (err) {
     return Promise.reject(err);
   }
 };
 
-export const deleteCategory = async (node: CategoryNode): Promise<void> => {
+export const deleteCategory = async (categoryId: CategoryNode): Promise<void> => {
   axios
-    .delete(`${constants.url}/shop/delete-category/${node.val.id}/`, {
+    .delete(`${constants.url}/shop/delete-category/${categoryId}/`, {
       withCredentials: true,
     })
     .then((res) => {
