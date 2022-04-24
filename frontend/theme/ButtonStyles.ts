@@ -70,8 +70,6 @@ export default {
     }),
     secondarySolid: () => ({
       bg: secondary[200],
-      // outlineColor: secondary[200],
-      // outlineOffset: "none",
       borderRadius: "md",
       _hover: { 
         opacity:"0.8",
