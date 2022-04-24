@@ -60,13 +60,15 @@ const SearchDropDown = ({
     <AnimatePresence>
       <motion.div
         animate={{ y: 10, opacity: 1 }}
-        initial={{ opacity: 0.3 }}
+        initial={{ opacity: 0.5 }}
         transition={{ ease: "easeOut", duration: 0.2 }}
-        style={{ width: "100%" }}
+        style={{ zIndex: 11, width: "100%" }}
       >
         <CustomContainer
           bgColor="white"
-          position="absolute"
+          opacity="1"
+          zIndex={11}
+          position="fixed"
           height="35vh"
           padding="0.8em"
           overflow="auto"
