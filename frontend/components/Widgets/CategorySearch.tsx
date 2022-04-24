@@ -8,9 +8,14 @@ import { useKeyPress } from "../../hooks/useKeyPress";
 
 interface CategoryTreeProps extends InputProps {
   categoryTree: CategoryTree;
+  getDropDownStatus?: (_: boolean) => void;
 }
 
-const CategorySearch = ({ categoryTree, ...props }: CategoryTreeProps) => {
+const CategorySearch = ({
+  getDropDownStatus,
+  categoryTree,
+  ...props
+}: CategoryTreeProps) => {
   const [searchPhrase, setSearchPhrase] = useState<string>("");
   const [searchedCategories, setSearchedCategories] = useState<any[]>([]);
   const [showDropDown, setShowDropDown] = useState<boolean>(false);
@@ -32,6 +37,12 @@ const CategorySearch = ({ categoryTree, ...props }: CategoryTreeProps) => {
       setShowDropDown(false);
     }
   }, [escapeKeyPress]);
+
+  useEffect(() => {
+    if (getDropDownStatus) {
+      getDropDownStatus(showDropDown);
+    }
+  }, [showDropDown]);
 
   return (
     <Box
