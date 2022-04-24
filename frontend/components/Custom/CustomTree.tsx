@@ -6,8 +6,10 @@ import {
   Container,
   List,
   ListItem,
+  ListItemProps,
   TextProps,
   Flex,
+  InputProps,
 } from "@chakra-ui/react";
 import { CategoryNode } from "../../util/Tree";
 import { IoMdArrowDropright, IoMdArrowDropdown } from "react-icons/io";
@@ -22,6 +24,20 @@ interface CustomTreeProps extends ContainerProps {
   addCb?: (parentNode: CategoryNode, newNodeName: string) => void;
   deleteCb?: (node: CategoryNode) => void;
 }
+
+const ListItemStyle = (highlightNode: any, child: any): ListItemProps => ({
+  padding: "0.5em 0.7em",
+  cursor: "pointer",
+  userSelect: "none",
+  transition: "all ease-in-out 0.2s",
+  bgColor: highlightNode?.val.id === child.val.id ? "secondary.200" : "none",
+  ml: child.children.length === 0 ? "1em" : "0",
+  color: highlightNode?.val.id === child.val.id ? "white" : "none",
+  fontWeight: highlightNode?.val.id === child.val.id ? "semibold" : "regular",
+  _hover: {
+    bgColor: highlightNode?.val.id === child.val.id ? "" : "gray.300",
+  },
+});
 
 const CustomTreeWrapper = ({
   root,
@@ -39,7 +55,10 @@ const CustomTreeWrapper = ({
   const [toAddNode, setToAddNode] = useState<boolean>(false);
   const [openedNodes, setOpenedNodes] = useState<any>({});
 
-  const FoldNode = (node: CategoryNode, action: "fold" | "unfold" = "fold") => {
+  const FoldingAction = (
+    node: CategoryNode,
+    action: "fold" | "unfold" = "fold"
+  ) => {
     setHighlightNode(node);
     setSelectedNodeId({
       ...selectedNodeId,
@@ -53,11 +72,11 @@ const CustomTreeWrapper = ({
 
   const handleFold = (node: CategoryNode) => {
     if (selectedNodeId && selectedNodeId[node.val.id]) {
-      FoldNode(node, "fold");
+      FoldingAction(node, "fold");
       setOpenedNodes({ ...openedNodes, [node.val.id]: false });
     } else {
       setOpenedNodes({ ...openedNodes, [node.val.id]: true });
-      FoldNode(node, "unfold");
+      FoldingAction(node, "unfold");
     }
     if (selectCb) selectCb(node.val.id);
   };
@@ -72,6 +91,24 @@ const CustomTreeWrapper = ({
     ...props
   }: CustomTreeProps) => {
     if (root.val === null && root.children.length === 0) return null;
+
+    const NewCategoryInputField = ({ ...props }: InputProps) => (
+      <CustomField
+        marginLeft="7%"
+        marginTop="0.5em"
+        borderRadius="sm"
+        width="80%"
+        size="md"
+        onBlur={(e: any) => {
+          setToAddNode(false);
+          if (addCb && highlightNode && e.target.value !== "") {
+            addCb(highlightNode, e.target.value);
+          }
+        }}
+        autoFocus
+        {...props}
+      />
+    );
 
     return (
       <Container key={key} {...props}>
@@ -88,90 +125,55 @@ const CustomTreeWrapper = ({
               }
               transition="all ease-in-out 0.2s"
             >
-              <AnimatePresence>
-                <motion.div
-                  animate={{ y: 20, opacity: 1 }}
-                  initial={{ opacity: 0.8 }}
-                  transition={{ ease: "easeOut", duration: 0.5 }}
-                  style={{ width: "100%" }}
+              <ListItem
+                key={indx}
+                onClick={() => handleFold(child)}
+                {...ListItemStyle(highlightNode, child)}
+              >
+                <Flex
+                  flexDirection="row"
+                  alignItems="center"
+                  gridGap={3}
+                  transition="all ease-in-out 0.2s"
                 >
-                  <ListItem
-                    padding="0.5em 0.7em"
-                    key={indx}
-                    _hover={{
-                      bgColor:
-                        highlightNode?.val.id === child.val.id
-                          ? ""
-                          : "gray.300",
-                    }}
-                    bgColor={
-                      highlightNode?.val.id === child.val.id
-                        ? "secondary.200"
-                        : "none"
-                    }
-                    ml={child.children.length === 0 ? "1em" : "0"}
-                    color={
-                      highlightNode?.val.id === child.val.id ? "white" : "none"
-                    }
-                    fontWeight={
-                      highlightNode?.val.id === child.val.id
-                        ? "semibold"
-                        : "regular"
-                    }
-                    cursor="pointer"
-                    onClick={() => handleFold(child)}
-                    userSelect="none"
-                    transition="all ease-in-out 0.2s"
-                  >
-                    <Flex
-                      flexDirection="row"
-                      alignItems="center"
-                      gridGap={3}
-                      transition="all ease-in-out 0.2s"
-                    >
-                      {child.children.length > 0 &&
-                        (openedNodes[child.val.id] ? (
-                          <IoMdArrowDropdown size="20" />
-                        ) : (
-                          <IoMdArrowDropright size="20" />
-                        ))}
-                      <Text>{child.val.name}</Text>
-                    </Flex>
-                  </ListItem>
-                </motion.div>
-              </AnimatePresence>
+                  {child.children.length > 0 &&
+                    (openedNodes[child.val.id] ? (
+                      <IoMdArrowDropdown size="20" />
+                    ) : (
+                      <IoMdArrowDropright size="20" />
+                    ))}
+                  <Text>{child.val.name}</Text>
+                </Flex>
+              </ListItem>
               <Box>
-                {toAddNode && child.val.id === highlightNode?.val.id ? (
-                  <CustomField
-                    marginLeft="7%"
-                    marginTop="0.5em"
-                    borderRadius="sm"
-                    width="80%"
-                    size="md"
-                    onBlur={(e: any) => {
-                      setToAddNode(false);
-                      if (addCb && highlightNode && e.target.value !== "") {
-                        addCb(highlightNode, e.target.value);
-                      }
-                    }}
-                    autoFocus
-                  />
-                ) : (
-                  <></>
+                {toAddNode && child.val.id === highlightNode?.val.id && (
+                  <NewCategoryInputField />
                 )}
-                {child.children.length > 0 ? (
-                  <CustomTree
-                    {...{
-                      root: child,
-                      key,
-                      selectCb,
-                      addCb,
-                      deleteCb,
-                      disableRightClick,
-                    }}
-                  />
-                ) : (
-                  <></>
+                {child.children.length > 0 && (
+                  <AnimatePresence key={indx}>
+                    <motion.div
+                      initial={{
+                        y: 0,
+                        opacity:
+                          selectedNodeId && selectedNodeId[child.val.parentId]
+                            ? 0
+                            : 1,
+                      }}
+                      animate={{ y: 0, opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                    >
+                      <CustomTree
+                        {...{
+                          root: child,
+                          key,
+                          selectCb,
+                          addCb,
+                          deleteCb,
+                          disableRightClick,
+                        }}
+                      />
+                    </motion.div>
+                  </AnimatePresence>
                 )}
               </Box>
             </Box>
@@ -181,7 +183,7 @@ const CustomTreeWrapper = ({
   };
 
   const handleAdd = () => {
-    if (highlightNode) FoldNode(highlightNode, "unfold");
+    if (highlightNode) FoldingAction(highlightNode, "unfold");
     setToAddNode(true);
   };
 
