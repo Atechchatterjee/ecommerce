@@ -1,21 +1,48 @@
 ### Installation and Usage
 
+<br>
+
 Git clone the repository.
 
-To run the local development environment use the following commands :
-
 ```bash
-sudo docker-compose -f ./frontend/docker-compose.yml up --build
-sudo docker-compose -f ./backend/docker-compose.yml up --build
+git clone https://github.com/Atechchatterjee/ecommerce.git
 ```
 
-To run the production version specify your own docker-compose file or use the given docker-compose-deploy.yml :
+Running the front-end server use the following commands:
 
 ```bash
-sudo docker-compose up -f ./frontend/docker-compose-deploy.yml --build
-sudo docker-compose up -f ./backend/docker-compose-deploy.yml --build
+cd ./frontend
+sudo docker-compose build
+sudo docker-compose up
 ```
+
+Running the backend server use the following commands:
+
+```bash
+cd ./backend
+sudo docker-compose build
+sudo docker-compose up
+```
+
+To run the production version specify your own docker-compose file or use the given docker-compose-deploy.yml
+
+```bash
+sudo docker-compose -f ./name-of-your-docker-compose-file build
+sudo docker-compose -f ./name-of-your-docker-compose-file up
+```
+
+<br>
 
 ### Prerequisites
 
 You should have **docker** and **docker-compose** installed on your local system.
+
+<br>
+
+### Technologies Used
+
+- React js
+- Django
+- Postgresql
+- Next js
+- Docker & Docker-Compose
