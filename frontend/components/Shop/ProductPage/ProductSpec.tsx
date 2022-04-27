@@ -237,7 +237,6 @@ const ProductSpec: React.FC = () => {
                 {product.image.map((curImg, indx) => (
                   <Image
                     position="absolute"
-                    zIndex={10 + indx}
                     key={indx}
                     objectFit="contain"
                     src={`${constants.url?.substring(
@@ -280,7 +279,7 @@ const ProductSpec: React.FC = () => {
             />
             <Button
               variant="primarySolid"
-              marginTop="2em"
+              margin="2em 0"
               size="lg"
               width="100%"
               onClick={uploadAllImages}
