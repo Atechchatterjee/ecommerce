@@ -1,3 +1,4 @@
+import { AiOutlineConsoleSql } from "react-icons/ai";
 import { Category } from "../types/shop";
 
 export class CategoryNode {
@@ -70,6 +71,20 @@ export class CategoryTree {
 
     for(const child of cur.children) {
       this.getAllLeaveNodes(child);
+    }
+  }
+
+  findNodeById(id: number, cur: CategoryNode, cb: (foundNode: CategoryNode)=> void): any {
+    if(!cur.children) 
+      return;
+
+    // finding the node
+    if(cur.val?.id === id) {
+      console.log({cur})
+      cb(cur);
+    }
+    for(const child of cur.children) {
+      this.findNodeById(id, child, cb);
     }
   }
 
