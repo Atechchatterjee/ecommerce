@@ -66,13 +66,14 @@ const DragUpload = ({ onFileUpload, clearUpload, ...props }: Props) => {
   };
 
   return (
-    <Container width="35em" {...props} height="initial" minHeight="10%">
+    <Container width="35em" {...props} height="inherit" minHeight="10%">
       <Container
+        width="100%"
         height="inherit"
         minHeight="10em"
         paddingBottom={uploadedFiles.length === 0 ? "6em" : "1em"}
-        bgImage="/dashed-border-bg.jpg"
-        bgSize="contain"
+        border="2px solid"
+        borderColor="primary.200"
         bgRepeat="no-repeat"
         onDragOver={(event) => {
           event.preventDefault();
