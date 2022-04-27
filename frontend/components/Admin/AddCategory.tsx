@@ -1,37 +1,53 @@
 import React, { useEffect, useState } from "react";
 import { Box, Flex } from "@chakra-ui/layout";
 import { Text, ContainerProps, FlexProps, Button } from "@chakra-ui/react";
-import { CategoryTree, convertToCustomTree } from "../../util/Tree";
+import {
+  CategoryNode,
+  CategoryTree,
+  convertToCustomTree,
+} from "../../util/Tree";
 import CustomContainer from "../Custom/CustomContainer";
 import { getAllCategory } from "../../services/CategoryService";
 import CategorySearch from "../Widgets/CategorySearch";
 import { AnimatePresence, motion } from "framer-motion";
 import { IoIosArrowBack } from "react-icons/io";
-import { FiPlus } from "react-icons/fi";
 import { CustomField } from "../Custom/CustomField";
 import { createCategory, deleteCategory } from "../../services/CategoryService";
 import { FaTrash } from "react-icons/fa";
+import { MdDone } from "react-icons/md";
+import ConfirmationModal from "../Widgets/ConfirmationModal";
 
 interface DisplayCategoriesProps extends FlexProps {
   categories?: any[];
   selectCb?: (_: any) => void;
+  deleteCb?: (_: any) => void;
 }
 
 const DisplayCategories = ({
   categories,
   selectCb,
+  deleteCb,
   ...props
 }: DisplayCategoriesProps) => {
   const [hoverId, setHoverId] = useState<number>(-1);
 
   const handleDeleteCategory = (category: any) => {
-    deleteCategory(category.val.id).catch((err) => {
-      console.error(err);
-    });
+    if (deleteCb) deleteCb(category);
   };
 
   return (
     <Flex flexDirection="column" gridGap={4} {...props}>
+      {categories?.length === 0 && (
+        <Text
+          fontFamily="sora"
+          fontSize="lg"
+          fontWeight="semibold"
+          color="gray.500"
+          textAlign="center"
+        >
+          No Sub Categories
+        </Text>
+      )}
       {categories?.map((category: any, indx) => (
         <AnimatePresence key={indx}>
           <motion.div
@@ -66,7 +82,7 @@ const DisplayCategories = ({
 
               <Button
                 variant="ghost"
-                color="red.700"
+                color="secondary.200"
                 size="lg"
                 position="revert"
                 padding="0% 2%"
@@ -93,13 +109,50 @@ const AddCategory = ({ ...props }: ContainerProps) => {
   const [categoryStack, setCategoryStack] = useState<any[]>([]);
   const [newCategoryName, setNewCategoryName] = useState<string>("");
   const [dropDownStatus, setDropDownStatus] = useState<boolean>(false);
+  const [triggerDeleteModal, setTriggerDeleteModal] = useState<boolean>(false);
+  const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
+  const [categoryToDelete, setCategoryToDelete] = useState<any>();
+
+  const updateCategoryStack = (
+    cur: CategoryNode,
+    categoryStackLocal: CategoryNode[],
+    itr: number,
+    cb?: (_: CategoryNode[]) => void
+  ) => {
+    if (itr < categoryStackLocal.length) {
+      const categoryInStack = categoryStackLocal[itr];
+      cur.children.forEach((child) => {
+        if (child.val.id === categoryInStack.val.id) {
+          categoryStackLocal[itr] = child;
+          console.log({ newChild: child });
+          return updateCategoryStack(child, categoryStackLocal, itr + 1, cb);
+        }
+      });
+    } else {
+      if (cb) cb(categoryStackLocal);
+    }
+  };
 
   useEffect(() => {
-    getAllCategory().then((categories) => {
-      const customTree = convertToCustomTree(categories);
-      setCustomTree(customTree);
-    });
-    setReRender(false);
+    getAllCategory()
+      .then((categories) => {
+        const customTree = convertToCustomTree(categories);
+        setCustomTree(customTree);
+        setNewCategoryName("");
+        const categoryStackCopy = categoryStack;
+        updateCategoryStack(
+          customTree.root,
+          categoryStackCopy,
+          0,
+          (newCategoryStack) => {
+            setCategoryStack(newCategoryStack);
+          }
+        );
+        setReRender(false);
+      })
+      .catch(() => {
+        setReRender(false);
+      });
   }, [reRender]);
 
   const popCategoryFromStack = () => {
@@ -122,11 +175,22 @@ const AddCategory = ({ ...props }: ContainerProps) => {
     }
   }, [customTree, categoryStack]);
 
+  useEffect(() => {
+    alert("Confirming delete of " + categoryToDelete?.val.name);
+    deleteCategory(categoryToDelete?.val.id)
+      .then(() => {
+        setReRender(true);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [confirmDelete]);
+
   const handleAddCategory = (e: any) => {
     const parentCategory = peekCategoryStack();
     createCategory({
       category_name: newCategoryName,
-      sub_category: parentCategory.val.id,
+      sub_category: parentCategory.val ? parentCategory.val.id : null,
     })
       .then(() => {
         setReRender(true);
@@ -158,6 +222,14 @@ const AddCategory = ({ ...props }: ContainerProps) => {
           getDropDownStatus={(status) => setDropDownStatus(status)}
         />
       )}
+      <ConfirmationModal
+        open={triggerDeleteModal}
+        setOpen={setTriggerDeleteModal}
+        modalBody={<Text>Do you want to Delete this category?</Text>}
+        confirmCb={() => {
+          setConfirmDelete(true);
+        }}
+      />
       {customTree && customTree.root && (
         <AnimatePresence>
           <motion.div
@@ -184,20 +256,36 @@ const AddCategory = ({ ...props }: ContainerProps) => {
                   flex="1"
                   categories={categoriesToDisplay}
                   selectCb={(category) => {
-                    if (category.children.length > 0) {
-                      setCategoriesToDisplay(category.children);
-                      setCategoryStack([...categoryStack, category]);
-                    }
+                    setCategoriesToDisplay(category.children);
+                    setCategoryStack([...categoryStack, category]);
+                  }}
+                  deleteCb={(category) => {
+                    setCategoryToDelete(category);
+                    setTriggerDeleteModal(true);
                   }}
                 />
-                <CustomField
-                  placeholder="Add Category"
-                  zIndex={dropDownStatus ? "-1" : "1"}
-                  borderRadius="md"
-                  mt="6%"
-                  height="5vh"
-                  onChange={(e: any) => setNewCategoryName(e.target.value)}
-                />
+                <Flex flexDirection="row" gridGap={3} w="99%">
+                  <CustomField
+                    placeholder="Add Category"
+                    zIndex={dropDownStatus ? "-1" : "1"}
+                    value={newCategoryName}
+                    borderRadius="md"
+                    height="5.5vh"
+                    onChange={(e: any) => setNewCategoryName(e.target.value)}
+                  />
+                  <Button
+                    variant="ghost"
+                    borderRadius="md"
+                    size="md"
+                    mt="0.8%"
+                    h="4.8vh"
+                    padding="0"
+                    position="revert"
+                    onClick={handleAddCategory}
+                  >
+                    <MdDone strokeWidth="0.03em" size="25" />
+                  </Button>
+                </Flex>
                 <Flex
                   flexDirection="row"
                   justifyContent="right"
@@ -214,17 +302,6 @@ const AddCategory = ({ ...props }: ContainerProps) => {
                     onClick={popCategoryFromStack}
                   >
                     <IoIosArrowBack size="1.1em" />
-                  </Button>
-                  <Button
-                    color="gray.100"
-                    variant="primarySolid"
-                    size="lg"
-                    w="10%"
-                    padding="0"
-                    position="revert"
-                    onClick={handleAddCategory}
-                  >
-                    <FiPlus size="25" />
                   </Button>
                 </Flex>
               </Flex>
