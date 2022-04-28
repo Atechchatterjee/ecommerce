@@ -20,7 +20,7 @@ import { AnimatePresence, motion } from "framer-motion";
 interface CustomTreeProps extends ContainerProps {
   root: CategoryNode;
   disableRightClick?: boolean;
-  selectCb?: (selectedCategory: number | null) => void;
+  selectCb?: (selectedCategory: CategoryNode | null) => void;
   addCb?: (parentNode: CategoryNode, newNodeName: string) => void;
   deleteCb?: (node: CategoryNode) => void;
 }
@@ -78,7 +78,7 @@ const CustomTreeWrapper = ({
       setOpenedNodes({ ...openedNodes, [node.val.id]: true });
       FoldingAction(node, "unfold");
     }
-    if (selectCb) selectCb(node.val.id);
+    if (selectCb) selectCb(node);
   };
 
   const CustomTree = ({

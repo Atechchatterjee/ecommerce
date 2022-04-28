@@ -175,9 +175,10 @@ const AddProduct = (props: ContainerProps) => {
                   text="Category"
                   width="100%"
                   borderRadius="sm"
-                  selectCb={({ selectedCategory }) =>
-                    setCategoryId(selectedCategory)
-                  }
+                  selectCb={({ selectedCategory }) => {
+                    if (selectedCategory?.val)
+                      setCategoryId(selectedCategory?.val.id);
+                  }}
                 />
                 <DragUpload
                   marginTop="2em"

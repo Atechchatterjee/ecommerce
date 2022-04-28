@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Category, CategoryMap } from "../../types/shop";
-import { convertToCustomTree } from "../../util/Tree";
+import { CategoryNode, convertToCustomTree } from "../../util/Tree";
 import axios from "axios";
 import constants from "../../util/Constants";
 import { Button, ButtonProps } from "@chakra-ui/button";
@@ -30,7 +30,7 @@ interface Props extends ButtonProps {
   selectCb?: ({
     selectedCategory,
   }: {
-    selectedCategory: number | null;
+    selectedCategory: CategoryNode | null;
   }) => void;
   text?: string;
   includeNone?: boolean;
@@ -44,7 +44,9 @@ const SelectCategory: React.FC<Props> = ({
 }) => {
   const categoryMap = useRef<CategoryMap>({});
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [selectedCategory, setSelectedCategory] = useState<number | null>(-2);
+  const [selectedCategory, setSelectedCategory] = useState<
+    CategoryNode | null | undefined
+  >(undefined);
   const [customTree, setCustomTree] = useState<any>([]);
 
   const createTree = (categories: Category[]) => {
@@ -72,14 +74,15 @@ const SelectCategory: React.FC<Props> = ({
     getAllCategory().then(createTree);
   }, []);
 
-  const handleSelect = (id: any) => {
+  const handleSelect = (node: any) => {
+    let id = node.val.id;
     if (typeof id === "number") {
-      setSelectedCategory(id);
+      setSelectedCategory(node);
       if (id < 0) id = null;
     } else if (typeof id === "string") {
       id = parseInt(id);
       if (id < 0) id = null;
-      setSelectedCategory(id);
+      setSelectedCategory(node);
     } else {
       id = null;
       setSelectedCategory(null);
@@ -88,13 +91,13 @@ const SelectCategory: React.FC<Props> = ({
     // callback to return category name and selected category id
     if (onSelect) {
       onSelect({
-        selectedCategory: id,
+        selectedCategory: node,
       });
     }
   };
 
   const TriggerButtonText: React.FC = () => {
-    switch (selectedCategory) {
+    switch (selectedCategory?.val.id) {
       case null:
         return (
           <>
@@ -105,10 +108,10 @@ const SelectCategory: React.FC<Props> = ({
               : "Sub Category"}
           </>
         );
-      case -2:
+      case undefined:
         return <> {text ? text : "Sub Category"}</>;
       default:
-        return <>{categoryMap.current[selectedCategory]}</>;
+        return <>{categoryMap.current[selectedCategory?.val.id]}</>;
     }
   };
 
@@ -142,7 +145,7 @@ const SelectCategory: React.FC<Props> = ({
               key="-1"
               marginLeft="-1.8em"
               disableRightClick
-              selectCb={(id: any) => handleSelect(id)}
+              selectCb={(node: any) => handleSelect(node)}
             />
           </ModalBody>
           <ModalFooter>
