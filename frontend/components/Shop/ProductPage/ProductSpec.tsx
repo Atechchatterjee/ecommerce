@@ -1,4 +1,4 @@
-import React, { useState, useContext, useReducer } from "react";
+import React, { useState, useContext, useReducer, useEffect } from "react";
 import {
   Spinner,
   Button,
@@ -6,6 +6,8 @@ import {
   Text,
   Image,
   Flex,
+  Box,
+  HStack,
 } from "@chakra-ui/react";
 import axios from "axios";
 import constants from "../../../util/Constants";
@@ -19,6 +21,13 @@ import { getProductInfo } from "../../../util/ProductInfo";
 import CustomContainer from "../../Custom/CustomContainer";
 import { CustomField } from "../../Custom/CustomField";
 import OptionsTable from "../../Admin/OptionsTable";
+import CategorySearch from "../../Widgets/CategorySearch";
+import {
+  CategoryNode,
+  CategoryTree,
+  convertToCustomTree,
+} from "../../../util/Tree";
+import SelectCategory, { getAllCategory } from "../../Admin/SelectCategory";
 
 const productValueReducer = (state: any, action: any) => {
   switch (action.type) {
@@ -33,7 +42,13 @@ const productValueReducer = (state: any, action: any) => {
   }
 };
 
-const UpdateProductValueForm = () => {
+interface UpdateProductValueFormProps {
+  getDropDownStatus?: (status: boolean) => void;
+}
+
+const UpdateProductValueForm = ({
+  getDropDownStatus,
+}: UpdateProductValueFormProps) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const { productInfo } = useContext(ProductInfoContext);
@@ -47,6 +62,17 @@ const UpdateProductValueForm = () => {
       price: product.price,
     }
   );
+  const [customTree, setCustomTree] = useState<CategoryTree>();
+  const [selectedCategory, setSelectedCategory] = useState<CategoryNode | null>(
+    null
+  );
+
+  useEffect(() => {
+    getAllCategory().then((categories) => {
+      const customTree = convertToCustomTree(categories);
+      setCustomTree(customTree);
+    });
+  }, []);
 
   const updateProduct = () => {
     setLoading(true);
@@ -103,12 +129,44 @@ const UpdateProductValueForm = () => {
         type="number"
         onChange={(e: any) => handleChange(e, "set-product-price")}
       />
+      {customTree ? (
+        <Flex flexDirection="row" gridGap={2}>
+          {selectedCategory ? (
+            <CategorySearch
+              flex="1"
+              categoryTree={customTree}
+              value={selectedCategory.val.name}
+              getDropDownStatus={(status) => {
+                if (getDropDownStatus) getDropDownStatus(status);
+              }}
+            />
+          ) : (
+            <CategorySearch
+              flex="1"
+              categoryTree={customTree}
+              getDropDownStatus={(status) => {
+                if (getDropDownStatus) getDropDownStatus(status);
+              }}
+            />
+          )}
+          <SelectCategory
+            height="4.9vh"
+            selectCb={({ selectedCategory }) => {
+              if (selectedCategory) setSelectedCategory(selectedCategory);
+            }}
+          />
+        </Flex>
+      ) : (
+        <></>
+      )}
+
       <Button
         size="lg"
         mt="3%"
         mb="5%"
         variant="primarySolid"
         onClick={updateProduct}
+        position="unset"
       >
         {loading ? <Spinner size="sm" /> : "Save"}
       </Button>
@@ -123,10 +181,10 @@ const ProductSpec: React.FC = () => {
   );
   const [openAddRowModal, setOpenAddRowModal] = useState<boolean>(false);
   const [modifyAddRowModal, setModifyAddRowModal] = useState<boolean>(false);
-  const [isOpenOptionModal, setIsOpenOptionModal] = useState<boolean>(false);
   const [uploadedImages, setUploadedImages] = useState<File[]>([]);
   const [clearUploadedFiles, setClearUploadedFiles] = useState<boolean>(false);
   const [selectedImage, setSelectedImage] = useState<number>(0);
+  const [dropDownStatus, setDropDownStatus] = useState<boolean>(false);
 
   const { productInfo } = useContext(ProductInfoContext);
   const [product, setProduct] = productInfo;
@@ -166,8 +224,8 @@ const ProductSpec: React.FC = () => {
       return (
         !tableExists && (
           <Button
-            marginTop="1.5em"
             size="lg"
+            mb="2em"
             width="100%"
             variant="primarySolid"
             onClick={() => {
@@ -289,9 +347,15 @@ const ProductSpec: React.FC = () => {
             <CreateSpecificationTableBtn />
           </Container>
           <Container marginTop="2em" width="40em">
-            <UpdateProductValueForm />
-            <SpecificationTable />
-            <OptionsTable mt="5%" borderRadius="lg" />
+            <UpdateProductValueForm
+              getDropDownStatus={(status) => {
+                setDropDownStatus(status);
+              }}
+            />
+            <Box position="relative" zIndex={dropDownStatus ? "-1" : "11"}>
+              <SpecificationTable />
+              <OptionsTable mt="5%" borderRadius="lg" />
+            </Box>
           </Container>
         </Flex>
       </SpecTableContext.Provider>
