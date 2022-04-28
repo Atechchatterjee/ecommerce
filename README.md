@@ -1,7 +1,5 @@
 ### Installation and Usage
 
-<br>
-
 Git clone the repository.
 
 ```bash
@@ -31,13 +29,9 @@ sudo docker-compose -f ./name-of-your-docker-compose-file build
 sudo docker-compose -f ./name-of-your-docker-compose-file up
 ```
 
-<br>
-
 ### Prerequisites
 
 You should have **docker** and **docker-compose** installed on your local system.
-
-<br>
 
 ### Technologies Used
 
