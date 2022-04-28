@@ -43,8 +43,8 @@ const ConfirmationModal = ({
           <ModalFooter>
             <Button
               onClick={() => {
-                handleClose();
                 if (confirmCb) confirmCb();
+                handleClose();
               }}
             >
               {buttonText || "Confirm"}
