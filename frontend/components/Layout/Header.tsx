@@ -1,28 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
-import {
-  Box,
-  Link,
-  LinkProps,
-  Flex,
-  BoxProps,
-  Grid,
-  GridItem,
-} from "@chakra-ui/layout";
+import React, { useEffect, useState } from "react";
+import { Box, Link, LinkProps, Grid, GridItem, Flex } from "@chakra-ui/layout";
 import { InputGroup, InputGroupProps, InputRightAddon } from "@chakra-ui/input";
-import { Button, ButtonProps, Fade, Tooltip } from "@chakra-ui/react";
-import { FaRegHeart, FaRegUser, FaHeart } from "react-icons/fa";
-import { AiOutlineShopping } from "react-icons/ai";
+import { Button, ButtonProps } from "@chakra-ui/react";
 import { isAuthenticated } from "../../util/Authenticated";
 import logout from "../../util/Logout";
-import { FiShoppingCart } from "react-icons/fi";
 import { useWindowDimensions } from "../../hooks/useWindowDimensions";
 import { FaSearch } from "react-icons/fa";
 import { CustomField } from "../Custom/CustomField";
 import Fuse from "fuse.js";
-import { GiHamburgerMenu } from "react-icons/gi";
 import CategorySidebar from "../Widgets/CategorySidebar";
 import { useCategoryData } from "../../hooks/useCategoryData";
-import { motion, AnimatePresence } from "framer-motion";
+import { MdMenu } from "react-icons/md";
 
 interface HeaderProps {
   products?: [any[], (_: any[]) => void];
@@ -54,13 +42,14 @@ const Header: React.FC<HeaderProps> = ({ products, originalProducts }) => {
     return (
       <Button
         variant="blurSolid"
+        padding="3.5%"
         borderRadius="md"
         onClick={() => {
           setShowSideBar(!showSideBar);
         }}
         {...props}
       >
-        <GiHamburgerMenu size={16} />
+        <MdMenu size="20" />
       </Button>
     );
   };
@@ -171,14 +160,16 @@ const Header: React.FC<HeaderProps> = ({ products, originalProducts }) => {
   return (
     <Box>
       <CategorySidebar
+        minWidth="20em"
         categoryTree={categoryTree}
         open={showSideBar}
+        closeCb={() => setShowSideBar(false)}
         zIndex={9}
       />
       <Box
         width="full"
         className="header-up"
-        height="7vh"
+        height="4.4rem"
         position="fixed"
         backgroundColor="primary.800"
         zIndex={10}
@@ -186,29 +177,23 @@ const Header: React.FC<HeaderProps> = ({ products, originalProducts }) => {
         padding="0.7%"
         overflow="hidden"
       >
-        <Grid
-          templateRows="repeat(1, 1fr)"
-          templateColumns="repeat(100, 1fr)"
-          gap={10}
-          width="100%"
-          height="inherit"
+        <Flex
+          flexDirection="row"
+          gridGap="10"
+          padding="1%"
+          height="full"
+          alignItems="center"
         >
-          <GridItem rowSpan={1} colSpan={11}>
+          <Box flex="2" textAlign="left" ml="-0.5%">
             <HamburgerButton />
-          </GridItem>
-          <GridItem rowSpan={1} colSpan={25} marginTop="-0.2%">
-            <SearchBar marginTop="0.2%" />
-          </GridItem>
-          <GridItem
-            rowSpan={1}
-            colSpan={12}
-            display="flex"
-            justifyItems="center"
-            justifyContent="right"
-          >
-            <LoginLink marginTop="0.2em" />
-          </GridItem>
-        </Grid>
+          </Box>
+          <Box flex="5">
+            <SearchBar />
+          </Box>
+          <Box flex="2.5" textAlign="right">
+            <LoginLink />
+          </Box>
+        </Flex>
       </Box>
     </Box>
   );
