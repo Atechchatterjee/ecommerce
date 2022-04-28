@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { CustomField } from "../Custom/CustomField";
-import { Box, InputProps } from "@chakra-ui/react";
+import { Box, BoxProps, InputProps } from "@chakra-ui/react";
 import { CategoryTree } from "../../util/Tree";
 import { searchCategory } from "../../util/SearchCategory";
 import SearchDropDown from "./SearchDropDown";
 import { useKeyPress } from "../../hooks/useKeyPress";
 
-interface CategoryTreeProps extends InputProps {
+interface CategoryTreeProps extends BoxProps {
   categoryTree: CategoryTree;
   getDropDownStatus?: (_: boolean) => void;
+  value?: string;
 }
 
 const CategorySearch = ({
   getDropDownStatus,
   categoryTree,
+  value,
   ...props
 }: CategoryTreeProps) => {
   const [searchPhrase, setSearchPhrase] = useState<string>("");
@@ -45,19 +47,13 @@ const CategorySearch = ({
   }, [showDropDown]);
 
   return (
-    <Box
-      width="100%"
-      justifyContent="center"
-      padding="2em 3em 0em 3em"
-      position="relative"
-    >
+    <Box width="100%" justifyContent="center" position="relative" {...props}>
       <CustomField
         size="lg"
         borderRadius="md"
-        value={searchPhrase}
+        value={value ? value : searchPhrase}
         placeholder="Search Categories"
         onChange={handleSearch}
-        {...props}
       />
       {showDropDown && (
         <SearchDropDown
