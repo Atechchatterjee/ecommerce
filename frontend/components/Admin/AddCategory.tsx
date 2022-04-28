@@ -176,13 +176,16 @@ const AddCategory = ({ ...props }: ContainerProps) => {
   }, [customTree, categoryStack]);
 
   useEffect(() => {
-    alert("Confirming delete of " + categoryToDelete?.val.name);
     deleteCategory(categoryToDelete?.val.id)
       .then(() => {
-        setReRender(true);
+        setTimeout(() => {
+          setReRender(true);
+        }, 100);
+        setConfirmDelete(false);
       })
       .catch((err) => {
         console.error(err);
+        setConfirmDelete(false);
       });
   }, [confirmDelete]);
 
@@ -218,6 +221,7 @@ const AddCategory = ({ ...props }: ContainerProps) => {
       </Text>
       {customTree && (
         <CategorySearch
+          padding="2em 3em 0em 3em"
           categoryTree={customTree}
           getDropDownStatus={(status) => setDropDownStatus(status)}
         />
