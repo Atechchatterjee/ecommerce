@@ -49,7 +49,7 @@ const OptionsTable = ({ ...props }: ContainerProps) => {
       interactive
       padding="0"
       overflowX="scroll"
-      sx={scrollBarStyle()}
+      sx={scrollBarStyle({ color: "gray.300", hidden: false })}
       display="flex"
       flexDirection="column"
       gridGap={5}
