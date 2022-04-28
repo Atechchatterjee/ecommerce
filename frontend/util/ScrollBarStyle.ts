@@ -1,10 +1,10 @@
 interface ScrollBarStyleProps { 
-  color: "primary" | "secondary";
+  color?: string;
   borderRadius?: "sm" | "md" | "lg";
   hidden?: boolean;
 }
 
-export const scrollBarStyle = ({ hidden, color, borderRadius }: ScrollBarStyleProps = {color: "primary"}) => ({
+export const scrollBarStyle = ({ hidden, color, borderRadius }: ScrollBarStyleProps = {}) => ({
   "&::-webkit-scrollbar": {
     width: "0.5rem",
     height: "0.5em",
@@ -21,7 +21,7 @@ export const scrollBarStyle = ({ hidden, color, borderRadius }: ScrollBarStylePr
     width: "2em",
     height: "3px",
     borderRadius:  borderRadius ? borderRadius: "full",
-    backgroundColor: color === "secondary" ? "secondary.200" : "primary.200",
+    backgroundColor: color || "primary.200",
     transition: "background-color 0.8s ease-in-out",
     display: hidden ? "none": "block"
   },
