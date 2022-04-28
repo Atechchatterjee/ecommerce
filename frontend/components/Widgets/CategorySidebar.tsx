@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import {
   Box,
   Button,
+  CloseButton,
   ContainerProps,
   Flex,
   FlexProps,
@@ -38,7 +39,7 @@ const DisplayCategories = ({
               key={indx}
               display="flex"
               w="95%"
-              h="5vh"
+              minH="5vh"
               borderRadius="md"
               backgroundColor={
                 hoverId !== category.val.id ? "rgba(255,255,255,0.4)" : ""
@@ -61,7 +62,9 @@ const DisplayCategories = ({
               }}
               transition="all ease-in-out 0.1s"
             >
-              <Text isTruncated>{category.val.name}</Text>
+              <Text fontSize="1rem" isTruncated>
+                {category.val.name}
+              </Text>
             </Box>
           </motion.div>
         </AnimatePresence>
@@ -73,11 +76,13 @@ const DisplayCategories = ({
 interface CategorySidebarProps extends ContainerProps {
   categoryTree?: CategoryTree;
   open?: boolean;
+  closeCb?: Function;
 }
 
 const CategorySidebar = ({
   open,
   categoryTree,
+  closeCb,
   ...props
 }: CategorySidebarProps) => {
   const [categoriesToDisplay, setCategoriesToDisplay] = useState<any[]>(
@@ -105,16 +110,20 @@ const CategorySidebar = ({
     return category.val !== null ? category.val.name : "Categories";
   };
 
+  const handleClose = () => {
+    if (closeCb) closeCb();
+  };
+
   if (open) {
     return (
       <AnimatePresence>
         <motion.div
           style={{
             position: "fixed",
-            zIndex: 9,
+            zIndex: 20,
             width: "100%",
             padding: "0",
-            marginTop: "4.5%",
+            height: "full",
           }}
           key="modal"
           animate={{ x: 3, opacity: 1 }}
@@ -122,26 +131,34 @@ const CategorySidebar = ({
         >
           <Box
             position="fixed"
-            left="0.5%"
+            left="0"
+            margin="0"
             w="18%"
-            h="89.8vh"
+            h="100vh"
             borderRadius="md"
             backgroundColor={
               checkBrowser(window, "firefox")
-                ? "rgba(250,250,250,1)"
-                : "rgba(250,250,250,0.7)"
+                ? "rgba(255,255,255,1)"
+                : "rgba(255,255,255,0.8)"
             }
             backdropFilter="blur(20px)"
             boxShadow="rgba(99, 99, 99, 0.2) 0px 2px 8px 0px"
-            padding="1.5% 1% 0 2%"
+            padding="1.5rem 1rem 0 2rem"
             transition="all 0.2s ease-in-out"
             {...props}
           >
+            <CloseButton
+              position="absolute"
+              right="3%"
+              top="2.5%"
+              onClick={handleClose}
+            />
             <Flex flexDirection="column" gridGap={6}>
               <Text fontWeight="bold" fontSize="1.1rem" flex="1">
                 <DynamicHeading />
               </Text>
               <DisplayCategories
+                mt="8%"
                 flex="1"
                 categories={categoriesToDisplay}
                 selectCb={(category) => {
