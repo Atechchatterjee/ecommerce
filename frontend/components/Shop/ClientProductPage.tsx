@@ -168,32 +168,47 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
         <Spinner />
       ) : (
         <Grid
-          padding="6% 3%"
+          padding="6rem 3rem"
           templateColumns={`repeat(${columns}, 1fr)`}
           templateRows={`repeat(1, 2fr)`}
           gap={20}
         >
-          <Box marginBottom="3em" className="product-images">
+          <Box marginBottom="3em" w="100%">
             <CustomContainer
               borderRadius="2xl"
-              width="80%"
-              height="80%"
-              maxHeight="38em"
-              padding="2em"
+              w="100%"
+              h="100%"
+              maxH="38em"
+              padding="5%"
+              position="relative"
               interactive
+              transition="all ease-in-out 0.5s"
             >
-              <Image
-                objectFit="scale-down"
-                src={`${constants.url?.substring(
-                  0,
-                  constants?.url.lastIndexOf("/")
-                )}${product.image[selectedImage].image}`}
-                width="100%"
-                height="inherit"
-              />
+              <Box position="relative" height="100vh">
+                {product.image.map((curImg, indx) => (
+                  <Image
+                    position="absolute"
+                    key={indx}
+                    objectFit="contain"
+                    src={`${constants.url?.substring(
+                      0,
+                      constants?.url.lastIndexOf("/")
+                    )}${curImg.image}
+                    `}
+                    opacity={
+                      curImg.image === product.image[selectedImage].image
+                        ? 1
+                        : 0
+                    }
+                    width="90%"
+                    height="30em"
+                    transition="all ease-in-out 0.5s"
+                  />
+                ))}
+              </Box>
             </CustomContainer>
             <ImageGallery
-              width="80%"
+              width="90%"
               selectCb={(indx) => {
                 setSelectedImage(indx);
               }}
