@@ -87,7 +87,6 @@ def delete_table_content(request):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
-@permission_classes([Is_Admin | Is_User])
 def exists_table(request):
     product_id = itemgetter('product_id')(request.data)
     try:
@@ -98,7 +97,6 @@ def exists_table(request):
 
 
 @api_view(['POST'])
-@permission_classes([Is_Admin | Is_User])
 def get_table_content(request):
     product_id = itemgetter('product_id')(request.data)
     try:
