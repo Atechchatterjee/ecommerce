@@ -119,9 +119,11 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
         setProduct(product);
         setTableExists(true);
         createTableHeading();
-        getTableContent(product).then((res) => {
-          updateTableContentStruct(res.data);
-        });
+        getTableContent(product)
+          .then((res) => {
+            updateTableContentStruct(res.data);
+          })
+          .catch((err) => console.error(err));
       })
       .catch(() => {
         setTableExists(false);
@@ -130,9 +132,11 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
 
   useEffect(() => {
     createTableHeading();
-    getTableContent(product).then((res) => {
-      updateTableContentStruct(res.data);
-    });
+    getTableContent(product)
+      .then((res) => {
+        updateTableContentStruct(res.data);
+      })
+      .catch((err) => console.error(err));
     setReRender(false);
     dispatchNewRow({ type: "clear" });
     setSelectedRows({});
@@ -277,7 +281,6 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
           </Flex>,
           <Flex
             flexDirection="row"
-            // mt="2em"
             gridGap={4}
             justifyContent="right"
             padding="3%"
@@ -305,7 +308,7 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
         ]}
       </CustomContainer>
     );
-  else return <Text>Table does not exist</Text>;
+  else return <></>;
 };
 
 export default SpecificationTable;
