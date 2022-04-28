@@ -57,54 +57,53 @@ const SearchDropDown = ({
   }, [downPress, upPress, enterPress]);
 
   return (
-    <AnimatePresence>
-      <motion.div
-        animate={{ y: 10, opacity: 1 }}
-        initial={{ opacity: 0.5 }}
-        transition={{ ease: "easeOut", duration: 0.2 }}
-        style={{ zIndex: 11, width: "100%" }}
+    // <AnimatePresence>
+    <motion.div
+      animate={{ y: 10 }}
+      // initial={{ opacity: 1 }}
+      transition={{ ease: "easeOut", duration: 0.2 }}
+      style={{ width: "100%" }}
+    >
+      <CustomContainer
+        bgColor="white"
+        position="fixed"
+        width="100%"
+        zIndex="12"
+        height="35vh"
+        padding="0.8em"
+        overflow="auto"
+        sx={scrollBarStyle({
+          hidden: true,
+          color: "primary",
+          borderRadius: "lg",
+        })}
+        // transition="all ease-in-out 0.5s"
+        onKeyDown={(e: any) => {
+          alert(e.keyCode);
+        }}
+        {...props}
       >
-        <CustomContainer
-          bgColor="white"
-          opacity="1"
-          zIndex={11}
-          position="fixed"
-          height="35vh"
-          padding="0.8em"
-          overflow="auto"
-          sx={scrollBarStyle({
-            hidden: true,
-            color: "primary",
-            borderRadius: "lg",
-          })}
-          transition="all ease-in-out 0.5s"
-          onKeyDown={(e: any) => {
-            alert(e.keyCode);
-          }}
-          {...props}
-        >
-          {items.map(({ item }, indx) => (
-            <Box
-              borderRadius="md"
-              bgColor={selectedItem.id === item.id ? "primary.100" : "white"}
-              color={selectedItem.id === item.id ? "white" : "gray.800"}
-              _hover={{
-                bgColor:
-                  selectedItem.id === item.id ? "primary.200" : "gray.200",
-              }}
-              key={indx}
-              width="full"
-              padding="0.8em"
-              cursor="pointer"
-              onClick={() => handleSelectItem(item)}
-              transition="all ease-in-out 0.2s"
-            >
-              {item.name}
-            </Box>
-          ))}
-        </CustomContainer>
-      </motion.div>
-    </AnimatePresence>
+        {items.map(({ item }, indx) => (
+          <Box
+            borderRadius="md"
+            bgColor={selectedItem.id === item.id ? "primary.100" : "white"}
+            color={selectedItem.id === item.id ? "white" : "gray.800"}
+            _hover={{
+              bgColor: selectedItem.id === item.id ? "primary.200" : "gray.200",
+            }}
+            key={indx}
+            width="full"
+            padding="0.8em"
+            cursor="pointer"
+            onClick={() => handleSelectItem(item)}
+            transition="all ease-in-out 0.2s"
+          >
+            {item.name}
+          </Box>
+        ))}
+      </CustomContainer>
+    </motion.div>
+    // </AnimatePresence>
   );
 };
 
