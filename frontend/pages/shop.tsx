@@ -1,5 +1,4 @@
 import type { NextPage } from "next";
-import WithAuth from "../util/WithAuth";
 import Header from "../components/Layout/Header";
 import Footer from "../components/Layout/Footer";
 import ProductType from "../components/Shop/Product";
@@ -40,7 +39,7 @@ const Shop: NextPage = () => {
   }, []);
 
   useEffect(() => {
-    setTimeout(() => setLoading(false), 200);
+    setTimeout(() => setLoading(false), 100);
   }, [allProducts]);
 
   return (
@@ -50,7 +49,7 @@ const Shop: NextPage = () => {
         originalProducts={originalProducts}
       />
       <Box
-        padding="6% 5% 3% 3%"
+        padding="6rem 5% 3% 3%"
         overflow="hidden"
         onScroll={(e: any) => alert(e.target.scrollTop)}
       >
@@ -92,4 +91,4 @@ const Shop: NextPage = () => {
   );
 };
 
-export default WithAuth(Shop, { admin: false });
+export default Shop;
