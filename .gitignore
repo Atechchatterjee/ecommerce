@@ -23,10 +23,10 @@
 /frontend/yarn-error.log*
 
 # /frontend/# local env files
-# /frontend/.env.local
-# /frontend/.env.development.local
-# /frontend/.env.test.local
-# /frontend/.env.production.local
+/frontend/.env.local
+/frontend/.env.development.local
+/frontend/.env.test.local
+/frontend/.env.production.local
 
 # backend
 /backend/data
@@ -34,6 +34,7 @@
 /backend/venv
 /backend/src/media/images/
 /backend/src/**/__pycache__/
+/backend/src/.env
 **/migrations
 
 # vercel
