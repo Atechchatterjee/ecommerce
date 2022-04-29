@@ -1,16 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { Box, Link, LinkProps, Grid, GridItem, Flex } from "@chakra-ui/layout";
+import {
+  Box,
+  Link,
+  Text,
+  LinkProps,
+  Grid,
+  GridItem,
+  Flex,
+} from "@chakra-ui/layout";
 import { InputGroup, InputGroupProps, InputRightAddon } from "@chakra-ui/input";
-import { Button, ButtonProps } from "@chakra-ui/react";
+import { Button, ButtonProps, Image, Tooltip } from "@chakra-ui/react";
 import { isAuthenticated } from "../../util/Authenticated";
 import logout from "../../util/Logout";
 import { useWindowDimensions } from "../../hooks/useWindowDimensions";
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaShoppingCart } from "react-icons/fa";
 import { CustomField } from "../Custom/CustomField";
 import Fuse from "fuse.js";
 import CategorySidebar from "../Widgets/CategorySidebar";
 import { useCategoryData } from "../../hooks/useCategoryData";
 import { MdMenu } from "react-icons/md";
+import { CategoryNode } from "../../util/Tree";
+import { scrollBarStyle } from "../../util/ScrollBarStyle";
+import { AiFillShopping } from "react-icons/ai";
 
 interface HeaderProps {
   products?: [any[], (_: any[]) => void];
@@ -40,17 +51,23 @@ const Header: React.FC<HeaderProps> = ({ products, originalProducts }) => {
 
   const HamburgerButton = ({ ...props }: ButtonProps) => {
     return (
-      <Button
-        variant="blurSolid"
-        padding="3.5%"
-        borderRadius="md"
-        onClick={() => {
-          setShowSideBar(!showSideBar);
-        }}
-        {...props}
-      >
-        <MdMenu size="20" />
-      </Button>
+      <Tooltip label="All Categories">
+        <Button
+          variant="unstyled"
+          _focus={{ outline: "none", outlineWidth: "0" }}
+          _hover={{ color: "white" }}
+          padding="3.5%"
+          borderRadius="md"
+          textAlign="center"
+          alignContent="center"
+          onClick={() => {
+            setShowSideBar(!showSideBar);
+          }}
+          {...props}
+        >
+          <MdMenu size="20" />
+        </Button>
+      </Tooltip>
     );
   };
 
@@ -157,6 +174,29 @@ const Header: React.FC<HeaderProps> = ({ products, originalProducts }) => {
     }
   };
 
+  const DisplayCategories = ({ cur }: { cur: CategoryNode }): any[] => {
+    if (cur.children.length === 0) return [];
+    return cur.children.map((child: CategoryNode) => {
+      return (
+        <>
+          <Text
+            key={child.val.id}
+            fontFamily="Sora"
+            fontSize="0.9em"
+            cursor="pointer"
+            _hover={{ color: "white" }}
+          >
+            {child.val.name}
+          </Text>
+          {DisplayCategories({ cur: child })}
+        </>
+      );
+    });
+  };
+
+  const redirectToShop = () => window.location.assign("/shop");
+  const redirectToCheckout = () => window.location.assign("/checkout");
+
   return (
     <Box>
       <CategorySidebar
@@ -169,31 +209,75 @@ const Header: React.FC<HeaderProps> = ({ products, originalProducts }) => {
       <Box
         width="full"
         className="header-up"
-        height="4.4rem"
+        height="4.4em"
         position="fixed"
         backgroundColor="primary.800"
         zIndex={10}
         color="white"
-        padding="0.7%"
+        padding="0.7rem"
         overflow="hidden"
       >
         <Flex
           flexDirection="row"
           gridGap="10"
-          padding="1%"
+          padding="1rem"
           height="full"
           alignItems="center"
         >
-          <Box flex="2" textAlign="left" ml="-0.5%">
-            <HamburgerButton />
+          <Box flex="2.3" textAlign="left">
+            <Image src="/CND_logo.jpg" w="6rem" h="2.7em" cursor="pointer" />
           </Box>
           <Box flex="5">
             <SearchBar />
           </Box>
-          <Box flex="2.5" textAlign="right">
+          <Flex
+            flex="1.5"
+            textAlign="right"
+            flexDirection="row"
+            gridGap="5"
+            justifyContent="right"
+            alignItems="center"
+          >
+            <Tooltip label="Cart">
+              <Box onClick={redirectToCheckout}>
+                <FaShoppingCart size="20" style={{ cursor: "pointer" }} />
+              </Box>
+            </Tooltip>
+            <Tooltip label="Shop">
+              <Box onClick={redirectToShop}>
+                <AiFillShopping size="20" style={{ cursor: "pointer" }} />
+              </Box>
+            </Tooltip>
+          </Flex>
+          <Box flex="0.5" textAlign="right">
             <LoginLink />
           </Box>
         </Flex>
+      </Box>
+      <Box>
+        <Box
+          className="sub-header"
+          sx={scrollBarStyle({ hidden: true })}
+          height="7.4rem"
+          overflow="scroll"
+          justifyItems="center"
+          bgColor="primary.200"
+          color="gray.300"
+        >
+          <Flex
+            flexDirection="row"
+            gridGap={10}
+            w="max-content"
+            paddingTop="5.2rem"
+            flexWrap="nowrap"
+            textAlign="justify"
+          >
+            <Box flex="0.1">
+              <HamburgerButton mt="-25%" ml="40%" />
+            </Box>
+            {categoryTree && DisplayCategories({ cur: categoryTree.root })}
+          </Flex>
+        </Box>
       </Box>
     </Box>
   );
