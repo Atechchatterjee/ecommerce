@@ -22,6 +22,7 @@ import { useWindowDimensions } from "../../hooks/useWindowDimensions";
 import { SpecTableContext } from "../../context/SpecTableContext";
 import SpecificationTable from "./ProductPage/SpecificationTable";
 import OptionsModal from "./ProductPage/OptionsModal";
+import { isAuthenticated } from "../../util/Authenticated";
 
 const OptionButtons: React.FC<{
   optionValues: { id: number; value: string }[];
@@ -117,6 +118,7 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
   const [openAddRowModal, setOpenAddRowModal] = useState<boolean>(false);
   const [modifyAddRowModal, setModifyAddRowModal] = useState<boolean>(false);
   const [isOpenOptionModal, setIsOpenOptionModal] = useState<boolean>(false);
+  const [authenticated, setAuthenticated] = useState<boolean>(false);
 
   const createTableHeading = () => {
     if (specTableHeading.length === 0)
@@ -148,18 +150,26 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
   }, [fetchedOptions]);
 
   useEffect(() => {
-    checkIfInCart(product.id)
-      .then(() => setProductExistsInCart(true))
-      .catch(() => setProductExistsInCart(false));
+    isAuthenticated()
+      .then(() => {
+        checkIfInCart(product.id)
+          .then(() => setProductExistsInCart(true))
+          .catch(() => setProductExistsInCart(false));
+        setAuthenticated(true);
+      })
+      .catch(() => setAuthenticated(false));
   }, []);
 
   const handleAddToCart = () => {
-    setAddToCartLoader(true);
-    addProductToCart(quantity, product.id);
-    setTimeout(() => {
-      setProductExistsInCart(true);
-      setAddToCartLoader(false);
-    }, 200);
+    if (!authenticated) window.location.assign("/login");
+    else {
+      setAddToCartLoader(true);
+      addProductToCart(quantity, product.id);
+      setTimeout(() => {
+        setProductExistsInCart(true);
+        setAddToCartLoader(false);
+      }, 200);
+    }
   };
 
   return (
