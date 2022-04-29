@@ -49,7 +49,7 @@ const Shop: NextPage = () => {
         originalProducts={originalProducts}
       />
       <Box
-        padding="6rem 5% 3% 3%"
+        padding="2rem 5% 3% 3%"
         overflow="hidden"
         onScroll={(e: any) => alert(e.target.scrollTop)}
       >
