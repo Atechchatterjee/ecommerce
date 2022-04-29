@@ -89,6 +89,7 @@ const DisplayCategories = ({
                 height="inherit"
                 alignContent="right"
                 onClick={() => handleDeleteCategory(category)}
+                isDisabled={category.children.length > 0}
               >
                 <FaTrash />
               </Button>
