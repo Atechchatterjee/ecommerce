@@ -7,6 +7,7 @@ import Header from "../../components/Layout/Header";
 import ClientProductPage from "../../components/Shop/ClientProductPage";
 import { ProductInfoContext } from "../../context/ProductInfoContext";
 import { getProductInfo } from "../../util/ProductInfo";
+import Footer from "../../components/Layout/Footer";
 
 const ProductPage: NextPage = () => {
   const router = useRouter();
@@ -33,6 +34,7 @@ const ProductPage: NextPage = () => {
       >
         <Header />
         <ClientProductPage product={product} />
+        <Footer />
       </ProductInfoContext.Provider>
     ) : (
       <></>
