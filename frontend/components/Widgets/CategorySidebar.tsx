@@ -31,8 +31,9 @@ const DisplayCategories = ({
         <AnimatePresence key={indx}>
           <motion.div
             key="modal"
-            initial={{ x: -10 }}
+            initial={{ x: -10, opacity: "0.4" }}
             animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.2 }}
             exit={{ opacity: 0 }}
           >
             <Box
@@ -126,7 +127,9 @@ const CategorySidebar = ({
             height: "full",
           }}
           key="modal"
-          animate={{ x: 3, opacity: 1 }}
+          initial={{ opacity: 0.5, x: -5 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.2 }}
           exit={{ opacity: 0 }}
         >
           <Box
