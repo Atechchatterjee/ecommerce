@@ -49,7 +49,7 @@ def create_product(request):
 
 @api_view(['DELETE'])
 @permission_classes([Is_Admin])
-def delete_product(request, product_id):
+def delete_product(_, product_id):
     try:
         Product.objects.get(product_id=product_id).delete()
         return Response(status=status.HTTP_200_OK)
@@ -57,7 +57,7 @@ def delete_product(request, product_id):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-def get_all_products(request):
+def get_all_products():
     try:
         all_products = Product.objects.all()
         serialized_products = ProductSerializer(
@@ -88,6 +88,12 @@ def update_product(request):
         'id', 'name', 'description', 'price'
     )(request.data)
 
+    category_from_model = None
+
+    if 'category' in request.data:
+        category = request.data['category']
+        category_from_model = fetch_category(category)
+
     image = request.data["image"] if 'image' in request.data else None
 
     try:
@@ -95,7 +101,11 @@ def update_product(request):
         product.name = name
         product.price = price
         product.description = description
-        product.save()
+        if category_from_model is not None:
+            product.category = category_from_model
+            product.save()
+        else:
+            product.save()
         if image is not None:
             save_product_images(product, [image])
         return Response(status=status.HTTP_200_OK)
