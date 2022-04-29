@@ -65,31 +65,31 @@ const Col1 = ({ ...props }: FlexProps) => (
     </Text>
     <HStack>
       <Avatar
-        src="facebook_circle.svg"
+        src="/facebook_circle.svg"
         size="sm"
         backgroundColor="white"
         style={{ cursor: "pointer" }}
       />
       <Avatar
-        src="twitter_circle.svg"
+        src="/twitter_circle.svg"
         size="sm"
         backgroundColor="white"
         style={{ cursor: "pointer" }}
       />
       <Avatar
-        src="instagram_circle.svg"
+        src="/instagram_circle.svg"
         size="sm"
         backgroundColor="white"
         style={{ cursor: "pointer" }}
       />
       <Avatar
-        src="youtube_circle.svg"
+        src="/youtube_circle.svg"
         size="sm"
         backgroundColor="white"
         style={{ cursor: "pointer" }}
       />
       <Avatar
-        src="pinterest_circle.svg"
+        src="/pinterest_circle.svg"
         size="sm"
         backgroundColor="white"
         style={{ cursor: "pointer" }}
