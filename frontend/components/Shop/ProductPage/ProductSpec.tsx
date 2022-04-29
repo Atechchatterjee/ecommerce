@@ -7,13 +7,11 @@ import {
   Image,
   Flex,
   Box,
-  HStack,
 } from "@chakra-ui/react";
 import axios from "axios";
 import constants from "../../../util/Constants";
 import SpecificationTable from "./SpecificationTable";
 import { SpecTableContext } from "../../../context/SpecTableContext";
-import OptionModal from "./OptionsModal";
 import ImageGallery from "../Product/ImageGallery";
 import DragUpload from "../../Custom/DragUpload";
 import { ProductInfoContext } from "../../../context/ProductInfoContext";
@@ -37,6 +35,8 @@ const productValueReducer = (state: any, action: any) => {
       return { ...state, description: action.payload };
     case "set-product-price":
       return { ...state, price: action.payload };
+    case "set-product-category":
+      return { ...state, category: action.payload };
     default:
       return state;
   }
@@ -60,6 +60,7 @@ const UpdateProductValueForm = ({
       name: product.name,
       description: product.description,
       price: product.price,
+      category: product.category,
     }
   );
   const [customTree, setCustomTree] = useState<CategoryTree>();
@@ -71,6 +72,10 @@ const UpdateProductValueForm = ({
     getAllCategory().then((categories) => {
       const customTree = convertToCustomTree(categories);
       setCustomTree(customTree);
+      // finding the category that matches the product category
+      customTree.findNodeById(product.category, customTree.root, (category) => {
+        setSelectedCategory(category);
+      });
     });
   }, []);
 
@@ -105,6 +110,31 @@ const UpdateProductValueForm = ({
     });
   };
 
+  const CategorySearchEl = () => {
+    if (selectedCategory && customTree) {
+      return (
+        <CategorySearch
+          flex="1"
+          categoryTree={customTree}
+          value={selectedCategory.val.name}
+          getDropDownStatus={(status) => {
+            if (getDropDownStatus) getDropDownStatus(status);
+          }}
+        />
+      );
+    } else if (customTree) {
+      return (
+        <CategorySearch
+          flex="1"
+          categoryTree={customTree}
+          getDropDownStatus={(status) => {
+            if (getDropDownStatus) getDropDownStatus(status);
+          }}
+        />
+      );
+    }
+  };
+
   return (
     <Flex flexDirection="column" gridGap={5} w="100%" mb="5%">
       <CustomField
@@ -131,28 +161,18 @@ const UpdateProductValueForm = ({
       />
       {customTree ? (
         <Flex flexDirection="row" gridGap={2}>
-          {selectedCategory ? (
-            <CategorySearch
-              flex="1"
-              categoryTree={customTree}
-              value={selectedCategory.val.name}
-              getDropDownStatus={(status) => {
-                if (getDropDownStatus) getDropDownStatus(status);
-              }}
-            />
-          ) : (
-            <CategorySearch
-              flex="1"
-              categoryTree={customTree}
-              getDropDownStatus={(status) => {
-                if (getDropDownStatus) getDropDownStatus(status);
-              }}
-            />
-          )}
           <SelectCategory
+            w="100%"
             height="4.9vh"
+            text={selectedCategory?.val.name || "Select Category"}
             selectCb={({ selectedCategory }) => {
-              if (selectedCategory) setSelectedCategory(selectedCategory);
+              if (selectedCategory) {
+                setSelectedCategory(selectedCategory);
+                dispatchProductValues({
+                  type: "set-product-category",
+                  payload: selectedCategory.val.id,
+                });
+              }
             }}
           />
         </Flex>
@@ -164,12 +184,14 @@ const UpdateProductValueForm = ({
         size="lg"
         mt="3%"
         mb="5%"
-        variant="primarySolid"
+        variant="secondarySolid"
         onClick={updateProduct}
         position="unset"
       >
         {loading ? <Spinner size="sm" /> : "Save"}
       </Button>
+
+      {/* <pre>{JSON.stringify(productValues, null, 2)}</pre> */}
     </Flex>
   );
 };
