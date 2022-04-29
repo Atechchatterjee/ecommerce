@@ -10,6 +10,11 @@ export default extendTheme({
     Button: ButtonStyles,
     Input: InputStyles,
     Checkbox: CheckBoxStyles,
+    Tooltip: {
+      baseStyle: {
+        bg: "primary.100",
+      }
+    }
   },
   styles: {
     global: {
