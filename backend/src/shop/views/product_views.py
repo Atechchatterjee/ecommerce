@@ -57,7 +57,7 @@ def delete_product(_, product_id):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-def get_all_products():
+def get_all_products(request):
     try:
         all_products = Product.objects.all()
         serialized_products = ProductSerializer(
