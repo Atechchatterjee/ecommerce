@@ -9,4 +9,4 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - NODE_ENV=developement
+      - NEXT_PUBLIC_APP_ENV=developement

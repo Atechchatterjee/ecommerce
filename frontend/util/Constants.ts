@@ -1,6 +1,6 @@
 export default {
   url:
-    process.env.NODE_ENV === 'production'
+    process.env.NEXT_PUBLIC_APP_ENV === 'production'
       ? process.env.NEXT_PUBLIC_PROD_URL
       :
        process.env.NEXT_PUBLIC_URL,
