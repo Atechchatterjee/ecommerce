@@ -108,7 +108,7 @@ const CategorySidebar = ({
 
   const DynamicHeading = () => {
     const category = peekCategoryStack();
-    return category.val !== null ? category.val.name : "Categories";
+    return category.val ? category.val.name : "Categories";
   };
 
   const handleClose = () => {
