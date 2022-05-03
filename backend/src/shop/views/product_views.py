@@ -2,12 +2,14 @@ from operator import itemgetter
 from rest_framework import status
 from ..models import (
   Product,
+  Units
 )
 from rest_framework.response import Response
 from authentication.backends import Is_Admin
 from rest_framework.decorators import parser_classes
 from ..serializers import (
     ProductSerializer,
+    UnitSerializer,
 )
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.decorators import api_view, permission_classes
@@ -141,5 +143,37 @@ def add_product_images(request):
         product = Product.objects.get(product_id=product_id)
         save_product_images(product, images)
         return Response(status=status.HTTP_200_OK)
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+@permission_classes([Is_Admin])
+def add_units(request):
+    unit_value = request.data['unitValue']
+    print(f"unit_value: {unit_value}")
+    try:
+        Units(value=unit_value).save()
+        return Response(status=status.HTTP_200_OK)
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([Is_Admin])
+def remove_units(request):
+    unit_id = request.data['unitId']
+    try:
+        Units.objects.get(unit_id=unit_id).delete()
+        return Response(status=status.HTTP_200_OK)
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def get_units(request):
+    try:
+        units = Units.objects.filter(value__isnull=False)
+        units_serialized = UnitSerializer(units, many=True).data
+        return Response({"units": units_serialized}, status=status.HTTP_200_OK)
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
