@@ -134,8 +134,8 @@ MEDIA_URL = '/media/'
 print(f"static root = {STATIC_ROOT} \nmedia root = {MEDIA_ROOT}")
 
 # SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
-CSRF_COOKIE_SAMESITE = 'Strict'
-SESSION_COOKIE_SAMESITE = 'Strict'
+CSRF_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_NAME = "user_session"
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SECURE = True
