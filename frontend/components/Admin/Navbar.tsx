@@ -28,7 +28,7 @@ interface NavLinkProps {
 const Links = [
   "Dashboard",
   "Purchase",
-  ["Catalogs", "Product", "Category", "All-Products"],
+  ["Catalogs", "Product", "Category", "All-Products", "Add-Units"],
   "Orders",
   "Customers",
 ];
