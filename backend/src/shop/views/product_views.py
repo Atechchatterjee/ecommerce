@@ -24,19 +24,21 @@ from .util import (
 def create_product(request):
     request_params = [
         'productName', 'productDescription',
-        'productPrice', 'categoryId']
+        'productPrice', 'categoryId', 'unitId']
     [
-        product_name, product_description, product_price, category_id
+        product_name, product_description, product_price, category_id, unit_id
     ] = [
         request.data[request_param] for request_param in request_params
     ]
+    print(f"unitId: {unit_id}")
     try:
         new_product = Product(
             name=product_name,
             price = str(product_price),
             description=product_description,
             category=fetch_category(
-                int(category_id)) if category_id != "" else None
+                int(category_id)) if category_id != "" else None,
+            unit=Units.objects.get(unit_id=int(unit_id)) if int(unit_id) != -1 else None
         )
         new_product.save()
         images = []
@@ -86,8 +88,8 @@ def get_all_products(request):
 @api_view(['POST'])
 @permission_classes([Is_Admin])
 def update_product(request):
-    (id, name, description, price) = itemgetter(
-        'id', 'name', 'description', 'price'
+    (id, name, description, price, unit) = itemgetter(
+        'id', 'name', 'description', 'price', 'unit'
     )(request.data)
 
     category_from_model = None
@@ -103,11 +105,11 @@ def update_product(request):
         product.name = name
         product.price = price
         product.description = description
+        if unit:
+            product.unit = Units.objects.get(unit_id=int(unit))
         if category_from_model is not None:
             product.category = category_from_model
-            product.save()
-        else:
-            product.save()
+        product.save()
         if image is not None:
             save_product_images(product, [image])
         return Response(status=status.HTTP_200_OK)
@@ -120,8 +122,9 @@ def get_product(request):
     id = request.data['id']
     try:
         product = Product.objects.get(product_id=int(id))
+        serialized_product = ProductSerializer(product).data
         serialized_product = {
-            **ProductSerializer(product).data,
+            **serialized_product,
             "image": get_product_images(product)
         }
         return Response({"product": serialized_product},
