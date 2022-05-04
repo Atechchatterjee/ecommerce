@@ -30,10 +30,9 @@ const AddUnits: React.FC = () => {
       >
         {allUnits.map((unit: any, indx: number) => {
           return (
-            <Flex flexDirection="row" gridGap={3} w="100%" flex="1">
+            <Flex flexDirection="row" gridGap={3} w="100%" flex="1" key={indx}>
               <Box
                 borderRadius="md"
-                key={indx}
                 padding="3%"
                 boxShadow="rgba(99, 99, 99, 0.12) 1px 3px 8px 1px"
                 flex="2"
