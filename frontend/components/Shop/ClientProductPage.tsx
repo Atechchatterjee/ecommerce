@@ -9,6 +9,7 @@ import {
   Text,
   Spinner,
   Grid,
+  Flex,
 } from "@chakra-ui/react";
 import constants from "../../util/Constants";
 import axios from "axios";
@@ -235,19 +236,28 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
               {product.description}
             </Text>
 
-            <HStack
+            <Flex
               marginTop="2em"
+              flexDirection="row"
               color="primary.900"
+              gridGap={2}
               fontWeight="semibold"
               position="relative"
             >
-              <Text fontSize="16" marginTop="0.7em">
-                ₹
-              </Text>
-              <Text fontSize="2em" fontWeight="600">
-                {product.price}
-              </Text>
-            </HStack>
+              <Flex flexDirection="row" gridGap={2}>
+                <Text fontSize="16" mt="0.9rem">
+                  ₹
+                </Text>
+                <Text fontSize="2em" fontWeight="600">
+                  {product.price}
+                </Text>
+              </Flex>
+              {product.unit && (
+                <Text justifyItems="center" mt="0.9rem" fontWeight="medium">
+                  per {product.unit.value}
+                </Text>
+              )}
+            </Flex>
             <HStack width="80%" marginTop="2em">
               <Text width="30%" fontWeight="semibold" isTruncated>
                 Quantity :
