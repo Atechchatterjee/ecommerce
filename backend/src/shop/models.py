@@ -24,9 +24,6 @@ class Units(models.Model):
     unit_id = models.AutoField(primary_key=True)
     value = models.TextField(null=True)
 
-    def __str__(self):
-        return self.value
-
 class Cart_Details(models.Model):
     id = models.AutoField(primary_key=True)
     user_id = models.ForeignKey('authentication.User', verbose_name="user_id", on_delete=models.CASCADE)
