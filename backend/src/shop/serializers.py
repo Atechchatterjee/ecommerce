@@ -11,11 +11,17 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ["category_id", "category_name", "sub_category"]
 
 
+class UnitSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Units
+        fields = ["unit_id", "value"]
+
+
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ["product_id", "name", "description",
-                  "price", "category"]
+        fields = "__all__"
+        depth = 1
 
 class SpecificationTableContentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -28,11 +34,6 @@ class ProductImageSerializer(serializers.ModelSerializer):
         model = Product_Images
         fields = ["image"]
 
-
-class UnitSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Units
-        fields = ["unit_id", "value"]
 
 class CartDetailsSerializer(serializers.ModelSerializer):
     class Meta:
