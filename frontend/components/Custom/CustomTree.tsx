@@ -150,30 +150,16 @@ const CustomTreeWrapper = ({
                   <NewCategoryInputField />
                 )}
                 {child.children.length > 0 && (
-                  <AnimatePresence key={indx}>
-                    <motion.div
-                      initial={{
-                        y: 0,
-                        opacity:
-                          selectedNodeId && selectedNodeId[child.val.parentId]
-                            ? 0
-                            : 1,
-                      }}
-                      animate={{ y: 0, opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                    >
-                      <CustomTree
-                        {...{
-                          root: child,
-                          key,
-                          selectCb,
-                          addCb,
-                          deleteCb,
-                          disableRightClick,
-                        }}
-                      />
-                    </motion.div>
-                  </AnimatePresence>
+                  <CustomTree
+                    {...{
+                      root: child,
+                      key,
+                      selectCb,
+                      addCb,
+                      deleteCb,
+                      disableRightClick,
+                    }}
+                  />
                 )}
               </Box>
             </Box>
