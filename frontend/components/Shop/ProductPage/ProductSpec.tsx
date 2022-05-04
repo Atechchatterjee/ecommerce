@@ -26,6 +26,8 @@ import {
   convertToCustomTree,
 } from "../../../util/Tree";
 import SelectCategory, { getAllCategory } from "../../Admin/SelectCategory";
+import SelectUnitMenu from "../../Widgets/SelectUnitMenu";
+import { fetchUnits } from "../../../services/UnitService";
 
 const productValueReducer = (state: any, action: any) => {
   switch (action.type) {
@@ -50,6 +52,8 @@ const UpdateProductValueForm = ({
   getDropDownStatus,
 }: UpdateProductValueFormProps) => {
   const [loading, setLoading] = useState<boolean>(false);
+  const [allUnits, setAllUnits] = useState<any[]>([]);
+  const [selectedUnit, setSelectedUnit] = useState<any>();
 
   const { productInfo } = useContext(ProductInfoContext);
   const [product, setProduct] = productInfo;
@@ -60,7 +64,7 @@ const UpdateProductValueForm = ({
       name: product.name,
       description: product.description,
       price: product.price,
-      category: product.category,
+      category: product.category.category_id,
     }
   );
   const [customTree, setCustomTree] = useState<CategoryTree>();
@@ -81,12 +85,18 @@ const UpdateProductValueForm = ({
 
   const updateProduct = () => {
     setLoading(true);
+    console.log({
+      id: product.id,
+      ...productValues,
+      unit: selectedUnit?.unit_id,
+    });
     axios
       .post(
         `${constants.url}/shop/updateproduct/`,
         {
           id: product.id,
           ...productValues,
+          unit: selectedUnit?.unit_id,
         },
         {
           withCredentials: true,
@@ -109,6 +119,16 @@ const UpdateProductValueForm = ({
       payload: e.target.value,
     });
   };
+
+  useEffect(() => {
+    fetchUnits().then((units) => setAllUnits(units));
+  }, []);
+
+  useEffect(() => {
+    if (product.unit) {
+      setSelectedUnit(product.unit);
+    }
+  }, [product]);
 
   const CategorySearchEl = () => {
     if (selectedCategory && customTree) {
@@ -152,18 +172,27 @@ const UpdateProductValueForm = ({
         value={productValues.description}
         onChange={(e: any) => handleChange(e, "set-product-description")}
       />
-      <CustomField
-        w="100%"
-        label="Product Price"
-        value={productValues.price}
-        type="number"
-        onChange={(e: any) => handleChange(e, "set-product-price")}
-      />
+      <Flex flexDirection="row" gridGap={3} w="100%">
+        <CustomField
+          w="100%"
+          label="Product Price"
+          value={productValues.price}
+          type="number"
+          onChange={(e: any) => handleChange(e, "set-product-price")}
+        />
+        <SelectUnitMenu
+          mt="1.8rem"
+          allUnits={allUnits}
+          selectedUnit={selectedUnit}
+          setSelectedUnit={setSelectedUnit}
+        />
+      </Flex>
       {customTree ? (
         <Flex flexDirection="row" gridGap={2}>
           <SelectCategory
             w="100%"
             height="4.9vh"
+            mt="2%"
             text={selectedCategory?.val.name || "Select Category"}
             selectCb={({ selectedCategory }) => {
               if (selectedCategory) {
@@ -190,8 +219,6 @@ const UpdateProductValueForm = ({
       >
         {loading ? <Spinner size="sm" /> : "Save"}
       </Button>
-
-      {/* <pre>{JSON.stringify(productValues, null, 2)}</pre> */}
     </Flex>
   );
 };
