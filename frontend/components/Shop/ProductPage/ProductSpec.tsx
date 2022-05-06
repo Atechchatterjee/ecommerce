@@ -193,7 +193,7 @@ const UpdateProductValueForm = ({
             w="100%"
             height="4.9vh"
             mt="2%"
-            text={selectedCategory?.val.name || "Select Category"}
+            text={product.category.category_name || "Select Category"}
             selectCb={({ selectedCategory }) => {
               if (selectedCategory) {
                 setSelectedCategory(selectedCategory);
