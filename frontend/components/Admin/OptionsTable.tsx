@@ -3,10 +3,10 @@ import { fetchOptions } from "../../services/OptionsService";
 import CustomContainer from "../Custom/CustomContainer";
 import CustomTable from "../Custom/CustomTable";
 import { ProductInfoContext } from "../../context/ProductInfoContext";
-import { Box, Button, ContainerProps, Tag, Text } from "@chakra-ui/react";
+import { Box, ContainerProps, Tag, Text } from "@chakra-ui/react";
 import { scrollBarStyle } from "../../util/ScrollBarStyle";
+import { AddButton } from "../Custom/CustomButtons";
 import OptionModal from "../Shop/ProductPage/OptionsModal";
-import { FiPlus } from "react-icons/fi";
 
 const OptionsTable = ({ ...props }: ContainerProps) => {
   const [rows, setRows] = useState<any[][]>();
@@ -69,15 +69,7 @@ const OptionsTable = ({ ...props }: ContainerProps) => {
           product={product}
           triggerOpen={[isOpenOptionModal, setIsOpenOptionModal]}
         >
-          <Button
-            width="8%"
-            mb="0.5em"
-            padding="0.8em"
-            variant="primarySolid"
-            onClick={() => setIsOpenOptionModal(true)}
-          >
-            <FiPlus size="30" />
-          </Button>
+          <AddButton onClick={() => setIsOpenOptionModal(true)} />
         </OptionModal>
       </Box>
     </CustomContainer>

@@ -5,7 +5,7 @@ import React, {
   useReducer,
   useState,
 } from "react";
-import { Spinner, Button, Flex, Text } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 import CustomTable from "../../Custom/CustomTable";
 import { SpecTableContext } from "../../../context/SpecTableContext";
 import { ProductInfoContext } from "../../../context/ProductInfoContext";
@@ -19,8 +19,7 @@ import {
   deleteRows,
   modifyTableContent,
 } from "../../../services/SpecTableService";
-import { FaTrash } from "react-icons/fa";
-import { TiTick } from "react-icons/ti";
+import { DeleteButton, SaveButton } from "../../Custom/CustomButtons";
 
 const newRowReducer = (state: any, action: any) => {
   switch (action.type) {
@@ -286,23 +285,18 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
             padding="3%"
             key="2"
           >
-            <Button
-              variant="primarySolid"
-              padding="0.8em"
+            <SaveButton
               onClick={() =>
                 oneRowSelected ? handleModifyRow() : handleAddRow()
               }
-            >
-              {loading.saveBtn ? (
-                <Spinner size="sm" />
-              ) : (
-                <TiTick size="1.5rem" />
-              )}
-            </Button>
+              isLoading={loading.saveBtn}
+            />
             {tableContentStruct.length !== 0 && (
-              <Button variant="primarySolid" onClick={handleDelete} key={1}>
-                {loading.deleteBtn ? <Spinner size="sm" /> : <FaTrash />}
-              </Button>
+              <DeleteButton
+                onClick={handleDelete}
+                key={1}
+                isLoading={loading.deleteBtn}
+              />
             )}
           </Flex>,
         ]}
