@@ -28,7 +28,7 @@ interface NavLinkProps {
 const Links = [
   "Dashboard",
   "Purchase",
-  ["Catalogs", "Product", "Category", "All-Products", "Add-Units"],
+  ["Catalogs", "Product", "Category", "All-Products", "Add-Units", "Enter-GST"],
   "Orders",
   "Customers",
 ];
@@ -84,7 +84,11 @@ const Navbar: React.FC = () => {
                       >
                         {link[0]}
                       </MenuButton>
-                      <MenuList bg="#091353" borderColor="#212C6B" zIndex={11}>
+                      <MenuList
+                        bg="primary.500"
+                        borderColor="primary.500"
+                        zIndex={11}
+                      >
                         {link.slice(1).map((item) => (
                           <MenuItem
                             key={item}
