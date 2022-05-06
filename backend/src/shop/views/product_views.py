@@ -1,6 +1,8 @@
 from operator import itemgetter
+import re
 from rest_framework import status
 from ..models import (
+  GST,
   Product,
   Units
 )
@@ -8,6 +10,7 @@ from rest_framework.response import Response
 from authentication.backends import Is_Admin
 from rest_framework.decorators import parser_classes
 from ..serializers import (
+    GSTSerializer,
     ProductSerializer,
     UnitSerializer,
 )
@@ -24,13 +27,12 @@ from .util import (
 def create_product(request):
     request_params = [
         'productName', 'productDescription',
-        'productPrice', 'categoryId', 'unitId']
+        'productPrice', 'categoryId', 'unitId', 'gstId']
     [
-        product_name, product_description, product_price, category_id, unit_id
+        product_name, product_description, product_price, category_id, unit_id, gst_id
     ] = [
         request.data[request_param] for request_param in request_params
     ]
-    print(f"unitId: {unit_id}")
     try:
         new_product = Product(
             name=product_name,
@@ -40,6 +42,10 @@ def create_product(request):
                 int(category_id)) if category_id != "" else None,
             unit=Units.objects.get(unit_id=int(unit_id)) if int(unit_id) != -1 else None
         )
+        if gst_id != "-1" or gst_id != "":
+            new_product.gst = GST.objects.get(id=int(gst_id))
+        else:
+            print("GST not selected")
         new_product.save()
         images = []
         for key in request.data:
@@ -61,7 +67,7 @@ def delete_product(_, product_id):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-def get_all_products(request):
+def get_all_products(_):
     try:
         all_products = Product.objects.all()
         serialized_products = ProductSerializer(
@@ -88,9 +94,12 @@ def get_all_products(request):
 @api_view(['POST'])
 @permission_classes([Is_Admin])
 def update_product(request):
-    (id, name, description, price, unit) = itemgetter(
-        'id', 'name', 'description', 'price', 'unit'
+    (id, name, description, price) = itemgetter(
+        'id', 'name', 'description', 'price'
     )(request.data)
+    unit = None
+    if 'unit' in request.data:
+        unit = request.data['unit']
 
     category_from_model = None
 
@@ -105,7 +114,7 @@ def update_product(request):
         product.name = name
         product.price = price
         product.description = description
-        if unit:
+        if unit != None:
             product.unit = Units.objects.get(unit_id=int(unit))
         if category_from_model is not None:
             product.category = category_from_model
@@ -179,4 +188,34 @@ def get_units(request):
         units_serialized = UnitSerializer(units, many=True).data
         return Response({"units": units_serialized}, status=status.HTTP_200_OK)
     except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+@permission_classes([Is_Admin])
+def add_gst(request):
+    print(f"request.data: {request.data}")
+    (c_gst, s_gst, i_gst) =  itemgetter('cgst', 'sgst', 'igst')(request.data)
+    try:
+        GST(cgst=int(c_gst), sgst=int(s_gst), igst=int(i_gst)).save()
+        return Response(status=status.HTTP_200_OK)
+    except: 
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def fetch_gst(_):
+    try:
+        all_gst_data = GST.objects.all()
+        serialized_data = GSTSerializer(all_gst_data, many=True).data
+        return Response(serialized_data, status=status.HTTP_200_OK)
+    except: 
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+@permission_classes([Is_Admin])
+def delete_gst(_, gst_ids):
+    try:
+        ids = [int(id) for id in gst_ids.split(",")]
+        GST.objects.filter(id__in=ids).delete()
+        return Response(status=status.HTTP_200_OK)
+    except: 
         return Response(status=status.HTTP_400_BAD_REQUEST)

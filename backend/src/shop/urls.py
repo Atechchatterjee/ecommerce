@@ -28,4 +28,7 @@ urlpatterns = [
     path('add-units/', views.add_units, name="add units"),
     path('get-units/', views.get_units, name="get units"),
     path('remove-units/', views.remove_units, name="remove units"),
+    path('add-gst/', views.add_gst, name="add gst"),
+    path('fetch-gst/', views.fetch_gst, name="fetch gst"),
+    path('delete-gst/<str:gst_ids>/', views.delete_gst, name="delete gst"),
 ]
