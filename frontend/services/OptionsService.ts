@@ -1,41 +1,24 @@
-import axios from "axios";
 import { ProductType } from "../types/shop";
-import constants from "../util/Constants";
+import api from "../util/AxiosApi";
 
-export const fetchOptions = async (product: ProductType): Promise<any> => (
-  new Promise((resolve, reject) => {
-    axios
-      .post(`${constants.url}/shop/getoptions/`, {
-        product_id: product.id,
-      })
-      .then(resolve)
-      .catch((err) => {
-        console.error(err);
-        reject(err);
-      });
-  })
-)
+export const fetchOptions = async (product: ProductType): Promise<any> => {
+  const res = await api.post(`/shop/getoptions/`, {product_id: product.id});
+  if(res) return Promise.resolve(res);
+  else return Promise.reject();
+}
 
  export const saveOptions = async (
    productId: number,
    optionValues: any,
    currentOptionName: any 
   ): Promise<any> => (
-    new Promise((resolve, reject) => {
-      axios
-        .post(
-          `${constants.url}/shop/saveoptions/`,
-          {
+    new Promise(async (resolve, reject) => {
+      const res = await api.post('/shop/saveoptions/', {
             product_id: productId,
             optionValues,
             optionName: currentOptionName,
-          },
-          { withCredentials: true }
-        )
-        .then(resolve)
-        .catch((err) => {
-          console.error(err);
-          reject(err);
-        })
+      })
+      if(res) resolve(res);
+      else reject();
     })
   );
