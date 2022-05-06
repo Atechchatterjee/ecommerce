@@ -2,12 +2,13 @@ import React, { useEffect, useState, useRef } from "react";
 import { HStack, Text, Container, Image, Input, Fade } from "@chakra-ui/react";
 import { ContainerProps } from "@chakra-ui/react";
 import { RiFolderUploadFill } from "react-icons/ri";
+import constants from "../../util/Constants";
 
 const ImagePreview: React.FC<{ imageFile: File }> = ({ imageFile }) => (
   <Fade in={true}>
     <Image
       src={URL.createObjectURL(imageFile)}
-      fallbackSrc="https://jkfenner.com/wp-content/uploads/2019/11/default.jpg"
+      fallbackSrc={constants.fallbackURL}
       fit="contain"
       boxSize="5em"
       transition="all ease-in-out 0.2s"
@@ -30,7 +31,7 @@ const DragUpload = ({ onFileUpload, clearUpload, ...props }: Props) => {
   const [hover, setHover] = useState<boolean>(false);
 
   useEffect(() => {
-    if (onFileUpload) onFileUpload(uploadedFiles);
+    if (onFileUpload && uploadedFiles) onFileUpload(uploadedFiles);
   }, [uploadedFiles]);
 
   useEffect(() => {
@@ -72,7 +73,7 @@ const DragUpload = ({ onFileUpload, clearUpload, ...props }: Props) => {
         height="inherit"
         minHeight="10em"
         paddingBottom={uploadedFiles.length === 0 ? "6em" : "1em"}
-        border="2px solid"
+        border="3px dashed"
         borderColor="primary.200"
         bgRepeat="no-repeat"
         onDragOver={(event) => {
@@ -92,7 +93,7 @@ const DragUpload = ({ onFileUpload, clearUpload, ...props }: Props) => {
         }}
         position="relative"
         borderRadius="lg"
-        transition="all ease-in-out 0.5s"
+        transition="all ease-in-out 0.2s"
       >
         {uploadedFiles.length === 0 ? (
           <Text
@@ -117,7 +118,7 @@ const DragUpload = ({ onFileUpload, clearUpload, ...props }: Props) => {
         )}
         <DummyInput />
         {uploadedFiles.map((file, indx) => (
-          <HStack marginTop="1em" key={indx}>
+          <HStack marginTop="1em" key={indx} transition="all ease-in-out 0.3s">
             <ImagePreview imageFile={file} />
             <Text>{file.name}</Text>
           </HStack>
