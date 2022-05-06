@@ -24,7 +24,7 @@ export const searchCategory = (
   noOfOutputTerms:number = -1
 ) => {
   const searchedTerms = new Fuse(
-    flattenTree(tree.root), {keys: ['name']}
+    flattenTree(tree.root), {keys: ['name'], fieldNormWeight: 1}
   ).search(searchTerm)
 
   if(noOfOutputTerms !== -1) return searchedTerms;

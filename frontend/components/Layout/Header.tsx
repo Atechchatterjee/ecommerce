@@ -74,7 +74,10 @@ const Header: React.FC<HeaderProps> = ({ products, originalProducts }) => {
   const SearchBar = ({ ...props }: InputGroupProps) => {
     const search = () => {
       if (allProducts && originalProducts) {
-        const fuse = new Fuse(originalProducts, { keys: ["name", "price"] });
+        const fuse = new Fuse(originalProducts, {
+          keys: ["name", "price"],
+          fieldNormWeight: 1,
+        });
         const output = fuse.search(searchPhrase);
         const filteredProduct: any[] = output.map(
           (eachOutput) => eachOutput.item
