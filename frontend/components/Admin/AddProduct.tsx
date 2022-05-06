@@ -1,4 +1,5 @@
 import {
+  Text,
   Container,
   Center,
   Heading,
@@ -19,9 +20,11 @@ import { Formik } from "formik";
 import DragUpload from "../Custom/DragUpload";
 import { CustomField } from "../Custom/CustomField";
 import CustomContainer from "../Custom/CustomContainer";
-import { ChevronDownIcon } from "@chakra-ui/icons";
 import { fetchUnits } from "../../services/UnitService";
 import SelectUnitMenu from "../Widgets/SelectUnitMenu";
+import GSTSelector from "../Widgets/GSTSelector";
+import { fetchGST } from "../../services/GSTService";
+import GSTSelectorModal from "../Widgets/GSTSelectorModal";
 
 interface ProductData {
   productName: string;
@@ -30,6 +33,7 @@ interface ProductData {
   categoryId: number | null;
   productImages: File[] | null;
   unitId: number;
+  gstId: number;
 }
 
 const createProduct = async ({
@@ -39,6 +43,7 @@ const createProduct = async ({
   unitId,
   categoryId,
   productImages,
+  gstId,
 }: ProductData): Promise<void> => {
   let formData = new FormData();
 
@@ -46,6 +51,7 @@ const createProduct = async ({
   formData.append("productDescription", productDescription);
   formData.append("productPrice", productPrice);
   formData.append("unitId", unitId.toString());
+  formData.append("gstId", gstId.toString());
 
   if (typeof categoryId === "number")
     formData.append("categoryId", categoryId.toString());
@@ -73,6 +79,7 @@ const AddProduct = (props: ContainerProps) => {
   const [clearUploadFiles, setClearUploadFiles] = useState<boolean>(false);
   const [allUnits, setAllUnits] = useState<any[]>([]);
   const [selectedUnit, setSelectedUnit] = useState<any>();
+  const [selectedGSTData, setSelectedGSTData] = useState<any>();
 
   const toast = useToast();
 
@@ -126,7 +133,7 @@ const AddProduct = (props: ContainerProps) => {
               productDescription: "",
               productPrice: "",
             }}
-            onSubmit={(values: any, { setSubmitting, resetForm }) => {
+            onSubmit={(values: any, { setSubmitting }) => {
               if (!categoryId) {
                 showErrorToast("Please select a category");
                 setSubmitting(false);
@@ -135,6 +142,7 @@ const AddProduct = (props: ContainerProps) => {
                 values["categoryId"] = categoryId;
                 values["productImages"] = productImages;
                 values["unitId"] = selectedUnit ? selectedUnit.unit_id : -1;
+                values["gstId"] = selectedGSTData ? selectedGSTData.id : -1;
                 createProduct(values)
                   .then(() => {
                     showSuccessToast(values);
@@ -215,6 +223,11 @@ const AddProduct = (props: ContainerProps) => {
                     selectCb={({ selectedCategory }) => {
                       if (selectedCategory?.val)
                         setCategoryId(selectedCategory?.val.id);
+                    }}
+                  />
+                  <GSTSelectorModal
+                    selectCb={(data: any) => {
+                      setSelectedGSTData(data);
                     }}
                   />
                   <DragUpload
