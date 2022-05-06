@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import (
-    Cart_Details, Category, Product,
+    GST, Cart_Details, Category, Product,
     Product_Images, Specification_Table_Content, Units
 )
 
@@ -39,3 +39,8 @@ class CartDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cart_Details
         fields = ["product_id", "quantity", "total_price"]
+
+class GSTSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GST
+        fields = "__all__"

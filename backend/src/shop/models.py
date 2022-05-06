@@ -18,6 +18,7 @@ class Product(models.Model):
     unit = models.ForeignKey(
         'shop.Units', null=True, verbose_name="unit", on_delete=models.SET_NULL, default=None
     )
+    gst = models.ForeignKey('shop.GST', null=True, verbose_name="gst", on_delete=models.SET_NULL)
 
 
 class Units(models.Model):
@@ -59,6 +60,12 @@ class Specification_Table_Content(models.Model):
     table_id = models.ForeignKey(
         'shop.Product_Specification_Table', verbose_name="table_id",
         on_delete=models.CASCADE, null=False)
+
+class GST(models.Model):
+    id = models.AutoField(primary_key=True)
+    cgst = models.IntegerField(null=True)
+    sgst = models.IntegerField(null=True)
+    igst = models.IntegerField(null=True)
 
 class Options(models.Model):
     id = models.AutoField(primary_key=True)
