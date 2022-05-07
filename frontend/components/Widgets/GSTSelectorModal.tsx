@@ -24,6 +24,7 @@ const GSTSelectorModal = ({
   ...props
 }: GSTSelectorModalProps) => {
   const [gstData, setGstData] = useState<any>();
+  const [selectedRow, setSelectedRow] = useState<any>();
   const [open, setOpen] = useState<boolean>(false);
 
   useEffect(() => {
@@ -37,13 +38,13 @@ const GSTSelectorModal = ({
   return (
     <>
       <Button
-        variant="primarySolid"
+        variant={selectedRow ? "secondarySolid" : "primarySolid"}
         size="lg"
         borderRadius="sm"
         onClick={() => setOpen(true)}
         {...props}
       >
-        Select GST Rates
+        Select{selectedRow && "ed"} GST Rates
       </Button>
       <Modal isOpen={open} onClose={onClose} size="xl">
         <ModalOverlay />
@@ -53,7 +54,12 @@ const GSTSelectorModal = ({
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <GSTSelector GSTData={gstData} mb="3rem" selectCb={selectCb} />
+            <GSTSelector
+              GSTData={gstData}
+              mb="3rem"
+              selectedRow={selectedRow}
+              setSelectedRow={setSelectedRow}
+            />
           </ModalBody>
           <ModalFooter>
             <Button variant="primarySolid" onClick={() => setOpen(false)}>
