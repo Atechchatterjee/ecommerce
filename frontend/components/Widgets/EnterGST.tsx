@@ -80,7 +80,7 @@ const EnterGST = ({ ...props }: ContainerProps) => {
           mt="1.5rem"
         >
           <AddButton onClick={handleAddGST} />
-          <DeleteButton onClick={handleDeleteGST} />
+          {rows.length !== 0 && <DeleteButton onClick={handleDeleteGST} />}
         </Flex>
       </Flex>
     </CustomContainer>
