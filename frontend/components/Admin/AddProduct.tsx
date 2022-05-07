@@ -1,5 +1,4 @@
 import {
-  Text,
   Container,
   Center,
   Heading,
@@ -13,8 +12,6 @@ import {
   Flex,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import constants from "../../util/Constants";
 import SelectCategory from "./SelectCategory";
 import { Formik } from "formik";
 import DragUpload from "../Custom/DragUpload";
@@ -22,9 +19,8 @@ import { CustomField } from "../Custom/CustomField";
 import CustomContainer from "../Custom/CustomContainer";
 import { fetchUnits } from "../../services/UnitService";
 import SelectUnitMenu from "../Widgets/SelectUnitMenu";
-import GSTSelector from "../Widgets/GSTSelector";
-import { fetchGST } from "../../services/GSTService";
 import GSTSelectorModal from "../Widgets/GSTSelectorModal";
+import { addProduct } from "../../services/ProductService";
 
 interface ProductData {
   productName: string;
@@ -36,41 +32,21 @@ interface ProductData {
   gstId: number;
 }
 
-const createProduct = async ({
-  productName,
-  productDescription,
-  productPrice,
-  unitId,
-  categoryId,
-  productImages,
-  gstId,
-}: ProductData): Promise<void> => {
+const createProduct = async (values: ProductData): Promise<void> => {
   let formData = new FormData();
 
-  formData.append("productName", productName);
-  formData.append("productDescription", productDescription);
-  formData.append("productPrice", productPrice);
-  formData.append("unitId", unitId.toString());
-  formData.append("gstId", gstId.toString());
-
-  if (typeof categoryId === "number")
-    formData.append("categoryId", categoryId.toString());
-  else formData.append("categoryId", "");
-
-  productImages?.forEach((productImage, indx) => {
-    if (productImage) formData.append(`images[${indx}]`, productImage);
+  Object.keys(values).forEach((valKey: any) => {
+    if (valKey === "productImages") {
+      values.productImages?.forEach((productImage, indx) => {
+        if (productImage) formData.append(`images[${indx}]`, productImage);
+      });
+    } else {
+      formData.append(valKey, (values as any)[valKey].toString());
+    }
   });
 
-  try {
-    console.log({ formData });
-    axios
-      .post(`${constants.url}/shop/createProduct/`, formData, {
-        withCredentials: true,
-      })
-      .then(() => Promise.resolve());
-  } catch (err) {
-    Promise.reject(err);
-  }
+  if (await addProduct(formData)) return Promise.resolve();
+  else return Promise.reject();
 };
 
 const AddProduct = (props: ContainerProps) => {
@@ -139,10 +115,13 @@ const AddProduct = (props: ContainerProps) => {
                 setSubmitting(false);
               } else {
                 setSubmitting(true);
-                values["categoryId"] = categoryId;
-                values["productImages"] = productImages;
-                values["unitId"] = selectedUnit ? selectedUnit.unit_id : -1;
-                values["gstId"] = selectedGSTData ? selectedGSTData.id : -1;
+                values = {
+                  ...values,
+                  categoryId,
+                  productImages,
+                  unitId: selectedUnit ? selectedUnit.unit_id : -1,
+                  gstId: selectedGSTData ? selectedGSTData.id : -1,
+                };
                 createProduct(values)
                   .then(() => {
                     showSuccessToast(values);
