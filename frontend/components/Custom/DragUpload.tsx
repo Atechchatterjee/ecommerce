@@ -28,7 +28,6 @@ const DragUpload = ({ onFileUpload, clearUpload, ...props }: Props) => {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const fileInputRef = useRef<any>(null);
   const [clearUploadFiles, setClearUploadFiles] = clearUpload;
-  const [hover, setHover] = useState<boolean>(false);
 
   useEffect(() => {
     if (onFileUpload && uploadedFiles) onFileUpload(uploadedFiles);
@@ -73,8 +72,9 @@ const DragUpload = ({ onFileUpload, clearUpload, ...props }: Props) => {
         height="inherit"
         minHeight="10em"
         paddingBottom={uploadedFiles.length === 0 ? "6em" : "1em"}
+        _hover={{ borderColor: "secondary.200" }}
         border="3px dashed"
-        borderColor="primary.200"
+        borderColor="primary.500"
         bgRepeat="no-repeat"
         onDragOver={(event) => {
           event.preventDefault();
@@ -83,14 +83,7 @@ const DragUpload = ({ onFileUpload, clearUpload, ...props }: Props) => {
         onClick={() => {
           if (fileInputRef.current) fileInputRef.current.click();
         }}
-        opacity={hover ? "0.85" : "0.95"}
         cursor="pointer"
-        onMouseEnter={() => {
-          setHover(true);
-        }}
-        onMouseLeave={() => {
-          setHover(false);
-        }}
         position="relative"
         borderRadius="lg"
         transition="all ease-in-out 0.2s"
@@ -102,7 +95,9 @@ const DragUpload = ({ onFileUpload, clearUpload, ...props }: Props) => {
             left="47%"
             fontWeight="semibold"
             fontSize="1.2em"
-            textColor={hover ? "#525E99" : "primary.900"}
+            _hover={{ color: "secondary.200" }}
+            color="primary.500"
+            // textColor={hover ? "#525E99" : "primary.900"}
             fontFamily="Sora"
             transition="all ease-in-out 0.5s"
             display="flex"
