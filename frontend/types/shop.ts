@@ -25,4 +25,5 @@ export type ProductType = {
   category: any;
   image: any[]
   unit?: any;
+  gst?: any;
 }
