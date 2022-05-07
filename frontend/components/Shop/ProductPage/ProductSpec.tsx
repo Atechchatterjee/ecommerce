@@ -28,6 +28,8 @@ import {
 import SelectCategory, { getAllCategory } from "../../Admin/SelectCategory";
 import SelectUnitMenu from "../../Widgets/SelectUnitMenu";
 import { fetchUnits } from "../../../services/UnitService";
+import api from "../../../util/AxiosApi";
+import GSTSelectorModal from "../../Widgets/GSTSelectorModal";
 
 const productValueReducer = (state: any, action: any) => {
   switch (action.type) {
@@ -65,6 +67,7 @@ const UpdateProductValueForm = ({
       description: product.description,
       price: product.price,
       category: product.category.category_id,
+      gst: product.gst?.id,
     }
   );
   const [customTree, setCustomTree] = useState<CategoryTree>();
@@ -208,6 +211,7 @@ const UpdateProductValueForm = ({
       ) : (
         <></>
       )}
+      <GSTSelectorModal selectCb={(data: any) => {}} />
 
       <Button
         size="lg"
@@ -252,20 +256,16 @@ const ProductSpec: React.FC = () => {
   };
 
   const createTable = async () => {
-    await axios
-      .post(
-        `${constants.url}/shop/createtable/`,
-        {
-          product_id: product.id,
-        },
-        {
-          withCredentials: true,
-        }
-      )
-      .then(() => {
-        setTableExists(true);
-      })
-      .catch((err) => console.error(err));
+    await api.post(
+      "/shop/createtable/",
+      {
+        product_id: product.id,
+      },
+      {
+        withCredentials: true,
+      }
+    );
+    setTableExists(true);
   };
 
   const CreateSpecificationTableBtn: React.FC = () => {
