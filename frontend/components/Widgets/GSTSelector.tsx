@@ -8,16 +8,22 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React from "react";
 
 interface GSTSelectorProps extends TableProps {
   GSTData: any;
   selectCb?: Function;
+  selectedRow: any;
+  setSelectedRow: Function;
 }
 
-const GSTSelector = ({ selectCb, GSTData, ...props }: GSTSelectorProps) => {
-  const [selectedRow, setSelectedRow] = useState<any>();
-
+const GSTSelector = ({
+  selectedRow,
+  setSelectedRow,
+  selectCb,
+  GSTData,
+  ...props
+}: GSTSelectorProps) => {
   const handleSelection = (data: any) => {
     setSelectedRow(data.id);
     selectCb && selectCb(data);
@@ -33,8 +39,8 @@ const GSTSelector = ({ selectCb, GSTData, ...props }: GSTSelectorProps) => {
         <Th textAlign="center">Select</Th>
       </Thead>
       <Tbody>
-        {GSTData.map((data: any) => (
-          <Tr onClick={() => handleSelection(data)}>
+        {GSTData.map((data: any, indx: number) => (
+          <Tr onClick={() => handleSelection(data)} key={indx}>
             <Td textAlign="center">{data.cgst} %</Td>
             <Td textAlign="center">{data.sgst} %</Td>
             <Td textAlign="center">{data.igst} %</Td>
