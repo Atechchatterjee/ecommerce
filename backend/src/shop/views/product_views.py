@@ -97,11 +97,14 @@ def update_product(request):
     (id, name, description, price) = itemgetter(
         'id', 'name', 'description', 'price'
     )(request.data)
-    unit = None
+
+    unit = gst = category_from_model = None
+
     if 'unit' in request.data:
         unit = request.data['unit']
-
-    category_from_model = None
+    if 'gst' in request.data:
+        print(f"gst = {request.data['gst']}")
+        gst = request.data['gst']
 
     if 'category' in request.data:
         category = request.data['category']
@@ -118,6 +121,8 @@ def update_product(request):
             product.unit = Units.objects.get(unit_id=int(unit))
         if category_from_model is not None:
             product.category = category_from_model
+        if gst != None:
+            product.gst = GST.objects.get(id=int(gst['id']))
         product.save()
         if image is not None:
             save_product_images(product, [image])
