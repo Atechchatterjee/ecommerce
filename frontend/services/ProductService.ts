@@ -6,7 +6,7 @@ export const addProduct = async (formData: FormData) => {
 }
 
 export const updateProduct = async (data: any) => {
-  const res = await api.post('/shop/updateProduct/', data, {withCredentials: true});
+  const res = await api.post('/shop/updateproduct/', data, {withCredentials: true});
   if (res.status === 200) return Promise.resolve(res);
 }
 
