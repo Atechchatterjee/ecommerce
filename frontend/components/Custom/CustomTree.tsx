@@ -15,7 +15,6 @@ import { CategoryNode } from "../../util/Tree";
 import { IoMdArrowDropright, IoMdArrowDropdown } from "react-icons/io";
 import RightClickMenu from "./RightClickMenu";
 import { CustomField } from "./CustomField";
-import { AnimatePresence, motion } from "framer-motion";
 
 interface CustomTreeProps extends ContainerProps {
   root: CategoryNode;
