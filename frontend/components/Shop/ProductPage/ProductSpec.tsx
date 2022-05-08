@@ -30,6 +30,8 @@ import SelectUnitMenu from "../../Widgets/SelectUnitMenu";
 import { fetchUnits } from "../../../services/UnitService";
 import api from "../../../util/AxiosApi";
 import GSTSelectorModal from "../../Widgets/GSTSelectorModal";
+import { GSTSelectorContext } from "../../../context/GSTSelectorContext";
+import { updateProduct } from "../../../services/ProductService";
 
 const productValueReducer = (state: any, action: any) => {
   switch (action.type) {
@@ -41,6 +43,8 @@ const productValueReducer = (state: any, action: any) => {
       return { ...state, price: action.payload };
     case "set-product-category":
       return { ...state, category: action.payload };
+    case "set-product-gst":
+      return { ...state, gst: action.payload };
     default:
       return state;
   }
@@ -60,6 +64,7 @@ const UpdateProductValueForm = ({
   const { productInfo } = useContext(ProductInfoContext);
   const [product, setProduct] = productInfo;
 
+  const [gstSelectedRows, setGstSelectedRows] = useState<any>(product.gst);
   const [productValues, dispatchProductValues] = useReducer(
     productValueReducer,
     {
@@ -67,7 +72,7 @@ const UpdateProductValueForm = ({
       description: product.description,
       price: product.price,
       category: product.category.category_id,
-      gst: product.gst?.id,
+      gst: gstSelectedRows,
     }
   );
   const [customTree, setCustomTree] = useState<CategoryTree>();
@@ -86,25 +91,21 @@ const UpdateProductValueForm = ({
     });
   }, []);
 
-  const updateProduct = () => {
-    setLoading(true);
-    console.log({
-      id: product.id,
-      ...productValues,
-      unit: selectedUnit?.unit_id,
+  useEffect(() => {
+    dispatchProductValues({
+      type: "set-product-gst",
+      payload: gstSelectedRows,
     });
-    axios
-      .post(
-        `${constants.url}/shop/updateproduct/`,
-        {
-          id: product.id,
-          ...productValues,
-          unit: selectedUnit?.unit_id,
-        },
-        {
-          withCredentials: true,
-        }
-      )
+  }, [gstSelectedRows]);
+
+  const handleUpdateProduct = () => {
+    setLoading(true);
+    updateProduct({
+      id: product.id,
+      unit: selectedUnit?.unit_id,
+      // gstId: gstSelectedRows?.id,
+      ...productValues,
+    })
       .then(() => {
         getProductInfo(product.id)
           .then((newProduct) => {
@@ -128,6 +129,7 @@ const UpdateProductValueForm = ({
   }, []);
 
   useEffect(() => {
+    console.log({ product });
     if (product.unit) {
       setSelectedUnit(product.unit);
     }
@@ -211,14 +213,20 @@ const UpdateProductValueForm = ({
       ) : (
         <></>
       )}
-      <GSTSelectorModal selectCb={(data: any) => {}} />
-
+      <GSTSelectorContext.Provider
+        value={{
+          selectedRows: gstSelectedRows,
+          setSelectedRows: setGstSelectedRows,
+        }}
+      >
+        <GSTSelectorModal borderRadius="md" />
+      </GSTSelectorContext.Provider>
       <Button
         size="lg"
         mt="3%"
         mb="5%"
         variant="secondarySolid"
-        onClick={updateProduct}
+        onClick={handleUpdateProduct}
         position="unset"
       >
         {loading ? <Spinner size="sm" /> : "Save"}
