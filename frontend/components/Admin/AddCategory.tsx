@@ -90,6 +90,7 @@ const DisplayCategories = ({
                 alignContent="right"
                 onClick={() => handleDeleteCategory(category)}
                 isDisabled={category.children.length > 0}
+                _disabled={{ position: "revert", color: "secondary.100" }}
               >
                 <FaTrash />
               </Button>
