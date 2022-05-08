@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Image, Fade, Flex } from "@chakra-ui/react";
+import { Image, Fade, Flex, Button } from "@chakra-ui/react";
 import { ProductContext } from "../../../context/ProductContext";
 import constants from "../../../util/Constants";
 import ProductDescription from "./ProductDescription";
@@ -9,6 +9,7 @@ import UploadBtn from "./UploadBtn";
 import CustomContainer from "../../../components/Custom/CustomContainer";
 import Rating from "../../Widgets/Rating";
 import { createImageUrl } from "../../../util/CreateImageUrl";
+import { FaTrash } from "react-icons/fa";
 
 interface Props {
   id: number;
@@ -58,6 +59,21 @@ const Product: React.FC<Props> = ({
         interactive
         reverseEffect
       >
+        {editable && (
+          <Button
+            variant="unstyled"
+            mt="0.3rem"
+            color="primary.200"
+            _hover={{ color: "secondary.200" }}
+            _focus={{ outline: "none" }}
+            position="absolute"
+            alignContent="center"
+            right="0rem"
+            onClick={() => (onDelete ? onDelete() : null)}
+          >
+            <FaTrash />
+          </Button>
+        )}
         <Flex flexDirection="column">
           <ProductContext.Provider
             value={{
@@ -80,7 +96,7 @@ const Product: React.FC<Props> = ({
               fallbackSrc={constants.fallbackURL}
               width="full"
               height="15em"
-              zIndex={1}
+              zIndex={-1}
               cursor={edit ? "pointer" : "auto"}
             />
             {edit ? <UploadBtn /> : <></>}
