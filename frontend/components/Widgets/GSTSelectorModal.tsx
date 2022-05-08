@@ -9,7 +9,8 @@ import {
   ModalOverlay,
   ButtonProps,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { GSTSelectorContext } from "../../context/GSTSelectorContext";
 import { fetchGST } from "../../services/GSTService";
 import GSTSelector from "./GSTSelector";
 
@@ -24,7 +25,7 @@ const GSTSelectorModal = ({
   ...props
 }: GSTSelectorModalProps) => {
   const [gstData, setGstData] = useState<any>();
-  const [selectedRow, setSelectedRow] = useState<any>();
+  const { selectedRows } = useContext(GSTSelectorContext);
   const [open, setOpen] = useState<boolean>(false);
 
   useEffect(() => {
@@ -38,13 +39,13 @@ const GSTSelectorModal = ({
   return (
     <>
       <Button
-        variant={selectedRow ? "secondarySolid" : "primarySolid"}
+        variant={selectedRows ? "secondarySolid" : "primarySolid"}
         size="lg"
         borderRadius="sm"
         onClick={() => setOpen(true)}
         {...props}
       >
-        Select{selectedRow && "ed"} GST Rates
+        Select{selectedRows && "ed"} GST Rates
       </Button>
       <Modal isOpen={open} onClose={onClose} size="xl">
         <ModalOverlay />
@@ -54,12 +55,7 @@ const GSTSelectorModal = ({
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <GSTSelector
-              GSTData={gstData}
-              mb="3rem"
-              selectedRow={selectedRow}
-              setSelectedRow={setSelectedRow}
-            />
+            <GSTSelector GSTData={gstData} mb="3rem" />
           </ModalBody>
           <ModalFooter>
             <Button variant="primarySolid" onClick={() => setOpen(false)}>

@@ -21,6 +21,7 @@ import { fetchUnits } from "../../services/UnitService";
 import SelectUnitMenu from "../Widgets/SelectUnitMenu";
 import GSTSelectorModal from "../Widgets/GSTSelectorModal";
 import { addProduct } from "../../services/ProductService";
+import { GSTSelectorContext } from "../../context/GSTSelectorContext";
 
 interface ProductData {
   productName: string;
@@ -204,11 +205,18 @@ const AddProduct = (props: ContainerProps) => {
                         setCategoryId(selectedCategory?.val.id);
                     }}
                   />
-                  <GSTSelectorModal
-                    selectCb={(data: any) => {
-                      setSelectedGSTData(data);
+                  <GSTSelectorContext.Provider
+                    value={{
+                      selectedRows: selectedGSTData,
+                      setSelectedRows: setSelectedGSTData,
                     }}
-                  />
+                  >
+                    <GSTSelectorModal
+                      selectCb={(data: any) => {
+                        setSelectedGSTData(data);
+                      }}
+                    />
+                  </GSTSelectorContext.Provider>
                   <DragUpload
                     marginLeft="-1em"
                     width="34em"

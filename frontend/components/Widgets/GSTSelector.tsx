@@ -8,24 +8,19 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import React from "react";
+import { useContext } from "react";
+import { GSTSelectorContext } from "../../context/GSTSelectorContext";
 
 interface GSTSelectorProps extends TableProps {
   GSTData: any;
   selectCb?: Function;
-  selectedRow: any;
-  setSelectedRow: Function;
 }
 
-const GSTSelector = ({
-  selectedRow,
-  setSelectedRow,
-  selectCb,
-  GSTData,
-  ...props
-}: GSTSelectorProps) => {
+const GSTSelector = ({ selectCb, GSTData, ...props }: GSTSelectorProps) => {
+  const { selectedRows, setSelectedRows } = useContext(GSTSelectorContext);
+
   const handleSelection = (data: any) => {
-    setSelectedRow(data.id);
+    setSelectedRows(data);
     selectCb && selectCb(data);
   };
 
@@ -45,7 +40,7 @@ const GSTSelector = ({
             <Td textAlign="center">{data.sgst} %</Td>
             <Td textAlign="center">{data.igst} %</Td>
             <Td textAlign="center">
-              <Checkbox size="lg" isChecked={data.id === selectedRow} />
+              <Checkbox size="lg" isChecked={data.id === selectedRows?.id} />
             </Td>
           </Tr>
         ))}
