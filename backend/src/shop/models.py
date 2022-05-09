@@ -67,6 +67,12 @@ class GST(models.Model):
     sgst = models.IntegerField(null=True)
     igst = models.IntegerField(null=True)
 
+class Product_Price(models.Model):
+    id = models.AutoField(primary_key=True)
+    range = models.TextField(null=True)
+    price = models.TextField(null=True)
+    product_id = models.ForeignKey('shop.Product', verbose_name="product_id", on_delete=models.CASCADE)
+
 class Options(models.Model):
     id = models.AutoField(primary_key=True)
     option_name = models.TextField()
