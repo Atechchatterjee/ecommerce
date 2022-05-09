@@ -46,7 +46,6 @@ const OptionsTable = ({ ...props }: ContainerProps) => {
 
   return (
     <CustomContainer
-      interactive
       padding="0"
       overflowX="scroll"
       sx={scrollBarStyle({ color: "gray.300", hidden: false })}
