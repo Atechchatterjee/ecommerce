@@ -32,6 +32,7 @@ import api from "../../../util/AxiosApi";
 import GSTSelectorModal from "../../Widgets/GSTSelectorModal";
 import { GSTSelectorContext } from "../../../context/GSTSelectorContext";
 import { updateProduct } from "../../../services/ProductService";
+import { FaSave } from "react-icons/fa";
 
 const productValueReducer = (state: any, action: any) => {
   switch (action.type) {
@@ -193,12 +194,12 @@ const UpdateProductValueForm = ({
         />
       </Flex>
       {customTree ? (
-        <Flex flexDirection="row" gridGap={2}>
+        <Flex flexDirection="row" gridGap={5} mt="2%">
           <SelectCategory
-            w="100%"
+            flex="1"
             height="4.9vh"
-            mt="2%"
             text={product.category.category_name || "Select Category"}
+            variant="primaryOutline"
             selectCb={({ selectedCategory }) => {
               if (selectedCategory) {
                 setSelectedCategory(selectedCategory);
@@ -209,27 +210,37 @@ const UpdateProductValueForm = ({
               }
             }}
           />
+          <GSTSelectorContext.Provider
+            value={{
+              selectedRows: gstSelectedRows,
+              setSelectedRows: setGstSelectedRows,
+            }}
+          >
+            <GSTSelectorModal
+              borderRadius="sm"
+              fontSize="md"
+              flex="1"
+              variant="primaryOutline"
+            />
+          </GSTSelectorContext.Provider>
         </Flex>
       ) : (
         <></>
       )}
-      <GSTSelectorContext.Provider
-        value={{
-          selectedRows: gstSelectedRows,
-          setSelectedRows: setGstSelectedRows,
-        }}
-      >
-        <GSTSelectorModal borderRadius="md" />
-      </GSTSelectorContext.Provider>
       <Button
         size="lg"
         mt="3%"
         mb="5%"
-        variant="secondarySolid"
+        variant="primarySolid"
         onClick={handleUpdateProduct}
         position="unset"
+        isLoading={loading}
       >
-        {loading ? <Spinner size="sm" /> : "Save"}
+        {/* {loading ? <Spinner size="sm" /> : "Save"} */}
+        <Flex flexDirection="row" gridGap={3}>
+          <Text>Save</Text>
+          <FaSave />
+        </Flex>
       </Button>
     </Flex>
   );
@@ -334,6 +345,7 @@ const ProductSpec: React.FC = () => {
           marginLeft="12em"
           position="absolute"
           flexDirection="row"
+          w="60rem"
           gridGap="100"
           pb="5%"
         >
@@ -403,13 +415,25 @@ const ProductSpec: React.FC = () => {
             </Button>
             <CreateSpecificationTableBtn />
           </Container>
-          <Container marginTop="2em" width="40em">
-            <UpdateProductValueForm
-              getDropDownStatus={(status) => {
-                setDropDownStatus(status);
-              }}
-            />
-            <Box position="relative" zIndex={dropDownStatus ? "-1" : "11"}>
+          <Container marginTop="2em" width="100rem">
+            <CustomContainer
+              padding="2rem 2rem 0.01rem 2rem"
+              width="100rem"
+              borderRadius="lg"
+            >
+              <UpdateProductValueForm
+                getDropDownStatus={(status) => {
+                  setDropDownStatus(status);
+                }}
+              />
+            </CustomContainer>
+            <Box
+              position="relative"
+              zIndex={dropDownStatus ? "-1" : "11"}
+              w="110%"
+              mt="2.5rem"
+              ml="-1rem"
+            >
               <SpecificationTable />
               <OptionsTable mt="5%" borderRadius="lg" />
             </Box>
