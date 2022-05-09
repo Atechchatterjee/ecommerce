@@ -17,13 +17,10 @@ SECRET_KEY = config('SECRET_KEY')
 
 DEBUG = bool(int(config('DEBUG', '1')))
 
-ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1', '192.168.31.222']
+ALLOWED_HOSTS = []
 
-# including production domain names and ip as allowed host
-# if ENV == 'production':
-#     for host in config('PROD_ALLOWED_HOST').split(','):
-#         ALLOWED_HOSTS.append(host)
-
+for host in config('ALLOWED_HOST', default='*').split(","):
+    ALLOWED_HOSTS.append(host.strip())
 
 # Application definition
 INSTALLED_APPS = [
@@ -142,24 +139,13 @@ SESSION_COOKIE_SECURE = True
 SESSION_SAVE_EVERY_REQUEST = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
-CORS_ORIGIN_WHITELIST = [
-    'http://localhost:3000',
-    'http://localhost',
-    'http://192.168.31.222',
-    'http://192.168.31.222:3000'
-]
+CORS_ORIGIN_WHITELIST =  []
+CORS_ALLOWED_ORIGINS  =  []
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    'http://localhost',
-    'http://192.168.31.222',
-    'http://192.168.31.222:3000'
-]
-
-# if ENV == 'production':
-#     for host in config('CORS_ALLOWED_HOST', ''):
-#         CORS_ALLOWED_ORIGINS.append(host)
-#         CORS_ORIGIN_WHITELIST.append(host)
+for host in config('CORS_ALLOWED_HOST', "").split(","):
+    print(f"allowed cors host = {host.strip()}")
+    CORS_ORIGIN_WHITELIST.append(host.strip())
+    CORS_ALLOWED_ORIGINS.append(host.strip())
 
 CORS_ALLOW_HEADERS = True
 
