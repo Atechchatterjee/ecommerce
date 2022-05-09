@@ -233,7 +233,6 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
     return (
       <CustomContainer
         position="relative"
-        interactive
         height="inherit"
         padding="0"
         borderRadius="lg"
