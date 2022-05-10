@@ -4,6 +4,7 @@ from rest_framework import status
 from ..models import (
   GST,
   Product,
+  Product_Price,
   Units
 )
 from rest_framework.response import Response
@@ -36,7 +37,6 @@ def create_product(request):
     try:
         new_product = Product(
             name=product_name,
-            price = str(product_price),
             description=product_description,
             category=fetch_category(
                 int(category_id)) if category_id != "" else None,
@@ -47,6 +47,15 @@ def create_product(request):
         else:
             print("GST not selected")
         new_product.save()
+        # checks if the product_price is an array
+        if hasattr(product_price, '__len__'):
+            Product_Price.objects.bulk_create([
+                Product_Price(
+                    range=priceObj.range,
+                    price=priceObj.price,
+                    product_id=new_product
+                ) for priceObj in range(0, product_price.length)
+            ])
         images = []
         for key in request.data:
             if key not in request_params:
@@ -162,6 +171,7 @@ def add_product_images(request):
         return Response(status=status.HTTP_200_OK)
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['POST'])
 @permission_classes([Is_Admin])
