@@ -11,7 +11,6 @@ class Product_Images(models.Model):
 class Product(models.Model):
     product_id = models.AutoField(primary_key=True)
     name = models.TextField(null=False)
-    price = models.TextField(null=False)
     description = models.TextField(null=False, default="")
     category = models.ForeignKey(
         'shop.Category', null=True, verbose_name="category", on_delete=models.SET_NULL)
