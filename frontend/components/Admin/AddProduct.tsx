@@ -22,6 +22,7 @@ import SelectUnitMenu from "../Widgets/SelectUnitMenu";
 import GSTSelectorModal from "../Widgets/GSTSelectorModal";
 import { addProduct } from "../../services/ProductService";
 import { GSTSelectorContext } from "../../context/GSTSelectorContext";
+import EnterPrice from "../Widgets/EnterPrice";
 
 interface ProductData {
   productName: string;
@@ -57,6 +58,7 @@ const AddProduct = (props: ContainerProps) => {
   const [allUnits, setAllUnits] = useState<any[]>([]);
   const [selectedUnit, setSelectedUnit] = useState<any>();
   const [selectedGSTData, setSelectedGSTData] = useState<any>();
+  const [allPriceData, setAllPriceData] = useState<any[]>([]);
 
   const toast = useToast();
 
@@ -122,6 +124,7 @@ const AddProduct = (props: ContainerProps) => {
                   productImages,
                   unitId: selectedUnit ? selectedUnit.unit_id : -1,
                   gstId: selectedGSTData ? selectedGSTData.id : -1,
+                  productPrice: allPriceData,
                 };
                 createProduct(values)
                   .then(() => {
@@ -189,34 +192,41 @@ const AddProduct = (props: ContainerProps) => {
                       setSelectedUnit={setSelectedUnit}
                     />
                   </Flex>
-                  <SelectCategory
-                    text="Select Category"
-                    width="100%"
-                    borderRadius="sm"
-                    bgColor={categoryId ? "secondary.200" : ""}
-                    _hover={
-                      categoryId
-                        ? { bgColor: "secondary.200", opacity: "0.8" }
-                        : { opacity: "0.9" }
-                    }
-                    size="lg"
-                    selectCb={({ selectedCategory }) => {
-                      if (selectedCategory?.val)
-                        setCategoryId(selectedCategory?.val.id);
-                    }}
-                  />
-                  <GSTSelectorContext.Provider
-                    value={{
-                      selectedRows: selectedGSTData,
-                      setSelectedRows: setSelectedGSTData,
-                    }}
-                  >
-                    <GSTSelectorModal
-                      selectCb={(data: any) => {
-                        setSelectedGSTData(data);
+                  <EnterPrice {...{ allPriceData, setAllPriceData }} />
+                  <Flex flexDirection="row" gridGap={3}>
+                    <SelectCategory
+                      text="Select Category"
+                      width="100%"
+                      borderRadius="sm"
+                      bgColor={categoryId ? "secondary.200" : ""}
+                      _hover={
+                        categoryId
+                          ? { bgColor: "secondary.200", opacity: "0.8" }
+                          : { opacity: "0.9" }
+                      }
+                      size="lg"
+                      fontSize="md"
+                      flex="1"
+                      selectCb={({ selectedCategory }) => {
+                        if (selectedCategory?.val)
+                          setCategoryId(selectedCategory?.val.id);
                       }}
                     />
-                  </GSTSelectorContext.Provider>
+                    <GSTSelectorContext.Provider
+                      value={{
+                        selectedRows: selectedGSTData,
+                        setSelectedRows: setSelectedGSTData,
+                      }}
+                    >
+                      <GSTSelectorModal
+                        flex="1"
+                        fontSize="md"
+                        selectCb={(data: any) => {
+                          setSelectedGSTData(data);
+                        }}
+                      />
+                    </GSTSelectorContext.Provider>
+                  </Flex>
                   <DragUpload
                     marginLeft="-1em"
                     width="34em"

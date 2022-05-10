@@ -33,6 +33,7 @@ import GSTSelectorModal from "../../Widgets/GSTSelectorModal";
 import { GSTSelectorContext } from "../../../context/GSTSelectorContext";
 import { updateProduct } from "../../../services/ProductService";
 import { FaSave } from "react-icons/fa";
+import EnterPrice from "../../Widgets/EnterPrice";
 
 const productValueReducer = (state: any, action: any) => {
   switch (action.type) {
@@ -80,6 +81,7 @@ const UpdateProductValueForm = ({
   const [selectedCategory, setSelectedCategory] = useState<CategoryNode | null>(
     null
   );
+  const [allPriceData, setAllPriceData] = useState<any[]>([]);
 
   useEffect(() => {
     getAllCategory().then((categories) => {
@@ -193,6 +195,7 @@ const UpdateProductValueForm = ({
           setSelectedUnit={setSelectedUnit}
         />
       </Flex>
+      <EnterPrice {...{ allPriceData, setAllPriceData }} />
       {customTree ? (
         <Flex flexDirection="row" gridGap={5} mt="2%">
           <SelectCategory
@@ -236,7 +239,6 @@ const UpdateProductValueForm = ({
         position="unset"
         isLoading={loading}
       >
-        {/* {loading ? <Spinner size="sm" /> : "Save"} */}
         <Flex flexDirection="row" gridGap={3}>
           <Text>Save</Text>
           <FaSave />
