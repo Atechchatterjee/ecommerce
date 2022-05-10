@@ -66,15 +66,15 @@ const DragUpload = ({ onFileUpload, clearUpload, ...props }: Props) => {
   };
 
   return (
-    <Container width="35em" {...props} height="inherit" minHeight="10%">
+    <Container width="35em" height="inherit" minHeight="10%" {...props}>
       <Container
         width="100%"
         height="inherit"
         minHeight="10em"
         paddingBottom={uploadedFiles.length === 0 ? "6em" : "1em"}
-        _hover={{ borderColor: "secondary.200" }}
+        _hover={{ borderColor: "primary.100" }}
         border="3px dashed"
-        borderColor="primary.500"
+        borderColor="primary.800"
         bgRepeat="no-repeat"
         onDragOver={(event) => {
           event.preventDefault();
@@ -95,11 +95,10 @@ const DragUpload = ({ onFileUpload, clearUpload, ...props }: Props) => {
             left="47%"
             fontWeight="semibold"
             fontSize="1.2em"
-            _hover={{ color: "secondary.200" }}
-            color="primary.500"
-            // textColor={hover ? "#525E99" : "primary.900"}
+            _hover={{ color: "primary.100" }}
+            color="primary.800"
             fontFamily="Sora"
-            transition="all ease-in-out 0.5s"
+            transition="all ease-in-out 0.1s"
             display="flex"
             flexDirection="column"
           >
