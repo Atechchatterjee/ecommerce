@@ -31,4 +31,5 @@ urlpatterns = [
     path('add-gst/', views.add_gst, name="add gst"),
     path('fetch-gst/', views.fetch_gst, name="fetch gst"),
     path('delete-gst/<str:gst_ids>/', views.delete_gst, name="delete gst"),
+    path('get-product-prices/<int:product_id>/', views.get_product_price, name="get product price"),
 ]
