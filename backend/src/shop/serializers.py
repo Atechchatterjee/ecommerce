@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import (
     GST, Cart_Details, Category, Product,
-    Product_Images, Specification_Table_Content, Units
+    Product_Images, Product_Price, Specification_Table_Content, Units
 )
 
 
@@ -33,6 +33,11 @@ class ProductImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product_Images
         fields = ["image"]
+
+class ProductPriceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product_Price
+        fields = ["id", "range", "price"]
 
 
 class CartDetailsSerializer(serializers.ModelSerializer):
