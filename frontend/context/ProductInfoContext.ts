@@ -11,7 +11,7 @@ export const ProductInfoContext = createContext<ProductInfoProps>({
     productInfo: [{
       id: 0,
       name: "",
-      price: "",
+      price: [],
       description: "",
       category: 0,
       image: [],

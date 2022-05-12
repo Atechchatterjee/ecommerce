@@ -20,7 +20,7 @@ export type OptionsData = {
 export type ProductType = {
   id: number;
   name: string;
-  price: string;
+  price: any[];
   description: string;
   category: any;
   image: any[]
