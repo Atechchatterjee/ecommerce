@@ -15,22 +15,17 @@ import { CustomField } from "../Custom/CustomField";
 interface EnterPriceProps extends FlexProps {
   allPriceData: any[];
   setAllPriceData: Function;
+  deleteCb?: Function;
 }
 
 const EnterPrice = ({
   allPriceData,
   setAllPriceData,
+  deleteCb,
   ...props
 }: EnterPriceProps) => {
   const [range, setRange] = useState<string>("");
   const [price, setPrice] = useState<string>("");
-
-  useEffect(() => {
-    setAllPriceData([
-      { id: 1, range: "1-100", price: "100" },
-      { id: 2, range: "101-1000", price: "200" },
-    ]);
-  }, []);
 
   const DisplayExistingPrice = ({ ...props }: FlexProps) => {
     return (
@@ -67,12 +62,13 @@ const EnterPrice = ({
   const handleAddPrice = () => {
     setAllPriceData([
       ...allPriceData,
-      { id: allPriceData.length, range, price },
+      { id: allPriceData.length, range, price, new: true },
     ]);
   };
 
   const handleDeletePrice = (id: number) => {
     setAllPriceData(allPriceData.filter((data) => data.id !== id));
+    if (deleteCb) deleteCb(id);
   };
 
   return (
