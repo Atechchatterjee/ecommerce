@@ -7,9 +7,10 @@ import {
   Button,
   MenuList,
   MenuItem,
+  ButtonProps,
 } from "@chakra-ui/react";
 
-interface SelectUnitMenuProps extends BoxProps {
+interface SelectUnitMenuProps extends ButtonProps {
   allUnits: any[];
   selectedUnit: any;
   setSelectedUnit: Function;
@@ -22,13 +23,14 @@ const SelectUnitMenu = ({
   ...props
 }: SelectUnitMenuProps) => {
   return (
-    <Box {...props}>
+    <Box>
       <Menu autoSelect={false}>
         <MenuButton
           as={Button}
           rightIcon={<ChevronDownIcon />}
           variant={selectedUnit ? "secondarySolid" : "primarySolid"}
           borderRadius="md"
+          {...props}
         >
           {selectedUnit ? selectedUnit.value : "Units"}
         </MenuButton>
