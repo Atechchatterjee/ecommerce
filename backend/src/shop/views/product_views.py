@@ -1,5 +1,5 @@
 from operator import itemgetter
-import re
+import json
 from rest_framework import status
 from ..models import (
   GST,
@@ -12,6 +12,7 @@ from authentication.backends import Is_Admin
 from rest_framework.decorators import parser_classes
 from ..serializers import (
     GSTSerializer,
+    ProductPriceSerializer,
     ProductSerializer,
     UnitSerializer,
 )
@@ -21,6 +22,28 @@ from .util import (
   fetch_category, get_product_images,
   save_product_images, get_product_model
 )
+
+def add_product_price_to_db(product_price, product):
+    Product_Price.objects.bulk_create([
+        Product_Price(
+            range=priceObj["range"],
+            price=priceObj["price"],
+            product_id=product
+        ) for priceObj in product_price
+    ])
+    
+
+def get_product_price_from_db(product=None, serialized=False, many=False, product_id=None):
+    product_price = None
+    if product_id is not None:
+        product_price = Product_Price.objects.filter(product_id__product_id=product_id)
+    elif product is not None:
+        product_price = Product_Price.objects.filter(product_id=product)
+    if serialized == False:
+        return product_price
+    else:
+        return ProductPriceSerializer(product_price, many=many).data
+    
 
 @api_view(['POST'])
 @permission_classes([Is_Admin])
@@ -44,18 +67,10 @@ def create_product(request):
         )
         if gst_id != "-1" or gst_id != "":
             new_product.gst = GST.objects.get(id=int(gst_id))
-        else:
-            print("GST not selected")
         new_product.save()
-        # checks if the product_price is an array
-        if hasattr(product_price, '__len__'):
-            Product_Price.objects.bulk_create([
-                Product_Price(
-                    range=priceObj.range,
-                    price=priceObj.price,
-                    product_id=new_product
-                ) for priceObj in range(0, product_price.length)
-            ])
+        if 'productPrice' in request.data:
+            parsed_product_price = json.loads(product_price)
+            add_product_price_to_db(parsed_product_price, new_product)
         images = []
         for key in request.data:
             if key not in request_params:
@@ -92,7 +107,8 @@ def get_all_products(_):
                     get_product_model(
                         serialized_product['product_id']
                     )
-                )
+                ),
+                "price": get_product_price_from_db(product_id=int(serialized_product['product_id']), serialized=True, many=True)
             })
         return Response({"allProducts": all_products},
                         status=status.HTTP_200_OK)
@@ -107,14 +123,18 @@ def update_product(request):
         'id', 'name', 'description', 'price'
     )(request.data)
 
+    print(f"request.data = {request.data}")
+
     unit = gst = category_from_model = None
+    deleted_product_price_indx = []
 
     if 'unit' in request.data:
         unit = request.data['unit']
     if 'gst' in request.data:
-        print(f"gst = {request.data['gst']}")
         gst = request.data['gst']
-
+    if 'deletedProductPriceIndx' in request.data:
+        deleted_product_price_indx = request.data['deletedProductPriceIndx']
+    
     if 'category' in request.data:
         category = request.data['category']
         category_from_model = fetch_category(category)
@@ -124,7 +144,6 @@ def update_product(request):
     try:
         product = Product.objects.get(product_id=id)
         product.name = name
-        product.price = price
         product.description = description
         if unit != None:
             product.unit = Units.objects.get(unit_id=int(unit))
@@ -133,12 +152,15 @@ def update_product(request):
         if gst != None:
             product.gst = GST.objects.get(id=int(gst['id']))
         product.save()
+        add_product_price_to_db(price, product)
+        if deleted_product_price_indx != []:
+            print(f"deleted indices = {deleted_product_price_indx}")
+            Product_Price.objects.filter(id__in=deleted_product_price_indx).delete()
         if image is not None:
             save_product_images(product, [image])
         return Response(status=status.HTTP_200_OK)
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
-
 
 @api_view(['POST'])
 def get_product(request):
@@ -148,12 +170,24 @@ def get_product(request):
         serialized_product = ProductSerializer(product).data
         serialized_product = {
             **serialized_product,
-            "image": get_product_images(product)
+            "image": get_product_images(product),
+            "price": get_product_price_from_db(product_id=int(id), serialized=True, many=True)
         }
         return Response({"product": serialized_product},
                         status=status.HTTP_200_OK)
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def get_product_price(_, product_id):
+    try:
+        product_prices = Product_Price.objects.filter(product_id=get_product_model(product_id))
+        serialized_product_prices = ProductPriceSerializer(product_prices, many=True).data
+        print(serialized_product_prices)
+        return Response(serialized_product_prices, status=status.HTTP_200_OK)
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
 
 
 @api_view(['POST'])
