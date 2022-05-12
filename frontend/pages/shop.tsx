@@ -1,33 +1,25 @@
 import type { NextPage } from "next";
 import Header from "../components/Layout/Header";
 import Footer from "../components/Layout/Footer";
-import ProductType from "../components/Shop/Product";
 import React, { useState, useEffect } from "react";
 import { Grid, GridItem, Box } from "@chakra-ui/react";
-import constants from "../util/Constants";
-import axios from "axios";
 import { useDynamicColumns } from "../hooks/useDynamicColumns";
 import { AnimatePresence, motion } from "framer-motion";
-
-interface ProductType {
-  product_id: number;
-  description: string;
-  image: string;
-  name: string;
-  price: string;
-  category: number;
-}
+import Product from "../components/Shop/Product";
+import { ProductInfoContext } from "../context/ProductInfoContext";
+import { ProductType } from "../types/shop";
+import api from "../util/AxiosApi";
 
 const getAllProducts = async (): Promise<ProductType[]> => {
-  const res = await axios.get(`${constants.url}/shop/getallproducts/`, {
+  const res = await api.get("/shop/getallproducts/", {
     withCredentials: true,
   });
   return Promise.resolve(res.data.allProducts);
 };
 
 const Shop: NextPage = () => {
-  const [allProducts, setAllProducts] = useState<ProductType[]>([]);
-  const [originalProducts, setOriginalProducts] = useState<ProductType[]>([]);
+  const [allProducts, setAllProducts] = useState<any[]>([]);
+  const [originalProducts, setOriginalProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [columns] = useDynamicColumns(4, [1700, 1300, 860]);
 
@@ -66,23 +58,24 @@ const Shop: NextPage = () => {
               allProducts.length / columns
             )}, 1fr)`}
           >
-            {allProducts.map(
-              ({ name, image, description, price, product_id }, indx) => (
-                <AnimatePresence key={indx}>
-                  <GridItem key={product_id}>
-                    <motion.div layout>
-                      <ProductType
-                        id={product_id}
-                        name={name}
-                        image={image}
-                        description={description}
-                        price={price}
-                      />
-                    </motion.div>
-                  </GridItem>
-                </AnimatePresence>
-              )
-            )}
+            {allProducts.map((product, indx) => (
+              <AnimatePresence key={indx}>
+                <GridItem key={product.product_id}>
+                  <motion.div layout>
+                    <ProductInfoContext.Provider
+                      value={{
+                        productInfo: [
+                          { ...product, id: product.product_id },
+                          () => {},
+                        ],
+                      }}
+                    >
+                      <Product />
+                    </ProductInfoContext.Provider>
+                  </motion.div>
+                </GridItem>
+              </AnimatePresence>
+            ))}
           </Grid>
         </motion.div>
       </Box>

@@ -1,47 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Image, Fade, Flex, Button } from "@chakra-ui/react";
 import { ProductContext } from "../../../context/ProductContext";
 import constants from "../../../util/Constants";
 import ProductDescription from "./ProductDescription";
-import EditBtn from "./EditBtn";
-import DeleteBtn from "./DeleteBtn";
 import UploadBtn from "./UploadBtn";
 import CustomContainer from "../../../components/Custom/CustomContainer";
 import Rating from "../../Widgets/Rating";
 import { createImageUrl } from "../../../util/CreateImageUrl";
 import { FaTrash } from "react-icons/fa";
+import { ProductInfoContext } from "../../../context/ProductInfoContext";
 
 interface Props {
-  id: number;
-  name: string;
-  description: string;
-  price: string;
-  image: any;
   editable?: boolean;
-  cb?: (
-    id: number,
-    name: string,
-    description: string,
-    price: string,
-    image?: File
-  ) => void;
   onDelete?: Function;
 }
 
-const Product: React.FC<Props> = ({
-  id,
-  name,
-  description,
-  price,
-  image,
-  editable,
-  cb,
-  onDelete,
-}) => {
+const Product: React.FC<Props> = ({ editable, onDelete }) => {
   const [edit, setEdit] = useState<boolean>(false); // toggles the edit mode
   const [triggerUpload, setTriggerUpload] = useState<boolean>(false);
   const [changedImage, setChangedImage] = useState<File | undefined>();
   const [loading, setLoading] = useState<boolean>(true);
+
+  const { productInfo } = useContext(ProductInfoContext);
+  const [product] = productInfo;
 
   useEffect(() => {
     setTimeout(() => setLoading(false), 100);
@@ -90,7 +71,11 @@ const Product: React.FC<Props> = ({
               objectFit="scale-down"
               userSelect="none"
               src={createImageUrl(
-                !!image ? (!!image[0] ? image[0].image : "") : "",
+                !!product.image
+                  ? !!product.image[0]
+                    ? product.image[0].image
+                    : ""
+                  : "",
                 changedImage
               )}
               fallbackSrc={constants.fallbackURL}
@@ -101,13 +86,6 @@ const Product: React.FC<Props> = ({
             />
             {edit ? <UploadBtn /> : <></>}
             <ProductDescription
-              productId={id}
-              name={name}
-              description={description}
-              price={price}
-              cb={(id, name, description, price) => {
-                if (cb) cb(id, name, description, price, changedImage);
-              }}
               height={editable ? "14em" : "17em"}
               overflowX="hidden"
               overflowY="hidden"

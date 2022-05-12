@@ -17,13 +17,14 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useDynamicColumns } from "../../hooks/useDynamicColumns";
+import { ProductInfoContext } from "../../context/ProductInfoContext";
 
 interface Product {
   product_id: number;
   description: string;
   image: any;
   name: string;
-  price: string;
+  price: any[];
   category: number;
 }
 
@@ -157,45 +158,42 @@ const AllProducts: React.FunctionComponent = () => {
         templateColumns={`repeat(${columns}, 1fr)`}
         templateRows={`repeat(${Math.ceil(allProducts.length / columns)}, 1fr)`}
       >
-        {allProducts.map(
-          ({ name, image, description, price, product_id, category }) => (
-            <GridItem key={product_id}>
+        {allProducts.map((product) => (
+          <GridItem key={product.product_id}>
+            <ProductInfoContext.Provider
+              value={{
+                productInfo: [{ ...product, id: product.product_id }, () => {}],
+              }}
+            >
               <Product
-                key={product_id}
-                id={product_id}
-                name={name}
-                image={image}
-                description={description}
-                price={price}
+                key={product.product_id}
+                id={product.product_id}
+                name={product.name}
+                image={product.image}
+                description={product.description}
+                price={product.price}
                 editable
-                cb={(id, name, description, price, img) => {
-                  // updates the product list in the db
-                  updateChanges(id, name, description, price, img);
-                  updateProduct({
-                    // update the product list locally
-                    product_id,
-                    name,
-                    description,
-                    price,
-                    image,
-                    category,
-                  });
-                }}
+                // cb={(id, name, description, price, img) => {
+                //   // updates the product list in the db
+                //   updateChanges(id, name, description, price, img);
+                //   updateProduct({
+                //     // update the product list locally
+                //     product_id,
+                //     name,
+                //     description,
+                //     price,
+                //     image,
+                //     category,
+                //   });
+                // }}
                 onDelete={() => {
                   setIsOpen(true);
-                  setPrdDel({
-                    product_id,
-                    name,
-                    description,
-                    price,
-                    image,
-                    category,
-                  });
+                  setPrdDel(product);
                 }}
               />
-            </GridItem>
-          )
-        )}
+            </ProductInfoContext.Provider>
+          </GridItem>
+        ))}
       </Grid>
       <DeleteModal
         confirmDelete={() => {
