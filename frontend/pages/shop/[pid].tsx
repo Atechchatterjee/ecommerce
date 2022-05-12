@@ -28,17 +28,11 @@ const ProductPage: NextPage = () => {
   }, [pid]);
 
   return !loading ? (
-    !admin ? (
-      <ProductInfoContext.Provider
-        value={{ productInfo: [product, setProduct] }}
-      >
-        <Header />
-        <ClientProductPage product={product} />
-        <Footer />
-      </ProductInfoContext.Provider>
-    ) : (
-      <></>
-    )
+    <ProductInfoContext.Provider value={{ productInfo: [product, setProduct] }}>
+      <Header />
+      <ClientProductPage product={product} />
+      <Footer />
+    </ProductInfoContext.Provider>
   ) : (
     <></>
   );
