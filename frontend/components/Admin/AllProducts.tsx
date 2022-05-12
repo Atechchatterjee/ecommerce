@@ -150,7 +150,6 @@ const AllProducts: React.FunctionComponent = () => {
   };
 
   return (
-    // <Center marginTop="3em" width="100%" overflowX="hidden">
     <Box marginTop="3em" width="100%" overflow="hidden" padding="0 2% 3% 2%">
       <Grid
         h="inherit"
@@ -167,25 +166,6 @@ const AllProducts: React.FunctionComponent = () => {
             >
               <Product
                 key={product.product_id}
-                id={product.product_id}
-                name={product.name}
-                image={product.image}
-                description={product.description}
-                price={product.price}
-                editable
-                // cb={(id, name, description, price, img) => {
-                //   // updates the product list in the db
-                //   updateChanges(id, name, description, price, img);
-                //   updateProduct({
-                //     // update the product list locally
-                //     product_id,
-                //     name,
-                //     description,
-                //     price,
-                //     image,
-                //     category,
-                //   });
-                // }}
                 onDelete={() => {
                   setIsOpen(true);
                   setPrdDel(product);
@@ -202,7 +182,6 @@ const AllProducts: React.FunctionComponent = () => {
         }}
       />
     </Box>
-    // </Center>
   );
 };
 
