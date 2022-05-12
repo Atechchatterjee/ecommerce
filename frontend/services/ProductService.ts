@@ -24,6 +24,11 @@ export const getProductInfo = async (productId: any) => {
   }
 }
 
+export const getProductPrice = async (productId: number) => {
+  const res = await api.get(`/shop/get-product-prices/${productId}/`)
+  if(res) return Promise.resolve(res.data);
+}
+
 export const addProductImages = async (formData: FormData) => {
   const res = await api.post('/shop/addproductimages/', formData, {withCredentials: true});
   if (res) return Promise.resolve(res);
