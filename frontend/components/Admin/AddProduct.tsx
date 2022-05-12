@@ -5,10 +5,6 @@ import {
   ContainerProps,
   Button,
   useToast,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputStepper,
   Flex,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
