@@ -108,7 +108,7 @@ const CategorySidebar = ({
 
   const DynamicHeading = () => {
     const category = peekCategoryStack();
-    return category.val ? category.val.name : "Categories";
+    return category.val ? category.val.name : "All Categories";
   };
 
   const handleClose = () => {
@@ -157,7 +157,7 @@ const CategorySidebar = ({
               onClick={handleClose}
             />
             <Flex flexDirection="column" gridGap={6}>
-              <Text fontWeight="bold" fontSize="1.1rem" flex="1">
+              <Text fontWeight="semibold" fontSize="1.3rem" flex="1">
                 <DynamicHeading />
               </Text>
               <DisplayCategories
