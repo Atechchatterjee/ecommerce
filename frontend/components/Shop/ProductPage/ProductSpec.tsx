@@ -81,7 +81,10 @@ const UpdateProductValueForm = ({
   const [selectedCategory, setSelectedCategory] = useState<CategoryNode | null>(
     null
   );
-  const [allPriceData, setAllPriceData] = useState<any[]>([]);
+  const [allPriceData, setAllPriceData] = useState<any[]>(product.price);
+  const [deletedProductPriceIndx, setDeleteProductPriceIndx] = useState<any[]>(
+    []
+  );
 
   useEffect(() => {
     getAllCategory().then((categories) => {
@@ -106,8 +109,9 @@ const UpdateProductValueForm = ({
     updateProduct({
       id: product.id,
       unit: selectedUnit?.unit_id,
-      // gstId: gstSelectedRows?.id,
       ...productValues,
+      price: allPriceData.filter((price) => price.new),
+      deletedProductPriceIndx,
     })
       .then(() => {
         getProductInfo(product.id)
@@ -180,24 +184,14 @@ const UpdateProductValueForm = ({
         value={productValues.description}
         onChange={(e: any) => handleChange(e, "set-product-description")}
       />
-      <Flex flexDirection="row" gridGap={3} w="100%">
-        <CustomField
-          w="100%"
-          label="Product Price"
-          value={productValues.price}
-          type="number"
-          onChange={(e: any) => handleChange(e, "set-product-price")}
-        />
-        <SelectUnitMenu
-          mt="1.8rem"
-          allUnits={allUnits}
-          selectedUnit={selectedUnit}
-          setSelectedUnit={setSelectedUnit}
-        />
-      </Flex>
-      <EnterPrice {...{ allPriceData, setAllPriceData }} />
+      <EnterPrice
+        {...{ allPriceData, setAllPriceData }}
+        deleteCb={(id: any) =>
+          setDeleteProductPriceIndx([...deletedProductPriceIndx, id])
+        }
+      />
       {customTree ? (
-        <Flex flexDirection="row" gridGap={5} mt="2%">
+        <Flex flexDirection="row" gridGap={5} mt="2.1rem">
           <SelectCategory
             flex="1"
             height="4.9vh"
@@ -226,6 +220,16 @@ const UpdateProductValueForm = ({
               variant="primaryOutline"
             />
           </GSTSelectorContext.Provider>
+
+          <SelectUnitMenu
+            size="lg"
+            variant="primaryOutline"
+            borderRadius="sm"
+            fontSize="md"
+            allUnits={allUnits}
+            selectedUnit={selectedUnit}
+            setSelectedUnit={setSelectedUnit}
+          />
         </Flex>
       ) : (
         <></>
