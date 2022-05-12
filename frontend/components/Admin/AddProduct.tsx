@@ -110,7 +110,7 @@ const AddProduct = (props: ContainerProps) => {
             initialValues={{
               productName: "",
               productDescription: "",
-              productPrice: "",
+              productPrice: [],
             }}
             onSubmit={(values: any, { setSubmitting }) => {
               if (!categoryId) {
@@ -124,13 +124,13 @@ const AddProduct = (props: ContainerProps) => {
                   productImages,
                   unitId: selectedUnit ? selectedUnit.unit_id : -1,
                   gstId: selectedGSTData ? selectedGSTData.id : -1,
-                  productPrice: allPriceData,
+                  productPrice: JSON.stringify(allPriceData),
                 };
                 createProduct(values)
                   .then(() => {
                     showSuccessToast(values);
                     setSubmitting(false);
-                    setTimeout(() => window.location.reload());
+                    setTimeout(() => window.location.reload(), 300);
                   })
                   .catch(() => {
                     showErrorToast("Product could not be created!");
@@ -165,33 +165,6 @@ const AddProduct = (props: ContainerProps) => {
                     minHeight="10em"
                     as="textarea"
                   />
-                  <Flex flexDirection="row" position="relative" gridGap={3}>
-                    <NumberInput
-                      precision={2}
-                      step={1}
-                      borderRadius="lg"
-                      onReset={() => alert("reseting")}
-                      w="100%"
-                    >
-                      <CustomField
-                        value={values.productPrice}
-                        placeholder="Prodcut Price"
-                        borderRadius="sm"
-                        name="productPrice"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                      <NumberInputStepper>
-                        <NumberIncrementStepper />
-                        <NumberDecrementStepper />
-                      </NumberInputStepper>
-                    </NumberInput>
-                    <SelectUnitMenu
-                      allUnits={allUnits}
-                      selectedUnit={selectedUnit}
-                      setSelectedUnit={setSelectedUnit}
-                    />
-                  </Flex>
                   <EnterPrice {...{ allPriceData, setAllPriceData }} />
                   <Flex flexDirection="row" gridGap={3}>
                     <SelectCategory
@@ -226,6 +199,14 @@ const AddProduct = (props: ContainerProps) => {
                         }}
                       />
                     </GSTSelectorContext.Provider>
+                    <SelectUnitMenu
+                      size="lg"
+                      fontSize="md"
+                      borderRadius="sm"
+                      allUnits={allUnits}
+                      selectedUnit={selectedUnit}
+                      setSelectedUnit={setSelectedUnit}
+                    />
                   </Flex>
                   <DragUpload
                     marginLeft="-1em"
