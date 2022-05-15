@@ -170,6 +170,7 @@ const AllProducts: React.FunctionComponent = () => {
                   setIsOpen(true);
                   setPrdDel(product);
                 }}
+                editable
               />
             </ProductInfoContext.Provider>
           </GridItem>
