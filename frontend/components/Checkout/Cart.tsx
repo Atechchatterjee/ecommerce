@@ -108,7 +108,7 @@ const Cart: React.FC<CartProps> = ({ proceed }) => {
           <Text key={`${indx}1`} isTruncated>
             {item.name}
           </Text>,
-          <Text key={`${indx}2`}>{item.price}</Text>,
+          <Text key={`${indx}2`}>{item.price ? item.price[0].price : ""}</Text>,
           <CustomField
             value={quantities[item.product_id]}
             key={`${indx}3`}
@@ -175,6 +175,7 @@ const Cart: React.FC<CartProps> = ({ proceed }) => {
           selectedRowsState={[selectedItems, setSelectedItems]}
           excludeSelectForRows={[cartItems.length - 1]}
           variant="unstyled"
+          tableVariant="simple"
         />
       </GridItem>
       <GridItem rowSpan={1} colSpan={16} textAlign="left">
