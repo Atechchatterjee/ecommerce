@@ -21,7 +21,7 @@ const Login: NextPage = () => {
 
   return (
     <Box position="relative" h="100vh" w="100%">
-      <Header />
+      <Header excludeCategoryBar />
       <CustomContainer
         height="35em"
         borderRadius="xl"
