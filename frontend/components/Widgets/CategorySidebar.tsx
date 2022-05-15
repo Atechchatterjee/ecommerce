@@ -4,6 +4,7 @@ import {
   Button,
   CloseButton,
   ContainerProps,
+  Fade,
   Flex,
   FlexProps,
   Text,
@@ -42,18 +43,20 @@ const DisplayCategories = ({
               w="95%"
               minH="5vh"
               borderRadius="md"
-              backgroundColor={
-                hoverId !== category.val.id ? "rgba(255,255,255,0.4)" : ""
-              }
-              bgGradient={
-                hoverId === category.val.id
-                  ? "linear(to-r, rgba(46, 60, 126, 0.7), rgba(46, 60, 126, 0.6))"
-                  : ""
-              }
-              color={hoverId === category.val.id ? "white" : "gray.800"}
+              // backgroundColor={
+              //   hoverId !== category.val.id ? "rgba(255,255,255,0.4)" : ""
+              // }
+              bg={hoverId === category.val.id ? "primary.200" : "primary.100"}
+              // linear(to-r, rgba(19, 30, 91, 0.8), rgba(19, 30, 91, 0.6))
+              // bgGradient={
+              //   hoverId === category.val.id
+              //     ? "linear(to-r, rgba(19, 30, 91, 0.8), rgba(19, 30, 91, 0.6))"
+              //     : ""
+              // }
+              color={hoverId === category.val.id ? "white" : "gray.100"}
               onMouseEnter={() => setHoverId(category.val.id)}
               onMouseLeave={() => setHoverId(-1)}
-              boxShadow="rgba(99, 99, 99, 0.2) 0px 2px 8px 0px"
+              boxShadow="rgba(99, 99, 99, 0.2) 1px 1px 4px 1px"
               padding="4% 8%"
               flex="1"
               cursor="pointer"
@@ -129,8 +132,8 @@ const CategorySidebar = ({
           key="modal"
           initial={{ opacity: 0.5, x: -5 }}
           animate={{ x: 0, opacity: 1 }}
-          transition={{ duration: 0.2 }}
-          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2, ease: "easeInOut", velocity: 0.1 }}
+          exit={{ opacity: 0.5, x: -5 }}
         >
           <Box
             position="fixed"
@@ -139,10 +142,8 @@ const CategorySidebar = ({
             w="18%"
             h="100vh"
             borderRadius="md"
-            backgroundColor={
-              checkBrowser(window, "firefox")
-                ? "rgba(255,255,255,1)"
-                : "rgba(255,255,255,0.8)"
+            bgGradient={
+              "linear(to-r, rgba(19, 30, 91, 0.95), rgba(19, 30, 91, 0.85))"
             }
             backdropFilter="blur(20px)"
             boxShadow="rgba(99, 99, 99, 0.2) 0px 2px 8px 0px"
@@ -152,12 +153,18 @@ const CategorySidebar = ({
           >
             <CloseButton
               position="absolute"
+              color="white"
               right="3%"
               top="2.5%"
               onClick={handleClose}
             />
             <Flex flexDirection="column" gridGap={6}>
-              <Text fontWeight="semibold" fontSize="1.3rem" flex="1">
+              <Text
+                fontWeight="semibold"
+                fontSize="1.3rem"
+                flex="1"
+                color="white"
+              >
                 <DynamicHeading />
               </Text>
               <DisplayCategories
@@ -173,7 +180,7 @@ const CategorySidebar = ({
               />
               <Button
                 color="gray.100"
-                variant="primarySolid"
+                variant="secondarySolid"
                 opacity="0.8"
                 marginTop="4%"
                 w="95%"
