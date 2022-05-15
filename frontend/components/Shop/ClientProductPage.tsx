@@ -249,7 +249,7 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
                   ₹
                 </Text>
                 <Text fontSize="2em" fontWeight="600">
-                  {/* {product.price} */}
+                  {product.price[0]?.price}
                 </Text>
               </Flex>
               {product.unit && (
