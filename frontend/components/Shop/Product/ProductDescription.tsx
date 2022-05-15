@@ -53,7 +53,10 @@ const NormalMode = ({ ...props }: ContainerProps) => {
           right="1em"
           bottom="1em"
         >
-          <Text fontWeight="bold">₹{product.price[0]?.price}</Text>
+          <Text fontWeight="bold">
+            ₹{product.price[0]?.price}{" "}
+            {product.unit ? " / " + product.unit.value : ""}
+          </Text>
         </Tag>
       </Flex>
     </Container>
