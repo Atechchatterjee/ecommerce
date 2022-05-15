@@ -33,9 +33,19 @@ class Cart_Details(models.Model):
     total_price = models.TextField(null=False)
     created = models.DateTimeField(null=False)
 
+    def find_price_for_given_quantity(self):
+        prices = Product_Price.objects.filter(product_id=self.product_id)
+        for price in prices:
+            product_range = price.range.split('-')
+            lower_range = int(product_range[0].strip())
+            upper_range = int(product_range[1].strip()) if len(product_range) > 1 else lower_range
+            if lower_range <= self.quantity <= upper_range:
+                return price.price
+        return prices[0].price if len(prices) > 0 else 0
+
     def save(self, *args, **kwargs):
         self.created = timezone.now()
-        self.total_price = self.quantity * int(self.product_id.price)
+        self.total_price = self.quantity * int(self.find_price_for_given_quantity())
         return super(Cart_Details, self).save(*args, **kwargs)
 
 
