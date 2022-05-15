@@ -22,6 +22,7 @@ interface Props extends TableProps {
   selectedRowsState?: [selectedRows: any[], setSelectedRows: Function];
   excludeSelectForRows?: number[];
   interactive?: boolean;
+  tableVariant?: "simple" | "custom";
 }
 
 const CustomTable = ({
@@ -33,6 +34,7 @@ const CustomTable = ({
   selectedRowsState = [[], () => {}],
   excludeSelectForRows,
   interactive,
+  tableVariant = "custom",
   ...props
 }: Props) => {
   const [selectTrigger, setSelectTrigger] = useState<boolean>(false);
@@ -80,17 +82,20 @@ const CustomTable = ({
   return (
     <Table variant="simple" size="md" width="full" {...props}>
       {tableCaption ? <TableCaption>{tableCaption}</TableCaption> : <></>}
-      <Thead bgColor="primary.100" height="3.5em">
+      <Thead
+        bgColor={tableVariant === "simple" ? "" : "primary.100"}
+        height="3.5em"
+      >
         <Tr>
           {heading.map((headingElement, indx: number) => (
-            <Th textColor="white" key={indx}>
+            <Th textColor={tableVariant === "simple" ? "" : "white"} key={indx}>
               {headingElement}
             </Th>
           ))}
           {select ? (
             <Th width={1} key={heading.length + 1}>
               <Text
-                textColor="white"
+                textColor={tableVariant === "simple" ? "" : "white"}
                 cursor="pointer"
                 onClick={() => {
                   selectAllRows();
