@@ -18,7 +18,7 @@ import { CustomField } from "../Custom/CustomField";
 import Fuse from "fuse.js";
 import CategorySidebar from "../Widgets/CategorySidebar";
 import { useCategoryData } from "../../hooks/useCategoryData";
-import { MdMenu } from "react-icons/md";
+import { MdEmail, MdMenu } from "react-icons/md";
 import { CategoryNode } from "../../util/Tree";
 import { scrollBarStyle } from "../../util/ScrollBarStyle";
 import { AiFillShopping } from "react-icons/ai";
@@ -26,9 +26,14 @@ import { AiFillShopping } from "react-icons/ai";
 interface HeaderProps {
   products?: [any[], (_: any[]) => void];
   originalProducts?: any[];
+  excludeCategoryBar?: boolean;
 }
 
-const Header: React.FC<HeaderProps> = ({ products, originalProducts }) => {
+const Header: React.FC<HeaderProps> = ({
+  excludeCategoryBar,
+  products,
+  originalProducts,
+}) => {
   const [authenticated, setAuthenticated] = useState<boolean>(false);
   const [allProducts, setAllProducts] = products || [];
   const [searchBarAutoFocus, setSearchBarAutoFocus] = useState<boolean>(false);
@@ -199,6 +204,37 @@ const Header: React.FC<HeaderProps> = ({ products, originalProducts }) => {
 
   const redirectToShop = () => window.location.assign("/shop");
   const redirectToCheckout = () => window.location.assign("/checkout");
+  const redirectToContact = () => window.location.assign("/contact");
+
+  const CategoryBar = () => {
+    return (
+      <Box>
+        <Box
+          className="sub-header"
+          sx={scrollBarStyle({ hidden: true })}
+          height="7.4rem"
+          overflow="scroll"
+          justifyItems="center"
+          bgColor="primary.200"
+          color="gray.300"
+        >
+          <Flex
+            flexDirection="row"
+            gridGap={10}
+            w="max-content"
+            paddingTop="5.2rem"
+            flexWrap="nowrap"
+            textAlign="justify"
+          >
+            <Box flex="0.1">
+              <HamburgerButton mt="-25%" ml="40%" />
+            </Box>
+            {categoryTree && DisplayCategories({ cur: categoryTree.root })}
+          </Flex>
+        </Box>
+      </Box>
+    );
+  };
 
   return (
     <Box>
@@ -251,37 +287,18 @@ const Header: React.FC<HeaderProps> = ({ products, originalProducts }) => {
                 <AiFillShopping size="20" style={{ cursor: "pointer" }} />
               </Box>
             </Tooltip>
+            <Tooltip label="Contact Us">
+              <Box onClick={redirectToContact}>
+                <MdEmail size="20" style={{ cursor: "pointer" }} />
+              </Box>
+            </Tooltip>
           </Flex>
           <Box flex="0.5" textAlign="right">
             <LoginLink />
           </Box>
         </Flex>
       </Box>
-      <Box>
-        <Box
-          className="sub-header"
-          sx={scrollBarStyle({ hidden: true })}
-          height="7.4rem"
-          overflow="scroll"
-          justifyItems="center"
-          bgColor="primary.200"
-          color="gray.300"
-        >
-          <Flex
-            flexDirection="row"
-            gridGap={10}
-            w="max-content"
-            paddingTop="5.2rem"
-            flexWrap="nowrap"
-            textAlign="justify"
-          >
-            <Box flex="0.1">
-              <HamburgerButton mt="-25%" ml="40%" />
-            </Box>
-            {categoryTree && DisplayCategories({ cur: categoryTree.root })}
-          </Flex>
-        </Box>
-      </Box>
+      {!excludeCategoryBar && <CategoryBar />}
     </Box>
   );
 };
