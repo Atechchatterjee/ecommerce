@@ -8,8 +8,8 @@ export const scrollBarStyle = ({ hidden, color, borderRadius }: ScrollBarStylePr
   "&::-webkit-scrollbar": {
     width: "0.5rem",
     height: "0.5em",
-    backgroundColor: "rgba(255,255,255,0)",
     borderRadius:  borderRadius ? borderRadius: "full",
+    bg: "gray.200",
     display: hidden ? "none": "block"
   },
   "&::-webkit-scrollbar-track": {
