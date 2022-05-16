@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { useRouter } from "next/router";
 import { NextPage } from "next";
 import axios from "axios";
-import ProductSpec from "../../../../components/Shop/ProductPage/ProductSpec";
+import ProductSpecification from "../../../../components/Shop/ProductPage/ProductSpecification";
 import Navbar from "../../../../components/Admin/Navbar";
 import WithAuth from "../../../../util/WithAuth";
 import { UserContext } from "../../../../context/UserContext";
@@ -38,7 +38,7 @@ const ProductPage: NextPage = () => {
           value={{ productInfo: [product, setProduct] }}
         >
           <Navbar />
-          <ProductSpec />
+          <ProductSpecification />
         </ProductInfoContext.Provider>
       </Box>
     ) : (
