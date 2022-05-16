@@ -9,7 +9,16 @@ import {
   Flex,
 } from "@chakra-ui/layout";
 import { InputGroup, InputGroupProps, InputRightAddon } from "@chakra-ui/input";
-import { Button, ButtonProps, Image, Tooltip } from "@chakra-ui/react";
+import {
+  Button,
+  ButtonProps,
+  Image,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Tooltip,
+} from "@chakra-ui/react";
 import { isAuthenticated } from "../../util/Authenticated";
 import logout from "../../util/Logout";
 import { useWindowDimensions } from "../../hooks/useWindowDimensions";
@@ -18,10 +27,11 @@ import { CustomField } from "../Custom/CustomField";
 import Fuse from "fuse.js";
 import CategorySidebar from "../Widgets/CategorySidebar";
 import { useCategoryData } from "../../hooks/useCategoryData";
-import { MdEmail, MdMenu } from "react-icons/md";
+import { MdEmail, MdMenu, MdStayPrimaryLandscape } from "react-icons/md";
 import { CategoryNode } from "../../util/Tree";
 import { scrollBarStyle } from "../../util/ScrollBarStyle";
 import { AiFillShopping } from "react-icons/ai";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 
 interface HeaderProps {
   products?: [any[], (_: any[]) => void];
@@ -208,7 +218,7 @@ const Header: React.FC<HeaderProps> = ({
 
   const CategoryBar = () => {
     return (
-      <Box>
+      <Box zIndex="-1">
         <Box
           className="sub-header"
           sx={scrollBarStyle({ hidden: true })}
@@ -263,9 +273,11 @@ const Header: React.FC<HeaderProps> = ({
           height="full"
           alignItems="center"
         >
-          <Box flex="2.3" textAlign="left">
-            <Image src="/CND_logo.jpg" w="6rem" h="2.7em" cursor="pointer" />
-          </Box>
+          {width > 700 && (
+            <Box flex="2.3" textAlign="left">
+              <Image src="/CND_logo.jpg" w="6rem" h="2.7em" cursor="pointer" />
+            </Box>
+          )}
           <Box flex="5">
             <SearchBar />
           </Box>
@@ -276,6 +288,7 @@ const Header: React.FC<HeaderProps> = ({
             gridGap="5"
             justifyContent="right"
             alignItems="center"
+            display={width > 700 ? "flex" : "none"}
           >
             <Tooltip label="Cart">
               <Box onClick={redirectToCheckout}>
@@ -293,9 +306,11 @@ const Header: React.FC<HeaderProps> = ({
               </Box>
             </Tooltip>
           </Flex>
-          <Box flex="0.5" textAlign="right">
-            <LoginLink />
-          </Box>
+          {width > 700 && (
+            <Box flex="0.5" textAlign="right">
+              <LoginLink />
+            </Box>
+          )}
         </Flex>
       </Box>
       {!excludeCategoryBar && <CategoryBar />}
