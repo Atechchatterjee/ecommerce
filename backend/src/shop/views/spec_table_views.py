@@ -15,8 +15,7 @@ from rest_framework.decorators import api_view, permission_classes
 
 @api_view(['POST'])
 @permission_classes([Is_Admin])
-def create_table(request):
-    product_id = itemgetter("product_id")(request.data)
+def create_table(_, product_id):
     try:
         Product_Specification_Table(
             product_id=Product.objects.get(product_id=product_id)
