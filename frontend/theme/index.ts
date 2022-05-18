@@ -16,12 +16,4 @@ export default extendTheme({
       }
     }
   },
-  styles: {
-    global: {
-      Input: {
-        backgroundColor: "red",
-        focusBorderColor: "red"
-      },
-    }
-  }
 });
