@@ -135,13 +135,7 @@ const AddProduct = (props: ContainerProps) => {
               }
             }}
           >
-            {({
-              values,
-              handleSubmit,
-              handleChange,
-              handleBlur,
-              isSubmitting,
-            }) => (
+            {({ values, handleSubmit, handleChange, isSubmitting }) => (
               <form onSubmit={handleSubmit}>
                 <Flex flexDirection="column" gridGap={8}>
                   <CustomField
@@ -166,7 +160,6 @@ const AddProduct = (props: ContainerProps) => {
                     <SelectCategory
                       text="Select Category"
                       width="100%"
-                      borderRadius="sm"
                       bgColor={categoryId ? "secondary.200" : ""}
                       _hover={
                         categoryId
@@ -174,7 +167,6 @@ const AddProduct = (props: ContainerProps) => {
                           : { opacity: "0.9" }
                       }
                       size="lg"
-                      fontSize="md"
                       flex="1"
                       selectCb={({ selectedCategory }) => {
                         if (selectedCategory?.val)
@@ -189,7 +181,7 @@ const AddProduct = (props: ContainerProps) => {
                     >
                       <GSTSelectorModal
                         flex="1"
-                        fontSize="md"
+                        borderRadius="md"
                         selectCb={(data: any) => {
                           setSelectedGSTData(data);
                         }}
@@ -197,8 +189,6 @@ const AddProduct = (props: ContainerProps) => {
                     </GSTSelectorContext.Provider>
                     <SelectUnitMenu
                       size="lg"
-                      fontSize="md"
-                      borderRadius="sm"
                       allUnits={allUnits}
                       selectedUnit={selectedUnit}
                       setSelectedUnit={setSelectedUnit}
