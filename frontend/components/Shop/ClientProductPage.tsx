@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useContext } from "react";
 import {
   HStack,
+  Spinner,
   Button,
   Input,
   Container,
   Box,
   Image,
   Text,
-  Spinner,
   Grid,
   Flex,
 } from "@chakra-ui/react";
@@ -106,6 +106,7 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
   const { productInfo } = useContext(ProductInfoContext);
   const [product] = productInfo;
   const [quantity, setQuantity] = useState<number>(1);
+  const [currentPrice, setCurrentPrice] = useState<any>();
   const [productExistsInCart, setProductExistsInCart] =
     useState<boolean>(false);
   const [selectedImage, setSelectedImage] = useState<number>(0);
@@ -134,17 +135,39 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
       ]);
   };
 
+  const getPriceInRange = (quantity: number) => {
+    const price = product.price;
+    let priceInRange = -1;
+    for (const priceObj of price) {
+      const [lowerRange, upperRange] = priceObj.range
+        .split("-")
+        .map((r: string) => parseInt(r.trim()));
+      console.log({ range: [lowerRange, upperRange], price: priceObj.price });
+      if (lowerRange <= quantity) {
+        if (upperRange && upperRange >= quantity) {
+          return priceObj.price;
+        }
+        priceInRange = priceObj.price;
+      }
+    }
+    return priceInRange;
+  };
+
   useEffect(() => {
     if (product) {
       fetchOptions(product).then((optionData) => {
-        console.log({ optionData });
         setFetchedOptions(optionData);
       });
       setLoading(false);
       createTableHeading();
       setTableExists(true);
+      setCurrentPrice(getPriceInRange(quantity));
     } else setLoading(true);
   }, [product]);
+
+  useEffect(() => {
+    setCurrentPrice(getPriceInRange(quantity));
+  }, [quantity]);
 
   useEffect(() => {
     console.log({ fetchedOptions });
@@ -249,7 +272,7 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
                   ₹
                 </Text>
                 <Text fontSize="2em" fontWeight="600">
-                  {product.price[0]?.price}
+                  {currentPrice === -1 ? <Spinner /> : currentPrice}
                 </Text>
               </Flex>
               {product.unit && (
