@@ -291,17 +291,29 @@ const Header: React.FC<HeaderProps> = ({
             display={width > 700 ? "flex" : "none"}
           >
             <Tooltip label="Cart">
-              <Box onClick={redirectToCheckout}>
+              <Box
+                onClick={redirectToCheckout}
+                _hover={{ color: "gray.400" }}
+                transition="color ease-in-out 0.2s"
+              >
                 <FaShoppingCart size="20" style={{ cursor: "pointer" }} />
               </Box>
             </Tooltip>
             <Tooltip label="Shop">
-              <Box onClick={redirectToShop}>
+              <Box
+                onClick={redirectToShop}
+                _hover={{ color: "gray.400" }}
+                transition="color ease-in-out 0.2s"
+              >
                 <AiFillShopping size="20" style={{ cursor: "pointer" }} />
               </Box>
             </Tooltip>
             <Tooltip label="Contact Us">
-              <Box onClick={redirectToContact}>
+              <Box
+                onClick={redirectToContact}
+                _hover={{ color: "gray.400" }}
+                transition="color ease-in-out 0.2s"
+              >
                 <MdEmail size="20" style={{ cursor: "pointer" }} />
               </Box>
             </Tooltip>
