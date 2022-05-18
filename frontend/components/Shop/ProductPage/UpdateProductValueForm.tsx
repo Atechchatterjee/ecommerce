@@ -8,6 +8,7 @@ import {
   getProductInfo,
 } from "../../../services/ProductService";
 import { fetchUnits } from "../../../services/UnitService";
+import { scrollBarStyle } from "../../../util/ScrollBarStyle";
 import {
   CategoryTree,
   CategoryNode,
@@ -142,13 +143,18 @@ const UpdateProductValueForm = ({
       />
       <CustomField
         w="100%"
-        h="10em"
+        minH="10em"
+        h="3xs"
         padding="2%"
         as="textarea"
         label="Product Description"
         value={productValues.description}
         onChange={(e: any) => handleChange(e, "set-product-description")}
+        sx={scrollBarStyle()}
       />
+      <Text color="gray.500" fontFamily="Sora" fontSize="0.9rem">
+        Product Price :
+      </Text>
       <EnterPrice
         {...{ allPriceData, setAllPriceData }}
         deleteCb={(id: any) =>
@@ -156,12 +162,12 @@ const UpdateProductValueForm = ({
         }
       />
       {customTree ? (
-        <Flex flexDirection="row" gridGap={5} mt="2.1rem">
+        <Flex flexDirection="row" gridGap={5} mt="2.1rem" flexWrap="wrap">
           <SelectCategory
             flex="1"
-            height="4.9vh"
+            size="md"
             text={product.category.category_name || "Select Category"}
-            variant="primaryOutline"
+            variant="primarySolid"
             selectCb={({ selectedCategory }) => {
               if (selectedCategory) {
                 setSelectedCategory(selectedCategory);
@@ -179,18 +185,16 @@ const UpdateProductValueForm = ({
             }}
           >
             <GSTSelectorModal
-              borderRadius="sm"
-              fontSize="md"
+              borderRadius="md"
+              size="md"
               flex="1"
-              variant="primaryOutline"
+              variant="primarySolid"
             />
           </GSTSelectorContext.Provider>
 
           <SelectUnitMenu
-            size="lg"
-            variant="primaryOutline"
-            borderRadius="sm"
-            fontSize="md"
+            size="md"
+            variant="primarySolid"
             allUnits={allUnits}
             selectedUnit={selectedUnit}
             setSelectedUnit={setSelectedUnit}
