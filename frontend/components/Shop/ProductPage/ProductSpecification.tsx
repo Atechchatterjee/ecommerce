@@ -12,6 +12,7 @@ import CustomContainer from "../../Custom/CustomContainer";
 import OptionsTable from "../../Admin/OptionsTable";
 import api from "../../../util/AxiosApi";
 import UpdateProductValueForm from "./UpdateProductValueForm";
+import { addProductImages } from "../../../services/ProductService";
 
 const ProductSpec: React.FC = () => {
   const [specTableHeading, setSpecTableHeading] = useState<any[]>([]);
@@ -69,27 +70,19 @@ const ProductSpec: React.FC = () => {
     else return <></>;
   };
 
-  const uploadAllImages = () => {
+  const uploadAllImages = async () => {
     let formData = new FormData();
     formData.append("productId", product.id.toString());
     uploadedImages.forEach((img, indx) => {
       formData.append(`file[${indx}]`, img);
     });
-    axios
-      .post(`${constants.url}/shop/addproductimages/`, formData, {
-        withCredentials: true,
+    await addProductImages(formData);
+    getProductInfo(product.id)
+      .then((newProduct) => {
+        setProduct(newProduct);
       })
-      .then(() => {
-        getProductInfo(product.id)
-          .then((newProduct) => {
-            setProduct(newProduct);
-          })
-          .catch((err) => console.error(err));
-        setClearUploadedFiles(true);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+      .catch((err) => console.error(err));
+    setClearUploadedFiles(true);
   };
 
   if (product)
@@ -103,20 +96,20 @@ const ProductSpec: React.FC = () => {
         }}
       >
         <Flex
-          marginLeft="12em"
-          position="absolute"
+          marginLeft="7%"
+          marginRight="7%"
+          justifyContent="center"
+          alignContent="center"
           flexDirection="row"
           flexWrap="wrap"
-          gridGap="100"
+          gridGap="1"
           pb="5%"
         >
           <Container margin="0" marginTop="2em" height="110vh">
             {product && (
               <CustomContainer
                 borderRadius="2xl"
-                width="38em"
-                height="80%"
-                maxHeight="38em"
+                height="55vh"
                 padding="5%"
                 position="relative"
                 interactive
@@ -159,7 +152,6 @@ const ProductSpec: React.FC = () => {
               height="14vh"
               clearUpload={[clearUploadedFiles, setClearUploadedFiles]}
               onFileUpload={(files) => {
-                console.log({ files });
                 if (files.length !== 0) {
                   setUploadedImages(files);
                 }
@@ -167,7 +159,7 @@ const ProductSpec: React.FC = () => {
             />
             <Button
               variant="primarySolid"
-              margin="2em 0"
+              margin="3em 0"
               size="lg"
               width="100%"
               onClick={uploadAllImages}
@@ -176,10 +168,10 @@ const ProductSpec: React.FC = () => {
             </Button>
             <CreateSpecificationTableBtn />
           </Container>
-          <Container marginTop="2em" width="100%" marginLeft="0">
+          <Container marginTop="2em" width="100%" justifyContent="center">
             <CustomContainer
               padding="2rem 2rem 0.01rem 2rem"
-              width="120%"
+              width="100%"
               borderRadius="lg"
             >
               <UpdateProductValueForm
@@ -191,9 +183,8 @@ const ProductSpec: React.FC = () => {
             <Box
               position="relative"
               zIndex={dropDownStatus ? "-1" : "11"}
-              w="110%"
+              w="100%"
               mt="2.5rem"
-              ml="-1rem"
             >
               <SpecificationTable />
               <OptionsTable mt="5%" borderRadius="lg" />
