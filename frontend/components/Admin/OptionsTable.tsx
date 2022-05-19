@@ -6,7 +6,7 @@ import { ProductInfoContext } from "../../context/ProductInfoContext";
 import { Box, ContainerProps, Tag, Text } from "@chakra-ui/react";
 import { scrollBarStyle } from "../../util/ScrollBarStyle";
 import { AddButton } from "../Custom/CustomButtons";
-import OptionModal from "../Shop/ProductPage/OptionsModal";
+import OptionModal from "../Shop/AdminProductPage/OptionsModal";
 
 const OptionsTable = ({ ...props }: ContainerProps) => {
   const [rows, setRows] = useState<any[][]>();

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { useRouter } from "next/router";
 import { NextPage } from "next";
 import axios from "axios";
-import ProductSpecification from "../../../../components/Shop/ProductPage/ProductSpecification";
+import ProductSpecification from "../../../../components/Shop/AdminProductPage/ProductSpecification";
 import Navbar from "../../../../components/Admin/Navbar";
 import WithAuth from "../../../../util/WithAuth";
 import { UserContext } from "../../../../context/UserContext";

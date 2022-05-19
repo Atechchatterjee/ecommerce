@@ -3,7 +3,6 @@ import {
   HStack,
   Spinner,
   Button,
-  Input,
   Container,
   Box,
   Image,
@@ -12,7 +11,6 @@ import {
   Flex,
 } from "@chakra-ui/react";
 import constants from "../../util/Constants";
-import axios from "axios";
 import { OptionsData } from "../../types/shop";
 import { ProductInfoContext } from "../../context/ProductInfoContext";
 import ImageGallery from "./Product/ImageGallery";
@@ -21,9 +19,10 @@ import { useDynamicColumns } from "../../hooks/useDynamicColumns";
 import { CustomField } from "../Custom/CustomField";
 import { useWindowDimensions } from "../../hooks/useWindowDimensions";
 import { SpecTableContext } from "../../context/SpecTableContext";
-import SpecificationTable from "./ProductPage/SpecificationTable";
-import OptionsModal from "./ProductPage/OptionsModal";
+import SpecificationTable from "./AdminProductPage/SpecificationTable";
+import OptionsModal from "./AdminProductPage/OptionsModal";
 import { isAuthenticated } from "../../util/Authenticated";
+import api from "../../util/AxiosApi";
 
 const OptionButtons: React.FC<{
   optionValues: { id: number; value: string }[];
@@ -54,8 +53,8 @@ const OptionButtons: React.FC<{
 
 const fetchOptions = async (product: any): Promise<OptionsData> =>
   new Promise((resolve) => {
-    axios
-      .post(`${constants.url}/shop/getoptions/`, {
+    api
+      .post("/shop/getoptions/", {
         product_id: product.product_id,
       })
       .then((res) => {
@@ -68,9 +67,9 @@ const fetchOptions = async (product: any): Promise<OptionsData> =>
 
 const addProductToCart = async (quantity: number, productId: number) => {
   return new Promise((resolve) => {
-    axios
+    api
       .post(
-        `${constants.url}/shop/add-to-cart/`,
+        "/shop/add-to-cart/",
         {
           product_id: productId,
           quantity,
@@ -84,9 +83,9 @@ const addProductToCart = async (quantity: number, productId: number) => {
 
 const checkIfInCart = async (productId: number) => {
   return new Promise((resolve) => {
-    axios
+    api
       .post(
-        `${constants.url}/shop/product-exists-in-cart/`,
+        "/shop/product-exists-in-cart/",
         {
           product_id: productId,
         },
@@ -142,11 +141,8 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
       const [lowerRange, upperRange] = priceObj.range
         .split("-")
         .map((r: string) => parseInt(r.trim()));
-      console.log({ range: [lowerRange, upperRange], price: priceObj.price });
       if (lowerRange <= quantity) {
-        if (upperRange && upperRange >= quantity) {
-          return priceObj.price;
-        }
+        if (upperRange && upperRange >= quantity) return priceObj.price;
         priceInRange = priceObj.price;
       }
     }
@@ -155,9 +151,7 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
 
   useEffect(() => {
     if (product) {
-      fetchOptions(product).then((optionData) => {
-        setFetchedOptions(optionData);
-      });
+      fetchOptions(product).then((optionData) => setFetchedOptions(optionData));
       setLoading(false);
       createTableHeading();
       setTableExists(true);

@@ -1,6 +1,5 @@
 import React, { useState, useContext } from "react";
 import { Button, Container, Text, Image, Flex, Box } from "@chakra-ui/react";
-import axios from "axios";
 import constants from "../../../util/Constants";
 import SpecificationTable from "./SpecificationTable";
 import { SpecTableContext } from "../../../context/SpecTableContext";
