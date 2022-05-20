@@ -156,9 +156,20 @@ const AddProduct = (props: ContainerProps) => {
                     as="textarea"
                   />
                   <EnterPrice {...{ allPriceData, setAllPriceData }} />
-                  <Flex flexDirection="row" gridGap={3}>
+                  <DragUpload
+                    marginLeft="-1em"
+                    width="34em"
+                    onFileUpload={(files) => {
+                      console.log({ files });
+                      setProductImages(files);
+                    }}
+                    clearUpload={[clearUploadFiles, setClearUploadFiles]}
+                  />
+                  <Flex flexDirection="row" gridGap={0}>
                     <SelectCategory
+                      borderRadius="none"
                       text="Select Category"
+                      variant="primaryLightSolid"
                       width="100%"
                       bgColor={categoryId ? "secondary.200" : ""}
                       _hover={
@@ -181,7 +192,8 @@ const AddProduct = (props: ContainerProps) => {
                     >
                       <GSTSelectorModal
                         flex="1"
-                        borderRadius="md"
+                        borderRadius="none"
+                        variant="primaryLightSolid"
                         selectCb={(data: any) => {
                           setSelectedGSTData(data);
                         }}
@@ -189,23 +201,16 @@ const AddProduct = (props: ContainerProps) => {
                     </GSTSelectorContext.Provider>
                     <SelectUnitMenu
                       size="lg"
+                      borderRadius="none"
+                      variant="primaryLightSolid"
                       allUnits={allUnits}
                       selectedUnit={selectedUnit}
                       setSelectedUnit={setSelectedUnit}
                     />
                   </Flex>
-                  <DragUpload
-                    marginLeft="-1em"
-                    width="34em"
-                    onFileUpload={(files) => {
-                      console.log({ files });
-                      setProductImages(files);
-                    }}
-                    clearUpload={[clearUploadFiles, setClearUploadFiles]}
-                  />
                   <Button
-                    borderRadius="sm"
                     variant="primarySolid"
+                    borderRadius="sm"
                     size="lg"
                     width="full"
                     type="submit"
