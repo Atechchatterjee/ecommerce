@@ -1,29 +1,26 @@
-import React, { useEffect, useState, useContext } from "react";
+import api from "../../util/AxiosApi";
 import { useRouter } from "next/router";
 import { NextPage } from "next";
-import axios from "axios";
-import { UserContext } from "../../context/UserContext";
-import Header from "../../components/Layout/Header";
-import ClientProductPage from "../../components/Shop/ClientProductPage";
+import { useEffect, useState } from "react";
 import { ProductInfoContext } from "../../context/ProductInfoContext";
 import { getProductInfo } from "../../util/ProductInfo";
+import { Spinner } from "@chakra-ui/react";
+import Header from "../../components/Layout/Header";
 import Footer from "../../components/Layout/Footer";
+import ClientProductPage from "../../components/Shop/ClientProductPage";
 
 const ProductPage: NextPage = () => {
   const router = useRouter();
   const { pid } = router.query;
   const [product, setProduct] = useState<any>();
   const [loading, setLoading] = useState<boolean>(true);
-  const { admin } = useContext(UserContext);
 
   useEffect(() => {
     if (!pid) return;
-    axios.get(`/admin/catalogs/all-products/${pid}`).then(() => {
-      getProductInfo(pid).then((product) => {
-        console.log({ product });
-        setProduct(product);
-        setLoading(false);
-      });
+    api.get(`/admin/catalogs/all-products/${pid}`).then(async () => {
+      const product = await getProductInfo(pid);
+      setProduct(product);
+      setLoading(false);
     });
   }, [pid]);
 
@@ -34,7 +31,7 @@ const ProductPage: NextPage = () => {
       <Footer />
     </ProductInfoContext.Provider>
   ) : (
-    <></>
+    <Spinner />
   );
 };
 
