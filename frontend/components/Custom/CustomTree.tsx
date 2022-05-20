@@ -10,6 +10,7 @@ import {
   TextProps,
   Flex,
   InputProps,
+  Collapse,
 } from "@chakra-ui/react";
 import { CategoryNode } from "../../util/Tree";
 import { IoMdArrowDropright, IoMdArrowDropdown } from "react-icons/io";
@@ -89,7 +90,7 @@ const CustomTreeWrapper = ({
     disableRightClick,
     ...props
   }: CustomTreeProps) => {
-    if (root.val === null && root.children.length === 0) return null;
+    // if (root.val === null && root.children.length === 0) return null;
 
     const NewCategoryInputField = ({ ...props }: InputProps) => (
       <CustomField
@@ -111,8 +112,8 @@ const CustomTreeWrapper = ({
 
     return (
       <Container key={key} {...props}>
-        {root.children &&
-          root.children.map((child, indx) => (
+        <Collapse in={root.children.length > 0}>
+          {root.children.map((child, indx) => (
             <Box
               key={indx}
               display={
@@ -144,25 +145,24 @@ const CustomTreeWrapper = ({
                   <Text>{child.val.name}</Text>
                 </Flex>
               </ListItem>
-              <Box>
-                {toAddNode && child.val.id === highlightNode?.val.id && (
-                  <NewCategoryInputField />
-                )}
-                {child.children.length > 0 && (
-                  <CustomTree
-                    {...{
-                      root: child,
-                      key,
-                      selectCb,
-                      addCb,
-                      deleteCb,
-                      disableRightClick,
-                    }}
-                  />
-                )}
-              </Box>
+              {/* <Collapse in={child.children.length > 0}> */}
+              {toAddNode && child.val.id === highlightNode?.val.id && (
+                <NewCategoryInputField />
+              )}
+              <CustomTree
+                {...{
+                  root: child,
+                  key,
+                  selectCb,
+                  addCb,
+                  deleteCb,
+                  disableRightClick,
+                }}
+              />
+              {/* </Collapse> */}
             </Box>
           ))}
+        </Collapse>
       </Container>
     );
   };
