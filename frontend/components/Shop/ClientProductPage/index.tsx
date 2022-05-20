@@ -10,129 +10,35 @@ import {
   Grid,
   Flex,
 } from "@chakra-ui/react";
-import constants from "../../util/Constants";
-import { OptionsData } from "../../types/shop";
-import { ProductInfoContext } from "../../context/ProductInfoContext";
-import ImageGallery from "./Product/ImageGallery";
-import CustomContainer from "../Custom/CustomContainer";
-import { useDynamicColumns } from "../../hooks/useDynamicColumns";
-import { CustomField } from "../Custom/CustomField";
-import { useWindowDimensions } from "../../hooks/useWindowDimensions";
-import { SpecTableContext } from "../../context/SpecTableContext";
-import SpecificationTable from "./AdminProductPage/SpecificationTable";
-import OptionsModal from "./AdminProductPage/OptionsModal";
-import { isAuthenticated } from "../../util/Authenticated";
-import api from "../../util/AxiosApi";
-
-const OptionButtons: React.FC<{
-  optionValues: { id: number; value: string }[];
-  selectedOption: number;
-  selected?: (indx: number) => void;
-}> = ({ optionValues, selectedOption, selected }) => (
-  <Box>
-    {optionValues.map((optionValue, indx) => (
-      <Button
-        key={indx}
-        {...(optionValue.id !== selectedOption
-          ? { colorScheme: "whiteAlpha", textColor: "black" }
-          : { variant: "secondarySolid" })}
-        fontFamily="Sora"
-        borderRadius="full"
-        width="9em"
-        boxShadow="0.01em 0.1em 0.1em 0.1em #e1e1e1"
-        left={`${indx + 2}em`}
-        onClick={() => {
-          if (selected) selected(optionValue.id);
-        }}
-      >
-        {optionValue.value}
-      </Button>
-    ))}
-  </Box>
-);
-
-const fetchOptions = async (product: any): Promise<OptionsData> =>
-  new Promise((resolve) => {
-    api
-      .post("/shop/getoptions/", {
-        product_id: product.product_id,
-      })
-      .then((res) => {
-        resolve(res.data.options);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  });
-
-const addProductToCart = async (quantity: number, productId: number) => {
-  return new Promise((resolve) => {
-    api
-      .post(
-        "/shop/add-to-cart/",
-        {
-          product_id: productId,
-          quantity,
-        },
-        { withCredentials: true }
-      )
-      .then(resolve)
-      .catch((err) => console.error(err));
-  });
-};
-
-const checkIfInCart = async (productId: number) => {
-  return new Promise((resolve) => {
-    api
-      .post(
-        "/shop/product-exists-in-cart/",
-        {
-          product_id: productId,
-        },
-        { withCredentials: true }
-      )
-      .then(resolve)
-      .catch((err) => console.error(err));
-  });
-};
+import { OptionsData } from "../../../types/shop";
+import { ProductInfoContext } from "../../../context/ProductInfoContext";
+import { useDynamicColumns } from "../../../hooks/useDynamicColumns";
+import { CustomField } from "../../Custom/CustomField";
+import { useWindowDimensions } from "../../../hooks/useWindowDimensions";
+import { isAuthenticated } from "../../../util/Authenticated";
+import { fetchOptions } from "../../../services/OptionsService";
+import { checkIfInCart, addProductToCart } from "../../../services/CartService";
+import ImageGallery from "../Product/ImageGallery";
+import CustomContainer from "../../Custom/CustomContainer";
+import ClientSpecificaitonTable from "./ClientSpecificationTable";
+import { createImageUrl } from "../../../util/CreateImageUrl";
 
 const ClientProductPage: React.FC<{ product?: any }> = () => {
   const [loading, setLoading] = useState<boolean>(true);
-  const [colorOptionIndx, setColorOptionIndx] = useState<{
-    [optionId: number]: number;
-  }>({});
   const [fetchedOptions, setFetchedOptions] = useState<OptionsData>([]);
-  const { productInfo } = useContext(ProductInfoContext);
-  const [product] = productInfo;
   const [quantity, setQuantity] = useState<number>(1);
   const [currentPrice, setCurrentPrice] = useState<any>();
   const [productExistsInCart, setProductExistsInCart] =
     useState<boolean>(false);
   const [selectedImage, setSelectedImage] = useState<number>(0);
-  const [columns] = useDynamicColumns(2, [1200]);
-  const [width] = useWindowDimensions();
   const [addToCardLoader, setAddToCartLoader] = useState<boolean>(false);
-  const [specTableHeading, setSpecTableHeading] = useState<any[]>([]);
-  const [tableExists, setTableExists] = useState<boolean>(
-    specTableHeading.length !== 0
-  );
-  const [openAddRowModal, setOpenAddRowModal] = useState<boolean>(false);
-  const [modifyAddRowModal, setModifyAddRowModal] = useState<boolean>(false);
-  const [isOpenOptionModal, setIsOpenOptionModal] = useState<boolean>(false);
   const [authenticated, setAuthenticated] = useState<boolean>(false);
 
-  const createTableHeading = () => {
-    if (specTableHeading.length === 0)
-      setSpecTableHeading([
-        ...specTableHeading,
-        <Text fontWeight="semibold" key={specTableHeading.length + 1}>
-          Specification
-        </Text>,
-        <Text fontWeight="semibold" key={specTableHeading.length + 2}>
-          Details
-        </Text>,
-      ]);
-  };
+  const { productInfo } = useContext(ProductInfoContext);
+  const [product] = productInfo;
+
+  const [columns] = useDynamicColumns(2, [1200]);
+  const [width] = useWindowDimensions();
 
   const getPriceInRange = (quantity: number) => {
     const price = product.price;
@@ -151,10 +57,8 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
 
   useEffect(() => {
     if (product) {
-      fetchOptions(product).then((optionData) => setFetchedOptions(optionData));
+      fetchOptions(product).then((res) => setFetchedOptions(res.data.options));
       setLoading(false);
-      createTableHeading();
-      setTableExists(true);
       setCurrentPrice(getPriceInRange(quantity));
     } else setLoading(true);
   }, [product]);
@@ -218,11 +122,7 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
                     position="absolute"
                     key={indx}
                     objectFit="contain"
-                    src={`${constants.url?.substring(
-                      0,
-                      constants?.url.lastIndexOf("/")
-                    )}${curImg.image}
-                    `}
+                    src={createImageUrl(curImg.image, undefined)}
                     opacity={
                       curImg.image === product.image[selectedImage].image
                         ? 1
@@ -289,32 +189,6 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
                 onChange={(e: any) => setQuantity(parseInt(e.target.value))}
               />
             </HStack>
-            <Box marginTop="3em" width="inherit" className="options-area">
-              {fetchedOptions.map((option, indx) => (
-                <HStack marginTop="1.5em" key={indx}>
-                  <Text fontWeight="semibold" fontSize="1.1em">
-                    {option.name} :
-                  </Text>
-                  <OptionButtons
-                    optionValues={option.values}
-                    selectedOption={
-                      colorOptionIndx[option.id] || option.values[0].id
-                    }
-                    selected={(indx: number) => {
-                      setColorOptionIndx({
-                        ...colorOptionIndx,
-                        [option.id]: indx,
-                      });
-                    }}
-                  />
-                </HStack>
-              ))}
-            </Box>
-            <OptionsModal
-              product={product}
-              triggerOpen={[isOpenOptionModal, setIsOpenOptionModal]}
-              simple
-            />
             <HStack marginTop="5%">
               <Button
                 variant="primarySolid"
@@ -338,18 +212,11 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
               </Button>
             </HStack>
           </Container>
-          <Box marginBottom="5%" width="80%" marginLeft="10%">
-            <SpecTableContext.Provider
-              value={{
-                headings: [specTableHeading, setSpecTableHeading],
-                tableExist: [tableExists, setTableExists],
-                openRowModal: [openAddRowModal, setOpenAddRowModal],
-                modifyRowModal: [modifyAddRowModal, setModifyAddRowModal],
-              }}
-            >
-              <SpecificationTable readOnly />
-            </SpecTableContext.Provider>
-          </Box>
+          <ProductInfoContext.Provider
+            value={{ productInfo: [product, () => {}] }}
+          >
+            <ClientSpecificaitonTable />
+          </ProductInfoContext.Provider>
         </Grid>
       )}
     </Box>
