@@ -26,6 +26,16 @@ export default {
       },
       ...commonStyles(),
     }),
+    primaryLightSolid: () => ({
+      bg: "#3E4A7F",
+      _hover: { bg: "primary.100" },
+      _disabled: {
+        _hover: {
+          textColor: primary[500],
+        }
+      },
+      ...commonStyles(),
+    }),
     primaryOutline: () => ({
       bg: "white",
       outlineColor: primary[800],
