@@ -1,4 +1,4 @@
-import { Text, Flex, Button } from "@chakra-ui/react";
+import { Text, Flex, FlexProps, Button } from "@chakra-ui/react";
 import { useState, useContext, useReducer, useEffect } from "react";
 import { FaSave } from "react-icons/fa";
 import { GSTSelectorContext } from "../../../context/GSTSelectorContext";
@@ -37,13 +37,7 @@ const productValueReducer = (state: any, action: any) => {
   }
 };
 
-interface UpdateProductValueFormProps {
-  getDropDownStatus?: (status: boolean) => void;
-}
-
-const UpdateProductValueForm = ({
-  getDropDownStatus,
-}: UpdateProductValueFormProps) => {
+const UpdateProductValueForm = ({ ...props }: FlexProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [allUnits, setAllUnits] = useState<any[]>([]);
   const [selectedUnit, setSelectedUnit] = useState<any>();
@@ -134,6 +128,7 @@ const UpdateProductValueForm = ({
       mb="5%"
       justifyContent="left"
       alignContent="left"
+      {...props}
     >
       <CustomField
         w="100%"
@@ -162,12 +157,14 @@ const UpdateProductValueForm = ({
         }
       />
       {customTree ? (
-        <Flex flexDirection="row" gridGap={5} mt="2.1rem" flexWrap="wrap">
+        <Flex flexDirection="row" gridGap={0} mt="2.1rem" flexWrap="wrap">
           <SelectCategory
-            flex="1"
-            size="md"
+            flex="0.7"
+            borderRightRadius="none"
+            borderLeftRadius="md"
+            size="lg"
             text={product.category.category_name || "Select Category"}
-            variant="primarySolid"
+            variant="primaryLightSolid"
             selectCb={({ selectedCategory }) => {
               if (selectedCategory) {
                 setSelectedCategory(selectedCategory);
@@ -185,16 +182,19 @@ const UpdateProductValueForm = ({
             }}
           >
             <GSTSelectorModal
-              borderRadius="md"
-              size="md"
+              borderRadius="none"
+              size="lg"
               flex="1"
-              variant="primarySolid"
+              variant="primaryLightSolid"
             />
           </GSTSelectorContext.Provider>
 
           <SelectUnitMenu
-            size="md"
-            variant="primarySolid"
+            size="lg"
+            flex="1.2"
+            borderRightRadius="md"
+            borderLeftRadius="none"
+            variant="primaryLightSolid"
             allUnits={allUnits}
             selectedUnit={selectedUnit}
             setSelectedUnit={setSelectedUnit}
