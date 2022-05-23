@@ -88,7 +88,11 @@ const CustomTable = ({
       >
         <Tr>
           {heading.map((headingElement, indx: number) => (
-            <Th textColor={tableVariant === "simple" ? "" : "white"} key={indx}>
+            <Th
+              textColor={tableVariant === "simple" ? "" : "white"}
+              key={indx}
+              fontSize={{ base: "0.6em", md: "0.6em", lg: "0.7em" }}
+            >
               {headingElement}
             </Th>
           ))}
@@ -96,6 +100,7 @@ const CustomTable = ({
             <Th width={1} key={heading.length + 1}>
               <Text
                 textColor={tableVariant === "simple" ? "" : "white"}
+                fontSize={{ base: "0.7em", md: "0.8em", lg: "0.9em" }}
                 cursor="pointer"
                 onClick={() => {
                   selectAllRows();
@@ -125,6 +130,7 @@ const CustomTable = ({
                   onClick={() => {
                     if (rowCb && selectTrigger === false) rowCb(rowEl[0]);
                   }}
+                  fontSize={{ base: "0.75em", md: "0.8em", lg: "0.9em" }}
                 >
                   {columnElement}
                 </Td>
