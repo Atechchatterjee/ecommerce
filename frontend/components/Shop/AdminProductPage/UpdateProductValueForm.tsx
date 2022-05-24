@@ -3,6 +3,7 @@ import { useState, useContext, useReducer, useEffect } from "react";
 import { FaSave } from "react-icons/fa";
 import { GSTSelectorContext } from "../../../context/GSTSelectorContext";
 import { ProductInfoContext } from "../../../context/ProductInfoContext";
+import { useWindowDimensions } from "../../../hooks/useWindowDimensions";
 import {
   updateProduct,
   getProductInfo,
@@ -64,6 +65,7 @@ const UpdateProductValueForm = ({ ...props }: FlexProps) => {
   const [deletedProductPriceIndx, setDeleteProductPriceIndx] = useState<any[]>(
     []
   );
+  const [width] = useWindowDimensions();
 
   useEffect(() => {
     getAllCategory().then((categories) => {
@@ -157,10 +159,15 @@ const UpdateProductValueForm = ({ ...props }: FlexProps) => {
         }
       />
       {customTree ? (
-        <Flex flexDirection="row" gridGap={0} mt="2.1rem" flexWrap="wrap">
+        <Flex
+          flexDirection={width < 490 ? "column" : "row"}
+          gridGap={width < 490 ? "2" : "0"}
+          mt="2.1rem"
+          flexWrap="wrap"
+        >
           <SelectCategory
-            flex="0.7"
-            borderRightRadius="none"
+            {...(width > 490 ? { ...{ flex: "0.7" } } : {})}
+            borderRightRadius={width < 490 ? "md" : "none"}
             borderLeftRadius="md"
             size="lg"
             text={product.category.category_name || "Select Category"}
@@ -182,18 +189,19 @@ const UpdateProductValueForm = ({ ...props }: FlexProps) => {
             }}
           >
             <GSTSelectorModal
-              borderRadius="none"
+              borderRadius={width < 490 ? "md" : "none"}
+              {...(width > 490 ? { ...{ flex: "1" } } : {})}
               size="lg"
-              flex="1"
               variant="primaryLightSolid"
             />
           </GSTSelectorContext.Provider>
 
           <SelectUnitMenu
             size="lg"
-            flex="1.2"
+            {...(width > 490 ? { ...{ flex: "1.2" } } : {})}
+            w={width < 490 ? "100%" : "initial"}
+            borderLeftRadius={width < 490 ? "md" : "none"}
             borderRightRadius="md"
-            borderLeftRadius="none"
             variant="primaryLightSolid"
             allUnits={allUnits}
             selectedUnit={selectedUnit}
