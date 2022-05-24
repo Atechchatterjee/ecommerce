@@ -1,13 +1,5 @@
 import React, { useState, useContext } from "react";
-import {
-  Button,
-  Container,
-  Text,
-  Image,
-  Flex,
-  Box,
-  useDimensions,
-} from "@chakra-ui/react";
+import { Button, Container, Text, Image, Flex, Box } from "@chakra-ui/react";
 import constants from "../../../util/Constants";
 import SpecificationTable from "./SpecificationTable";
 import { SpecTableContext } from "../../../context/SpecTableContext";
@@ -111,10 +103,10 @@ const ProductSpec: React.FC = () => {
           alignContent="center"
           flexDirection="row"
           flexWrap="wrap"
-          gridGap="1"
+          gridGap="0"
           pb="5%"
         >
-          <Container margin="0" marginTop="2em" height="110vh">
+          <Container margin="0" marginTop="2em" height="inherit">
             {product && (
               <CustomContainer
                 borderRadius="2xl"
@@ -122,7 +114,7 @@ const ProductSpec: React.FC = () => {
                 padding="5%"
                 position="relative"
                 interactive
-                transition="all ease-in-out 0.5s"
+                transition="all ease-in-out 0.2s"
               >
                 {product.image.map((curImg, indx) => (
                   <Image
@@ -140,7 +132,8 @@ const ProductSpec: React.FC = () => {
                         : 0
                     }
                     width="90%"
-                    height="30em"
+                    height="inherit"
+                    maxH="50vh"
                     transition="all ease-in-out 0.5s"
                   />
                 ))}
@@ -156,9 +149,6 @@ const ProductSpec: React.FC = () => {
             />
             <DragUpload
               marginTop="10%"
-              marginLeft="-3%"
-              width="106%"
-              height="14vh"
               clearUpload={[clearUploadedFiles, setClearUploadedFiles]}
               onFileUpload={(files) => {
                 if (files.length !== 0) {
@@ -168,7 +158,7 @@ const ProductSpec: React.FC = () => {
             />
             <Button
               variant="primarySolid"
-              margin="3rem 0"
+              margin="3vh 0"
               position="relative"
               size="lg"
               width="100%"
@@ -178,7 +168,7 @@ const ProductSpec: React.FC = () => {
             </Button>
             <CreateSpecificationTableBtn />
           </Container>
-          <Container marginTop="2em" width="100%" justifyContent="center">
+          <Container marginTop="3vh" width="100%" justifyContent="center">
             <CustomContainer
               padding="2rem 2rem 0.01rem 2rem"
               width="100%"
