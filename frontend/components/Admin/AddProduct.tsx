@@ -19,6 +19,7 @@ import GSTSelectorModal from "../Widgets/GSTSelectorModal";
 import { addProduct } from "../../services/ProductService";
 import { GSTSelectorContext } from "../../context/GSTSelectorContext";
 import EnterPrice from "../Widgets/EnterPrice";
+import { useWindowDimensions } from "../../hooks/useWindowDimensions";
 
 interface ProductData {
   productName: string;
@@ -58,6 +59,8 @@ const AddProduct = (props: ContainerProps) => {
 
   const toast = useToast();
 
+  const [width] = useWindowDimensions();
+
   const showSuccessToast = (values?: any) => {
     toast({
       title: "Created",
@@ -83,12 +86,39 @@ const AddProduct = (props: ContainerProps) => {
     fetchUnits().then((allUnits) => setAllUnits(allUnits));
   }, []);
 
+  const handleSumbit = (values: any, { setSubmitting }: any) => {
+    if (!categoryId) {
+      showErrorToast("Please select a category");
+      setSubmitting(false);
+    } else {
+      setSubmitting(true);
+      values = {
+        ...values,
+        categoryId,
+        productImages,
+        unitId: selectedUnit ? selectedUnit.unit_id : -1,
+        gstId: selectedGSTData ? selectedGSTData.id : -1,
+        productPrice: JSON.stringify(allPriceData),
+      };
+      createProduct(values)
+        .then(() => {
+          showSuccessToast(values);
+          setSubmitting(false);
+          setTimeout(() => window.location.reload(), 300);
+        })
+        .catch(() => {
+          showErrorToast("Product could not be created!");
+          setSubmitting(false);
+        });
+    }
+  };
+
   return (
     <Center marginBottom="2%">
       <CustomContainer
         height="inherit"
-        width="60em"
-        padding="2em 4em 7em 4em"
+        maxW="90vw"
+        padding={width > 540 ? "2em 4rem 7em 4rem" : "2em 2rem 7em 2rem"}
         borderRadius="lg"
         {...props}
       >
@@ -108,32 +138,7 @@ const AddProduct = (props: ContainerProps) => {
               productDescription: "",
               productPrice: [],
             }}
-            onSubmit={(values: any, { setSubmitting }) => {
-              if (!categoryId) {
-                showErrorToast("Please select a category");
-                setSubmitting(false);
-              } else {
-                setSubmitting(true);
-                values = {
-                  ...values,
-                  categoryId,
-                  productImages,
-                  unitId: selectedUnit ? selectedUnit.unit_id : -1,
-                  gstId: selectedGSTData ? selectedGSTData.id : -1,
-                  productPrice: JSON.stringify(allPriceData),
-                };
-                createProduct(values)
-                  .then(() => {
-                    showSuccessToast(values);
-                    setSubmitting(false);
-                    setTimeout(() => window.location.reload(), 300);
-                  })
-                  .catch(() => {
-                    showErrorToast("Product could not be created!");
-                    setSubmitting(false);
-                  });
-              }
-            }}
+            onSubmit={handleSumbit}
           >
             {({ values, handleSubmit, handleChange, isSubmitting }) => (
               <form onSubmit={handleSubmit}>
@@ -157,17 +162,17 @@ const AddProduct = (props: ContainerProps) => {
                   />
                   <EnterPrice {...{ allPriceData, setAllPriceData }} />
                   <DragUpload
-                    marginLeft="-1em"
-                    width="34em"
-                    onFileUpload={(files) => {
-                      console.log({ files });
-                      setProductImages(files);
-                    }}
+                    onFileUpload={(files) => setProductImages(files)}
                     clearUpload={[clearUploadFiles, setClearUploadFiles]}
                   />
-                  <Flex flexDirection="row" gridGap={0}>
+                  <Flex
+                    flexDirection={width < 490 ? "column" : "row"}
+                    gridGap={width < 490 ? "2" : "0"}
+                  >
                     <SelectCategory
-                      borderRadius="none"
+                      {...(width > 490 ? { ...{ flex: "0.7" } } : {})}
+                      borderRightRadius={width < 490 ? "md" : "none"}
+                      borderLeftRadius="md"
                       text="Select Category"
                       variant="primaryLightSolid"
                       width="100%"
@@ -178,7 +183,6 @@ const AddProduct = (props: ContainerProps) => {
                           : { opacity: "0.9" }
                       }
                       size="lg"
-                      flex="1"
                       selectCb={({ selectedCategory }) => {
                         if (selectedCategory?.val)
                           setCategoryId(selectedCategory?.val.id);
@@ -191,8 +195,8 @@ const AddProduct = (props: ContainerProps) => {
                       }}
                     >
                       <GSTSelectorModal
-                        flex="1"
-                        borderRadius="none"
+                        borderRadius={width < 490 ? "md" : "none"}
+                        {...(width > 490 ? { ...{ flex: "1" } } : {})}
                         variant="primaryLightSolid"
                         selectCb={(data: any) => {
                           setSelectedGSTData(data);
@@ -201,7 +205,9 @@ const AddProduct = (props: ContainerProps) => {
                     </GSTSelectorContext.Provider>
                     <SelectUnitMenu
                       size="lg"
-                      borderRadius="none"
+                      {...(width > 490 ? { ...{ flex: "1.2" } } : {})}
+                      w={width < 490 ? "100%" : "initial"}
+                      borderLeftRadius={width < 490 ? "md" : "none"}
                       variant="primaryLightSolid"
                       allUnits={allUnits}
                       selectedUnit={selectedUnit}
