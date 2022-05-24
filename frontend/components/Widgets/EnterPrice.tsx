@@ -76,22 +76,22 @@ const EnterPrice = ({
       <DisplayExistingPrice />
       <Flex
         flexDirection="row"
-        gridGap={5}
+        gridGap={3}
         w="100%"
-        padding="0.5rem 1.8rem 0 0.5rem"
+        padding="0.5rem 1.5vw 0 0.5vw"
         {...props}
       >
         <CustomField
-          placeholder="Enter Range"
+          placeholder="Range"
           value={range}
           onChange={(e: any) => setRange(e.target.value)}
         />
         <CustomField
-          placeholder="Enter Price"
+          placeholder="Price"
           value={price}
           onChange={(e: any) => setPrice(e.target.value)}
         />
-        <SaveButton onClick={handleAddPrice} />
+        <SaveButton onClick={handleAddPrice} ml="3%" />
       </Flex>
     </Flex>
   );

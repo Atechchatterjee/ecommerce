@@ -68,7 +68,7 @@ const DisplayCategories = ({
                 onMouseEnter={() => setHoverId(category.val.id)}
                 onMouseLeave={() => setHoverId(-1)}
                 boxShadow="rgba(99, 99, 99, 0.12) 1px 3px 8px 1px"
-                padding="3% 5%"
+                padding="1.2rem 5%"
                 flex="1"
                 cursor="pointer"
                 margin="0"
@@ -77,7 +77,12 @@ const DisplayCategories = ({
                 }}
                 transition="all ease-in-out 0.1s"
               >
-                <Text isTruncated>{category.val.name}</Text>
+                <Text
+                  fontSize={{ base: "13px", md: "15px", lg: "16px" }}
+                  isTruncated
+                >
+                  {category.val.name}
+                </Text>
               </Box>
 
               <Button
@@ -223,7 +228,7 @@ const AddCategory = ({ ...props }: ContainerProps) => {
       </Text>
       {customTree && (
         <CategorySearch
-          padding="2em 3em 0em 3em"
+          padding="2em 9% 0em 8%"
           categoryTree={customTree}
           getDropDownStatus={(status) => setDropDownStatus(status)}
         />

@@ -31,6 +31,7 @@ export const CustomField = ({
         borderRadius="sm"
         focusBorderColor="secondary.200"
         errorBorderColor="red.300"
+        fontSize={{ base: "13px", md: "15px", lg: "16px" }}
         {...props}
       />
     </FormControl>
