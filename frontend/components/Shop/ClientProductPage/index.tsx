@@ -110,7 +110,7 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
               borderRadius="2xl"
               w="100%"
               h="100%"
-              maxH="38em"
+              maxH="60vh"
               padding="5%"
               position="relative"
               interactive
@@ -129,7 +129,7 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
                         : 0
                     }
                     width="90%"
-                    height="30em"
+                    height="55vh"
                     transition="all ease-in-out 0.5s"
                   />
                 ))}
@@ -146,7 +146,10 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
             className="product-description"
             padding={width > 1000 ? "0 10% 5% 0%" : "0 10% 5% 10%"}
           >
-            <Text fontWeight="semibold" fontSize="250%">
+            <Text
+              fontWeight="semibold"
+              fontSize={{ base: "1.5em", md: "2em", lg: "2.5em" }}
+            >
               {product.name}
             </Text>
             <Text fontSize="100%" marginTop="2em" lineHeight="190%">
@@ -175,8 +178,12 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
                 </Text>
               )}
             </Flex>
-            <HStack width="80%" marginTop="2em">
-              <Text width="30%" fontWeight="semibold" isTruncated>
+            <HStack width="100%" marginTop="2em">
+              <Text
+                width="40%"
+                fontWeight="semibold"
+                fontSize={{ base: "0.7em", md: "0.9em", lg: "1em" }}
+              >
                 Quantity :
               </Text>
               <CustomField
@@ -189,7 +196,7 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
                 onChange={(e: any) => setQuantity(parseInt(e.target.value))}
               />
             </HStack>
-            <HStack marginTop="5%">
+            <HStack marginTop="7vh">
               <Button
                 variant="primarySolid"
                 width="10em"
