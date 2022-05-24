@@ -65,11 +65,11 @@ const AddUnits: React.FC = () => {
     <CustomContainer
       w="50rem"
       h="inherit"
-      mt="5rem"
+      mt="5vh"
       borderRadius="lg"
       position="relative"
       color="gray.600"
-      padding="2% 2% 4% 2%"
+      padding="2rem 2% 4rem 2%"
       display="flex"
       justifyContent="center"
     >
