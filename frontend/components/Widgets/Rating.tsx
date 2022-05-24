@@ -55,7 +55,7 @@ const Rating = ({
   };
 
   return (
-    <Container width="30em" {...props}>
+    <Container width="30em" {...props} fontSize="0.8rem">
       <Flex flexDirection="row">
         <HStack flex="1">
           {[...Array(MAX_RATING)].map((_, i) => {
@@ -63,7 +63,9 @@ const Rating = ({
             return Stars("empty", i);
           })}
         </HStack>
-        <Text flex="2">{numberOfReviews}</Text>
+        <Text flex="2" ml="0.5rem" mt="0.15rem">
+          {numberOfReviews}
+        </Text>
       </Flex>
     </Container>
   );
