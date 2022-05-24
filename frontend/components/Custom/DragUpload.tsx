@@ -1,9 +1,19 @@
 import React, { useEffect, useState, useRef } from "react";
-import { HStack, Text, Container, Image, Input, Fade } from "@chakra-ui/react";
+import {
+  HStack,
+  Text,
+  Container,
+  Image,
+  Input,
+  Fade,
+  Flex,
+  Box,
+} from "@chakra-ui/react";
 import { ContainerProps } from "@chakra-ui/react";
 import { RiFolderUploadFill } from "react-icons/ri";
 import constants from "../../util/Constants";
 
+// showing the image preivew of the uploaded image
 const ImagePreview: React.FC<{ imageFile: File }> = ({ imageFile }) => (
   <Fade in={true}>
     <Image
@@ -66,58 +76,68 @@ const DragUpload = ({ onFileUpload, clearUpload, ...props }: Props) => {
   };
 
   return (
-    <Container width="35em" height="inherit" minHeight="10%" {...props}>
-      <Container
-        width="100%"
-        height="inherit"
-        minHeight="10em"
-        paddingBottom={uploadedFiles.length === 0 ? "6em" : "1em"}
-        _hover={{ borderColor: "primary.100" }}
-        border="3px dashed"
-        borderColor="primary.800"
-        bgRepeat="no-repeat"
-        onDragOver={(event) => {
-          event.preventDefault();
-        }}
-        onDrop={handleDrop}
-        onClick={() => {
-          if (fileInputRef.current) fileInputRef.current.click();
-        }}
-        cursor="pointer"
-        position="relative"
-        borderRadius="lg"
-        transition="all ease-in-out 0.2s"
-      >
-        {uploadedFiles.length === 0 ? (
+    <Container
+      width="100%"
+      height="auto"
+      minH="15vh"
+      _hover={{ borderColor: "primary.100" }}
+      border="3px dashed"
+      borderColor="primary.800"
+      onDragOver={(event) => {
+        event.preventDefault();
+      }}
+      onDrop={handleDrop}
+      onClick={() => {
+        if (fileInputRef.current) fileInputRef.current.click();
+      }}
+      cursor="pointer"
+      borderRadius="lg"
+      transition="all ease-in-out 0.2s"
+      {...props}
+    >
+      {uploadedFiles.length === 0 ? (
+        <Flex
+          mt="4.5vh"
+          fontWeight="semibold"
+          fontSize="1.2em"
+          _hover={{ color: "primary.100" }}
+          color="primary.800"
+          fontFamily="Sora"
+          transition="all ease-in-out 0.1s"
+          flexDirection="column"
+        >
+          <RiFolderUploadFill
+            style={{
+              marginLeft: "47%",
+            }}
+          />
           <Text
-            position="absolute"
-            top="27%"
-            left="47%"
-            fontWeight="semibold"
-            fontSize="1.2em"
-            _hover={{ color: "primary.100" }}
-            color="primary.800"
+            textAlign="center"
+            justifyContent="center"
+            alignContent="center"
             fontFamily="Sora"
-            transition="all ease-in-out 0.1s"
-            display="flex"
-            flexDirection="column"
+            fontSize={{ base: "0.75em", md: "0.8em", lg: "1em" }}
           >
-            <RiFolderUploadFill size="10%" />
-            <Text ml="-20%" mt="2%" fontFamily="Sora">
-              Drop Files Here
-            </Text>
+            Drop Files Here
           </Text>
-        ) : (
-          <></>
-        )}
-        <DummyInput />
+        </Flex>
+      ) : (
+        <></>
+      )}
+      <DummyInput />
+      <Flex
+        position="relative"
+        height="inherit"
+        flexDirection="column"
+        mb={uploadedFiles.length > 0 ? "4vh" : "0"}
+      >
         {uploadedFiles.map((file, indx) => (
-          <HStack marginTop="1em" key={indx} transition="all ease-in-out 0.3s">
+          <HStack marginTop="1em" key={indx} position="relative">
             <ImagePreview imageFile={file} />
             <Text>{file.name}</Text>
           </HStack>
         ))}
-      </Container>
+      </Flex>
     </Container>
   );
 };
