@@ -7,15 +7,7 @@ import { useDynamicColumns } from "../hooks/useDynamicColumns";
 import { AnimatePresence, motion } from "framer-motion";
 import Product from "../components/Shop/Product";
 import { ProductInfoContext } from "../context/ProductInfoContext";
-import { ProductType } from "../types/shop";
-import api from "../util/AxiosApi";
-
-const getAllProducts = async (): Promise<ProductType[]> => {
-  const res = await api.get("/shop/getallproducts/", {
-    withCredentials: true,
-  });
-  return Promise.resolve(res.data.allProducts);
-};
+import { getAllProducts } from "../services/ProductService";
 
 const Shop: NextPage = () => {
   const [allProducts, setAllProducts] = useState<any[]>([]);
