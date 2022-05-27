@@ -91,9 +91,12 @@ def delete_product(_, product_id):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-def get_all_products(_):
+def get_all_products(_, limit):
+    lower_limit, upper_limit = 0,5
     try:
-        all_products = Product.objects.all()
+        if limit is not None:
+            lower_limit, upper_limit = [int(limit.strip()) for limit in limit.split(",")]
+        all_products = Product.objects.all()[lower_limit:upper_limit]
         serialized_products = ProductSerializer(
             all_products,
             many=True
