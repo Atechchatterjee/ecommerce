@@ -4,7 +4,6 @@ import Product from "../Shop/Product";
 import {
   Button,
   Box,
-  Center,
   Grid,
   GridItem,
   Modal,
@@ -18,34 +17,20 @@ import {
 import axios from "axios";
 import { useDynamicColumns } from "../../hooks/useDynamicColumns";
 import { ProductInfoContext } from "../../context/ProductInfoContext";
+import { getAllProducts } from "../../services/ProductService";
 
-interface Product {
-  product_id: number;
-  description: string;
-  image: any;
-  name: string;
-  price: any[];
-  category: number;
-}
-
-const fetchAllProducts = async (): Promise<Product[]> => {
+const fetchAllProducts = async (): Promise<any[]> => {
   console.log("fetching all products");
   return new Promise((resolve) => {
-    axios
-      .get(`${constants.url}/shop/getallproducts/`, { withCredentials: true })
-      .then((res) => {
-        const allProducts = res.data.allProducts;
-        resolve(allProducts);
-      })
-      .catch((err) => console.error(err));
+    getAllProducts().then((allProducts) => resolve(allProducts));
   });
 };
 
 const AllProducts: React.FunctionComponent = () => {
-  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [allProducts, setAllProducts] = useState<any[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [del, setDel] = useState<boolean>(false);
-  const [prdDel, setPrdDel] = useState<Product>();
+  const [prdDel, setPrdDel] = useState<any>();
   const [columns] = useDynamicColumns(4, [1700, 1300, 860]);
 
   const deleteProduct = (productId: any) => {
@@ -87,8 +72,8 @@ const AllProducts: React.FunctionComponent = () => {
   };
 
   // updates the local array of product values
-  const updateProduct = (updatedProduct: Product) => {
-    let copyProducts: Product[] = allProducts.map((el) => {
+  const updateProduct = (updatedProduct: any) => {
+    let copyProducts: any[] = allProducts.map((el) => {
       if (updatedProduct.product_id === el.product_id) return updatedProduct;
       else return el;
     });
@@ -96,9 +81,9 @@ const AllProducts: React.FunctionComponent = () => {
   };
 
   // removes the product from the local array of product values
-  const removeProduct = (product: Product | undefined) => {
+  const removeProduct = (product: any | undefined) => {
     if (!product) return;
-    let copyProducts: Product[] = allProducts.filter((el) => {
+    let copyProducts: any[] = allProducts.filter((el) => {
       return product.product_id !== el.product_id;
     });
     setAllProducts(copyProducts);
