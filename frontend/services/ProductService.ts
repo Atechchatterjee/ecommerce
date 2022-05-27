@@ -1,3 +1,4 @@
+import { ProductType } from "../types/shop";
 import api from "../util/AxiosApi"
 
 export const addProduct = async (formData: FormData) => {
@@ -33,3 +34,10 @@ export const addProductImages = async (formData: FormData) => {
   const res = await api.post('/shop/addproductimages/', formData, {withCredentials: true});
   if (res) return Promise.resolve(res);
 }
+
+export const getAllProducts = async (): Promise<ProductType[]> => {
+  const res = await api.get("/shop/getallproducts/0,8", {
+    withCredentials: true,
+  });
+  return Promise.resolve(res.data.allProducts);
+};
