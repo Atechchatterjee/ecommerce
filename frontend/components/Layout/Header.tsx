@@ -137,8 +137,7 @@ const Header: React.FC<HeaderProps> = ({
           }}
           _focus={{ border: "none" }}
           autoFocus={searchBarAutoFocus}
-          height="4.2%"
-          minHeight="2.5em"
+          height="2.5rem"
           color="white"
         />
         {width >= 700 ? (
