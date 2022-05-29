@@ -1,37 +1,19 @@
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Link,
-  Text,
-  LinkProps,
-  Grid,
-  GridItem,
-  Flex,
-} from "@chakra-ui/layout";
+import { Box, Link, Text, LinkProps, Flex } from "@chakra-ui/layout";
 import { InputGroup, InputGroupProps, InputRightAddon } from "@chakra-ui/input";
-import {
-  Button,
-  ButtonProps,
-  Image,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Tooltip,
-} from "@chakra-ui/react";
+import { Button, ButtonProps, Image, Tooltip } from "@chakra-ui/react";
 import { isAuthenticated } from "../../util/Authenticated";
-import logout from "../../util/Logout";
 import { useWindowDimensions } from "../../hooks/useWindowDimensions";
 import { FaSearch, FaShoppingCart } from "react-icons/fa";
 import { CustomField } from "../Custom/CustomField";
-import Fuse from "fuse.js";
-import CategorySidebar from "../Widgets/CategorySidebar";
 import { useCategoryData } from "../../hooks/useCategoryData";
-import { MdEmail, MdMenu, MdStayPrimaryLandscape } from "react-icons/md";
+import { MdEmail, MdMenu } from "react-icons/md";
 import { CategoryNode } from "../../util/Tree";
 import { scrollBarStyle } from "../../util/ScrollBarStyle";
 import { AiFillShopping } from "react-icons/ai";
-import { ChevronDownIcon } from "@chakra-ui/icons";
+import CategorySidebar from "../Widgets/CategorySidebar";
+import logout from "../../util/Logout";
+import Fuse from "fuse.js";
 
 interface HeaderProps {
   products?: [any[], (_: any[]) => void];
@@ -220,12 +202,12 @@ const Header: React.FC<HeaderProps> = ({
       <Box zIndex="-1">
         <Box
           className="sub-header"
-          sx={scrollBarStyle({ hidden: true })}
           height="7.4rem"
-          overflow="scroll"
+          overflowY="hidden"
           justifyItems="center"
           bgColor="primary.200"
           color="gray.300"
+          sx={scrollBarStyle({ hidden: true, scrollbarWidth: "none" })}
         >
           <Flex
             flexDirection="row"
