@@ -2,9 +2,10 @@ interface ScrollBarStyleProps {
   color?: string;
   borderRadius?: "sm" | "md" | "lg";
   hidden?: boolean;
+  scrollbarWidth?: string;
 }
 
-export const scrollBarStyle = ({ hidden, color, borderRadius }: ScrollBarStyleProps = {}) => ({
+export const scrollBarStyle = ({ hidden, color, borderRadius, scrollbarWidth }: ScrollBarStyleProps = {}) => ({
   "&::-webkit-scrollbar": {
     width: "0.9rem",
     height: "0.5em",
@@ -25,4 +26,5 @@ export const scrollBarStyle = ({ hidden, color, borderRadius }: ScrollBarStylePr
     transition: "background-color 0.8s ease-in-out",
     display: hidden ? "none": "block"
   },
+  scrollbarWidth: scrollbarWidth || "" // hide scrollbar for firefox
 });
