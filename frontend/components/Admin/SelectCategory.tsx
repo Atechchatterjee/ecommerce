@@ -1,9 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Category, CategoryMap } from "../../types/shop";
 import { CategoryNode, convertToCustomTree } from "../../util/Tree";
-import axios from "axios";
-import constants from "../../util/Constants";
-import { Button, ButtonProps } from "@chakra-ui/button";
+import { Button, BoxProps } from "@chakra-ui/button";
 import {
   Modal,
   ModalOverlay,
@@ -14,19 +12,9 @@ import {
   ModalFooter,
 } from "@chakra-ui/modal";
 import CustomTree from "../Custom/CustomTree";
+import { getAllCategory } from "../../services/CategoryService";
 
-export const getAllCategory = async (): Promise<Category[]> => {
-  try {
-    const res = await axios.get(`${constants.url}/shop/getallcategory/`, {
-      withCredentials: true,
-    });
-    return Promise.resolve(res.data.categories);
-  } catch (err) {
-    return Promise.reject(err);
-  }
-};
-
-interface Props extends ButtonProps {
+interface Props extends BoxProps {
   selectCb?: ({
     selectedCategory,
   }: {
@@ -36,12 +24,12 @@ interface Props extends ButtonProps {
   includeNone?: boolean;
 }
 
-const SelectCategory: React.FC<Props> = ({
+const SelectCategory = ({
   selectCb: onSelect,
   text,
   includeNone,
   ...props
-}) => {
+}: Props) => {
   const categoryMap = useRef<CategoryMap>({});
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<
