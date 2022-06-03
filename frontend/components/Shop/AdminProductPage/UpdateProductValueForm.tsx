@@ -15,11 +15,12 @@ import {
   CategoryNode,
   convertToCustomTree,
 } from "../../../util/Tree";
-import SelectCategory, { getAllCategory } from "../../Admin/SelectCategory";
+import SelectCategory from "../../Admin/SelectCategory";
 import { CustomField } from "../../Custom/CustomField";
 import EnterPrice from "../../Widgets/EnterPrice";
 import GSTSelectorModal from "../../Widgets/GSTSelectorModal";
 import SelectUnitMenu from "../../Widgets/SelectUnitMenu";
+import { getAllCategory } from "../../../services/CategoryService";
 
 const productValueReducer = (state: any, action: any) => {
   switch (action.type) {
