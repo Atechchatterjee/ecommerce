@@ -8,7 +8,7 @@ import WithAuth from "../../../../util/WithAuth";
 import { UserContext } from "../../../../context/UserContext";
 import { ProductInfoContext } from "../../../../context/ProductInfoContext";
 import { ProductType } from "../../../../types/shop";
-import { getProductInfo } from "../../../../util/ProductInfo";
+import { getProductInfo } from "../../../../services/ProductService";
 import { Box } from "@chakra-ui/react";
 
 const ProductPage: NextPage = () => {
