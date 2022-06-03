@@ -6,7 +6,7 @@ import { SpecTableContext } from "../../../context/SpecTableContext";
 import ImageGallery from "../Product/ImageGallery";
 import DragUpload from "../../Custom/DragUpload";
 import { ProductInfoContext } from "../../../context/ProductInfoContext";
-import { getProductInfo } from "../../../util/ProductInfo";
+import { getProductInfo } from "../../../services/ProductService";
 import CustomContainer from "../../Custom/CustomContainer";
 import OptionsTable from "../../Admin/OptionsTable";
 import api from "../../../util/AxiosApi";
