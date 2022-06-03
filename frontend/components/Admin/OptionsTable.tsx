@@ -39,15 +39,14 @@ const OptionsTable = ({ ...props }: ContainerProps) => {
 
   useEffect(() => {
     fetchOptions(product).then((res) => {
-      console.log({ options: res.data.options });
       convertToRows(res.data.options);
     });
   }, []);
 
   return (
     <CustomContainer
-      padding="0"
-      overflowX="scroll"
+      padding="0 0 4.5rem 0"
+      overflowX="auto"
       sx={scrollBarStyle({ color: "gray.300", hidden: false })}
       display="flex"
       flexDirection="column"
@@ -63,7 +62,14 @@ const OptionsTable = ({ ...props }: ContainerProps) => {
           ...new Array(longestRowLength - 1).fill(""),
         ]}
       />
-      <Box flex="1" textAlign="right" width="100%" paddingRight="2%">
+      <Box
+        flex="1"
+        textAlign="right"
+        width="100%"
+        bottom="2%"
+        right="2%"
+        position="absolute"
+      >
         <OptionModal
           product={product}
           triggerOpen={[isOpenOptionModal, setIsOpenOptionModal]}
