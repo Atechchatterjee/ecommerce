@@ -26,12 +26,12 @@ const Login: NextPage = () => {
         height="35em"
         borderRadius="xl"
         marginBottom="7%"
-        width="100%"
+        width={width < 1200 ? "60vh" : "40vw"}
         position="absolute"
         display="flex"
         alignContent="center"
         top="20%"
-        left="31%"
+        left={width < 1200 ? "28%" : "31%"}
       >
         <Box
           padding={width >= 500 ? "0 10% 0% 10%" : "0"}
@@ -56,7 +56,13 @@ const Login: NextPage = () => {
                 }}
                 _selected={{ color: "primary.500" }}
               >
-                <Heading as="h2" size="md" isTruncated fontFamily="Sora">
+                <Heading
+                  as="h2"
+                  size="md"
+                  isTruncated
+                  fontFamily="Sora"
+                  fontSize={{ base: "15px", md: "17px", lg: "19px" }}
+                >
                   Sign Up
                 </Heading>
               </Tab>
@@ -66,7 +72,13 @@ const Login: NextPage = () => {
                 }}
                 _selected={{ color: "primary.500" }}
               >
-                <Heading as="h2" size="md" isTruncated fontFamily="Sora">
+                <Heading
+                  as="h2"
+                  size="md"
+                  isTruncated
+                  fontFamily="Sora"
+                  fontSize={{ base: "15px", md: "17px", lg: "19px" }}
+                >
                   Sign In
                 </Heading>
               </Tab>
