@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Link, Text, LinkProps, Flex } from "@chakra-ui/layout";
 import { InputGroup, InputGroupProps, InputRightAddon } from "@chakra-ui/input";
-import { Button, ButtonProps, Image, Tooltip } from "@chakra-ui/react";
+import { Button, BoxProps, Image, Tooltip } from "@chakra-ui/react";
 import { isAuthenticated } from "../../util/Authenticated";
 import { useWindowDimensions } from "../../hooks/useWindowDimensions";
 import { FaSearch, FaShoppingCart } from "react-icons/fa";
@@ -46,7 +46,7 @@ const Header: React.FC<HeaderProps> = ({
       });
   }, []);
 
-  const HamburgerButton = ({ ...props }: ButtonProps) => {
+  const HamburgerButton = ({ ...props }: BoxProps) => {
     return (
       <Tooltip label="All Categories">
         <Button
@@ -60,7 +60,7 @@ const Header: React.FC<HeaderProps> = ({
           onClick={() => {
             setShowSideBar(!showSideBar);
           }}
-          {...props}
+          {...(props as any)}
         >
           <MdMenu size="20" />
         </Button>

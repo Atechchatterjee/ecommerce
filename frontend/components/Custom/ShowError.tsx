@@ -14,7 +14,7 @@ export const ShowError = ({ condition, error, ...props }: ShowErrorProps) => {
       color="red"
       backgroundColor="#FFEBE8"
       padding="1em 0em"
-      {...props}
+      {...(props as any)}
     >
       <span>{error}</span>
     </Box>

@@ -7,14 +7,14 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  ButtonProps,
+  BoxProps,
 } from "@chakra-ui/react";
 import { useContext, useEffect, useState } from "react";
 import { GSTSelectorContext } from "../../context/GSTSelectorContext";
 import { fetchGST } from "../../services/GSTService";
 import GSTSelector from "./GSTSelector";
 
-interface GSTSelectorModalProps extends ButtonProps {
+interface GSTSelectorModalProps extends BoxProps {
   buttonText?: string;
   selectCb?: Function;
 }
@@ -43,7 +43,7 @@ const GSTSelectorModal = ({
         size="lg"
         borderRadius="sm"
         onClick={() => setOpen(true)}
-        {...props}
+        {...(props as any)}
       >
         Select{selectedRows && "ed"} GST Rates
       </Button>

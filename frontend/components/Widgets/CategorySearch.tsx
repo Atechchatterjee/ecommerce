@@ -47,7 +47,12 @@ const CategorySearch = ({
   }, [showDropDown]);
 
   return (
-    <Box width="100%" justifyContent="center" position="relative" {...props}>
+    <Box
+      width="100%"
+      justifyContent="center"
+      position="relative"
+      {...(props as any)}
+    >
       <CustomField
         size="lg"
         borderRadius="md"

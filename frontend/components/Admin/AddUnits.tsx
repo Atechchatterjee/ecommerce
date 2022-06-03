@@ -14,7 +14,7 @@ const AddUnits: React.FC = () => {
   const DisplayUnits = ({ ...props }: BoxProps) => {
     if (allUnits.length === 0)
       return (
-        <Box {...props}>
+        <Box {...(props as any)}>
           <Text fontSize="1.2rem" fontWeight="medium" fontFamily="Sora">
             Enter some units ...
           </Text>
@@ -22,7 +22,7 @@ const AddUnits: React.FC = () => {
       );
     return (
       <Box
-        {...props}
+        {...(props as any)}
         display="flex"
         flexDirection="column"
         gridGap={5}

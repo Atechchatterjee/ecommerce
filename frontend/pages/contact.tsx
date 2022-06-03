@@ -29,7 +29,7 @@ interface EmailStruct {
 
 const AddressMap = ({ ...props }: BoxProps) => {
   return (
-    <Box className="google-map-code" {...props}>
+    <Box className="google-map-code" {...(props as any)}>
       <iframe
         src="https://maps.google.com/maps?width=600&amp;height=400&amp;hl=en&amp;q=CND Engineering&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
         width="100%"
