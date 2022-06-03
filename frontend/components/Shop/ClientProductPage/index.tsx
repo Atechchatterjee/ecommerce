@@ -196,10 +196,10 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
                 onChange={(e: any) => setQuantity(parseInt(e.target.value))}
               />
             </HStack>
-            <HStack marginTop="7vh">
+            <Flex marginTop="7vh" gridGap={5} flexWrap="inherit">
               <Button
                 variant="primarySolid"
-                width="10em"
+                width="100%"
                 borderRadius="3"
                 padding="1.4em 2em"
               >
@@ -207,8 +207,7 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
               </Button>
               <Button
                 variant="primaryOutline"
-                width="10em"
-                left="1em"
+                width="100%"
                 onClick={handleAddToCart}
                 disabled={productExistsInCart}
                 isLoading={addToCardLoader}
@@ -217,7 +216,7 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
                   {productExistsInCart ? "Added to Cart" : "Add to Cart"}
                 </Text>
               </Button>
-            </HStack>
+            </Flex>
           </Container>
           <ProductInfoContext.Provider
             value={{ productInfo: [product, () => {}] }}
