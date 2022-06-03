@@ -1,6 +1,5 @@
 import React from "react";
 import { Heading, Box, Center, BoxProps } from "@chakra-ui/layout";
-import { string } from "yup";
 
 interface BannerProps extends BoxProps {
   text: string;
