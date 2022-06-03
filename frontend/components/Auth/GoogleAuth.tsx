@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useGoogleLogin } from "react-google-login";
 import { GetUser } from "../../util/GetUser";
 import constants from "../../util/Constants";
-import { Button, ButtonProps } from "@chakra-ui/button";
+import { Button, BoxProps } from "@chakra-ui/button";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { Text } from "@chakra-ui/react";
 import {
@@ -65,7 +65,7 @@ const PopUp: React.FC<{
   );
 };
 
-const GoogleAuth = ({ ...props }: ButtonProps) => {
+const GoogleAuth = ({ ...props }: BoxProps) => {
   const [googleAuth, setGoogleAuth] = useState<boolean>(false);
   const [userExist, setUserExist] = useState<boolean>(false);
   const googleId = useRef<string>("");

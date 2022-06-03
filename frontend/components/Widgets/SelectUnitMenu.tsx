@@ -1,16 +1,15 @@
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import {
-  BoxProps,
   Box,
   Menu,
   MenuButton,
   Button,
   MenuList,
   MenuItem,
-  ButtonProps,
+  BoxProps,
 } from "@chakra-ui/react";
 
-interface SelectUnitMenuProps extends ButtonProps {
+interface SelectUnitMenuProps extends BoxProps {
   allUnits: any[];
   selectedUnit: any;
   setSelectedUnit: Function;

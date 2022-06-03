@@ -1,9 +1,9 @@
-import { Button, ButtonProps } from "@chakra-ui/react";
+import { Button, BoxProps } from "@chakra-ui/react";
 import { FaTrash } from "react-icons/fa";
 import { FiPlus } from "react-icons/fi";
 import { MdDone } from "react-icons/md";
 
-interface CustomButtonProps extends ButtonProps {
+interface CustomButtonProps extends BoxProps {
   iconSize?: string | number;
 }
 
