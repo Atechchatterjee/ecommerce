@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { ProductInfoContext } from "../../context/ProductInfoContext";
-import { getProductInfo } from "../../util/ProductInfo";
+import { getProductInfo } from "../../services/ProductService";
 import { Spinner } from "@chakra-ui/react";
 import Header from "../../components/Layout/Header";
 import Footer from "../../components/Layout/Footer";
