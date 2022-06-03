@@ -236,7 +236,7 @@ const SpecificationTable: React.FC<{ product?: any; readOnly?: boolean }> = ({
         height="inherit"
         padding="0"
         borderRadius="lg"
-        overflowX="scroll"
+        overflowX="auto"
         sx={scrollBarStyle()}
       >
         <CustomTable
