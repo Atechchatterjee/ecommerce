@@ -65,17 +65,23 @@ def create_product(request):
                 int(category_id)) if category_id != "" else None,
             unit=Units.objects.get(unit_id=int(unit_id)) if int(unit_id) != -1 else None
         )
+
         if gst_id != "-1" or gst_id != "":
             new_product.gst = GST.objects.get(id=int(gst_id))
+
         new_product.save()
+
         if 'productPrice' in request.data:
             parsed_product_price = json.loads(product_price)
             add_product_price_to_db(parsed_product_price, new_product)
+
         images = []
         for key in request.data:
             if key not in request_params:
                 images.append(request.data.get(key))
+
         save_product_images(new_product, images)
+
         return Response(status=status.HTTP_200_OK)
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -165,16 +171,15 @@ def update_product(request):
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['POST'])
-def get_product(request):
-    id = request.data['id']
+@api_view(['GET'])
+def get_product(_, product_id):
     try:
-        product = Product.objects.get(product_id=int(id))
+        product = Product.objects.get(product_id=int(product_id))
         serialized_product = ProductSerializer(product).data
         serialized_product = {
             **serialized_product,
             "image": get_product_images(product),
-            "price": get_product_price_from_db(product_id=int(id), serialized=True, many=True)
+            "price": get_product_price_from_db(product_id=int(product_id), serialized=True, many=True)
         }
         return Response({"product": serialized_product},
                         status=status.HTTP_200_OK)
