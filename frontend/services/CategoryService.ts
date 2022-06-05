@@ -4,7 +4,7 @@ import api from "../util/AxiosApi";
 
 export const createCategory = async (data: Category): Promise<void> => {
   if (data.category_name.length === 0) return;
-  await api.post("/shop/createcategory/", data, { withCredentials: true });
+  await api.post("/shop/create-category/", data, { withCredentials: true });
 };
 
 export const deleteCategory = async (
@@ -16,6 +16,6 @@ export const deleteCategory = async (
 };
 
 export const getAllCategory = async (): Promise<Category[]> => {
-  const res = await api.get("/shop/getallcategory/");
+  const res = await api.get("/shop/get-all-category/");
   return Promise.resolve(res.data.categories);
 };

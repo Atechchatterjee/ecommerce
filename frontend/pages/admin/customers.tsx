@@ -11,9 +11,8 @@ import {
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import Navbar from "../../components/Admin/Navbar";
-import axios from "axios";
-import constants from "../../util/Constants";
 import WithAuth from "../../util/WithAuth";
+import api from "../../util/AxiosApi";
 
 interface Users {
   email: string;
@@ -31,20 +30,15 @@ const AdminCustomers: NextPage = () => {
 
   const getAllUsers = async (): Promise<Users[]> => {
     return new Promise(async (resolve, reject) => {
-      try {
-        const res = await axios.get(`${constants.url}/admin/getallusers/`, {
-          withCredentials: true,
-        });
+      const res = await api.get("/admin/getallusers/", {
+        withCredentials: true,
+      });
 
-        const allUsers = res.data.all_users;
+      const allUsers = res.data.all_users;
 
-        if (allUsers) {
-          resolve(allUsers);
-        } else {
-          reject();
-        }
-      } catch (err) {
-        console.error(err);
+      if (allUsers) {
+        resolve(allUsers);
+      } else {
         reject();
       }
     });

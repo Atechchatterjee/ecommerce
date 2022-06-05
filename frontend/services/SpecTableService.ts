@@ -7,7 +7,7 @@ export const doesTableExist = async (product: ProductType): Promise<void> => {
     if (product)
       axios
         .post(
-          `${constants.url}/shop/existstable/`,
+          `${constants.url}/shop/exists-table/`,
           {
             product_id: product.id,
           },
@@ -26,7 +26,7 @@ export const saveTableContent = async (
   new Promise((resolve) => {
     axios
       .post(
-        `${constants.url}/shop/savetablecontent/`,
+        `${constants.url}/shop/save-table-content/`,
         {
           addedRows: [(lastIndxInTableStruct + 1).toString(), ...newRow],
           product_id: product.id,
@@ -47,7 +47,7 @@ export const getTableContent = async (
   new Promise((resolve, reject) => {
     axios
       .post(
-        `${constants.url}/shop/gettablecontent/`,
+        `${constants.url}/shop/get-table-content/`,
         {
           product_id: product.id,
         },
@@ -64,7 +64,7 @@ export const deleteRows = (selectedRows: any) =>
   new Promise((resolve, reject) => {
     axios
       .post(
-        `${constants.url}/shop/deletetablecontent/`,
+        `${constants.url}/shop/delete-table-content/`,
         {
           deleteIndices: selectedRows,
         },

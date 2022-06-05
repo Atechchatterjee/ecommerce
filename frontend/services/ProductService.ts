@@ -1,20 +1,31 @@
 import { ProductType } from "../types/shop";
-import api from "../util/AxiosApi"
+import api from "../util/AxiosApi";
 
 export const addProduct = async (formData: FormData) => {
-  const res = await api.post("/shop/createProduct/", formData, {withCredentials: true});
+  const res = await api.post("/shop/create-product/", formData, {
+    withCredentials: true,
+  });
   return Promise.resolve(res);
-}
+};
 
 export const updateProduct = async (data: any) => {
-  const res = await api.post('/shop/updateproduct/', data, {withCredentials: true});
+  const res = await api.post("/shop/update-product/", data, {
+    withCredentials: true,
+  });
   if (res.status === 200) return Promise.resolve(res);
-}
+};
+
+export const deleteProduct = async (productId: any) => {
+  const res = await api.delete(`/shop/delete-product/${productId}/`, {
+    withCredentials: true,
+  });
+  return Promise.resolve(res);
+};
 
 // TODO: change post method to get
 export const getProductInfo = async (productId: any) => {
-  const res = await api.post('/shop/getproduct/', {id: productId})
-  if(res) {
+  const res = await api.get(`/shop/get-product/${productId}`);
+  if (res) {
     // change product_id field to id
     let modifiedProduct = {
       ...res.data.product,
@@ -23,20 +34,22 @@ export const getProductInfo = async (productId: any) => {
     delete modifiedProduct["product_id"];
     return Promise.resolve(modifiedProduct);
   }
-}
+};
 
 export const getProductPrice = async (productId: number) => {
-  const res = await api.get(`/shop/get-product-prices/${productId}/`)
-  if(res) return Promise.resolve(res.data);
-}
+  const res = await api.get(`/shop/get-product-prices/${productId}/`);
+  if (res) return Promise.resolve(res.data);
+};
 
 export const addProductImages = async (formData: FormData) => {
-  const res = await api.post('/shop/addproductimages/', formData, {withCredentials: true});
+  const res = await api.post("/shop/add-product-images/", formData, {
+    withCredentials: true,
+  });
   if (res) return Promise.resolve(res);
-}
+};
 
 export const getAllProducts = async (): Promise<ProductType[]> => {
-  const res = await api.get("/shop/getallproducts/0,8", {
+  const res = await api.get("/shop/get-all-products/0,8", {
     withCredentials: true,
   });
   return Promise.resolve(res.data.allProducts);
