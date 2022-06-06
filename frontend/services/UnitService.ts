@@ -1,55 +1,30 @@
-import axios from "axios";
-import constants from "../util/Constants";
+import api from "../util/AxiosApi";
 
+export const removeUnits = async (unit: any) => {
+  const res = await api.post(
+    "/shop/remove-units/",
+    { unitId: unit.unit_id },
+    { withCredentials: true }
+  );
+  return Promise.resolve(res);
+};
 
-export  const removeUnits = async (unit: any) => {
-    return new Promise((resolve, reject) => {
-    axios
-      .post(
-        `${constants.url}/shop/remove-units/`,
-        { unitId: unit.unit_id },
-        { withCredentials: true }
-      )
-      .then((res) => {
-        resolve(res);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-    });
-  };
+export const addUnits = async (unit: string) => {
+  if (unit.trim() == "") {
+    alert("Please enter a unit");
+    return;
+  }
 
-export  const addUnits = (unit: string) => {
-    if (unit.trim() == "") {
-      alert("Please enter a unit");
-      return;
-    }
+  const res = await api.post(
+    "/shop/add-units/",
+    { unitValue: unit },
+    { withCredentials: true }
+  );
 
-    return new Promise((resolve, reject) => {
-    axios
-      .post(
-        `${constants.url}/shop/add-units/`,
-        { unitValue: unit },
-        { withCredentials: true }
-      )
-      .then((res) => {
-        resolve(res);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-    });
-  };
+  return Promise.resolve(res);
+};
 
 export const fetchUnits = async (): Promise<any[]> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(`${constants.url}/shop/get-units/`)
-        .then((res) => {
-          resolve(res.data.units);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    });
-  };
+  const res = await api.get("/shop/get-units/");
+  return Promise.resolve(res.data.units);
+};
