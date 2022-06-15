@@ -48,8 +48,8 @@ export const addProductImages = async (formData: FormData) => {
   if (res) return Promise.resolve(res);
 };
 
-export const getAllProducts = async (): Promise<ProductType[]> => {
-  const res = await api.get("/shop/get-all-products/0,8", {
+export const getAllProducts = async (n?: number): Promise<ProductType[]> => {
+  const res = await api.get(`/shop/get-all-products/0,${n || 10}`, {
     withCredentials: true,
   });
   return Promise.resolve(res.data.allProducts);
