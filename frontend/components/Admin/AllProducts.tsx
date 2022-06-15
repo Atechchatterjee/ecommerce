@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import constants from "../../util/Constants";
 import Product from "../Shop/Product";
 import {
   Button,
@@ -14,15 +13,17 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/react";
-import axios from "axios";
 import { useDynamicColumns } from "../../hooks/useDynamicColumns";
 import { ProductInfoContext } from "../../context/ProductInfoContext";
-import { getAllProducts } from "../../services/ProductService";
+import { getAllProducts, deleteProduct } from "../../services/ProductService";
+import Pagination from "../Widgets/Pagination";
 
 const fetchAllProducts = async (): Promise<any[]> => {
-  console.log("fetching all products");
   return new Promise((resolve) => {
-    getAllProducts().then((allProducts) => resolve(allProducts));
+    getAllProducts(13).then((allProducts) => {
+      console.table(allProducts);
+      resolve(allProducts);
+    });
   });
 };
 
@@ -32,16 +33,9 @@ const AllProducts: React.FunctionComponent = () => {
   const [del, setDel] = useState<boolean>(false);
   const [prdDel, setPrdDel] = useState<any>();
   const [columns] = useDynamicColumns(4, [1700, 1300, 860]);
-
-  const deleteProduct = (productId: any) => {
-    axios
-      .delete(`${constants.url}/shop/delete-product/${productId}/`, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        console.log(res);
-      });
-  };
+  const [pageLimit, setPageLimit] = useState<number>(8);
+  const [noOfProductDisplayed, setNoOfProductDisplayed] =
+    useState<number>(pageLimit);
 
   // modal to confirm delete-action
   const DeleteModal: React.FC<{ confirmDelete: Function }> = ({
@@ -71,15 +65,6 @@ const AllProducts: React.FunctionComponent = () => {
     );
   };
 
-  // updates the local array of product values
-  const updateProduct = (updatedProduct: any) => {
-    let copyProducts: any[] = allProducts.map((el) => {
-      if (updatedProduct.product_id === el.product_id) return updatedProduct;
-      else return el;
-    });
-    setAllProducts(copyProducts);
-  };
-
   // removes the product from the local array of product values
   const removeProduct = (product: any | undefined) => {
     if (!product) return;
@@ -100,47 +85,26 @@ const AllProducts: React.FunctionComponent = () => {
     }
   }, [del, setDel, prdDel, setPrdDel]);
 
-  // sends changes/updates to backend to updates the db
-  const updateChanges = (
-    id: number,
-    name: string,
-    description: string,
-    price: string,
-    image: any
-  ) => {
-    let formData = new FormData();
-
-    formData.append("id", id.toString());
-    formData.append("name", name);
-    formData.append("description", description);
-    formData.append("price", price);
-    if (image) formData.append("image", image);
-
-    console.log(formData.get("image"));
-
-    axios
-      .post(`${constants.url}/shop/updateproduct/`, formData, {
-        withCredentials: true,
-        headers: {
-          "content-type": "multipart/form-data",
-        },
-      })
-      .then((res) => {
-        console.log(res);
-        fetchAllProducts().then((allProducts) => setAllProducts(allProducts));
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
-
   return (
     <Box marginTop="3em" width="100%" overflow="hidden" padding="0 2% 3% 2%">
-      <Grid
-        h="inherit"
-        gap={6}
-        templateColumns={`repeat(${columns}, 1fr)`}
-        templateRows={`repeat(${Math.ceil(allProducts.length / columns)}, 1fr)`}
+      <Pagination
+        wrapperEl={({ children }: any) => (
+          <Grid
+            h="inherit"
+            gap={6}
+            templateColumns={`repeat(${columns}, 1fr)`}
+            templateRows={`repeat(${Math.ceil(
+              noOfProductDisplayed / columns
+            )}, 1fr)`}
+          >
+            {children}
+          </Grid>
+        )}
+        pageLimit={pageLimit}
+        maxEl={allProducts.length}
+        getNoOfElDisplayed={(n) => {
+          setNoOfProductDisplayed(n);
+        }}
       >
         {allProducts.map((product) => (
           <GridItem key={product.product_id}>
@@ -160,7 +124,7 @@ const AllProducts: React.FunctionComponent = () => {
             </ProductInfoContext.Provider>
           </GridItem>
         ))}
-      </Grid>
+      </Pagination>
       <DeleteModal
         confirmDelete={() => {
           setDel(true);
