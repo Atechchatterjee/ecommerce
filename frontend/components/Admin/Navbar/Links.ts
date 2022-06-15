@@ -11,9 +11,9 @@ export const Links: LinkProps[] = [
     label: "Catalogs",
     href: "catalogs",
     children: [
-      { label: "Product", href: "product" },
-      { label: "Category", href: "category" },
-      { label: "All Products", href: "all-products" },
+      { label: "Add Product", href: "product" },
+      { label: "Edit Category", href: "category" },
+      { label: "View Products", href: "all-products" },
       { label: "Add Units", href: "add-units" },
       { label: "Enter GST", href: "enter-gst" },
     ],
