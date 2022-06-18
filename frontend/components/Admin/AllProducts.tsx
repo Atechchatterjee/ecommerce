@@ -4,7 +4,6 @@ import {
   Button,
   Box,
   Grid,
-  GridItem,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -16,15 +15,12 @@ import {
 import { useDynamicColumns } from "../../hooks/useDynamicColumns";
 import { ProductInfoContext } from "../../context/ProductInfoContext";
 import { getAllProducts, deleteProduct } from "../../services/ProductService";
-import Pagination from "../Widgets/Pagination";
+import usePagination from "../../hooks/usePagination";
+import PaginationBar from "../Widgets/PaginationBar";
 
 const fetchAllProducts = async (): Promise<any[]> => {
-  return new Promise((resolve) => {
-    getAllProducts(13).then((allProducts) => {
-      console.table(allProducts);
-      resolve(allProducts);
-    });
-  });
+  const allProducts = await getAllProducts(13);
+  return Promise.resolve(allProducts);
 };
 
 const AllProducts: React.FunctionComponent = () => {
@@ -33,9 +29,8 @@ const AllProducts: React.FunctionComponent = () => {
   const [del, setDel] = useState<boolean>(false);
   const [prdDel, setPrdDel] = useState<any>();
   const [columns] = useDynamicColumns(4, [1700, 1300, 860]);
-  const [pageLimit, setPageLimit] = useState<number>(8);
-  const [noOfProductDisplayed, setNoOfProductDisplayed] =
-    useState<number>(pageLimit);
+  const [pageLimit] = useState<number>(8);
+  useState<number>(pageLimit);
 
   // modal to confirm delete-action
   const DeleteModal: React.FC<{ confirmDelete: Function }> = ({
@@ -85,29 +80,29 @@ const AllProducts: React.FunctionComponent = () => {
     }
   }, [del, setDel, prdDel, setPrdDel]);
 
+  const {
+    startIndx,
+    endIndx,
+    moveNext,
+    movePrev,
+    numberOfPages,
+    currentSelectedPage,
+    numberOfElementDisplayed,
+  } = usePagination({ pageLimit, maxEl: allProducts.length });
+
   return (
     <Box marginTop="3em" width="100%" overflow="hidden" padding="0 2% 3% 2%">
-      <Pagination
-        wrapperEl={({ children }: any) => (
-          <Grid
-            h="inherit"
-            gap={6}
-            templateColumns={`repeat(${columns}, 1fr)`}
-            templateRows={`repeat(${Math.ceil(
-              noOfProductDisplayed / columns
-            )}, 1fr)`}
-          >
-            {children}
-          </Grid>
-        )}
-        pageLimit={pageLimit}
-        maxEl={allProducts.length}
-        getNoOfElDisplayed={(n) => {
-          setNoOfProductDisplayed(n);
-        }}
+      <Grid
+        h="inherit"
+        gap={6}
+        templateColumns={`repeat(${columns}, 1fr)`}
+        templateRows={`repeat(${Math.ceil(
+          numberOfElementDisplayed / columns
+        )}, 1fr)`}
       >
-        {allProducts.map((product) => (
-          <GridItem key={product.product_id}>
+        {allProducts
+          .filter((_, i: number) => i >= startIndx && i < endIndx)
+          .map((product) => (
             <ProductInfoContext.Provider
               value={{
                 productInfo: [{ ...product, id: product.product_id }, () => {}],
@@ -122,9 +117,11 @@ const AllProducts: React.FunctionComponent = () => {
                 editable
               />
             </ProductInfoContext.Provider>
-          </GridItem>
-        ))}
-      </Pagination>
+          ))}
+      </Grid>
+      <PaginationBar
+        {...{ moveNext, movePrev, currentSelectedPage, numberOfPages }}
+      />
       <DeleteModal
         confirmDelete={() => {
           setDel(true);
