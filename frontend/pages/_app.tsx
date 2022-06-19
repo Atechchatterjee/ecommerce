@@ -7,9 +7,12 @@ import { checkWhichUser } from "../util/Authenticated";
 import { UserContext } from "../context/UserContext";
 import Head from "next/head";
 import ScrollBarWrapper from "../components/Custom/ScrollBarWrapper";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const [admin, setAdmin] = useState<boolean | null>(null);
+
+  const queryClient = new QueryClient();
 
   useEffect(() => {
     checkWhichUser()
@@ -22,15 +25,20 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
 
   return (
     <ChakraProvider theme={theme}>
-      <UserContext.Provider value={{ admin, setAdmin }}>
-        <Head>
-          <title>Ecommerce Design</title>
-          <meta name="viewport" content="width=device-width,initial-scale=1" />
-        </Head>
-        <ScrollBarWrapper color="secondary">
-          <Component {...pageProps} />
-        </ScrollBarWrapper>
-      </UserContext.Provider>
+      <QueryClientProvider client={queryClient}>
+        <UserContext.Provider value={{ admin, setAdmin }}>
+          <Head>
+            <title>Ecommerce Design</title>
+            <meta
+              name="viewport"
+              content="width=device-width,initial-scale=1"
+            />
+          </Head>
+          <ScrollBarWrapper color="secondary">
+            <Component {...pageProps} />
+          </ScrollBarWrapper>
+        </UserContext.Provider>
+      </QueryClientProvider>
     </ChakraProvider>
   );
 };
