@@ -49,7 +49,7 @@ export const addProductImages = async (formData: FormData) => {
 };
 
 export const getAllProducts = async (n?: number): Promise<ProductType[]> => {
-  const res = await api.get(`/shop/get-all-products/0,${n || 10}`, {
+  const res = await api.get(`/shop/get-all-products/0,${n || 25}`, {
     withCredentials: true,
   });
   return Promise.resolve(res.data.allProducts);
