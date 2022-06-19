@@ -1,19 +1,22 @@
 import type { NextPage } from "next";
-import Header from "../components/Layout/Header";
-import Footer from "../components/Layout/Footer";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Grid, GridItem, Box } from "@chakra-ui/react";
 import { useDynamicColumns } from "../hooks/useDynamicColumns";
-import { AnimatePresence, motion } from "framer-motion";
-import Product from "../components/Shop/Product";
+import { motion } from "framer-motion";
 import { ProductInfoContext } from "../context/ProductInfoContext";
 import { getAllProducts } from "../services/ProductService";
+import Product from "../components/Shop/Product";
+import Header from "../components/Layout/Header";
+import Footer from "../components/Layout/Footer";
+import usePagination from "../hooks/usePagination";
+import PaginationBar from "../components/Widgets/PaginationBar";
 
 const Shop: NextPage = () => {
   const [allProducts, setAllProducts] = useState<any[]>([]);
   const [originalProducts, setOriginalProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [columns] = useDynamicColumns(4, [1700, 1300, 860]);
+  const [pageLimit] = useState<number>(8);
 
   useEffect(() => {
     getAllProducts().then((products) => {
@@ -25,6 +28,17 @@ const Shop: NextPage = () => {
   useEffect(() => {
     setTimeout(() => setLoading(false), 100);
   }, [allProducts]);
+
+  const {
+    startIndx,
+    endIndx,
+    moveNext,
+    movePrev,
+    moveToPage,
+    numberOfPages,
+    currentSelectedPage,
+    numberOfElementDisplayed,
+  } = usePagination({ pageLimit, maxEl: allProducts?.length || 0 });
 
   return (
     <Box>
@@ -47,28 +61,35 @@ const Shop: NextPage = () => {
             gap={6}
             templateColumns={`repeat(${columns}, 1fr)`}
             templateRows={`repeat(${Math.ceil(
-              allProducts.length / columns
+              numberOfElementDisplayed / columns
             )}, 1fr)`}
           >
-            {allProducts.map((product, indx) => (
-              <AnimatePresence key={indx}>
+            {allProducts
+              .filter((_: any, i: number) => i >= startIndx && i < endIndx)
+              .map((product) => (
                 <GridItem key={product.product_id}>
-                  <motion.div layout>
-                    <ProductInfoContext.Provider
-                      value={{
-                        productInfo: [
-                          { ...product, id: product.product_id },
-                          () => {},
-                        ],
-                      }}
-                    >
-                      <Product />
-                    </ProductInfoContext.Provider>
-                  </motion.div>
+                  <ProductInfoContext.Provider
+                    value={{
+                      productInfo: [
+                        { ...product, id: product.product_id },
+                        () => {},
+                      ],
+                    }}
+                  >
+                    <Product />
+                  </ProductInfoContext.Provider>
                 </GridItem>
-              </AnimatePresence>
-            ))}
+              ))}
           </Grid>
+          <PaginationBar
+            {...{
+              moveNext,
+              movePrev,
+              moveToPage,
+              currentSelectedPage,
+              numberOfPages,
+            }}
+          />
         </motion.div>
       </Box>
       {loading ? <></> : <Footer />}
