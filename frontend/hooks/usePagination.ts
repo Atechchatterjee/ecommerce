@@ -22,11 +22,8 @@ const usePagination = ({ pageLimit, maxEl }: PaginationProps) => {
       setCurrentSelectedPage(currentSelectedPage + 1);
     }
 
-    if (endIndx + pageLimit <= maxEl) {
-      newEndIndx = endIndx + pageLimit;
-    } else if (maxEl - endIndx > 0) {
-      newEndIndx = maxEl;
-    }
+    if (endIndx + pageLimit <= maxEl) newEndIndx = endIndx + pageLimit;
+    else if (maxEl - endIndx > 0) newEndIndx = maxEl;
 
     setStartIndx(newStartIndx);
     setEndIndx(newEndIndx);
@@ -42,12 +39,26 @@ const usePagination = ({ pageLimit, maxEl }: PaginationProps) => {
       newStartIndx = startIndx - pageLimit;
       setCurrentSelectedPage(currentSelectedPage - 1);
     } else newStartIndx = 0;
-    if (endIndx - pageLimit > 0) {
-      newEndIndx = endIndx - (endIndx - startIndx);
-    } else newEndIndx = pageLimit;
+
+    if (endIndx - pageLimit > 0) newEndIndx = endIndx - (endIndx - startIndx);
+    else newEndIndx = pageLimit;
 
     setStartIndx(newStartIndx);
     setEndIndx(newEndIndx);
+
+    setNumberOfElementDisplayed(newEndIndx - newStartIndx);
+  };
+
+  const moveToPage = (pageNo: number) => {
+    let newStartIndx = pageNo * pageLimit,
+      newEndIndx = newStartIndx + pageLimit;
+
+    if (newStartIndx <= maxEl) setStartIndx(newStartIndx);
+
+    if (newEndIndx <= maxEl) setEndIndx(newEndIndx);
+    else setEndIndx(maxEl);
+
+    setCurrentSelectedPage(pageNo);
 
     setNumberOfElementDisplayed(newEndIndx - newStartIndx);
   };
@@ -64,6 +75,7 @@ const usePagination = ({ pageLimit, maxEl }: PaginationProps) => {
     currentSelectedPage,
     startIndx,
     endIndx,
+    moveToPage,
   };
 };
 

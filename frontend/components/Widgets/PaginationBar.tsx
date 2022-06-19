@@ -6,6 +6,7 @@ interface PaginationBarProps {
   currentSelectedPage: number;
   moveNext: Function;
   movePrev: Function;
+  moveToPage: Function;
 }
 
 const PaginationBar = ({
@@ -13,6 +14,7 @@ const PaginationBar = ({
   currentSelectedPage,
   moveNext,
   movePrev,
+  moveToPage,
 }: PaginationBarProps) => (
   <Flex
     flexDirection="row"
@@ -30,10 +32,16 @@ const PaginationBar = ({
         <Box
           bg={currentSelectedPage == i ? "secondary.200" : "gray.50"}
           color={currentSelectedPage == i ? "white" : "gray.600"}
-          transition="all ease-in-out 0.2s"
+          transition="all ease-in-out 0.1s"
           padding="0.5rem 1rem"
           borderRadius="md"
           cursor="pointer"
+          onClick={() => {
+            moveToPage(i);
+          }}
+          _hover={{
+            backgroundColor: currentSelectedPage != i && "gray.200",
+          }}
         >
           <Text>{i}</Text>
         </Box>
