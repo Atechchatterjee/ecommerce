@@ -73,10 +73,10 @@ const ClientProductPage: React.FC<{ product?: any }> = () => {
 
   useEffect(() => {
     isAuthenticated()
-      .then(() => {
-        checkIfInCart(product.id)
-          .then(() => setProductExistsInCart(true))
-          .catch(() => setProductExistsInCart(false));
+      .then(async () => {
+        const res = await checkIfInCart(product.id);
+        if (res) setProductExistsInCart(true);
+        else setProductExistsInCart(false);
         setAuthenticated(true);
       })
       .catch(() => setAuthenticated(false));
