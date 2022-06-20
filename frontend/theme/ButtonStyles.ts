@@ -1,18 +1,19 @@
-import ColorPalatte from "./ColorPalatte"
+import ColorPalatte from "./ColorPalatte";
 
-const {primary, secondary} = ColorPalatte;
+const { primary, secondary } = ColorPalatte;
 
-const includeProperty = (property: any, condition: boolean) => (
-  condition ? property : {}
-)
+const includeProperty = (property: any, condition: boolean) =>
+  condition ? property : {};
 
-const commonStyles = ({includeColor = true}: {includeColor?: boolean} = {}) => ({
+const commonStyles = ({
+  includeColor = true,
+}: { includeColor?: boolean } = {}) => ({
   fontFamily: "Sora",
   fontWeight: "medium",
   focusBorderColor: "secondary.200",
-  fontSize:{ base: "12px", md: "15px", lg: "16px" },
-  ...includeProperty({color: "white"}, includeColor),
-})
+  fontSize: { base: "12px", md: "15px", lg: "16px" },
+  ...includeProperty({ color: "white" }, includeColor),
+});
 
 export default {
   variants: {
@@ -22,9 +23,30 @@ export default {
       _disabled: {
         _hover: {
           textColor: primary[900],
-        }
+        },
       },
       ...commonStyles(),
+    }),
+    mutedPrimarySolid: () => ({
+      bg: "#46508D",
+      _hover: { bg: "primary.100" },
+      _disabled: {
+        _hover: {
+          textColor: primary[900],
+        },
+      },
+      ...commonStyles(),
+    }),
+    whitePrimarySolid: () => ({
+      bg: "#ffffff",
+      color: primary[500],
+      _hover: { bg: "gray.200" },
+      _disabled: {
+        _hover: {
+          textColor: primary[900],
+        },
+      },
+      ...commonStyles({ includeColor: false }),
     }),
     primaryLightSolid: () => ({
       bg: "#3E4A7F",
@@ -32,7 +54,7 @@ export default {
       _disabled: {
         _hover: {
           textColor: primary[500],
-        }
+        },
       },
       ...commonStyles(),
     }),
@@ -49,12 +71,12 @@ export default {
         outlineColor: primary[500],
         outlineOffset: "none",
       },
-       _disabled: {
-         _hover: {
-          textColor: primary[900]
-         }
+      _disabled: {
+        _hover: {
+          textColor: primary[900],
+        },
       },
-      ...commonStyles({includeColor: false}),
+      ...commonStyles({ includeColor: false }),
     }),
     secondaryOutline: () => ({
       bg: "white",
@@ -62,25 +84,28 @@ export default {
       outlineOffset: "none",
       borderRadius: "sm",
       textColor: secondary[200],
-      ...commonStyles({includeColor: false}),
+      ...commonStyles({ includeColor: false }),
     }),
     blurSolid: () => ({
-      bgImage: "linear-gradient(to bottom, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.15))",
+      bgImage:
+        "linear-gradient(to bottom, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.15))",
       backdropFilter: "blur(20px)",
     }),
     primaryBlurSolid: () => ({
-      bgImage: "linear-gradient(to bottom, rgba(71, 84, 153, 0.4), rgba(59, 73, 148, 0.5))",
+      bgImage:
+        "linear-gradient(to bottom, rgba(71, 84, 153, 0.4), rgba(59, 73, 148, 0.5))",
       backdropFilter: "blur(30px)",
     }),
     secondaryBlurSolid: () => ({
-      bgImage: "linear-gradient(to right, rgba(161, 157, 242, 0.9), rgba(161, 157, 242, 0.8))",
+      bgImage:
+        "linear-gradient(to right, rgba(161, 157, 242, 0.9), rgba(161, 157, 242, 0.8))",
       backdropFilter: "blur(30px)",
     }),
     secondarySolid: () => ({
       bg: secondary[200],
       borderRadius: "md",
-      _hover: { 
-        opacity:"0.8",
+      _hover: {
+        opacity: "0.8",
       },
       ...commonStyles(),
     }),
@@ -106,4 +131,4 @@ export default {
       ...commonStyles(),
     }),
   },
-}
+};
