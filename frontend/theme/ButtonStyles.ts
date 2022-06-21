@@ -28,7 +28,7 @@ export default {
       ...commonStyles(),
     }),
     mutedPrimarySolid: () => ({
-      bg: "#46508D",
+      bg: primary[200],
       _hover: { bg: "primary.100" },
       _disabled: {
         _hover: {
