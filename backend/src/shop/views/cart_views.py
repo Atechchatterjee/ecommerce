@@ -4,11 +4,13 @@ from authentication.tokens import retrieve_payload
 from ..models import (
     Cart_Details,
     Product,
-    Product_Images
+    Product_Images,
+    Product_Price
 )
 from rest_framework.response import Response
 from authentication.backends import Is_User
 from ..serializers import (
+    ProductPriceSerializer,
     ProductSerializer,
     ProductImageSerializer,
     CartDetailsSerializer
@@ -42,13 +44,20 @@ def add_product_to_cart(request):
 def get_serialized_product(product_id: int):
     product = Product.objects.get(product_id=product_id)
     serialized_product =  ProductSerializer(product).data
+    product_price = Product_Price.objects.filter(product_id=product)
+    serialized_product_price = ProductPriceSerializer(
+       product_price,
+       many=True
+    ).data
     serialized_product = {
         **serialized_product, 
+        "price": serialized_product_price,
         "images": ProductImageSerializer(
             Product_Images.objects.filter(product_id=product),
             many=True
         ).data
     }
+    print(f"serialized product of id = {product_id} is {serialized_product}")
     return serialized_product
 
 @api_view(['GET'])
@@ -67,6 +76,7 @@ def get_products_from_cart(request):
                 **get_serialized_product(int(item.get("product_id")))
             } for item in serialized_cart_items
         ]
+        print(f"cart items = {modified_cart_items}")
         return Response({
             "cart_items": modified_cart_items 
         }, status=status.HTTP_200_OK)
