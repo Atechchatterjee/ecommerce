@@ -23,7 +23,19 @@ export type ProductType = {
   price: any[];
   description: string;
   category: any;
-  image: any[]
+  image: any[];
   unit?: any;
   gst?: any;
-}
+};
+
+export type CartItem = {
+  product_id: number;
+  name: string;
+  price: any;
+  description: string;
+  category: any;
+  images: any[];
+  unit?: any;
+  gst?: any;
+  total_price: number;
+};
