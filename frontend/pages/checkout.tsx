@@ -1,7 +1,6 @@
-import { Box, Fade, SliderMark, ContainerProps } from "@chakra-ui/react";
+import { Box, Fade, ContainerProps } from "@chakra-ui/react";
 import { NextPage } from "next";
 import Cart from "../components/Checkout/Cart";
-import CustomSlider from "../components/Custom/CustomSlider";
 import WithAuth from "../util/WithAuth";
 import { useState } from "react";
 import Shipping from "../components/Checkout/Shipping";
@@ -10,35 +9,40 @@ import CustomContainer from "../components/Custom/CustomContainer";
 import { scrollBarStyle } from "../util/ScrollBarStyle";
 import CheckoutSlider from "../components/Checkout/CheckoutSlider";
 
+const MainContainer = ({ children, ...props }: ContainerProps) => (
+  <CustomContainer
+    borderRadius="lg"
+    maxWidth="75%"
+    h="84vh"
+    bg="white"
+    position="absolute"
+    top="15vh"
+    left="12%"
+    padding="0 0 2rem 0"
+    overflow="auto"
+    transition="all ease-in-out 0.5s"
+    sx={scrollBarStyle()}
+    {...props}
+  >
+    {children}
+  </CustomContainer>
+);
+
 const Checkout: NextPage = () => {
   const [stageNo, setStageNo] = useState<number>(0);
-  const [stageNames, setStageNames] = useState<string[]>([
-    "Cart",
-    "Shipping",
-    "Payment",
-  ]);
-
-  const ContainerStyles: ContainerProps = {
-    borderRadius: "lg",
-    width: "100%",
-    maxWidth: "75%",
-    bgColor: "white",
-    position: "absolute",
-    height: "83%",
-    minHeight: "50%",
-    top: "15vh",
-    left: "12%",
-    overflow: "auto",
-    backdropFilter: "blur(4px)",
-    sx: scrollBarStyle(),
-  };
 
   return (
     <Box width="100%" height="100vh" position="relative" textAlign="center">
       <Head key={0}>
         <title>Checkout</title>
       </Head>
-      <Box w="100%" h="40vh" bgColor="primary.500" display="flex">
+      <Box
+        w="100%"
+        h="40vh"
+        bgColor="primary.800"
+        display="flex"
+        borderRadius="0 0 3rem 3rem"
+      >
         <CheckoutSlider
           getSelectedIndx={(selectedIndx) => {
             setStageNo(selectedIndx);
@@ -46,7 +50,7 @@ const Checkout: NextPage = () => {
         />
       </Box>
 
-      <CustomContainer transition="all ease-in-out 0.5s" {...ContainerStyles}>
+      <MainContainer>
         {(() => {
           switch (stageNo) {
             case 0:
@@ -63,7 +67,7 @@ const Checkout: NextPage = () => {
               );
           }
         })()}
-      </CustomContainer>
+      </MainContainer>
     </Box>
   );
 };
