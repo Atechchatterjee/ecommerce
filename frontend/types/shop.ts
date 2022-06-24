@@ -32,6 +32,7 @@ export type CartItem = {
   product_id: number;
   name: string;
   price: any;
+  quantity: number;
   description: string;
   category: any;
   images: any[];
