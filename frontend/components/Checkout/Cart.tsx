@@ -1,5 +1,13 @@
-import { Box, Button, Text, Flex, Grid, GridItem } from "@chakra-ui/react";
-import { IoIosArrowBack } from "react-icons/io";
+import {
+  Box,
+  Button,
+  Text,
+  Flex,
+  Grid,
+  GridItem,
+  Divider,
+} from "@chakra-ui/react";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import ProductContainer from "./ProductContainer";
 import { getCartItems } from "../../services/CartService";
 import { useQuery } from "react-query";
@@ -20,35 +28,43 @@ const Cart: React.FC<CartProps> = ({ proceed }) => {
     >
       <GridItem rowSpan={20} colSpan={20}>
         {cartItems &&
-          cartItems.map((prd: any) => <ProductContainer product={prd} />)}
+          cartItems.map((prd: any) => (
+            <>
+              <ProductContainer product={prd} />
+              <Divider orientation="horizontal" />
+            </>
+          ))}
       </GridItem>
       <GridItem rowSpan={1} colSpan={16} textAlign="left">
         <Box>
           <Button
-            variant="primaryOutline"
+            variant="ghost"
             borderRadius="full"
             backgroundColor={`rgba(255,255,255, 0.1)`}
             onClick={() => window.location.assign("/shop")}
+            padding="2%"
           >
-            <Flex flexDirection="row" gridGap={1.5}>
+            <Flex flexDirection="row" gridGap={3}>
               <IoIosArrowBack size={20} />
-              <Text flex="1">Back</Text>
+              <Text flex="1" fontSize="lg" mt="0%">
+                Shop
+              </Text>
             </Flex>
           </Button>
         </Box>
       </GridItem>
 
       <GridItem rowSpan={1} colSpan={4} textAlign="right">
-        <Flex flexDirection="row" gridGap="2" width="full">
-          <Button
-            flex="1"
-            marginLeft="1em"
-            variant="primarySolid"
-            onClick={() => proceed && proceed()}
-          >
-            Proceed
-          </Button>
-        </Flex>
+        <Button
+          padding="1rem 1.5rem"
+          variant="primarySolid"
+          onClick={() => proceed && proceed()}
+        >
+          <Flex flexDirection="row" gridGap={3}>
+            <Text>Checkout</Text>
+            <IoIosArrowForward size={15} style={{ marginTop: "2%" }} />
+          </Flex>
+        </Button>
       </GridItem>
     </Grid>
   );
