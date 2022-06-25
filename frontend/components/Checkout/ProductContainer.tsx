@@ -4,13 +4,12 @@ import {
   FlexProps,
   Text,
   Box,
-  HStack,
   Input,
   Flex,
+  CloseButton,
 } from "@chakra-ui/react";
 import { CartItem } from "../../types/shop";
 import { createImageUrl } from "../../util/CreateImageUrl";
-import { CustomField } from "../Custom/CustomField";
 
 interface ProductContainerProps extends FlexProps {
   product: CartItem;
@@ -39,9 +38,13 @@ const ProductContainer = ({ product, ...props }: ProductContainerProps) => {
       <Text mt="1.7rem" fontFamily="Sora" flex="1">
         {product.name}
       </Text>
-      <Text mt="1rem" fontFamily="Sora" flex="1">
-        {product.price[0].price}
-        <Text fontSize="sm">/ {product.unit.value}</Text>
+      <Text mt="1.7rem" fontFamily="Sora" flex="1">
+        <Flex flexDirection="row" gridGap={2}>
+          {"\u20B9" + product.price[0].price}
+          <Text fontSize="sm" fontStyle="italic" mt="0.2rem">
+            / {product.unit.value}
+          </Text>
+        </Flex>
       </Text>
       <Input
         mt="1.7rem"
@@ -51,9 +54,16 @@ const ProductContainer = ({ product, ...props }: ProductContainerProps) => {
         type="number"
         focusBorderColor="secondary.200"
       />
-      <Text mt="1.7rem" flex="1" fontFamily="Sora">
-        {product.total_price}
+      <Text
+        mt="1.7rem"
+        flex="1"
+        fontFamily="Sora"
+        fontWeight="semibold"
+        color="primary.500"
+      >
+        {"\u20B9" + product.total_price}
       </Text>
+      <CloseButton margin="1.5% 1.5% 0 0" _focus={{ outline: "none" }} />
     </Flex>
   );
 };
