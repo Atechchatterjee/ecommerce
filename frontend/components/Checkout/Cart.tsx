@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Text,
-  Flex,
-  Grid,
-  GridItem,
-  Divider,
-} from "@chakra-ui/react";
+import { Button, Text, Flex, Divider } from "@chakra-ui/react";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import ProductContainer from "./ProductContainer";
 import { getCartItems } from "../../services/CartService";
@@ -16,46 +8,51 @@ interface CartProps {
   proceed?: () => void;
 }
 
+const calculateTotalPrice = (cartItems: any) =>
+  cartItems &&
+  cartItems.reduce(
+    (total: number, currentPrd: any) =>
+      total + parseInt(currentPrd.total_price),
+    0
+  );
+
 const Cart: React.FC<CartProps> = ({ proceed }) => {
   const { data: cartItems } = useQuery("get-cart-items", getCartItems);
 
   return (
-    <Grid
-      padding="1% 2% 0 2%"
-      templateRows="repeat(20, 1fr)"
-      templateColumns="repeat(20, 1fr)"
-      gap="9"
-    >
-      <GridItem rowSpan={20} colSpan={20}>
-        {cartItems &&
-          cartItems.map((prd: any) => (
-            <>
-              <ProductContainer product={prd} />
-              <Divider orientation="horizontal" />
-            </>
-          ))}
-      </GridItem>
-      <GridItem rowSpan={1} colSpan={16} textAlign="left">
-        <Box>
-          <Button
-            variant="ghost"
-            borderRadius="full"
-            backgroundColor={`rgba(255,255,255, 0.1)`}
-            onClick={() => window.location.assign("/shop")}
-            padding="2%"
-          >
-            <Flex flexDirection="row" gridGap={3}>
-              <IoIosArrowBack size={20} />
-              <Text flex="1" fontSize="lg" mt="0%">
-                Shop
-              </Text>
-            </Flex>
-          </Button>
-        </Box>
-      </GridItem>
-
-      <GridItem rowSpan={1} colSpan={4} textAlign="right">
+    <Flex flexDirection="column" gridGap="3vh" padding="2rem 2rem 0 2rem">
+      {cartItems &&
+        cartItems.map((prd: any) => (
+          <Flex flexDirection="column" gridGap={20}>
+            <ProductContainer product={prd} />
+            <Divider orientation="horizontal" />
+          </Flex>
+        ))}
+      <Flex flexDirection="row" justifyContent="right" mr="12%">
+        Total Price :
+        <Text fontWeight="bold" ml="1rem">
+          {"\u20B9" + calculateTotalPrice(cartItems)}
+        </Text>
+      </Flex>
+      <Divider orientation="horizontal" />
+      <Flex flexDirection="row" gridGap="70%" flex="1" w="100%" mt="25%">
         <Button
+          variant="ghost"
+          flex="0.5"
+          borderRadius="full"
+          backgroundColor={`rgba(255,255,255, 0.1)`}
+          onClick={() => window.location.assign("/shop")}
+          padding="1%"
+        >
+          <Flex flexDirection="row" gridGap={3}>
+            <IoIosArrowBack size={20} />
+            <Text flex="1" fontSize="lg" mt="0%">
+              Shop
+            </Text>
+          </Flex>
+        </Button>
+        <Button
+          flex="1"
           padding="1rem 1.5rem"
           variant="primarySolid"
           onClick={() => proceed && proceed()}
@@ -65,8 +62,8 @@ const Cart: React.FC<CartProps> = ({ proceed }) => {
             <IoIosArrowForward size={15} style={{ marginTop: "2%" }} />
           </Flex>
         </Button>
-      </GridItem>
-    </Grid>
+      </Flex>
+    </Flex>
   );
 };
 
