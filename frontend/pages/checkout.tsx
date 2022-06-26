@@ -12,14 +12,12 @@ import CheckoutSlider from "../components/Checkout/CheckoutSlider";
 const MainContainer = ({ children, ...props }: ContainerProps) => (
   <CustomContainer
     borderRadius="lg"
+    minHeight="83vh"
     maxWidth="75%"
-    h="84vh"
     bg="white"
     position="absolute"
     top="15vh"
     left="12%"
-    padding="0 0 2rem 0"
-    overflow="auto"
     transition="all ease-in-out 0.5s"
     sx={scrollBarStyle()}
     {...props}
