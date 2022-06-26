@@ -19,11 +19,9 @@ const ProductContainer = ({ product, ...props }: ProductContainerProps) => {
   return (
     <Flex
       flexDirection="row"
-      gridGap={40}
-      h="7em"
-      margin="1rem"
+      gridGap={30}
+      maxH="2em"
       width="100%"
-      padding="1rem"
       {...(props as any)}
     >
       <Box flex="1">
@@ -38,8 +36,8 @@ const ProductContainer = ({ product, ...props }: ProductContainerProps) => {
       <Text mt="1.7rem" fontFamily="Sora" flex="1">
         {product.name}
       </Text>
-      <Text mt="1.7rem" fontFamily="Sora" flex="1">
-        <Flex flexDirection="row" gridGap={2}>
+      <Text mt="1.7rem" fontFamily="Sora" flex="1.5">
+        <Flex flexDirection="row" gridGap={2} justifyContent="center">
           {"\u20B9" + product.price[0].price}
           <Text fontSize="sm" fontStyle="italic" mt="0.2rem">
             / {product.unit.value}
@@ -47,7 +45,7 @@ const ProductContainer = ({ product, ...props }: ProductContainerProps) => {
         </Flex>
       </Text>
       <Input
-        mt="1.7rem"
+        mt="1.2rem"
         value={product.quantity}
         flex="0.3"
         textAlign="center"
