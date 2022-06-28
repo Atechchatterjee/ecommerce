@@ -16,13 +16,8 @@ const getDataFromPincode = (pincode: string): Promise<any> =>
   new Promise((resolve) => {
     axios
       .get(`https://api.postalpincode.in/pincode/${pincode}`)
-      .then((res) => {
-        resolve(res.data[0].PostOffice[0]);
-      })
-      .catch((err) => {
-        console.error(err);
-        rejects(err);
-      });
+      .then((res) => resolve(res.data[0].PostOffice[0]))
+      .catch((err) => rejects(err));
   });
 
 const Shipping = ({ ...props }: ContainerProps) => {
@@ -32,7 +27,7 @@ const Shipping = ({ ...props }: ContainerProps) => {
   const [state, setState] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [pincode, setPincode] = useState<string>("");
-  const FORM_BORDER_COLOR = "gray.400";
+  const FORM_BORDER_COLOR = "gray.300";
 
   const handlePincodeBlur = (e: any) => {
     const currentPincode: string = e.target.value;
@@ -41,7 +36,6 @@ const Shipping = ({ ...props }: ContainerProps) => {
     setLoading(true);
     getDataFromPincode(currentPincode)
       .then((data) => {
-        console.log({ data });
         setCity(data.Region);
         setState(data.State);
         setCountry(data.Country);
@@ -52,13 +46,17 @@ const Shipping = ({ ...props }: ContainerProps) => {
 
   return (
     <Box display="flex" justifyContent="center">
-      <FormControl width="50%" marginTop="5%">
+      <FormControl width="50%" marginTop="3%">
         <Flex flexDirection="column" gridGap={5}>
           <Box flex="1">
-            <FormLabel htmlFor="Address Line">Address Line</FormLabel>
+            <FormLabel htmlFor="Address">Address</FormLabel>
             <CustomField
               id="address"
               type="text"
+              padding="0.5rem"
+              spellCheck={false}
+              as="textarea"
+              h="10rem"
               value={address}
               borderColor={FORM_BORDER_COLOR}
               onChange={(e: any) => setAddress(e.target.value)}
@@ -83,6 +81,7 @@ const Shipping = ({ ...props }: ContainerProps) => {
                 type="text"
                 value={country}
                 borderColor={FORM_BORDER_COLOR}
+                isDisabled
               />
             )}
           </Box>
@@ -97,6 +96,7 @@ const Shipping = ({ ...props }: ContainerProps) => {
                 type="text"
                 value={state}
                 borderColor={FORM_BORDER_COLOR}
+                isDisabled
               />
             )}
           </Box>
@@ -111,12 +111,15 @@ const Shipping = ({ ...props }: ContainerProps) => {
                 type="text"
                 value={city}
                 borderColor={FORM_BORDER_COLOR}
+                isDisabled
               />
             )}
           </Box>
-          <Button variant="primarySolid" marginTop="5%">
-            Submit
-          </Button>
+          <Box textAlign="right" flex="1">
+            <Button variant="primarySolid" mt="3%" w="5rem">
+              save
+            </Button>
+          </Box>
         </Flex>
       </FormControl>
     </Box>
