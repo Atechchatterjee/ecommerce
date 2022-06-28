@@ -13,9 +13,14 @@ import { createImageUrl } from "../../util/CreateImageUrl";
 
 interface ProductContainerProps extends FlexProps {
   product: CartItem;
+  onDelete?: (productId: number) => void;
 }
 
-const ProductContainer = ({ product, ...props }: ProductContainerProps) => {
+const ProductContainer = ({
+  product,
+  onDelete,
+  ...props
+}: ProductContainerProps) => {
   return (
     <Flex
       flexDirection="row"
@@ -29,6 +34,7 @@ const ProductContainer = ({ product, ...props }: ProductContainerProps) => {
           <Image
             w="5em"
             h="5em"
+            objectFit="contain"
             src={createImageUrl(product.images[0].image, undefined)}
           />
         )}
@@ -38,10 +44,12 @@ const ProductContainer = ({ product, ...props }: ProductContainerProps) => {
       </Text>
       <Text mt="1.7rem" fontFamily="Sora" flex="1.5">
         <Flex flexDirection="row" gridGap={2} justifyContent="center">
-          {"\u20B9" + product.price[0].price}
-          <Text fontSize="sm" fontStyle="italic" mt="0.2rem">
-            / {product.unit.value}
-          </Text>
+          {"\u20B9" + parseInt(product.price[0].price).toLocaleString("en-IN")}
+          {product.unit && (
+            <Text fontSize="sm" fontStyle="italic" mt="0.2rem">
+              / {product.unit.value}
+            </Text>
+          )}
         </Flex>
       </Text>
       <Input
@@ -59,9 +67,15 @@ const ProductContainer = ({ product, ...props }: ProductContainerProps) => {
         fontWeight="semibold"
         color="primary.500"
       >
-        {"\u20B9" + product.total_price}
+        {"\u20B9" + parseInt(product.total_price).toLocaleString("en-IN")}
       </Text>
-      <CloseButton margin="1.5% 1.5% 0 0" _focus={{ outline: "none" }} />
+      <CloseButton
+        margin="1.5% 1.5% 0 0"
+        _focus={{ outline: "none" }}
+        onClick={() => {
+          if (onDelete) onDelete(product.product_id);
+        }}
+      />
     </Flex>
   );
 };

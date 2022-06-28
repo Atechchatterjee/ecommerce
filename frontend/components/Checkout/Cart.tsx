@@ -1,8 +1,9 @@
 import { Button, Text, Flex, Divider } from "@chakra-ui/react";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import ProductContainer from "./ProductContainer";
-import { getCartItems } from "../../services/CartService";
+import { deleteItemsFromCart, getCartItems } from "../../services/CartService";
 import { useQuery } from "react-query";
+import { useEffect } from "react";
 
 interface CartProps {
   proceed?: () => void;
@@ -19,23 +20,40 @@ const calculateTotalPrice = (cartItems: any) =>
 const Cart: React.FC<CartProps> = ({ proceed }) => {
   const { data: cartItems } = useQuery("get-cart-items", getCartItems);
 
+  useEffect(() => {
+    console.table(cartItems);
+  }, [cartItems]);
+
   return (
-    <Flex flexDirection="column" gridGap="3vh" padding="2rem 2rem 0 2rem">
+    <Flex flexDirection="column" gridGap="3vh" padding="2rem 2rem 8rem 2rem">
       {cartItems &&
         cartItems.map((prd: any) => (
           <Flex flexDirection="column" gridGap={20}>
-            <ProductContainer product={prd} />
+            <ProductContainer
+              product={prd}
+              onDelete={async (productId) => {
+                const res = await deleteItemsFromCart([productId]);
+                if (res.status == 200) alert("Deleted !!");
+              }}
+            />
             <Divider orientation="horizontal" />
           </Flex>
         ))}
       <Flex flexDirection="row" justifyContent="right" mr="12%">
         Total Price :
         <Text fontWeight="bold" ml="1rem">
-          {"\u20B9" + calculateTotalPrice(cartItems)}
+          {"\u20B9" +
+            (calculateTotalPrice(cartItems) || "").toLocaleString("en-IN")}
         </Text>
       </Flex>
       <Divider orientation="horizontal" />
-      <Flex flexDirection="row" gridGap="70%" flex="1" w="100%" mt="25%">
+      <Flex
+        flexDirection="row"
+        gridGap="70%"
+        w="94%"
+        position="absolute"
+        bottom="2rem"
+      >
         <Button
           variant="ghost"
           flex="0.5"
