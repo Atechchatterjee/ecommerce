@@ -38,5 +38,5 @@ export type CartItem = {
   images: any[];
   unit?: any;
   gst?: any;
-  total_price: number;
+  total_price: string;
 };
