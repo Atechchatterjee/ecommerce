@@ -1,12 +1,12 @@
-import { Box, Fade, ContainerProps } from "@chakra-ui/react";
 import { NextPage } from "next";
+import { useState } from "react";
+import { scrollBarStyle } from "../util/ScrollBarStyle";
+import { Box, Fade, ContainerProps } from "@chakra-ui/react";
 import Cart from "../components/Checkout/Cart";
 import WithAuth from "../util/WithAuth";
-import { useState } from "react";
 import Shipping from "../components/Checkout/Shipping";
 import Head from "next/head";
 import CustomContainer from "../components/Custom/CustomContainer";
-import { scrollBarStyle } from "../util/ScrollBarStyle";
 import CheckoutSlider from "../components/Checkout/CheckoutSlider";
 
 const MainContainer = ({ children, ...props }: ContainerProps) => (
@@ -30,7 +30,7 @@ const Checkout: NextPage = () => {
   const [stageNo, setStageNo] = useState<number>(0);
 
   return (
-    <Box width="100%" height="100vh" position="relative" textAlign="center">
+    <Box w="100%" h="100vh" position="relative" textAlign="center">
       <Head key={0}>
         <title>Checkout</title>
       </Head>
@@ -41,11 +41,7 @@ const Checkout: NextPage = () => {
         display="flex"
         borderRadius="0 0 3rem 3rem"
       >
-        <CheckoutSlider
-          getSelectedIndx={(selectedIndx) => {
-            setStageNo(selectedIndx);
-          }}
-        />
+        <CheckoutSlider indx={[stageNo, setStageNo]} />
       </Box>
 
       <MainContainer>
@@ -53,13 +49,13 @@ const Checkout: NextPage = () => {
           switch (stageNo) {
             case 0:
               return (
-                <Fade in={true}>
-                  <Cart proceed={() => setStageNo(2)} />
+                <Fade in>
+                  <Cart proceed={() => setStageNo(1)} />
                 </Fade>
               );
             case 1:
               return (
-                <Fade in={true}>
+                <Fade in>
                   <Shipping />
                 </Fade>
               );
