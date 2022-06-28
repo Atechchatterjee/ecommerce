@@ -54,7 +54,7 @@ const NormalMode = ({ ...props }: ContainerProps) => {
           bottom="1em"
         >
           <Text fontWeight="bold">
-            ₹{product.price[0]?.price}{" "}
+            ₹{parseInt(product.price[0]?.price).toLocaleString("en-IN")}
             {product.unit ? " / " + product.unit.value : ""}
           </Text>
         </Tag>
