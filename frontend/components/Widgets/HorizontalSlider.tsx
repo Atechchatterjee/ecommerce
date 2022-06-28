@@ -1,12 +1,11 @@
 import { Box, BoxProps, Button, Flex, Text } from "@chakra-ui/react";
-import { useState } from "react";
 
 type Label = { icon: any; text: string };
 
 interface HorizontalSliderProps {
   labels: Label[];
+  indx: [selectedIndx: number, setSelectedIndx: (_: number) => void];
   mode?: "light" | "dark";
-  getSelectedIndx?: (selectedIndx: number) => void;
 }
 
 const ProgressLine = ({ ...props }: BoxProps) => {
@@ -16,9 +15,9 @@ const ProgressLine = ({ ...props }: BoxProps) => {
 const HorizontalSlider = ({
   labels,
   mode = "dark",
-  getSelectedIndx,
+  indx,
 }: HorizontalSliderProps) => {
-  const [selectedIndx, setSelectedIndx] = useState<number>(0);
+  const [selectedIndx, setSelectedIndx] = indx;
 
   return (
     <Flex flexDirection="row" gridGap="0">
@@ -35,7 +34,6 @@ const HorizontalSlider = ({
             opacity="0.9"
             onClick={() => {
               setSelectedIndx(i);
-              if (getSelectedIndx) getSelectedIndx(i);
             }}
           >
             <Flex flexDirection="row" gridGap="1rem">
