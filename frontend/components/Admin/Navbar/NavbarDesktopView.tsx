@@ -47,11 +47,18 @@ const NavbarDesktopView = ({
   const router = useRouter();
 
   return (
-    <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
+    <Flex h={16} alignItems="center" justifyContent="space-between">
       <ExpandButtonForMobileView {...{ isOpen, onOpen, onClose }} />
-      <HStack spacing={8} alignItems={"center"}>
-        <Box>Admin Panel</Box>
-        <HStack as={"nav"} spacing={4} display={{ base: "none", md: "flex" }}>
+      <HStack spacing={8} alignItems="center">
+        <Box fontWeight="semibold" fontFamily="Sora" fontSize="lg">
+          Cnd Ekart
+        </Box>
+        <HStack
+          as={"nav"}
+          spacing={4}
+          display={{ base: "none", md: "flex" }}
+          justifyContent="right"
+        >
           {Links.map((link) => {
             return link.children ? (
               <NavLink key={link.label}>
@@ -60,9 +67,10 @@ const NavbarDesktopView = ({
                     key={link.label}
                     rounded="full"
                     cursor="pointer"
+                    fontSize="sm"
                     minW={0}
                   >
-                    {link.label}
+                    {link.label.toUpperCase()}
                   </MenuButton>
                   <CustomContainer>
                     <MenuList
@@ -91,8 +99,9 @@ const NavbarDesktopView = ({
                 onClick={() => {
                   router.push(`/admin/${link.href}`);
                 }}
+                fontSize="sm"
               >
-                {link.label}
+                {link.label.toUpperCase()}
               </NavLink>
             );
           })}

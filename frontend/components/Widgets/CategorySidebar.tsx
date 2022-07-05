@@ -12,7 +12,6 @@ import {
 import { IoIosArrowBack } from "react-icons/io";
 import { CategoryTree } from "../../util/Tree";
 import { AnimatePresence, motion } from "framer-motion";
-import { checkBrowser } from "../../util/CheckBrowser";
 
 interface DisplayCategoriesProps extends FlexProps {
   categories?: any[];

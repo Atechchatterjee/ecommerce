@@ -8,7 +8,7 @@ const includeProperty = (property: any, condition: boolean) =>
 const commonStyles = ({
   includeColor = true,
 }: { includeColor?: boolean } = {}) => ({
-  fontFamily: "Sora",
+  fontFamily: "Nunito",
   fontWeight: "medium",
   focusBorderColor: "secondary.200",
   fontSize: { base: "12px", md: "15px", lg: "16px" },

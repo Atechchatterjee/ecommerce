@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { ProductInfoContext } from "../context/ProductInfoContext";
 import { getAllProducts } from "../services/ProductService";
 import Product from "../components/Shop/Product";
-import Header from "../components/Layout/Header";
+import Header from "../components/Layout/Header/index";
 import Footer from "../components/Layout/Footer";
 import usePagination from "../hooks/usePagination";
 import PaginationBar from "../components/Widgets/PaginationBar";

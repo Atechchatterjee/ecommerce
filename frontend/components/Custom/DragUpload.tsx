@@ -98,11 +98,11 @@ const DragUpload = ({ onFileUpload, clearUpload, ...props }: Props) => {
       {uploadedFiles.length === 0 ? (
         <Flex
           mt="4.5vh"
-          fontWeight="semibold"
+          fontWeight="bold"
           fontSize="1.2em"
           _hover={{ color: "primary.100" }}
-          color="primary.800"
-          fontFamily="Sora"
+          color="primary.500"
+          fontFamily="Nunito"
           transition="all ease-in-out 0.1s"
           flexDirection="column"
         >
@@ -115,7 +115,8 @@ const DragUpload = ({ onFileUpload, clearUpload, ...props }: Props) => {
             textAlign="center"
             justifyContent="center"
             alignContent="center"
-            fontFamily="Sora"
+            fontFamily="Nunito"
+            fontWeight="bold"
             fontSize={{ base: "0.75em", md: "0.8em", lg: "1em" }}
           >
             Drop Files Here

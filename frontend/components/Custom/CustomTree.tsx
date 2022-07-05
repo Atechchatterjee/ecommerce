@@ -11,6 +11,7 @@ import {
   Flex,
   InputProps,
   Collapse,
+  Divider,
 } from "@chakra-ui/react";
 import { CategoryNode } from "../../util/Tree";
 import { IoMdArrowDropright, IoMdArrowDropdown } from "react-icons/io";
@@ -145,6 +146,7 @@ const CustomTreeWrapper = ({
                   <Text>{child.val.name}</Text>
                 </Flex>
               </ListItem>
+              <Divider size="200" />
               {/* <Collapse in={child.children.length > 0}> */}
               {toAddNode && child.val.id === highlightNode?.val.id && (
                 <NewCategoryInputField />

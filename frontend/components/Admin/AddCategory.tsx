@@ -39,9 +39,9 @@ const DisplayCategories = ({
     <Flex flexDirection="column" gridGap={4} {...props}>
       {categories?.length === 0 && (
         <Text
-          fontFamily="sora"
+          fontFamily="Nunito"
           fontSize="lg"
-          fontWeight="semibold"
+          fontWeight="bold"
           color="gray.500"
           textAlign="center"
         >
@@ -78,7 +78,7 @@ const DisplayCategories = ({
                 transition="all ease-in-out 0.1s"
               >
                 <Text
-                  fontSize={{ base: "13px", md: "15px", lg: "16px" }}
+                  fontSize={{ base: "14px", md: "15px", lg: "16px" }}
                   isTruncated
                 >
                   {category.val.name}
@@ -219,7 +219,8 @@ const AddCategory = ({ ...props }: ContainerProps) => {
       {...props}
     >
       <Text
-        fontWeight="bold"
+        fontWeight="semibold"
+        fontFamily="Sora"
         fontSize="2em"
         textColor="primary.900"
         textAlign="center"
