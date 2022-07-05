@@ -256,13 +256,13 @@ const ContactInformation = ({ ...props }: ContainerProps) => {
 const Contact: NextPage = () => {
   return (
     <Flex flexDirection="column" padding="0">
-      <Header excludeCategoryBar />
+      {/* <Header excludeCategoryBar /> */}
       <Box mb="1rem" w="100%">
         <Flex
           justifyContent="center"
           flexDirection="row"
           mb="1rem"
-          pt="6rem"
+          pt="2rem"
           gridGap={3}
         >
           <MdEmail
