@@ -24,7 +24,7 @@ from .util import get_user_by_email, get_product_model, get_cart_details
 def add_product_to_cart(request):
     product_id, quantity = itemgetter("product_id", "quantity")(request.data)
     payload = retrieve_payload(request.COOKIES.get("token"))
-    email = payload.get("email")
+    email = payload.get("email") if payload != None else ""
     cart = get_cart_details(email, product_id)
     if cart != None:
         cart.quantity = quantity
@@ -64,7 +64,7 @@ def get_serialized_product(product_id: int):
 @permission_classes([Is_User])
 def get_products_from_cart(request):
     payload = retrieve_payload(request.COOKIES.get("token"))
-    email = payload.get("email")
+    email = payload.get("email") if payload != None else ""
     try:
         cart_items = Cart_Details.objects.filter(
             user_id=get_user_by_email(email))
@@ -89,7 +89,7 @@ def get_products_from_cart(request):
 def product_exists_in_cart(request):
     product_id = itemgetter("product_id")(request.data)
     payload = retrieve_payload(request.COOKIES.get("token"))
-    email = payload.get("email")
+    email = payload.get("email") if payload != None else ""
     try:
         Cart_Details.objects.get(
             user_id=get_user_by_email(email),
@@ -105,7 +105,7 @@ def product_exists_in_cart(request):
 def delete_cart_items(request):
     product_ids = itemgetter("product_ids")(request.data)
     payload = retrieve_payload(request.COOKIES.get("token"))
-    email = payload.get("email")
+    email = payload.get("email") if payload != None else ""
     products = Product.objects.filter(product_id__in=product_ids)
     try:
         Cart_Details.objects.filter(
