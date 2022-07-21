@@ -17,6 +17,7 @@ services:
              python manage.py makemigrations authentication &&
              python manage.py makemigrations administrator &&
              python manage.py makemigrations shop &&
+             python manage.py makemigrations checkout &&
              python manage.py migrate &&
              python manage.py runserver 0.0.0.0:8000"
     volumes:

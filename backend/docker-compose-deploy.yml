@@ -18,6 +18,7 @@ services:
       python manage.py makemigrations authentication &&
       python manage.py makemigrations administrator &&
       python manage.py makemigrations shop &&
+      python manage.py makemigrations checkout &&
       python manage.py migrate &&
       uwsgi --http :8000 --master --enable-threads --module ecomm.wsgi"
     environment:
