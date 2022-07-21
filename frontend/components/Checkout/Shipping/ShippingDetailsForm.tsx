@@ -9,6 +9,7 @@ import {
 import { CustomField } from "../../Custom/CustomField";
 import { useState } from "react";
 import axios from "axios";
+import { createShippingQuery } from "../../../services/ShippingService";
 
 const getDataFromPincode = (pincode: string): Promise<any> =>
   new Promise((resolve, reject) => {
@@ -27,6 +28,9 @@ const ShippingDetailsForm = () => {
   const [pincode, setPincode] = useState<string>("");
   const FORM_BORDER_COLOR = "gray.300";
 
+  const submitForm = () =>
+    createShippingQuery({ address, pincode, country, state, city });
+
   const handlePincodeBlur = (e: any) => {
     const currentPincode: string = e.target.value;
     if (currentPincode.trim() === ("" || pincode)) return;
@@ -43,7 +47,7 @@ const ShippingDetailsForm = () => {
   };
 
   return (
-    <FormControl width="50%" flex="1" padding="2% 5%">
+    <FormControl width="50%" flex="1" padding="2% 5%" onSubmit={submitForm}>
       <Flex flexDirection="column" gridGap={5}>
         <Text fontSize="xl" fontWeight="bold" color="gray.600">
           Fill in the Shipping Details
@@ -107,7 +111,7 @@ const ShippingDetailsForm = () => {
           </Box>
         </Flex>
         <Box textAlign="right" flex="1">
-          <Button variant="primarySolid" mt="3%" w="5rem">
+          <Button variant="primarySolid" mt="3%" w="5rem" onClick={submitForm}>
             save
           </Button>
         </Box>
