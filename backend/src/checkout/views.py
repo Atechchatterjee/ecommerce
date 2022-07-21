@@ -4,8 +4,16 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from authentication.backends import Is_User
 from authentication.tokens import retrieve_payload
-from checkout.models import Shipping_Details
+from checkout.models import Shipping_Details, Shipping_Query
 from shop.views.util import get_user_by_email
+
+def generate_shipping_query(shipping_details):
+    try:
+        Shipping_Query(details=shipping_details).save()
+        return True
+    except:
+        return False
+
 
 @api_view(['POST'])
 @permission_classes([Is_User])
@@ -26,11 +34,18 @@ def create_shipping_query(request):
     )(request.data)
 
     # adding shipping details
-    Shipping_Details(
+    shipping_details = Shipping_Details(
         user_id=user,
         address=address,
         country=country,
         state=state,
         city=city,
         pincode=pincode
-    ).save()
+    )
+    shipping_details.save()
+
+    if generate_shipping_query(shipping_details):
+        return Response(status=status.HTTP_200_OK)
+    else:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
