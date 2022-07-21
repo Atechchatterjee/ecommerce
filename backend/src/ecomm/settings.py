@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'administrator',
     'authentication',
     'shop',
+    'checkout',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
