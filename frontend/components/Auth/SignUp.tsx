@@ -62,7 +62,6 @@ const SignUp: React.FunctionComponent = () => {
                 flex="1"
               />
               <CustomField
-                placeholder="Email Address"
                 name="email"
                 label="Email Id"
                 onChange={handleChange}
@@ -70,14 +69,12 @@ const SignUp: React.FunctionComponent = () => {
                 flex="1"
               />
               <CustomField
-                placeholder="Name"
                 name="name"
                 label="Name"
                 onChange={handleChange}
                 flex="1"
               />
               <CustomField
-                placeholder="Password"
                 name="password"
                 type="password"
                 label="Password"
@@ -86,7 +83,6 @@ const SignUp: React.FunctionComponent = () => {
                 flex="1"
               />
               <CustomField
-                placeholder="Phone Number"
                 name="phNumber"
                 label="Phone Number"
                 onChange={handleChange}

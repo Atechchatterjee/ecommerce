@@ -54,7 +54,6 @@ const SignIn: React.FunctionComponent = () => {
                   width="100%"
                 >
                   <CustomField
-                    placeholder="Email Address"
                     name="email"
                     label="Email Id"
                     onChange={handleChange}
@@ -63,7 +62,6 @@ const SignIn: React.FunctionComponent = () => {
                     flex="1"
                   />
                   <CustomField
-                    placeholder="Password"
                     name="password"
                     type="password"
                     label="Password"
