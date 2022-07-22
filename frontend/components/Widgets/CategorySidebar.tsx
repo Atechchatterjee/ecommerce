@@ -4,14 +4,13 @@ import {
   Button,
   CloseButton,
   ContainerProps,
-  Fade,
   Flex,
   FlexProps,
   Text,
 } from "@chakra-ui/react";
-import { IoIosArrowBack } from "react-icons/io";
 import { CategoryTree } from "../../util/Tree";
 import { AnimatePresence, motion } from "framer-motion";
+import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 
 interface DisplayCategoriesProps extends FlexProps {
   categories?: any[];
@@ -26,7 +25,7 @@ const DisplayCategories = ({
   const [hoverId, setHoverId] = useState<number>(-1);
 
   return (
-    <Flex flexDirection="column" gridGap={4} {...props}>
+    <Flex flexDirection="column" gridGap={0} w="100%" {...props}>
       {categories?.map((category: any, indx) => (
         <AnimatePresence key={indx}>
           <motion.div
@@ -38,25 +37,18 @@ const DisplayCategories = ({
           >
             <Box
               key={indx}
-              display="flex"
-              w="95%"
+              position="relative"
+              w="100%"
               minH="5vh"
-              borderRadius="md"
-              // backgroundColor={
-              //   hoverId !== category.val.id ? "rgba(255,255,255,0.4)" : ""
-              // }
-              bg={hoverId === category.val.id ? "primary.200" : "primary.100"}
-              // linear(to-r, rgba(19, 30, 91, 0.8), rgba(19, 30, 91, 0.6))
-              // bgGradient={
-              //   hoverId === category.val.id
-              //     ? "linear(to-r, rgba(19, 30, 91, 0.8), rgba(19, 30, 91, 0.6))"
-              //     : ""
-              // }
+              borderTop="1px solid #414D9A"
+              borderBottom={
+                indx === categories.length - 1 ? "1px solid #414D9A" : ""
+              }
+              bg={hoverId === category.val.id ? "primary.200" : ""}
               color={hoverId === category.val.id ? "white" : "gray.100"}
               onMouseEnter={() => setHoverId(category.val.id)}
               onMouseLeave={() => setHoverId(-1)}
-              boxShadow="rgba(99, 99, 99, 0.2) 1px 1px 4px 1px"
-              padding="4% 8%"
+              padding="5% 9%"
               flex="1"
               cursor="pointer"
               margin="0"
@@ -65,9 +57,17 @@ const DisplayCategories = ({
               }}
               transition="all ease-in-out 0.1s"
             >
-              <Text fontSize="1rem" isTruncated>
+              <Text fontSize="1.1rem" isTruncated>
                 {category.val.name}
               </Text>
+              {category.children.length > 0 && (
+                <ChevronRightIcon
+                  fontSize="1.3rem"
+                  position="absolute"
+                  top="1.2rem"
+                  right="1rem"
+                />
+              )}
             </Box>
           </motion.div>
         </AnimatePresence>
@@ -110,7 +110,7 @@ const CategorySidebar = ({
 
   const DynamicHeading = () => {
     const category = peekCategoryStack();
-    return category.val ? category.val.name : "All Categories";
+    return category.val ? category.val.name : "Categories";
   };
 
   const handleClose = () => {
@@ -141,12 +141,8 @@ const CategorySidebar = ({
             w="18%"
             h="100vh"
             borderRadius="md"
-            bgGradient={
-              "linear(to-r, rgba(19, 30, 91, 0.95), rgba(19, 30, 91, 0.85))"
-            }
-            backdropFilter="blur(20px)"
-            boxShadow="rgba(99, 99, 99, 0.2) 0px 2px 8px 0px"
-            padding="1.5rem 1rem 0 2rem"
+            bg="#262F65"
+            padding="1.5rem 0rem 0 0rem"
             transition="all 0.2s ease-in-out"
             {...props}
           >
@@ -159,10 +155,13 @@ const CategorySidebar = ({
             />
             <Flex flexDirection="column" gridGap={6}>
               <Text
-                fontWeight="semibold"
+                fontWeight="medium"
                 fontSize="1.3rem"
                 flex="1"
                 color="white"
+                fontFamily="Sora"
+                ml="10%"
+                transition="all ease-in-out 0.2s"
               >
                 <DynamicHeading />
               </Text>
@@ -177,17 +176,24 @@ const CategorySidebar = ({
                   }
                 }}
               />
-              <Button
-                color="gray.100"
-                variant="secondarySolid"
-                opacity="0.8"
-                marginTop="4%"
-                w="95%"
-                onClick={popCategoryFromStack}
-              >
-                <IoIosArrowBack />
-              </Button>
             </Flex>
+            <Button
+              color="gray.100"
+              variant="secondarySolid"
+              borderRadius="none"
+              marginTop="10%"
+              padding="1.7rem 0"
+              w="100%"
+              onClick={popCategoryFromStack}
+              isDisabled={categoryStack.length === 0}
+            >
+              <Flex flexDirection="row" gridGap="2" textAlign="center">
+                <ChevronLeftIcon fontSize="1.5rem" ml="-15%" />
+                <Text fontSize="1.1rem" mt="0.15rem">
+                  Back
+                </Text>
+              </Flex>
+            </Button>
           </Box>
         </motion.div>
       </AnimatePresence>
