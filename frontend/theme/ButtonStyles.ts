@@ -40,11 +40,8 @@ export default {
     whitePrimarySolid: () => ({
       bg: "#ffffff",
       color: primary[500],
-      _hover: { bg: "gray.200" },
-      _disabled: {
-        _hover: {
-          textColor: primary[900],
-        },
+      _hover: {
+        bg: "gray.200",
       },
       ...commonStyles({ includeColor: false }),
     }),
@@ -106,6 +103,10 @@ export default {
       borderRadius: "md",
       _hover: {
         opacity: "0.8",
+        _disabled: {
+          opacity: "0.5",
+          bg: "secondary.200",
+        },
       },
       ...commonStyles(),
     }),
