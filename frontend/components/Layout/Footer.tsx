@@ -48,7 +48,7 @@ const Col1 = ({ ...props }: FlexProps) => (
       fontFamily="Sora"
       fontWeight="bold"
     >
-      Ecommerce Design
+      CND E-Kart
     </Heading>
     <Text>Got Question? Call us 24/7</Text>
     <Link
