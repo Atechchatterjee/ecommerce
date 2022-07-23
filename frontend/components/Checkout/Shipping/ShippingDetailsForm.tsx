@@ -1,15 +1,15 @@
 import {
-  Spinner,
   Button,
   Flex,
   Box,
   FormControl,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { CustomField } from "../../Custom/CustomField";
-import { useState } from "react";
-import axios from "axios";
+import { useReducer, useState } from "react";
 import { createShippingQuery } from "../../../services/ShippingService";
+import axios from "axios";
 
 const getDataFromPincode = (pincode: string): Promise<any> =>
   new Promise((resolve, reject) => {
@@ -19,28 +19,76 @@ const getDataFromPincode = (pincode: string): Promise<any> =>
       .catch((err) => reject(err));
   });
 
+const initialFormState = {
+  address: "",
+  country: "",
+  city: "",
+  state: "",
+  pincode: "",
+};
+
+const formReducer = (formState: any, action: any) => {
+  switch (action.type) {
+    case "address":
+      return { ...formState, address: action.payload };
+    case "pincode":
+      return { ...formState, pincode: action.payload };
+    case "set-location":
+      return { ...formState, ...action.payload };
+    case "reset":
+      return initialFormState;
+    default:
+      return formState;
+  }
+};
+
 const ShippingDetailsForm = () => {
-  const [address, setAddress] = useState<string>("");
-  const [city, setCity] = useState<string>("");
-  const [country, setCountry] = useState<string>("");
-  const [state, setState] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [pincode, setPincode] = useState<string>("");
+  const [prevPincode, setPrevPincode] = useState<string>("");
+  const toast = useToast();
   const FORM_BORDER_COLOR = "gray.300";
 
-  const submitForm = () =>
-    createShippingQuery({ address, pincode, country, state, city });
+  const [formState, dispatchFormState] = useReducer(
+    formReducer,
+    initialFormState
+  );
+
+  const submitForm = () => {
+    try {
+      createShippingQuery(formState);
+      toast({
+        title: "Query successfully generated.",
+        description:
+          "We have generated a shipping query with all your details.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+    } catch {
+      toast({
+        title: "Sorry for the inconvenience!",
+        description: "We could not generate a shipping query.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+    dispatchFormState({ type: "reset" });
+  };
 
   const handlePincodeBlur = (e: any) => {
     const currentPincode: string = e.target.value;
-    if (currentPincode.trim() === ("" || pincode)) return;
-    setPincode(currentPincode);
+    if (currentPincode.trim() === "" || currentPincode.trim() === prevPincode)
+      return;
     setLoading(true);
     getDataFromPincode(currentPincode)
       .then((data) => {
-        setCity(data.Region);
-        setState(data.State);
-        setCountry(data.Country);
+        const { Region: city, State: state, Country: country } = data;
+        dispatchFormState({
+          type: "set-location",
+          payload: { city, state, country },
+        });
+        setPrevPincode(currentPincode);
         setLoading(false);
       })
       .catch(() => setLoading(false));
@@ -61,9 +109,11 @@ const ShippingDetailsForm = () => {
             spellCheck={false}
             as="textarea"
             h="10rem"
-            value={address}
+            value={formState.address}
             borderColor={FORM_BORDER_COLOR}
-            onChange={(e: any) => setAddress(e.target.value)}
+            onChange={(e: any) =>
+              dispatchFormState({ type: "address", payload: e.target.value })
+            }
           />
         </Box>
         <Box flex="1">
@@ -71,6 +121,10 @@ const ShippingDetailsForm = () => {
             label="pincode"
             id="pincode"
             type="text"
+            value={formState.pincode}
+            onChange={(e: any) =>
+              dispatchFormState({ type: "pincode", payload: e.target.value })
+            }
             onBlur={handlePincodeBlur}
             borderColor={FORM_BORDER_COLOR}
           />
@@ -80,7 +134,7 @@ const ShippingDetailsForm = () => {
             label="country"
             id="country"
             type="text"
-            value={country}
+            value={formState.country}
             borderColor={FORM_BORDER_COLOR}
             isDisabled
             isLoading={loading}
@@ -92,7 +146,7 @@ const ShippingDetailsForm = () => {
               label="state"
               id="state"
               type="text"
-              value={state}
+              value={formState.state}
               borderColor={FORM_BORDER_COLOR}
               isLoading={loading}
               isDisabled
@@ -103,7 +157,7 @@ const ShippingDetailsForm = () => {
               label="city"
               id="city"
               type="text"
-              value={city}
+              value={formState.city}
               borderColor={FORM_BORDER_COLOR}
               isDisabled
               isLoading={loading}
