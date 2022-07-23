@@ -14,3 +14,11 @@ export const createShippingQuery = async (shippingDetails: ShippingDetails) => {
   });
   return Promise.resolve();
 };
+
+export const getAllShippingQueries = async (): Promise<any> => {
+  const res = await api.get(`/checkout/get-all-shipping-queries/`, {
+    withCredentials: true,
+  });
+  if (res) return Promise.resolve(res);
+  else return Promise.reject();
+};
