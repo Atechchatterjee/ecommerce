@@ -5,6 +5,8 @@ from rest_framework.response import Response
 from authentication.backends import Is_Admin, Is_User
 from authentication.tokens import retrieve_payload
 from checkout.models import Shipping_Details, Shipping_Query
+from shop.models import Cart_Details
+from shop.serializers import CartDetailsSerializer
 from .serializers import ShippingQuerySerializers
 from shop.views.util import get_user_by_email
 
@@ -57,6 +59,15 @@ def get_all_shipping_queries(request):
     try:
         all_shipping_queries = Shipping_Query.objects.all()
         serialized_queries = ShippingQuerySerializers(all_shipping_queries, many=True).data
+        
+        # adding cart items to serialized query
+        for i in range(0, len(all_shipping_queries)):
+            shipping_query = all_shipping_queries[i]
+            cart_items = Cart_Details.objects.filter(user_id=shipping_query.details.user_id)
+            CartDetailsSerializer.Meta.depth = 1
+            serialized_cart_items = CartDetailsSerializer(cart_items, many=True, context={"depth": 1}).data
+            serialized_queries[i] = {**serialized_queries[i], "cart": serialized_cart_items}
+
         return Response({"shipping_queries": serialized_queries}, status=status.HTTP_200_OK)
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
