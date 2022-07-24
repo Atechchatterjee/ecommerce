@@ -12,4 +12,6 @@ class Shipping_Details(models.Model):
 class Shipping_Query(models.Model):
     id = models.AutoField(primary_key=True)
     details = models.ForeignKey("checkout.Shipping_Details", verbose_name="details", on_delete=models.CASCADE)
+    charges = models.CharField(null=True, max_length=100, default=None)
+    approved = models.BooleanField(null=False, max_length=100, default=False)
 
