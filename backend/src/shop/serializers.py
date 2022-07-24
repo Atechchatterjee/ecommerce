@@ -44,6 +44,7 @@ class CartDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cart_Details
         fields = ["product_id", "quantity", "total_price"]
+        depth = 0
 
 class GSTSerializer(serializers.ModelSerializer):
     class Meta:
