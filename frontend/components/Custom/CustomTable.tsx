@@ -17,24 +17,28 @@ interface Props extends TableProps {
   rows: any[][];
   heading: any[];
   tableCaption?: string;
+  doubleClick?: boolean;
   rowCb?: Function;
   select?: boolean;
   selectedRowsState?: [selectedRows: any[], setSelectedRows: Function];
   excludeSelectForRows?: number[];
   interactive?: boolean;
-  tableVariant?: "simple" | "custom";
+  tableVariant?: "simple" | "primary" | "secondary";
+  disableClick?: boolean;
 }
 
 const CustomTable = ({
   rows,
   heading,
   tableCaption,
+  doubleClick,
   rowCb,
   select,
   selectedRowsState = [[], () => {}],
   excludeSelectForRows,
   interactive,
-  tableVariant = "custom",
+  disableClick,
+  tableVariant = "primary",
   ...props
 }: Props) => {
   const [selectTrigger, setSelectTrigger] = useState<boolean>(false);
@@ -74,18 +78,36 @@ const CustomTable = ({
     setSelectedRows(copy);
   };
 
-  const rowHoverStyle = {
-    background: "#F7F7F7",
-    cursor: "pointer",
+  const bgColor = () => {
+    switch (tableVariant) {
+      case "simple": {
+        return "";
+      }
+      case "primary": {
+        return "primary.100";
+      }
+      case "secondary": {
+        return "secondary.200";
+      }
+      default: {
+        return "primary.100";
+      }
+    }
+  };
+
+  const handleClicking = (fun: Function) => {
+    if (disableClick) {
+      return {};
+    } else {
+      if (doubleClick) return { onDoubleClick: fun };
+      else return { onClick: fun };
+    }
   };
 
   return (
-    <Table variant="simple" size="md" width="full" {...props}>
+    <Table variant="simple" size="md" width="full" overflow="scroll" {...props}>
       {tableCaption ? <TableCaption>{tableCaption}</TableCaption> : <></>}
-      <Thead
-        bgColor={tableVariant === "simple" ? "" : "primary.100"}
-        height="3.5em"
-      >
+      <Thead bgColor={bgColor()} height="3.5em">
         <Tr>
           {heading.map((headingElement, indx: number) => (
             <Th
@@ -118,18 +140,38 @@ const CustomTable = ({
         {rows.map((rowEl, i) => (
           <Tr
             key={i}
-            {...(interactive ? { _hover: { rowHoverStyle } } : {})}
-            onClick={() => {
-              if (!selectTrigger) setSelectTrigger(false);
+            _hover={{
+              bg: interactive && "gray.200",
+              cursor: interactive || (doubleClick && "pointer"),
             }}
+            {...(handleClicking(() => {
+              if (!selectTrigger) setSelectTrigger(false);
+            }) as any)}
           >
             {rowEl.map((columnElement: any, indx: number) =>
               indx !== 0 ? (
                 <Td
                   key={indx}
-                  onClick={() => {
+                  {...(handleClicking(() => {
                     if (rowCb && selectTrigger === false) rowCb(rowEl[0]);
-                  }}
+                  }) as any)}
+                  {...(!doubleClick
+                    ? {
+                        ...{
+                          onClick: () => {
+                            if (rowCb && selectTrigger === false)
+                              rowCb(rowEl[0]);
+                          },
+                        },
+                      }
+                    : {
+                        ...{
+                          onDoubleClick: () => {
+                            if (rowCb && selectTrigger === false)
+                              rowCb(rowEl[0]);
+                          },
+                        },
+                      })}
                   fontSize={{ base: "0.75em", md: "0.8em", lg: "0.9em" }}
                 >
                   {columnElement}
