@@ -68,6 +68,7 @@ def get_products_from_cart(request):
     try:
         cart_items = Cart_Details.objects.filter(
             user_id=get_user_by_email(email))
+        CartDetailsSerializer.Meta.depth = 0
         serialized_cart_items = CartDetailsSerializer(
             cart_items, many=True).data 
         modified_cart_items = [
