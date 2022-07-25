@@ -3,11 +3,12 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from authentication.backends import Is_Admin, Is_User
+from authentication.models import User
 from authentication.tokens import retrieve_payload
 from checkout.models import Shipping_Details, Shipping_Query
 from shop.models import Cart_Details
 from shop.serializers import CartDetailsSerializer
-from .serializers import ShippingQuerySerializers
+from .serializers import ShippingQuerySerializers, ShippingDetailsSerializer
 from shop.views.util import get_user_by_email
 
 def generate_shipping_query(shipping_details):
@@ -71,3 +72,34 @@ def get_all_shipping_queries(request):
         return Response({"shipping_queries": serialized_queries}, status=status.HTTP_200_OK)
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+@permission_classes([Is_Admin])
+def approve_shipping_queries(request):
+    queries = request.data["queries"];
+    print(f"queries for approval = {queries}")
+    try:
+        for query in queries:
+            query_model = Shipping_Query.objects.get(id=query["id"])
+            query_model.charges = query["charges"]
+            query_model.approved = True
+            query_model.save()
+        return Response(status=status.HTTP_200_OK)
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([Is_User])
+def get_shipping_details(request):
+    token_payload = retrieve_payload(request.COOKIES.get("token"))
+    email = token_payload.get("email") if token_payload != None else None
+    try:
+        user = User.objects.get(email=email)
+        print("user = ", user)
+        shipping_details = Shipping_Details.objects.get(user_id=user)
+        serialized_shipping_details = ShippingDetailsSerializer(shipping_details).data
+        return Response({"shipping_details": serialized_shipping_details}, status=status.HTTP_200_OK)
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
