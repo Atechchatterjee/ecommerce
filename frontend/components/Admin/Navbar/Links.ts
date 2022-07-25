@@ -20,4 +20,5 @@ export const Links: LinkProps[] = [
   },
   { label: "Orders", href: "orders" },
   { label: "Customers", href: "customers" },
+  { label: "Shipping Query", href: "shipping-query" },
 ];
