@@ -7,9 +7,13 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { CustomField } from "../../Custom/CustomField";
-import { useReducer, useState } from "react";
-import { createShippingQuery } from "../../../services/ShippingService";
+import { useReducer, useState, useEffect } from "react";
+import {
+  createShippingQuery,
+  getShippingDetails,
+} from "../../../services/ShippingService";
 import axios from "axios";
+import { useQuery } from "react-query";
 
 const getDataFromPincode = (pincode: string): Promise<any> =>
   new Promise((resolve, reject) => {
@@ -48,9 +52,26 @@ const ShippingDetailsForm = () => {
   const toast = useToast();
   const FORM_BORDER_COLOR = "gray.300";
 
+  const { data: shippingDetails } = useQuery(
+    "shipping_details",
+    getShippingDetails
+  );
+
+  const createInitialFormState = () => {
+    if (shippingDetails) {
+      return {
+        address: shippingDetails.address,
+        country: shippingDetails.country,
+        city: shippingDetails.city,
+        state: shippingDetails.state,
+        pincode: shippingDetails.pincode,
+      };
+    } else return initialFormState;
+  };
+
   const [formState, dispatchFormState] = useReducer(
     formReducer,
-    initialFormState
+    createInitialFormState()
   );
 
   const submitForm = () => {
