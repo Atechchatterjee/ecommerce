@@ -53,7 +53,7 @@ export const CustomField = ({
               fontSize={{ base: "13px", md: "15px", lg: "16px" }}
               {...props}
             />
-            <Spinner size="md" mt="2%" />
+            <Spinner size="md" w="1.2rem" h="1.2rem" mt="0.6rem" ml="0.5rem" />
           </InputGroup>
         </Flex>
       ) : (
