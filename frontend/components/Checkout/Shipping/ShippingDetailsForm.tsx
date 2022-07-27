@@ -7,7 +7,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { CustomField } from "../../Custom/CustomField";
-import { useReducer, useState, useEffect } from "react";
+import { useEffect, useReducer, useState } from "react";
 import {
   createShippingQuery,
   getShippingDetails,
@@ -41,6 +41,8 @@ const formReducer = (formState: any, action: any) => {
       return { ...formState, ...action.payload };
     case "reset":
       return initialFormState;
+    case "set-state":
+      return action.payload;
     default:
       return formState;
   }
@@ -57,6 +59,7 @@ const ShippingDetailsForm = () => {
     getShippingDetails
   );
 
+  // creates initial state based on previous form data
   const createInitialFormState = () => {
     if (shippingDetails) {
       return {
@@ -73,6 +76,10 @@ const ShippingDetailsForm = () => {
     formReducer,
     createInitialFormState()
   );
+
+  useEffect(() => {
+    dispatchFormState({ type: "set-state", payload: createInitialFormState() });
+  }, [shippingDetails]);
 
   const submitForm = () => {
     try {
