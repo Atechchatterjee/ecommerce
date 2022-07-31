@@ -19,20 +19,22 @@ export default {
   variants: {
     primarySolid: () => ({
       bg: primary[500],
-      _hover: { bg: "primary.200" },
-      _disabled: {
-        _hover: {
-          textColor: primary[900],
+      _hover: {
+        bg: "primary.200",
+        _disabled: {
+          opacity: "0.5",
+          bg: "primary.500",
         },
       },
       ...commonStyles(),
     }),
     mutedPrimarySolid: () => ({
       bg: primary[200],
-      _hover: { bg: "primary.100" },
-      _disabled: {
-        _hover: {
-          textColor: primary[900],
+      _hover: {
+        bg: "primary.100",
+        _disabled: {
+          opacity: "0.5",
+          bg: "primary.200",
         },
       },
       ...commonStyles(),
