@@ -73,11 +73,26 @@ def get_all_shipping_queries(request):
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+
+@api_view(['GET'])
+def get_shipping_query(request):
+    token_payload = retrieve_payload(request.COOKIES.get("token"))
+    email = token_payload.get("email") if token_payload != None else None
+
+    try:
+        user = User.objects.get(email=email)
+        shipping_details = Shipping_Details.objects.filter(user_id=user)
+        queries = Shipping_Query.objects.filter(details__in=shipping_details)
+        serialized_queries = ShippingQuerySerializers(queries, many=True).data
+        return Response({"queries": serialized_queries}, status=status.HTTP_200_OK)
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
 @api_view(['POST'])
 @permission_classes([Is_Admin])
 def approve_shipping_queries(request):
     queries = request.data["queries"];
-    print(f"queries for approval = {queries}")
     try:
         for query in queries:
             query_model = Shipping_Query.objects.get(id=query["id"])
@@ -96,7 +111,6 @@ def get_shipping_details(request):
     email = token_payload.get("email") if token_payload != None else None
     try:
         user = User.objects.get(email=email)
-        print("user = ", user)
         shipping_details = Shipping_Details.objects.get(user_id=user)
         serialized_shipping_details = ShippingDetailsSerializer(shipping_details).data
         return Response({"shipping_details": serialized_shipping_details}, status=status.HTTP_200_OK)

@@ -43,3 +43,11 @@ export const getShippingDetails = async (): Promise<any> => {
     return Promise.resolve(res.data.shipping_details);
   else return Promise.reject();
 };
+
+export const getShippingQuery = async () => {
+  const res = await api.get(`/checkout/get-shipping-query/`, {
+    withCredentials: true,
+  });
+  if (res && res.status === 200) return Promise.resolve(res.data.queries);
+  else return Promise.reject();
+};
