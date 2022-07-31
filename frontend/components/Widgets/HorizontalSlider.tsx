@@ -5,6 +5,7 @@ type Label = { icon: any; text: string };
 interface HorizontalSliderProps {
   labels: Label[];
   indx: [selectedIndx: number, setSelectedIndx: (_: number) => void];
+  disableIndx?: number;
   mode?: "light" | "dark";
 }
 
@@ -15,6 +16,7 @@ const ProgressLine = ({ ...props }: BoxProps) => {
 const HorizontalSlider = ({
   labels,
   mode = "dark",
+  disableIndx,
   indx,
 }: HorizontalSliderProps) => {
   const [selectedIndx, setSelectedIndx] = indx;
@@ -35,13 +37,14 @@ const HorizontalSlider = ({
             onClick={() => {
               setSelectedIndx(i);
             }}
+            isDisabled={disableIndx === i}
           >
             <Flex flexDirection="row" gridGap="1rem">
               <Icon />
               <Text fontWeight="semibold">{text}</Text>
             </Flex>
           </Button>
-          {i < labels.length - 1 && <ProgressLine mt="2%" />}
+          {i < labels.length - 1 && <ProgressLine mt="1.5rem" />}
         </>
       ))}
     </Flex>

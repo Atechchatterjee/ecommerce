@@ -6,9 +6,10 @@ import HorizontalSlider from "../Widgets/HorizontalSlider";
 
 interface CheckoutSliderProps {
   indx: [selectedIndx: number, setSelectedIndx: (_: number) => void];
+  disableIndx?: number;
 }
 
-const CheckoutSlider = ({ indx }: CheckoutSliderProps) => (
+const CheckoutSlider = ({ disableIndx, indx }: CheckoutSliderProps) => (
   <Box ml="20.5%" mt="2%">
     <HorizontalSlider
       indx={indx}
@@ -17,6 +18,7 @@ const CheckoutSlider = ({ indx }: CheckoutSliderProps) => (
         { icon: MdLocationOn, text: "Shipping Details" },
         { icon: SiRazorpay, text: "Payment Options" },
       ]}
+      disableIndx={disableIndx}
     />
   </Box>
 );
