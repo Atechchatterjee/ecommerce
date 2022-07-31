@@ -3,7 +3,7 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import ProductContainer from "./ProductContainer";
 import { deleteItemsFromCart, getCartItems } from "../../services/CartService";
 import { useQuery } from "react-query";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface CartProps {
   proceed?: () => void;
@@ -18,14 +18,20 @@ const calculateTotalPrice = (cartItems: any) =>
   );
 
 const Cart: React.FC<CartProps> = ({ proceed }) => {
-  const { data: cartItems } = useQuery("get-cart-items", getCartItems);
+  const { data: cartData } = useQuery("get-cart-items", getCartItems);
+  const [cartItems, setCartItems] = useState<any[][]>([]);
 
   useEffect(() => {
-    console.table(cartItems);
-  }, [cartItems]);
+    if (cartData) setCartItems(cartData);
+  }, [cartData]);
 
   return (
-    <Flex flexDirection="column" gridGap="3vh" padding="2rem 2rem 8rem 2rem">
+    <Flex
+      flexDirection="column"
+      gridGap="3vh"
+      padding="2rem 2rem 8rem 2rem"
+      height="83vh"
+    >
       {cartItems &&
         cartItems.map((prd: any) => (
           <Flex flexDirection="column" gridGap={20}>
@@ -35,6 +41,7 @@ const Cart: React.FC<CartProps> = ({ proceed }) => {
                 const res = await deleteItemsFromCart([productId]);
                 if (res.status == 200) alert("Deleted !!");
               }}
+              onChangeQuantity={(quantity) => {}}
             />
             <Divider orientation="horizontal" />
           </Flex>
@@ -49,14 +56,13 @@ const Cart: React.FC<CartProps> = ({ proceed }) => {
       <Divider orientation="horizontal" />
       <Flex
         flexDirection="row"
-        gridGap="70%"
-        w="94%"
+        gridGap="67rem"
+        w="100%"
         position="absolute"
         bottom="2rem"
       >
         <Button
           variant="ghost"
-          flex="0.5"
           borderRadius="full"
           backgroundColor={`rgba(255,255,255, 0.1)`}
           onClick={() => window.location.assign("/shop")}
@@ -70,8 +76,7 @@ const Cart: React.FC<CartProps> = ({ proceed }) => {
           </Flex>
         </Button>
         <Button
-          flex="1"
-          padding="1rem 1.5rem"
+          padding="1rem 2rem"
           variant="primarySolid"
           onClick={() => proceed && proceed()}
         >

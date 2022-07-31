@@ -1,7 +1,7 @@
 import { NextPage } from "next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { scrollBarStyle } from "../util/ScrollBarStyle";
-import { Box, Fade, ContainerProps, Container } from "@chakra-ui/react";
+import { Box, ContainerProps, Container } from "@chakra-ui/react";
 import Cart from "../components/Checkout/Cart";
 import WithAuth from "../util/WithAuth";
 import Shipping from "../components/Checkout/Shipping";
@@ -19,7 +19,6 @@ const MainContainer = ({ children, ...props }: ContainerProps) => (
     position="absolute"
     top="15vh"
     left="12%"
-    // transition="all ease-in-out 0.5s"
     sx={scrollBarStyle()}
     {...props}
   >
@@ -29,9 +28,24 @@ const MainContainer = ({ children, ...props }: ContainerProps) => (
 
 const Checkout: NextPage = () => {
   const [stageNo, setStageNo] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 100);
+  }, [stageNo]);
 
   return (
-    <Box w="100%" h="100vh" position="relative" textAlign="center">
+    <Box
+      w="100%"
+      h="100vh"
+      position="relative"
+      textAlign="center"
+      overflow={loading ? "clip" : "auto"}
+      sx={scrollBarStyle({})}
+    >
       <Head key={0}>
         <title>Checkout</title>
       </Head>
@@ -39,38 +53,56 @@ const Checkout: NextPage = () => {
         w="100%"
         h="30%"
         bgColor="primary.800"
-        display="flex"
         position="absolute"
         borderRadius="0 0 3rem 3rem"
       >
-        <CheckoutSlider indx={[stageNo, setStageNo]} />
+        <AnimatePresence>
+          <motion.div
+            animate={{ x: "0%", opacity: 1 }}
+            initial={{ x: "0%", opacity: 0 }}
+            transition={{ type: "just" }}
+          >
+            <CheckoutSlider indx={[stageNo, setStageNo]} disableIndx={1} />
+          </motion.div>
+        </AnimatePresence>
       </Box>
-      <AnimatePresence>
-        <motion.div
-          animate={{ x: 0, y: 0 }}
-          initial={{ x: 0, y: 50 }}
-          transition={{ ease: "easeInOut", duration: 0.5 }}
-        >
-          <MainContainer>
-            {(() => {
-              switch (stageNo) {
-                case 0:
-                  return (
-                    <Fade in>
+
+      <MainContainer>
+        {(() => {
+          switch (stageNo) {
+            case 0:
+              return (
+                !loading && (
+                  <AnimatePresence>
+                    <motion.div
+                      animate={{ x: 0, y: 0, opacity: 1 }}
+                      initial={{ x: -30, y: 0, opacity: 0 }}
+                      transition={{ duration: 0.4 }}
+                      exit={{ x: -30 }}
+                    >
                       <Cart proceed={() => setStageNo(1)} />
-                    </Fade>
-                  );
-                case 1:
-                  return (
-                    <Fade in>
+                    </motion.div>
+                  </AnimatePresence>
+                )
+              );
+            case 1:
+              return (
+                !loading && (
+                  <AnimatePresence>
+                    <motion.div
+                      animate={{ x: 0, opacity: 1 }}
+                      initial={{ x: 30, opacity: 0 }}
+                      transition={{ duration: 0.4 }}
+                      exit={{ x: 30 }}
+                    >
                       <Shipping />
-                    </Fade>
-                  );
-              }
-            })()}
-          </MainContainer>
-        </motion.div>
-      </AnimatePresence>
+                    </motion.div>
+                  </AnimatePresence>
+                )
+              );
+          }
+        })()}
+      </MainContainer>
     </Box>
   );
 };
