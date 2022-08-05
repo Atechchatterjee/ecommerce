@@ -66,7 +66,6 @@ const SearchBar = ({
     <InputGroup color="gray" display="flex" {...props}>
       <CustomField
         key={1}
-        flex="0.78"
         placeholder="Search"
         value={searchPhrase}
         bg="primary.200"
@@ -87,7 +86,6 @@ const SearchBar = ({
       />
       {width >= 700 ? (
         <InputRightAddon
-          flex="1"
           bg="primary.200"
           height="4.2%"
           minHeight="2.5em"
