@@ -5,7 +5,7 @@ import axios from "axios";
 import * as yup from "yup";
 import { ShowError } from "../Custom/ShowError";
 import { CustomField } from "../Custom/CustomField";
-import { Box, Button, Flex } from "@chakra-ui/react";
+import { Box, BoxProps, Button, Flex } from "@chakra-ui/react";
 import constants from "../../util/Constants";
 
 // validation with yup
@@ -14,7 +14,7 @@ const emailValidation: RegExp =
 const phNumberValidation: RegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
-const SignUp: React.FunctionComponent = () => {
+const SignUp = ({ ...props }: BoxProps) => {
   const [failedErr, setFailedErr] = useState<string>(""); // error for already existing user
 
   const formikRef = useRef<any>();
@@ -30,7 +30,7 @@ const SignUp: React.FunctionComponent = () => {
   });
 
   return (
-    <div className="SignUp-Wrapper">
+    <Box className="SignUp-Wrapper" {...props}>
       <Formik
         innerRef={formikRef}
         initialValues={{
@@ -102,7 +102,7 @@ const SignUp: React.FunctionComponent = () => {
           </form>
         )}
       </Formik>
-    </div>
+    </Box>
   );
 };
 

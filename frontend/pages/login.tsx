@@ -1,105 +1,51 @@
-import {
-  Tabs,
-  TabList,
-  Tab,
-  TabPanels,
-  TabPanel,
-  Heading,
-  Box,
-  Fade,
-} from "@chakra-ui/react";
+import { Box, Flex, Text, Heading, Image, Fade } from "@chakra-ui/react";
 import type { NextPage } from "next";
-import React from "react";
-import SignUp from "../components/Auth/SignUp";
+import { useState } from "react";
 import SignIn from "../components/Auth/SignIn";
-import Header from "../components/Layout/Header";
-import CustomContainer from "../components/Custom/CustomContainer";
-import { useWindowDimensions } from "../hooks/useWindowDimensions";
+import SignUp from "../components/Auth/SignUp";
+import Navigation from "../components/Layout/Navigation";
 
-const Login: NextPage = () => {
-  const [width] = useWindowDimensions();
+const NewLogin: NextPage = () => {
+  const [showSignIn, setShowSignIn] = useState<boolean>(true);
 
   return (
-    <Box position="relative" h="100vh" w="100%">
-      <Header excludeCategoryBar />
-      <CustomContainer
-        height="35em"
-        borderRadius="xl"
-        marginBottom="7%"
-        width={width < 1200 ? "60vh" : "40vw"}
-        position="absolute"
-        display="flex"
-        alignContent="center"
-        top="20%"
-        left={width < 1200 ? "28%" : "31%"}
-      >
-        <Box
-          padding={width >= 500 ? "0 10% 0% 10%" : "0"}
-          marginTop="3em"
-          width="100%"
-          height="100%"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <Tabs
-            align="center"
-            isFitted={false}
-            variant="line"
-            isLazy
-            position="relative"
-            defaultIndex={1}
-          >
-            <TabList>
-              <Tab
-                _focus={{
-                  outline: "none",
-                }}
-                _selected={{ color: "primary.500" }}
+    <Flex flexDirection="row" w="100%">
+      <Box flex="1">
+        <Image src="CND_logo.jpg" w="6rem" h="3rem" mt="1%" ml="2%" />
+        <Box padding="10% 20%">
+          <Flex flexDirection="column" gridGap="1em">
+            <Heading fontFamily="Sora" textAlign="center" color="primary.500">
+              {showSignIn ? "Sign In" : "Sign Up"}
+            </Heading>
+            <Flex
+              flexDirection="row"
+              gridGap="0.5em"
+              justifyContent="center"
+              mb="2em"
+            >
+              <Text textAlign="center">or</Text>
+              <Text
+                textAlign="center"
+                color="primary.100"
+                cursor="pointer"
+                fontWeight="bold"
+                onClick={() => setShowSignIn(!showSignIn)}
               >
-                <Heading
-                  as="h2"
-                  size="md"
-                  isTruncated
-                  fontFamily="Sora"
-                  fontSize={{ base: "15px", md: "17px", lg: "19px" }}
-                >
-                  Sign Up
-                </Heading>
-              </Tab>
-              <Tab
-                _focus={{
-                  outline: "none",
-                }}
-                _selected={{ color: "primary.500" }}
-              >
-                <Heading
-                  as="h2"
-                  size="md"
-                  isTruncated
-                  fontFamily="Sora"
-                  fontSize={{ base: "15px", md: "17px", lg: "19px" }}
-                >
-                  Sign In
-                </Heading>
-              </Tab>
-            </TabList>
-            <TabPanels position="relative">
-              <TabPanel>
-                <Fade in={true}>
-                  <SignUp />
-                </Fade>
-              </TabPanel>
-              <TabPanel>
-                <Fade in={true}>
-                  <SignIn />
-                </Fade>
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
+                {showSignIn ? "SignUp" : "SignIn"}
+              </Text>
+            </Flex>
+          </Flex>
+          {showSignIn ? <SignIn /> : <SignUp />}
         </Box>
-      </CustomContainer>
-    </Box>
+      </Box>
+      <Flex bg="primary.500" flex="1" height="100vh" flexDirection="column">
+        <Box w="100%" display="flex" justifyContent="right">
+          <Navigation colorMode="blue" height="3.6rem" w="30em" />
+        </Box>
+        <Image src="login_illustration.svg" mt="18%" />
+      </Flex>
+    </Flex>
   );
 };
 
-export default Login;
+export default NewLogin;
