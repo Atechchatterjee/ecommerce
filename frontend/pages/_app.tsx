@@ -28,7 +28,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       <QueryClientProvider client={queryClient}>
         <UserContext.Provider value={{ admin, setAdmin }}>
           <Head>
-            <title>Ecommerce Design</title>
+            <title>CND e-kart</title>
             <meta
               name="viewport"
               content="width=device-width,initial-scale=1"
