@@ -59,16 +59,13 @@ export default {
     }),
     primaryOutline: () => ({
       bg: "white",
-      outlineColor: primary[800],
-      outlineOffset: "none",
+      border: `1px ${primary[800]} solid`,
       borderRadius: "sm",
       textColor: primary[900],
       _hover: {
         bg: primary[500],
         color: "white",
         borderColor: primary[500],
-        outlineColor: primary[500],
-        outlineOffset: "none",
       },
       _disabled: {
         _hover: {
