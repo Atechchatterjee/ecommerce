@@ -6,6 +6,7 @@ const ScrollBarWrapper = ({ children, ...props }: BoxProps) => (
     sx={scrollBarStyle()}
     position="sticky"
     overflow="auto"
+    id="window-root"
     {...(props as any)}
   >
     <Box height="100vh">{children}</Box>
