@@ -1,4 +1,4 @@
-import { Box, Flex, Text, Heading, Image, Fade } from "@chakra-ui/react";
+import { Box, Flex, Text, Heading, Image } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import { useState } from "react";
 import SignIn from "../components/Auth/SignIn";
@@ -40,7 +40,7 @@ const NewLogin: NextPage = () => {
       </Box>
       <Flex bg="primary.500" flex="1" height="100vh" flexDirection="column">
         <Box w="100%" display="flex" justifyContent="right">
-          <Navigation colorMode="blue" height="3.6rem" w="30em" />
+          <Navigation colorMode="blue" height="3.6rem" w="30em" active={5} />
         </Box>
         <Image src="login_illustration.svg" mt="18%" />
       </Flex>
