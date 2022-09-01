@@ -4,6 +4,8 @@ import ProductContainer from "./ProductContainer";
 import { deleteItemsFromCart, getCartItems } from "../../services/CartService";
 import { useQuery } from "react-query";
 import { useEffect, useState } from "react";
+import { getShippingDetails } from "../../services/ShippingService";
+import { FaSave } from "react-icons/fa";
 
 interface CartProps {
   proceed?: () => void;
@@ -20,10 +22,33 @@ const calculateTotalPrice = (cartItems: any) =>
 const Cart: React.FC<CartProps> = ({ proceed }) => {
   const { data: cartData } = useQuery("get-cart-items", getCartItems);
   const [cartItems, setCartItems] = useState<any[][]>([]);
+  const [changed, setChanged] = useState<boolean>(false);
 
   useEffect(() => {
     if (cartData) setCartItems(cartData);
+    getShippingDetails()
+      .then((details: any) => {
+        console.log({ shippingDetails: details });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }, [cartData]);
+
+  const handleQuantityChange = (quantity: number, i: number) => {
+    setChanged(true);
+    setCartItems(
+      cartItems.map((item: any, indx: number) =>
+        indx == i
+          ? {
+              ...item,
+              total_price: (quantity * item.price[0].price).toString(),
+              quantity,
+            }
+          : item
+      )
+    );
+  };
 
   return (
     <Flex
@@ -33,15 +58,12 @@ const Cart: React.FC<CartProps> = ({ proceed }) => {
       height="83vh"
     >
       {cartItems &&
-        cartItems.map((prd: any) => (
+        cartItems.map((prd: any, i: number) => (
           <Flex flexDirection="column" gridGap={20}>
             <ProductContainer
               product={prd}
-              onDelete={async (productId) => {
-                const res = await deleteItemsFromCart([productId]);
-                if (res.status == 200) alert("Deleted !!");
-              }}
-              onChangeQuantity={(quantity) => {}}
+              onDelete={async (productId) => deleteItemsFromCart([productId])}
+              onChangeQuantity={(quantity) => handleQuantityChange(quantity, i)}
             />
             <Divider orientation="horizontal" />
           </Flex>
@@ -56,7 +78,7 @@ const Cart: React.FC<CartProps> = ({ proceed }) => {
       <Divider orientation="horizontal" />
       <Flex
         flexDirection="row"
-        gridGap="67rem"
+        gridGap="60%"
         w="100%"
         position="absolute"
         bottom="2rem"
@@ -75,16 +97,28 @@ const Cart: React.FC<CartProps> = ({ proceed }) => {
             </Text>
           </Flex>
         </Button>
-        <Button
-          padding="1rem 2rem"
-          variant="primarySolid"
-          onClick={() => proceed && proceed()}
-        >
-          <Flex flexDirection="row" gridGap={3}>
-            <Text>Checkout</Text>
-            <IoIosArrowForward size={15} style={{ marginTop: "2%" }} />
-          </Flex>
-        </Button>
+        <Flex flexDirection="row" gridGap="1rem">
+          <Button
+            padding="2% 30%"
+            variant="primarySolid"
+            onClick={() => proceed && proceed()}
+          >
+            <Flex flexDirection="row" gridGap={3}>
+              <Text>Save</Text>
+              <FaSave size={15} style={{ marginTop: "2%" }} />
+            </Flex>
+          </Button>
+          <Button
+            padding="2% 30%"
+            variant="primarySolid"
+            onClick={() => proceed && proceed()}
+          >
+            <Flex flexDirection="row" gridGap={3}>
+              <Text>Checkout</Text>
+              <IoIosArrowForward size={15} style={{ marginTop: "2%" }} />
+            </Flex>
+          </Button>
+        </Flex>
       </Flex>
     </Flex>
   );
